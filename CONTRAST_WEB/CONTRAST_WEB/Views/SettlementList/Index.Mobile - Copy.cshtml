@@ -1,0 +1,62 @@
+﻿@model IList<CONTRAST_WEB.Models.vw_travel_for_settlement>
+
+@{
+    ViewBag.Title = "TRAVEL SETTLEMENT";
+    Layout = "~/Views/Shared/_Layout.Mobile.cshtml";
+}
+
+<div class="row">
+    <div class="Absolute-Center">
+        <div style="margin-top:15px;" class="col-xs-12">
+            <div>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+
+                    using (Html.BeginForm("Details", "SettlementList", Model[i]))
+                    {
+                        @Html.HiddenFor(m => item.id_request)
+                        @Html.HiddenFor(m => item.id_destination_city)
+                        @Html.HiddenFor(m => item.total_meal)
+                        @Html.HiddenFor(m => item.total_miscellaneous)
+                        @Html.HiddenFor(m => item.total_ticket)
+                        @Html.HiddenFor(m => item.total_transportation)
+                        @Html.HiddenFor(m => item.total_winter)
+                        @Html.HiddenFor(m => item.total_hotel)
+                        @Html.HiddenFor(m => item.total_laundry)
+                        @Html.HiddenFor(m => item.no_reg)
+                        @Html.HiddenFor(m => item.emp_name)
+                        @Html.HiddenFor(m => item.group_code)
+                        @Html.HiddenFor(m => item.login_id)
+
+                        <div class="item col-xs-12">
+                            <div class="thumbnail">
+                                <div class="clearfix">
+                                    <div class="column content">
+                                        <span><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
+                                    </div>
+
+                                    <div style="padding:10px 0px; width:165px;" class="column menu">
+                                        <span class="templatetext">TR @Html.DisplayFor(modelItem => item.id_request)</span>
+                                        <br />
+                                        <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
+                                    </div>
+
+                                    <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>    
+        
+
+<script>
+        function goBack() {
+            window.history.back();
+        }
+</script>

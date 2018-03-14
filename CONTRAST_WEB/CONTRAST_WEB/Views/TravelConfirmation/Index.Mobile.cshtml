@@ -1,0 +1,53 @@
+﻿@model IList<CONTRAST_WEB.Models.tb_r_travel_dit>
+@{
+    ViewBag.Title = "Travel Plan Confirmation";
+    Layout = "~/Views/Shared/_Layout.Mobile.cshtml";
+}
+<div class="row">
+    <div class="Absolute-Center">
+	
+	<div style="margin-top:15px;" class="col-xs-12">
+            <div>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+
+                    <div class="item col-xs-12">
+						<div class="thumbnail">
+							<div class="clearfix">
+								<div class="column content">									
+									@using (Html.BeginForm("Details", "TravelConfirmation", Model[i]))
+									{
+										@Html.AntiForgeryToken()
+										<input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Travel-Status-icon-b.png" />
+									}
+                                </div>
+
+                                <div style="max-width:400px;min-width:150px;" class="column menu">
+                                    <div>
+                                        <strong>DIT @Html.DisplayFor(m => item.id_dit)</strong>
+                                    </div>
+                                    <div>
+                                        <span class="fnt3"><strong>To</strong> @Html.DisplayFor(m => item.destination_city)</span>
+                                    </div>
+                                    <div>
+                                        <span class="fnt3"><strong>Created </strong> @Html.DisplayFor(m => item.create_date)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

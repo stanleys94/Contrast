@@ -1,0 +1,58 @@
+﻿@model IList<CONTRAST_WEB.Models.tb_r_travel_dit>
+@{
+    ViewBag.Title = "Travel Confirmation List";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
+    
+</div>
+
+<div class="container">
+    <div style="margin-top:120px; padding:0 100px;" id="products" class="row list-group _3EibU">
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+
+            <div class="item col-xs-6 col-lg-6">
+                <div class="thumbnail">
+                    <div class="clearfix">
+                        <div class="column content">
+                            @using (Html.BeginForm("DetailsMSTR", "TravelConfirmation", Model[i]))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Travel-Status-icon-b.png" />
+                            }
+                        </div>
+
+                        <div class="column menu">
+                            <div>
+                                <strong>DIT @Html.DisplayFor(m => item.id_dit)</strong>
+                            </div>
+                            @*<div>
+                                    <span class="fnt3">Noreg @Html.DisplayFor(m => item.no_reg)</span>
+                                </div>*@
+                            <div>
+                                <span class="fnt3"><strong>To</strong> @Html.DisplayFor(m => item.destination_city)</span>
+                            </div>
+                            <div>
+                                <span class="fnt3"><strong>Created </strong> @Html.DisplayFor(m => item.create_date)</span>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

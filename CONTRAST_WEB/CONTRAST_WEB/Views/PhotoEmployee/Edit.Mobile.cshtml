@@ -1,0 +1,46 @@
+﻿@model CONTRAST_WEB.Models.tb_m_photo_employee
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.Mobile.cshtml";
+}
+
+<div class="container">
+    <div style="margin-top:70px;" id="products" class="row list-group _3EibU">
+
+	<div style="padding:0px 10px;"  class="well">
+                        <span><strong>EDIT PROFILE</strong></span>
+                    </div>
+
+       @using (Html.BeginForm("Upload", "PhotoEmployee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+       {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.photo_id)
+                <div class="form-group">
+                    <h5 style="width:350px" class="h5sl">Code :</h5>
+                    <div class="col-xs-12" style="width:100%">
+                        @Html.EditorFor(model => model.code, new { htmlAttributes = new { @class = "form-control", style="border:0px;" } })
+                        @Html.ValidationMessageFor(model => model.code, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h5 style="width:350px" class="h5sl">Upload Image :</h5>
+                    <div class="col-xs-12">
+                        <input class="form-control" type="file" name="file" id="file1" style="width:100%;border:0px;" />
+                    </div>
+                </div>
+
+                <div style="margin-top:5px;" class="form-group">
+                    <div class="col-md-offset-2 col-md-2">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

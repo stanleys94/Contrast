@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 u">
+    <title>CONTRAST</title>
+    <link href="~/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" onclick="goBack()">
+                    <i class="glyphicon glyphicon-chevron-left white"></i><span>@ViewBag.Title</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

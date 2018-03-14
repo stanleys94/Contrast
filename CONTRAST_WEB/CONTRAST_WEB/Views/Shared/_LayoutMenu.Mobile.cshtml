@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 u">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/test.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="padding-bottom:50px" class="page-header">
+        <img style="float:left;" height="auto" width="150px" src="~/img/small_logo_horizontal.png" />
+
+		@using (Html.BeginForm("LogOff", "Account"))
+            {
+                   
+
+
+		    <button style="color:transparent;background-color:transparent;border:0px;padding-top:0px;float:right;" type="submit">
+                    <span style="color:white;font-size:30px;" class="glyphicon glyphicon-log-out"></span>
+                    </button>
+
+                    @Html.AntiForgeryToken()                
+            }
+    </div>
+    <div class="well">
+	    <span>
+            <a href='@Url.Action("Index", "PhotoEmployee")'>
+                <img style="padding:0 5px; height:40px; width:50px;border-radius: 50%;" src="@Url.Content(ViewBag.photo)" />
+            </a>
+		</span>
+        <span>Hello, <strong>@ViewBag.Username</strong></span>
+    </div>
+    <div id="header-row" style="overflow:hidden; height:200px; width:auto;">
+        <!-- container-fluid is the same as container but spans a wider viewport,
+        it still has padding though so you need to remove this either by adding
+        another class with no padding or inline as I did below -->
+        <div class="container-fluid" style="padding: 0px; margin: 0 0 20px;">
+            <div class="row">
+                <!-- You originally has it set up for two columns, remove the second
+                column as it is unneeded and set the first to always span all 12 columns
+                even when at its smallest (xs). Set the overflow to hidden so no matter
+                the height of your image it will never show outside this div-->
+                <div class="col-xs-12">
+                    <a href="index.html">
+                        <!-- place your image here -->
+                        <img src="~/img/image_banner.jpg" alt="company logo" style="width: 100%; height:auto;">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="margin:20px 0px" />
+    
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <footer class="footer modal-footer">
+        <p style="text-align:center">&copy; @DateTime.Now.Year - PT Toyota Astra Motor</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

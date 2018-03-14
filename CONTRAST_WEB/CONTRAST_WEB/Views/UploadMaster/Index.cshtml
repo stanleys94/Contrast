@@ -1,0 +1,108 @@
+﻿@model CONTRAST_WEB.Models.FileType
+@{
+    ViewBag.Title = "Upload Master";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    IList<string> error_list = ViewBag.errorlist;
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Upload Master Data</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
+
+
+        @using (Html.BeginForm("Upload", "UploadMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => Model.division)
+            @Html.HiddenFor(m => Model.name)
+            @Html.HiddenFor(m => Model.no_reg)
+            @Html.HiddenFor(m => Model.position)
+
+            <label style="width:100%;" class="h5c">MASTER DATA</label>
+            <div class="well">
+                <div style="margin:10px 100px;">
+                    <table>
+                        <tr>
+                            <td><input style="width:auto" type="file" id="FileMaster" name="FileUpload" /></td>
+                            <td style="padding:10px 0;">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.DropDownListFor(m => m.excell_type,
+                                        new SelectList(
+                                        new List<object>
+                                        {
+
+                                             new { Value = "Master Rate Hotel" ,      Text = "Master Rate Hotel"},
+                                             new { Value = "Master Rate Flight",      Text = "Master Rate Flight" },
+                                             new { Value = "Master Rate Visa",        Text = "Master Rate Visa" },
+                                             new { Value = "Master Rate Passport",    Text = "Master Rate Passport"},
+                                             //new { Value = "Master Budget",           Text = "Master Budget"},
+                                             new { Value = "Master Budget Source Data" ,      Text = "Master Budget Source Data"},
+                                             new { Value = "Master Vendor Employee",  Text = "Master Vendor Employee"},
+                                             new { Value = "Master Vendor Travel",    Text = "Master Vendor Travel"},
+                                             new { Value = "Travel Procedure",        Text = "Travel Procedure"},
+                                             new { Value = "Organization Structure",  Text = "Organization Structure"},
+
+                                        }, "Value",
+
+                                        "Text"), "-Select Table-", new { @class = "form-control", placeholder = "Purpose" })
+                                </div>
+                            </td>
+                            <td>
+                                <div style="padding-left:10px;">
+                                    <button id="button" class="btn btn-info btn-sm" type="submit" name="submit" value="Submit"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div style="padding-left:10px;">
+                                    <button id="button" class="btn btn-success btn-sm" type="submit" name="download" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download File</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <div style="padding-left:10px;">
+                                    <button id="button" class="btn btn-warning btn-sm" type="submit" name="division_input" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download Division Name</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <strong style="color:lawngreen">  @ViewBag.done  </strong>
+                <strong style="color:red"> @ViewBag.error_list </strong>
+                @if (error_list != null)
+                {
+                    foreach (var item in error_list)
+                    {
+                        <strong style="color:red"> @item </strong><br />
+                    }
+                }
+            </div>
+        }
+        <br />
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#button").click(function () {
+            $("#show").fadeIn();
+        });
+    });
+</script>

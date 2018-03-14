@@ -1,0 +1,126 @@
+﻿@model IList<CONTRAST_WEB.Models.TrackingHelper>
+@{
+    ViewBag.Title = "Actual Cost Verivy";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    //var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    //grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+<div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Transaction Tracking</li>
+    </ol>
+</div>
+
+<div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
+    
+    @using (Html.BeginForm("Search", "TrackProgress", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div>
+                <div>
+                    <span><input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" /></span>
+
+                    <span style=" margin-left : 100px">
+                        Start Date Range :
+                        <input type="date" name="start" value="@ViewBag.start" class="form-control" placeholder="search" style="width:150px" />
+                    </span>
+                    <span><input type="date" name="end" value="@ViewBag.end" class="form-control" placeholder="search" style="width:150px" /></span>
+
+                    <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
+                <table style="width:1185px;margin-bottom:0px;" class="table table-condensed table-striped">
+                    <tr style="background-color:deepskyblue; text-align:center;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:160px;">
+                            Name
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            No REG
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            Group Code
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                            Destination
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            Transaction
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:140px;">
+                            Transaction Type 
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            Aproval
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:180px;">
+                            Created Date
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;padding:0 5px;">
+                <table style="width:1165px;" class="table table-condensed table-hover table-striped">
+
+                    @for (int k = 0; k < Model.Count(); k++)
+                    {
+                        @Html.HiddenFor(Model => Model[k].login_name)
+                        @Html.HiddenFor(Model => Model[k].login_id)
+                        @Html.HiddenFor(Model => Model[k].TrackedList.id_actualcost)
+
+                        <tr>
+                            <td class="td" style="width:160px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.name)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.name)
+                            </td>
+                            <td  class="td" style="width:80px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.no_reg)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.no_reg)
+                            </td>
+                            <td  class="td" style="width:80px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.group_code)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.group_code)
+                            </td>
+                            <td  class="td" style="width:100px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.destination_name)
+                            </td>
+                            <td  class="td" style="width:100px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi)
+                            </td>
+                            <td  class="td" style="width:140px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
+                            </td>
+                            <td  class="td" style="width:80px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.verified_flag)
+                            </td> 
+                            <td class="td" style="width:155px; margin-left:10px">
+                                @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
+                                @Html.HiddenFor(Model => Model[k].TrackedList.create_date)
+                            </td> 
+                        </tr>
+                    }
+                </table>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/verify.js"></script>

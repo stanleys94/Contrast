@@ -1,0 +1,69 @@
+﻿@model IList<CONTRAST_WEB.Models.vw_travel_execution_list>
+@{
+    ViewBag.Title = "TRAVEL EXECUTION LIST";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Travel Execution</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
+         
+            @for(int i = 0; i < Model.Count(); i++)
+            {
+                var item = Model[i];
+                using (Html.BeginForm("Details", "TravelExecution",Model[i]))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="item col-xs-6 col-lg-6">
+                        <div class="thumbnail">
+                            <div class="clearfix">
+                                <div class="column content">
+                                    <span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Travel-Execution-icon-b.png" /></span>
+                                </div>
+
+                                <div style="padding:20px 1px; width:270px;" class="column menu">
+                                    <span class="templatetext">TR @Html.DisplayFor(modelItem => item.id_request)</span>
+                                    <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_1) )</span>
+
+                                </div>
+
+                                <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        
+    </div>
+</div>
+
+<script>
+        function goBack() {
+            window.history.back();
+        }
+</script>
+
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">Small modal</h4>
+            </div>
+            <div class="modal-body">
+                Hai... <strong>USER</strong>. Request Anda Sudah dikirim, tunggu informasi lebih lanjut..
+            </div>
+        </div>
+    </div>
+</div>

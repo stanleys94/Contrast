@@ -1,0 +1,113 @@
+﻿@using CONTRAST_WEB.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "loginForm" }))
+{
+    <div class="container">
+        <div class="row">
+            <div style="margin:250px auto" class="Absolute-Center">
+                <div style="margin:0 80px" class="col-md-5 col-md-offset-8">
+                    <form class="width" id="loginForm">
+                        <div class="form-group">
+                            <div style="z-index:2;position:absolute;">
+                                @Html.AntiForgeryToken()
+                                <tam-sso server="https://passport.toyota.astra.co.id" app="17d92bb9-614e-4d18-9387-14ed425bb3d7" auto-submit="loginForm"></tam-sso>
+                            </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <footer class="footer modal-footer">
+                        <p style="text-align:center">&copy; @DateTime.Now.Year - PT Toyota Astra Motor</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+    <script type="text/javascript">
+
+
+    </script>
+
+    <script>
+        'use strict';
+
+        window.initializePassportSSO = function (event) {
+            var tag = document.getElementsByTagName("tam-sso")[0];
+
+            if (!tag) {
+                console.log('TAM Single Sign On tag <tam-sso> was not found.');
+                return false;
+            }
+
+            var appId = tag.getAttribute('app');
+            if (!appId) {
+                console.log('Application ID from attribute "app" was not found.');
+                return false;
+            }
+
+            var passportDomain = tag.getAttribute('server');
+            if (!passportDomain) {
+                passportDomain = 'https://passport.toyota.astra.co.id';
+            }
+
+            var ssoUrl = passportDomain + '/auth/external/' + appId;
+            //var tokenUrl = passportDomain + '/api/v1/token';
+
+            window.ssoLogin = function () {
+                var width = 640;
+                var height = 480;
+                var left = screen.width / 2 - width / 2;
+                var top = screen.height / 2 - height / 2;
+                var params = 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top;
+                window.open(ssoUrl, 'tamsso', params);
+            };
+
+            window.addEventListener('message', function (event) {
+                console.log(event);
+                if (event.origin === passportDomain) {
+                    var message = event.data;
+                    if (message.Type === 'Success') {
+                        window.GrantSignOn(message.Content);
+                    }
+                }
+            });
+
+            window.GrantSignOn = function (token) {
+                tag.innerHTML = '<input type="hidden" id="TAMSignOnToken" name="TAMSignOnToken" value="' + token + '"/>';
+
+                var formId = tag.getAttribute('auto-submit');
+                if (!formId) return;
+                var form = document.getElementById(formId);
+                if (form) {
+                    form.submit();
+                }
+            };
+
+            var buttonCss = "<style>button.tam-sso{color:#fff;background-color:#CC0400;border:1px solid #7F0200;padding:10px;font-size:16px;border-radius:4px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}button.tam-sso:hover{background-color:#BF0400;cursor:pointer}button.tam-sso img{vertical-align:middle;margin-right:8px}</style>";
+
+            tag.innerHTML = '<button id="tam-sso-button" class="tam-sso" type="button"><img src="' + passportDomain + '/tam.png">Login using TAM SSO</button>' + buttonCss;
+
+            var ssoButton = document.getElementById('tam-sso-button');
+            ssoButton.addEventListener('click', window.ssoLogin);
+        };
+
+        document.addEventListener("DOMContentLoaded", window.initializePassportSSO);
+
+        $("#tt").click(function () {
+            $("#loginForm").submit();
+        });
+
+    </script>

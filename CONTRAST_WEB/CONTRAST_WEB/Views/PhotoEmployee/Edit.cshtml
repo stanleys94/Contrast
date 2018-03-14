@@ -1,0 +1,73 @@
+﻿@model CONTRAST_WEB.Models.tb_m_photo_employee
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item"><a style="color:gray;" href="javascript:void(0);" onclick="history.go(-1);">Profile</a></li>
+        <li class="breadcrumb-item active">Edit Profile</li>
+	<label style="margin-left:100px">
+		@using (Html.BeginForm("Edit", "PhotoEmployee", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-question-sign"></span> DOWNLOAD FAQ</button>
+                    }
+		</label>
+		<label style="margin-left:10px">
+		@using (Html.BeginForm("Edit", "PhotoEmployee", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-info-sign"></span> DOWNLOAD SOP</button>
+                    }
+		</label>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:100px;" id="products" class="row list-group _3EibU">
+
+        <h2>Edit Profile</h2>
+
+        @using (Html.BeginForm("Upload", "PhotoEmployee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.photo_id)
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="file">CODE</label>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.code, new { htmlAttributes = new { @class = "form-control", @style = "width:50%;" } })
+                        @Html.ValidationMessageFor(model => model.code, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="file">UPLOAD IMAGE</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="file" name="file" id="file1" style="width:50%;" />
+                    </div>
+                </div>
+
+                <div style="margin-top:5px;" class="form-group">
+                    <div class="col-md-offset-2 col-md-2">
+                        <input type="submit" value="Save" class="btn btn-default" />
+			<span>@Html.ActionLink("View Photo", "Index", "PhotoEmployee")</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

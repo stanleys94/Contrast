@@ -1,0 +1,213 @@
+﻿@model IList<CONTRAST_WEB.Models.InvoiceHelper>
+@{
+    ViewBag.Title = "Purchase Order";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    //var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    //grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Purchase Order</li>
+    </ol>
+</div>
+
+<div style="margin-top:110px;width:1200px;" id="products" class="row list-group _3EibU">
+
+
+    @using (Html.BeginForm("Search", "InvoiceDownload", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m[0].loged_employee.code)
+        @Html.HiddenFor(m => m[0].loged_employee.name)
+        @Html.HiddenFor(m => m[0].loged_employee.unit_code_name)
+        @Html.HiddenFor(m => m[0].loged_employee.unit_code_id)
+
+        <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div>
+                <div>
+                    <span><input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" /></span>
+
+                    <span style=" margin-left : 100px">
+                        Start Date Range :
+                        <input type="date" name="start" value="@ViewBag.start" class="form-control" placeholder="search" style="width:150px" />
+                    </span>
+                    <span><input type="date" name="end" value="@ViewBag.end" class="form-control" placeholder="search" style="width:150px" /></span>
+
+                    <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                </div>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("Download", "InvoiceDownload", FormMethod.Post))
+    {
+        <div class="clearfix">
+            <div style="width:100%;text-align:left;height:415px;overflow-y:scroll; overflow-x:scroll; border:0px;padding:0 5px;">
+                <table style="width:2500px;" class="table table-condensed table-hover table-striped">
+
+                    <tr style="background-color:deepskyblue; text-align:center;overflow-y:unset">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:55px;">
+                            BTA NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                            NOREG
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:200px;">
+                            Name
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                            Type
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:250px;">
+                            WBS No
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                            Cost Center
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Quantity
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Amount
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Vendor Code
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Vendor Name
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Invoice Number
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Tax Invoice No
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Destination
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Start Date
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            End Date
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Employee Input
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Create Date
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Download
+                        </th>
+
+                    </tr>
+
+                    @if (Model[0].invoice != null)
+                    {
+                        for (int k = 0; k < Model.Count(); k++)
+                        {
+                            @Html.HiddenFor(m => m[k].loged_employee.code)
+                            @Html.HiddenFor(m => m[k].loged_employee.name)
+                            @Html.HiddenFor(m => m[k].loged_employee.unit_code_name)
+                            @Html.HiddenFor(m => m[k].loged_employee.unit_code_id)
+
+                            @Html.HiddenFor(Model => Model[k].invoice.id_data)
+
+                            <tr>
+                                <td style="width:55px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.group_code)
+                                    @Html.HiddenFor(Model => Model[k].invoice.group_code)
+                                </td>
+                                <td style="width:100px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.no_reg)
+                                    @Html.HiddenFor(Model => Model[k].invoice.no_reg)
+                                </td>
+                                <td style="width:200px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.name)
+                                    @Html.HiddenFor(Model => Model[k].invoice.name)
+                                </td>
+                                <td style="width:100px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.jenis_transaksi)
+                                    @Html.HiddenFor(Model => Model[k].invoice.jenis_transaksi)
+                                </td>
+                                <td style="width:250px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.wbs_no)
+                                    @Html.HiddenFor(Model => Model[k].invoice.wbs_no)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.cost_center)
+                                    @Html.HiddenFor(Model => Model[k].invoice.cost_center)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.qty)
+                                    @Html.HiddenFor(Model => Model[k].invoice.qty)
+                                </td>
+
+				 <td style="width:110px" class="td">
+                                 @Html.HiddenFor(Model => Model[k].invoice.amount_total)
+				 <span>Rp.</span>
+				 @Html.DisplayFor(Model => Model[k].invoice.amount_total)
+                                </td>                           
+                                <td style="width:150px" class="td">
+
+                                    @Html.DisplayFor(Model => Model[k].invoice.vendor_code)
+                                    @Html.HiddenFor(Model => Model[k].invoice.vendor_code)
+                                </td>
+                                <td style="width:350px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.vendor_name)
+                                    @Html.HiddenFor(Model => Model[k].invoice.vendor_name)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].invoice.invoice_number)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.tax_invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].invoice.tax_invoice_number)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.destination_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.destination_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.startDate_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.startDate_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.endDate_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.endDate_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.employee_input)
+                                    @Html.HiddenFor(Model => Model[k].invoice.employee_input)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.create_date)
+                                    @Html.HiddenFor(Model => Model[k].invoice.create_date)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    <button type="submit" name="download" value=@k class="btn btn-info">Download</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+
+        </div>
+        <div style="float:right;margin-top:10px;" class="col-lg-1 col-lg-offset-11">
+            <button type="button" class="btn btn-default" onclick="goBack()">Cancel</button>
+        </div>
+    }
+
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/verify.js"></script>

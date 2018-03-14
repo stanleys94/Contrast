@@ -1,0 +1,77 @@
+﻿@model IList<CONTRAST_WEB.Models.vw_travel_for_settlement>
+
+@{
+    ViewBag.Title = "SETTLEMENT LIST";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Settlement List</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+
+            using (Html.BeginForm("Details", "SettlementList", Model[i]))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => item.id_request)
+                @Html.HiddenFor(m => item.id_destination_city)
+                @Html.HiddenFor(m => item.total_meal)
+                @Html.HiddenFor(m => item.total_miscellaneous)
+                @Html.HiddenFor(m => item.total_ticket)
+                @Html.HiddenFor(m => item.total_transportation)
+                @Html.HiddenFor(m => item.total_winter)
+                @Html.HiddenFor(m => item.total_hotel)
+                @Html.HiddenFor(m => item.total_laundry)
+                @Html.HiddenFor(m => item.no_reg)
+                @Html.HiddenFor(m => item.emp_name)
+                @Html.HiddenFor(m => item.group_code)
+                @Html.HiddenFor(m => item.login_id)
+                @Html.HiddenFor(m => item.comment)
+                @Html.HiddenFor(m => item.final_status)
+                @Html.HiddenFor(m => item.process_reject)
+                <div class="item col-xs-6 col-lg-6">
+                    <div class="thumbnail">
+                        <div class="clearfix">
+                            <div class="column content">
+                                <span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
+                            </div>
+
+                            <div style="padding:20px 1px; width:270px;" class="column menu">
+                                <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span>
+                                <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
+                                @if (item.final_status == "2")
+                                {
+                                    <strong style="color:red">Rejected</strong>
+                                }
+                                else if (item.final_status == "0")
+                                {
+                                    <strong style="color:darkcyan">Pending</strong>
+                                }
+                            </div>
+
+                            <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

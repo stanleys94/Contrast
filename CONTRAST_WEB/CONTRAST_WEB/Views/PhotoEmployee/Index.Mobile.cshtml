@@ -1,0 +1,45 @@
+﻿@model CONTRAST_WEB.Models.tb_m_photo_employee
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.Mobile.cshtml";
+}
+
+<div class="container">
+    <div style="margin-top:70px;" id="products" class="row list-group _3EibU">
+
+        <div style="padding:0px 10px;"  class="well">
+                        <span><strong>DETAIL PROFILE</strong></span>
+                    </div>
+			<span>
+            <img style="height:100px; width:100px;  border-radius: 50%;" src="@Url.Content(Model.photo_emp)" />
+			</span>
+			<label>
+            @Html.ActionLink("Edit", "Edit", new { model=Model })
+			</label>
+        
+        <div>
+            <dl class="dl-horizontal">
+                <dt>
+                    No. Employee
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.code)
+                </dd>
+				<br>
+                <dt>
+                    Insert Date
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.insert_date)
+                </dd>
+            </dl>
+
+
+
+        </div>
+        
+    </div>
+</div>

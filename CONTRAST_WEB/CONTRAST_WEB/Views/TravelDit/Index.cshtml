@@ -1,0 +1,165 @@
+﻿@model CONTRAST_WEB.Models.tb_m_employee
+@{
+    ViewBag.Title = "PARTICIPANT";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    List<string> err = ViewBag.error_list;
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Upload DIT</li>
+    </ol>
+</div>
+<div class="container">
+    <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
+
+        <!--[if !IE]><!-->
+        <style type="text/css">
+            /* Generic Styling, for Desktops/Laptops */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            /* Zebra striping */
+            tr:nth-of-type(odd) {
+                background: #eee;
+            }
+
+            th {
+                background: #333;
+                color: white;
+                font-weight: bold;
+            }
+
+            td, th {
+                padding: 6px;
+                border: 1px solid #ccc;
+                text-align: left;
+            }
+            /*
+            Max width before this PARTICULAR table gets nasty
+            This query will take effect for any screen smaller than 760px
+            and also iPads specifically.
+            */
+            @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+                /* Force table to not be like tables anymore */
+                table, thead, tbody, th, td, tr {
+                    display: block;
+                    border: 0px;
+                }
+
+                    /* Hide table headers (but not display: none;, for accessibility) */
+                    thead tr {
+                        position: absolute;
+                        top: -9999px;
+                        left: -9999px;
+                    }
+
+                tr {
+                    border: 0px solid #ccc;
+                }
+
+                td {
+                    /* Behave  like a "row" */
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    position: relative;
+                    padding-left: 50%;
+                }
+
+                    td:before {
+                        /* Now like a table header */
+                        position: absolute;
+                        /* Top/left values mimic padding */
+                        top: 6px;
+                        left: 6px;
+                        width: 45%;
+                        padding-right: 10px;
+                        white-space: nowrap;
+                    }
+
+                    /*
+             Label the data
+             */
+                    td:before {
+                        content: attr(data-title);
+                    }
+            }
+        </style>
+
+        @using (Html.BeginForm("Upload", "TravelDit", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.code)
+            @Html.HiddenFor(m => m.name)
+            @Html.HiddenFor(m => m.@class)
+            @Html.HiddenFor(m => m.entry_date)
+            @Html.HiddenFor(m => m.position)
+            @Html.HiddenFor(m => m.bank_account)
+            @Html.HiddenFor(m => m.unit_code_code)
+            @Html.HiddenFor(m => m.unit_code_id)
+            @Html.HiddenFor(m => m.unit_code_name)
+            <div><label style="width:100%" class="h5sl">UPLOAD DAFTAR ISIAN TRAVEL</label></div>
+            <table class="table-bordered">
+                <tr>
+                    <td style="width:300px;">
+                        <input style="margin-right:-100px;" type="file" id="FileUpload1" name="UploadedFile" />
+                    </td>
+                    <td style="width:auto;">
+                        <button id="button" class="btn btn-info btn-sm" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>
+
+                        <span>
+                            <strong style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; color:orangered; margin:10px; width:100%;"></strong>
+                            <strong style="font-family:'Lucida Sans'; color:darkslategrey;width:100%;">@ViewBag.Done</strong>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        }
+        <table>
+            <tr>
+                <td style="background-color:whitesmoke;width:300px;">
+                    @using (Html.BeginForm("DetailsView", "TravelDit", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.code)
+                        @Html.HiddenFor(m => m.name)
+                        <input type="submit" class="btn btn-warning btn-sm" value="View DIT" />
+                    }
+                </td>
+                <td style="background-color:whitesmoke;width:auto;">
+                    @using (Html.BeginForm("Download", "TravelDit", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-default btn-sm">DOWNLOAD TEMPLATE</button>
+                    }
+                </td>
+            </tr>
+        </table>
+        <br />
+        @if (err != null)
+        {
+            for (int i = 0; i < err.Count; i++)
+            {
+                <div>
+                    <strong style="color:red">@err[i]</strong><br />
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#button").click(function () {
+            $("#show").fadeIn();
+        });
+    });
+</script>

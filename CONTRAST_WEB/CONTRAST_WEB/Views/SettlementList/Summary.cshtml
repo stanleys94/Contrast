@@ -1,0 +1,192 @@
+﻿@model CONTRAST_WEB.Models.SettlementHelper
+
+@{
+    ViewBag.Title = "SETTLEMENT";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}  
+
+@using (Html.BeginForm("Index", "Menu", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.TravelRequest.id_request)
+    @Html.HiddenFor(m => m.TravelRequest.no_reg)
+    @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
+    @Html.HiddenFor(m => m.TravelRequest.total_meal)
+    @Html.HiddenFor(m => m.TravelRequest.total_hotel)
+    @Html.HiddenFor(m => m.TravelRequest.total_ticket)
+    @Html.HiddenFor(m => m.TravelRequest.total_transportation)
+    @Html.HiddenFor(m => m.TravelRequest.total_laundry)
+    @Html.HiddenFor(m => m.TravelRequest.total_miscellaneous)
+    @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
+    @Html.HiddenFor(m => m.TravelRequest.group_code)
+    @Html.HiddenFor(m => m.TravelRequest.login_id)
+
+    @Html.HiddenFor(m => m.MealSettlement)
+    @Html.HiddenFor(m => m.HotelSettlement)
+    @Html.HiddenFor(m => m.TicketSettlement)
+    @Html.HiddenFor(m => m.TransportationSettlement)
+    @Html.HiddenFor(m => m.LaundrySettlement)
+    @Html.HiddenFor(m => m.MiscSettlement)
+    <div style="margin:100px 0px;" class="container containshad">
+        <div style="margin-top:110px" class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <span><img style="height:60px" src="~/img/Logos_toyota.png" /></span>
+                @*<span><img style="height:60px" src="~/img/tam_logo.PNG" /></span>*@
+                <span style="font-size:20px; color:red;">PT. TOYOTA ASTRA MOTOR</span>
+            </div>
+            <div style="width:450px; margin-bottom:10px;" class="col-md-11 col-md-offset-1"><h5 class="h5c">SETTLEMENT RECEIPT</h5></div>
+
+            <div style="border-bottom:2px solid black; width:1000px; margin-bottom:20px;" class="col-md-11 col-md-offset-1"></div>
+                        
+            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Jl. Laks. Yos Sudarso, Sunter II</h6></div>
+            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">ID :<strong> @Html.DisplayFor(m => m.TravelRequest.total_winter, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
+            
+            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Jakarta Utara - Indonesia</h6></div>
+            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">NOREG :<strong>@Html.DisplayFor(m => m.TravelRequest.total_transportation, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
+
+            <div style="width:950px;" class="col-md-11 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Phone :62-21 - 6515551(Hunting)</h6></div>
+
+            <div style="width:950px; margin-top:20px;" class="col-md-11 col-md-offset-1"><h5 class="h5z">DETAIL TRAVEL</h5></div>
+            <div style="margin-left:150px" class="clearfix main">
+                <div class="main1">
+                    <div class="bulet">
+                        <div class="bulet1" style="background: rgb(246, 246, 246);">
+                            <div class="bulet2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teks">
+                        <div style="color:gray" class="teks1">
+                            <span>From</span>
+                            <span>Jakarta</span>
+                        </div>
+                    </div>
+                    <div class="lab">
+                        <div class="lab1">
+                            Date : @Html.DisplayFor(m => m.TravelRequest.destination_name, new { placeholder = "Availability", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="main1"></div>
+                <div class="main1">
+                    <div class="buled">
+                        <div class="bulet1" style="background: rgb(246, 246, 246);">
+                            <div class="buled2"></div>
+                        </div>
+                    </div>
+                    <div class="teks">
+                        <div style="color:#00b4ee" class="teks1">
+                            To
+                            <span>
+                                @Html.DisplayFor(m => m.TravelRequest.destination_name, new { placeholder = "Availability", @class = "form-control" })
+                                @Html.HiddenFor(m => m.TravelRequest.destination_name)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="lab">
+                        <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.TravelRequest.destination_name, new { placeholder = "Availability", @class = "form-control" })</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width:950px" class="col-md-11 col-md-offset-1"><h5 class="h5z">DETAIL BUDGET</h5></div>
+
+            <div class="col-md-5 col-md-offset-1">
+
+                <div style="width:950px" class="col-md-12">
+                    <h5 class="h5sl">MEAL</h5>
+                </div>
+                <div class="col-md-12">
+                    <H6 style="text-align:left; color:darkgrey;">RP. @Html.DisplayFor(m => m.MealSettlement, new { placeholder = "Availability", @class = "form-control" })</H6>
+                    <div class="form-group input-group">
+                        <H6 style="text-align:left; color:darkgrey;">
+                            @*@Html.DisplayFor(m => m.settlement_meal, new { placeholder = "Budget", @class = "form-control" })*@
+                        </H6>
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    </div>
+                </div>
+
+                <div style="width:950px" class="col-md-12">
+                    <h5 class="h5sl">HOTEL</h5>
+                </div>
+                <div class="col-md-12">
+                    <H6 style="text-align:left; color:darkgrey;">RP. @Html.DisplayFor(m => m.HotelSettlement, new { placeholder = "Availability", @class = "form-control" })</H6>
+                    <div class="form-group input-group">
+                        <H6 style="text-align:left; color:darkgrey;">
+                            @*@Html.DisplayFor(m => m.settlement_hotel, new { @class = "form-control" })*@
+                        </H6>
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    </div>
+                </div>
+
+                <div style="width:950px" class="col-md-12">
+                    <h5 class="h5sl">TICKET</h5>
+                </div>
+                <div class="col-md-12">
+                    <H6 style="text-align:left; color:darkgrey;">RP. @Html.DisplayFor(m => m.TicketSettlement, new { placeholder = "Availability", @class = "form-control" })</H6>
+                    <div class="form-group input-group">
+                        <H6 style="text-align:left; color:darkgrey;">
+                            @*@Html.DisplayFor(m => m.settlement_flight, new { @class = "form-control" })*@
+                        </H6>
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                <div class="col-md-12">
+                    <h5 class="h5sl">LAND TRANSPORTATION</h5>
+                </div>
+                <div class="col-md-12">
+                    <H6 style="text-align:left; color:darkgrey;">RP. @Html.DisplayFor(m => m.TransportationSettlement, new { placeholder = "Availability", @class = "form-control" })</H6>
+                    <div class="form-group input-group">
+                        <H6 style="text-align:left; color:darkgrey;">
+                            @*@Html.DisplayFor(m => m.settlement_transportation, new { @class = "form-control" })*@
+                        </H6>
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <h5 class="h5sl">LAUNDRY</h5>
+                </div>
+                <div class="col-md-12">
+                    <H6 style="text-align:left; color:darkgrey;">RP. @Html.DisplayFor(m => m.LaundrySettlement, new { placeholder = "Availability", @class = "form-control" })</H6>
+                    <div class="form-group input-group">
+                        <H6 style="text-align:left; color:darkgrey;">
+                            @*@Html.DisplayFor(m => m.settlement_laundry, new { @class = "form-control" })*@
+                        </H6>
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <h5 class="h5sl">OTHER</h5>
+                </div>
+                <div class="col-md-12">
+                    <H6 style="text-align:left; color:darkgrey;">RP. @Html.DisplayFor(m => m.MiscSettlement, new { placeholder = "Availability", @class = "form-control" })</H6>
+                    <div class="form-group input-group">
+                        @*@Html.DisplayFor(m => m.settlement_miscellaneous, new { @class = "form-control" })*@
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-11 col-md-offset-1 h5x">
+                <h5 class="h5a">Total Budget</h5>
+                <label>RP.&nbsp;@Html.DisplayFor(m => m.DifferenceSettlement)@Html.HiddenFor(m => m.DifferenceSettlement)</label>
+
+            </div>
+            <div class="col-md-11 col-md-offset-1">
+                <img style="height:200px" src="~/img/receipt-paid4.png" />
+            </div>
+            <div class="col-md-11 col-md-offset-1"><h5 class="h5z2"></h5></div>
+            <hr />
+            <div class="form-group col-md-11 col-md-offset-1">
+                @*<button style="width:145px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">Submit</button>*@
+                @Html.ActionLink("Close", "Index2", "Menu")
+                <button style="width:145px" type="button" class="btn btn-default btn-lg">CLOSE</button>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,223 @@
+﻿@model CONTRAST_WEB.Models.TravelExecutionHelper
+
+@{
+    ViewBag.Title = "TRAVEL EXECUTION";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item"><a style="color:gray;" href="javascript:void(0);" onclick="history.go(-1);">Travel Execution</a></li>
+        <li class="breadcrumb-item active">Execution</li>
+    </ol>
+</div>
+
+@using (Html.BeginForm("Upload", "TravelExecution", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.TravelRequest.group_code)
+    @Html.HiddenFor(m => m.TravelRequest.no_reg)
+
+<div class="container">
+    <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
+        <div class="item col-xs-6 col-lg-6">
+            <div class="thumbnail">
+                <div class="clearfix">
+                    
+                    <div class="col-lg-12 cont-bg">
+                        <label>GEO TAGGING</label>
+                    </div>                     
+                        <div class="col-lg-12 cont-bg">
+                             @*<button id="submit" name="Submit" value="Submit">SUBMIT</button>*@ 
+                            <!--<button class="btn-primary">Check Location</button>-->
+                        </div>
+                        <div style="margin-top:5px" class="col-lg-12 cont-bg">
+                            <label>Latitute&nbsp;&nbsp; &nbsp;&nbsp;:</label>                              
+                            @Html.TextBoxFor(m => m.Templat, new { id = "lat", @style ="border:0px;"  })
+                        </div>
+                        <div style="margin-top:5px" class="col-lg-12 cont-bg">
+                            <label>Longitude&nbsp;:</label>                            
+                            @Html.TextBoxFor(m => m.Templong, new { id = "lon", @style ="border:0px;"  })
+                        </div>
+                        <div class="thumbnail" style="margin-top:10px; height:auto; width:100%; text-align:center;">
+                            <div id="map_canvas" style="width: 100%; height: 300px;"></div>
+                        </div>                    
+                </div>
+            </div>
+            <div style="color:red">
+                @Html.DisplayFor(m => m.error_string)
+            </div>
+        </div>
+
+        <div class="item col-xs-6 col-lg-6">
+            <div class="thumbnail">
+                <div class="clearfix">
+                    <div class="col-lg-12 cont-bg">
+                        <label>UPLOAD PICTURE</label>
+                    </div>
+                    <div class="col-lg-12 cont-bg">
+                        <div>
+                            <input type="file" id="FileUpload1" name="UploadedFile" /><label>*Max size 3Mb</label>
+                            @*<button id="submit" name="Submit" value="Submit">SUBMIT</button>*@
+                        </div>
+                        <!-- <div>
+                             <input style="margin-top:5px; border-radius:5px;" placeholder="Description" id="lon" name="lon" type="text" />
+                         </div> -->
+                    </div>
+                    <div class="col-xs-12 col-lg-12">
+                        <div id="imgPreview" class="col-md-12 thumbnail" style="display:none; margin-top:10px;">
+                            <img class="img-responsive" id="targetImg" />
+                            <div class="caption">
+                               
+                                <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
+                                <span id="description"></span>
+                            </div>
+                             
+                            <input style="margin-top:5px; border-radius:5px;" placeholder="Description" id="lon" name="lon" type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                <div class="item col-lg-12 col">                   
+                        <table>
+                          
+                        </table>  
+                    <button id="submit" name="Submit" value="Submit" class="btn btn-default btn-lg">SUBMIT</button>
+                    <button type="button" class="btn btn-default btn-lg" onclick="goBack()">Cancel</button>
+                </div>         
+        </div>
+    </div>
+</div>
+
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJP3X7VXW1rv0yK97KRPlJAiPPsL2mEgg"></script>
+<script type="text/javascript">
+
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success);
+    } else {
+        alert("Geo Location is not supported on your current browser!");
+    }
+    function success(position) {
+        var lat = position.coords.latitude;
+        $("#lat").val(lat);
+        var long = position.coords.longitude;
+        $("#lon").val(long);
+        var city = position.coords.locality;
+        var myLatlng = new google.maps.LatLng(lat, long);
+        var myOptions = {
+            center: myLatlng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            title: "lat: " + lat + " long: " + long
+        });
+
+        marker.setMap(map);
+        var infowindow = new google.maps.InfoWindow({ content: "<b>User Address</b><br/> Latitude:" + lat + "<br /> Longitude:" + long + "<br /> City:" + city + "" });
+        infowindow.open(map, marker);
+    }
+
+    $(document).ready(function () {
+
+        $("#SelectImage").change(function () {
+
+            var File = this.files;
+
+            if (File && File[0]) {
+                ReadImage(File[0]);
+            }
+        })
+
+    })
+
+    var ReadImage = function (file) {
+
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+
+        image.src = _file.target.result;
+        image.onload = function () {
+
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+                $("#targetImg").attr('src', _file.target.result);
+                $("#description").text("Size:" + size + ", " + height + "X " + width + ", " + type + "");
+                $("#imgPreview").show();
+                $("lon").val("longitude");
+
+            }
+        }
+    }
+
+    var ClearPreview = function () {
+        $("#SelectImage").val('');
+        $("#description").text('');
+        $("#imgPreview").hide();
+
+    }
+
+    var Uploadimage = function () {
+
+        var file = $("#SelectImage").get(0).files;
+
+        var data = new FormData;
+        data.append("ImageFile", file[0]);
+        data.append("ProductName", "SamsungA8");
+
+        $.ajax({
+
+            type: "Post",
+            url:"/TravelExecute/ImageUpload",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (imgID) {
+
+            ClearPreview();
+
+        $("#uploadedImage").append('<img src="/Test/ImageRetrieve?imgID=' + imgID + '" class="img-responsive thumbnail" />');
+
+                //$("#uploadedImage").append('<img src="/UploadedImage/' + response + '" class="img-responsive thumbnail" />');
+
+            }
+        })
+        //
+    }
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">NOTICE</h4>
+            </div>
+            <div class="modal-body">
+                Hai... <strong>USER</strong>. Travel has Executed Please Back To Menu..
+            </div>
+        </div>
+    </div>
+</div>
+
+ 

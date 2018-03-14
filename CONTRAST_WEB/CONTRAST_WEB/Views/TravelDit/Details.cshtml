@@ -1,0 +1,139 @@
+﻿@model CONTRAST_WEB.Models.tb_r_travel_dit
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);" onclick="history.go(-3);">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);" onclick="history.go(-2);">Upload DIT</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);" onclick="history.go(-1);">View DIT</a></li>
+        <li class="breadcrumb-item active">Details DIT</li>
+    </ol>
+</div>
+<div style="margin-top:140px;" class="container">
+    <div class="col-lg-5  col-lg-offset-1">
+        <dl class="dl-horizontal">
+            <dt>
+                Noreg
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.no_reg)
+            </dd>
+
+            <dt>
+                Travel Month
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.travel_month)
+            </dd>
+
+            <dt>
+                Periode
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.periode)
+            </dd>
+
+            <dt>
+                Destination Code
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.destination_code)
+            </dd>
+
+            <dt>
+                Destination City
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.destination_city)
+            </dd>
+
+            <dt>
+                Overseas Flag
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.overseas_flag)
+            </dd>
+
+            <dt>
+                Travel Purpose
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.travel_purpose)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-lg-6">
+        <dl class="dl-horizontal">
+            <dt>
+                Allowance Meal Idr
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.allowance_meal_idr)
+            </dd>
+
+            <dt>
+                Allowance Hotel
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.allowance_hotel)
+            </dd>
+            <dt>
+                Allowance Ticket
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.allowance_ticket)
+            </dd>
+
+            <dt>
+                Start Date
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.start_date)
+            </dd>
+
+            <dt>
+                End Date
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.end_date)
+            </dd>
+
+            <dt>
+                User Created
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.user_created)
+            </dd>
+
+            <dt>
+                Create Date
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.create_date)
+            </dd>
+
+        </dl>
+    </div>
+
+    <div style="float:left;" class="col-lg-10 col-lg-offset-2">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.id_dit }) |
+            @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>

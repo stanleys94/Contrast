@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 u">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body data-spy="scroll">
+    <nav class="navbar navbar-fixed-top navbar-default">
+                @*<a  class="navbar-brand" onclick="goBack()">
+				<a href='@Url.Action("Index", "Menu")' class="navbar-brand" onclick="goBack()">
+                    <span>
+					<i class="glyphicon glyphicon-chevron-left white"></i>
+					</span>
+                    <span style="margin:10px;"><strong style="color:white">@ViewBag.Title</strong></span>
+                </a>*@
+				
+				@using (Html.BeginForm("Index", "Home"))
+				{
+                    
+                    <span>
+					
+					</span>
+					<span style="margin:10px;"><strong style="color:white">@ViewBag.Title</strong></span>
+                    
+                    @Html.AntiForgeryToken()
+				}
+    </nav>
+    
+    <div class="container">
+        @RenderBody()
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

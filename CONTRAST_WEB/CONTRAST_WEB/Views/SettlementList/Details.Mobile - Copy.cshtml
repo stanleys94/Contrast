@@ -1,0 +1,283 @@
+﻿@model CONTRAST_WEB.Models.SettlementHelper
+
+@{
+    ViewBag.Title = "SETTLEMENT";
+    Layout = "~/Views/Shared/_Layout.Mobile.cshtml";
+}
+
+
+<div class="container">
+    <div style="margin:90px auto auto auto; min-width:50%; max-width:345px;" class="row">
+        <div class="col-xs-11 col-xs-offset-1">
+            <label>EXTEND ?</label>
+            <div style="width:125px;" class="radio">
+                <label style="float:right;">
+                    <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" value="false" checked>
+                    NO
+                </label>
+                <label style="float:left;">
+                    <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck" value="true">
+                    YES
+                </label>
+            </div>
+        </div>
+        <div class="col-xs-12" style="margin-bottom:0px;display:none;float:left;" id="ifYes00"><label>DURATION OF EXTEND :</label></div>
+        
+        <div class="col-xs-12" style="margin-bottom:0px;display:none;float:left;" id="ifYes11">
+            <label>Start</label>
+            <div class="form-group input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input class="form-control" type="date" />
+            </div>
+        </div>
+        <div class="col-xs-12" style="margin-bottom:0px;display:none;float:left;" id="ifYes22">
+            <label>End</label>
+            <div style="max-width:280px;" class="form-group input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input class="form-control" type="date" />
+            </div>
+        </div>
+        <div class="col-xs-12"><H5 class="h5s">MEAL</H5></div>
+        @using (Html.BeginForm("AddUpload", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => Model.TravelRequest.id_request)
+            @Html.HiddenFor(m => Model.TravelRequest.id_destination_city)
+            @Html.HiddenFor(m => Model.TravelRequest.total_meal)
+            @Html.HiddenFor(m => Model.TravelRequest.total_miscellaneous)
+            @Html.HiddenFor(m => Model.TravelRequest.total_ticket)
+            @Html.HiddenFor(m => Model.TravelRequest.total_transportation)
+            @Html.HiddenFor(m => Model.TravelRequest.total_winter)
+            @Html.HiddenFor(m => Model.TravelRequest.total_hotel)
+            @Html.HiddenFor(m => Model.TravelRequest.total_laundry)
+            @Html.HiddenFor(m => Model.TravelRequest.no_reg)
+            @Html.HiddenFor(m => Model.TravelRequest.emp_name)
+            @Html.HiddenFor(m => Model.TravelRequest.group_code)
+            @Html.HiddenFor(m => Model.TravelRequest.login_id)
+
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
+                <div class="form-group">
+                    <div class="input-group">
+                        <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled />-->
+                        @Html.TextBoxFor(m => m.TravelRequest.total_meal, new { placeholder = "Availability", @class = "form-control", @readonly = "readonly", @disabled = "true" })
+                        @Html.HiddenFor(m => m.TravelRequest.total_meal)
+                        <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Actual</H6>
+                <div class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
+                    @Html.TextBoxFor(m => m.TravelRequest.total_meal, new { placeholder = "Availability", @class = "form-control", @readonly = "readonly", @disabled = "true" })
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:0px;display:none;float:left;" id="ifYes">
+                <H6 class="h6s">Reimburse</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })
+                    @Html.HiddenFor(m => m.MealSettlement)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+            </div>
+            <div class="col-xs-12"><H5 class="h5s">HOTEL</H5></div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.TravelRequest.total_hotel, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })
+                    @Html.HiddenFor(m => m.TravelRequest.total_hotel)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Actual</H6>
+                <div class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
+                    @Html.TextBoxFor(m => m.TravelRequest.total_hotel, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:0px;display:none;float:left;" id="ifYes2">
+                <H6 class="h6s">Reimburse</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.HotelSettlement, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.HotelSettlement)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">@*col-xs-offset-1*@</div>
+            <div class="col-xs-11 col-xs-offset-1"><H5 class="h5s">TICKET</H5></div>
+            <div class="col-xs-12 col-xs-offset-1">
+                <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.TravelRequest.total_ticket, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })
+                    @Html.HiddenFor(m => m.TravelRequest.total_ticket)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Actual</H6>
+                <div class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
+                    @Html.TextBoxFor(m => m.TravelRequest.total_ticket, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:0px;display:none;float:left;" id="ifYes3">
+                <H6 class="h6s">Reimburse</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.TicketSettlement, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.TicketSettlement)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">@*col-xs-offset-1*@</div>
+
+
+            <div class="col-xs-12"><H5 class="h5s">LAND TRANSPORTATION</H5></div>
+            <div class="col-xs-12">
+                <H6 class="h6s">Reimburse</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.TransportationSettlement, new { @class = "form-control" })
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+                <div style="position:relative;">
+                    <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
+                        Choose File...
+                        <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info5").html($(this).val());'>-->
+                        <input type="file" id="FileUpload1" name="UploadedFile1" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val());'>
+                    </a>
+                    &nbsp;
+                    <span class='label label-info' id="upload-file-info5"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12"><H5 class="h5s">LAUNDRY</H5></div>
+            <div class="col-xs-12" >
+                <H6 class="h6s">Reimburse</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.LaundrySettlement, new { @class = "form-control" })
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+                <div style="position:relative;">
+                    <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
+                        Choose File...
+                        <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info6").html($(this).val());'>-->
+                        <input type="file" id="FileUpload2" name="UploadedFile2" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; '   size="40" onchange='$("#upload-file-info6").html($(this).val());'>  
+                    </a>
+                    &nbsp;
+                    <span class='label label-info' id="upload-file-info6"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12"><H5 class="h5s">OTHER</H5></div>
+            <div class="col-xs-12">
+                <H6 class="h6s">Reimburse</H6>
+                <div class="form-group input-group">
+                    @Html.TextBoxFor(m => m.MiscSettlement, new { @class = "form-control" })
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+                <div style="position:relative;">
+                    <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
+                        Choose File...
+                        <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;'size="40" onchange='$("#upload-file-info7").html($(this).val());'>
+                    </a>
+                    &nbsp;
+                    <span class='label label-info' id="upload-file-info7"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-xs-offset-1">
+                <br />
+            </div>
+
+            <!--actual cost, bukan settlement -->
+            @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
+            @Html.HiddenFor(m => m.TotalSettlement)
+            @Html.HiddenFor(m => m.TravelRequest.id_request)
+            @Html.HiddenFor(m => m.TravelRequest.no_reg)
+            @Html.HiddenFor(m => m.TravelRequest.group_code)
+            @Html.HiddenFor(m => m.TravelRequest.login_id)
+
+            @*<div style="margin-left:100px" class="col-xs-11 col-xs-offset-1">
+                <button type="submit" style="width:145px" class="btn btn-info btn-xs" target=".bs-example-modal-sm">Upload</button>
+                <hr />
+                <label>TOTAL</label>
+                <H6 style="text-align:left; color:darkgrey;"></H6><span>IDR @Html.DisplayFor(m => m.TravelRequest.grand_total_settlement)</span>
+                <H6 style="text-align:left; color:darkgrey;">Settlement</H6><span>IDR @Html.DisplayFor(m => m.TotalSettlement)</span>
+                <hr class="bigHr" />
+                <span>IDR @Html.DisplayFor(m => m.DifferenceSettlement)@Html.HiddenFor(m => m.DifferenceSettlement)</span>
+                @*&nbsp;<label style="text-align:left; color:red;">DIFFERENCES BETWEEN SUSPENSE AND SETTLEMENT</label>
+                <hr />
+            </div>*@
+        }
+
+        @using (Html.BeginForm("Insert", "SettlementList", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.TravelRequest.id_request)
+            @Html.HiddenFor(m => m.TravelRequest.no_reg)
+            @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
+            @Html.HiddenFor(m => m.TravelRequest.total_meal)
+            @Html.HiddenFor(m => m.TravelRequest.total_hotel)
+            @Html.HiddenFor(m => m.TravelRequest.total_ticket)
+            @Html.HiddenFor(m => m.TravelRequest.total_transportation)
+            @Html.HiddenFor(m => m.TravelRequest.total_laundry)
+            @Html.HiddenFor(m => m.TravelRequest.total_miscellaneous)
+            @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
+            @Html.HiddenFor(m => m.TravelRequest.group_code)
+            @Html.HiddenFor(m => m.TravelRequest.login_id)
+
+            @Html.HiddenFor(m => m.MealSettlement)
+            @Html.HiddenFor(m => m.HotelSettlement)
+            @Html.HiddenFor(m => m.TicketSettlement)
+            @Html.HiddenFor(m => m.TransportationSettlement)
+            @Html.HiddenFor(m => m.LaundrySettlement)
+            @Html.HiddenFor(m => m.MiscSettlement)
+
+            <div style="max-width:350px; margin:0 auto;" class="col-xs-12">
+                <button type="submit" style="width:130px" class="btn btn-info btn-sm" target=".bs-example-modal-sm">Submit</button>
+                <button type="button" style="width:130px" class="btn btn-default btn-sm" onclick="goBack()">Cancel</button>
+            </div>
+            <div class="col-xs-12">
+
+            </div>
+        }
+
+    </div>
+    <hr />
+</div>
+
+<script>
+    function yesnoCheck() {
+        if (document.getElementById('yesCheck').checked) {
+            document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('ifYes2').style.display = 'block';
+            document.getElementById('ifYes3').style.display = 'block';
+            document.getElementById('ifYes11').style.display = 'block';
+            document.getElementById('ifYes22').style.display = 'block';
+            document.getElementById('ifYes00').style.display = 'block';
+        }
+        else {
+            document.getElementById('ifYes').style.display = 'none';
+            document.getElementById('ifYes2').style.display = 'none';
+            document.getElementById('ifYes3').style.display = 'none';
+            document.getElementById('ifYes11').style.display = 'none';
+            document.getElementById('ifYes22').style.display = 'none';
+            document.getElementById('ifYes00').style.display = 'none';
+        }
+    }
+</script>

@@ -1,0 +1,99 @@
+﻿@model CONTRAST_WEB.Models.tb_m_employee
+@{
+    Layout = "~/Views/Shared/_LayoutMenu.Mobile.cshtml";
+}
+
+<div id="products" class="row list-group _3EibU">
+
+    <div class="item col-xs-4" style="padding:2px;">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "TravelRequest", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.HiddenFor(m => m.@class)
+                @Html.HiddenFor(m => m.entry_date)
+                @Html.HiddenFor(m => m.position)
+                @Html.HiddenFor(m => m.bank_account)
+                @Html.HiddenFor(m => m.unit_code_code)
+                @Html.HiddenFor(m => m.unit_code_id)
+                @Html.HiddenFor(m => m.unit_code_name)
+                @Html.AntiForgeryToken()
+                <div style="padding:15px 0px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/Travel-Request-icon.png" alt="" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">ASSIGNMENT</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="item col-xs-4" style="padding:2px;">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "TravelStatus", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.AntiForgeryToken()
+                <div style="padding:15px 0px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/Travel-Status-icon.png" alt="" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">STATUS</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="item col-xs-4" style="padding:2px;">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "TravelExecution", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.AntiForgeryToken()
+                <div style="padding:15px 0px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/Travel-Execution-icon.png" alt="" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">EXECUTION</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="item col-xs-4" style="padding:2px;">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.AntiForgeryToken()
+                <div style="padding:15px 0px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/Settlement-icon.png" alt="" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">SETTLEMENT</div>
+                </div>
+
+            }
+        </div>
+    </div>
+
+    <div class="item col-xs-4" style="padding:2px;">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "TravelConfirmation", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.HiddenFor(m => m.@class)
+                @Html.HiddenFor(m => m.entry_date)
+                @Html.HiddenFor(m => m.position)
+                @Html.HiddenFor(m => m.bank_account)
+                @Html.HiddenFor(m => m.unit_code_code)
+                @Html.HiddenFor(m => m.unit_code_id)
+                @Html.HiddenFor(m => m.unit_code_name)
+                @Html.AntiForgeryToken()
+
+                <div style="padding:15px 0px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/travel-confirmation-menu.png" alt="" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">CONFIRMATION</div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>

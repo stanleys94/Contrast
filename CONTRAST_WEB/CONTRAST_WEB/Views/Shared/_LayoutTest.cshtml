@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 u">
+    <title>CONTRAST</title>
+    <link href="~/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/test.css" rel="stylesheet" />
+</head>
+
+@model CONTRAST_WEB.Models.TravelRequestHelper
+<body>
+    <div class="page-header">
+        <img height="auto" width="150px" src="~/img/small_logo_horizontal.png" /><a href="/Home/Index/"><span class="glyphicon glyphicon-log-out white"></span></a>
+    </div>
+    <div class="well">
+        <img style="height:50px; width:auto;" src="~/img/small_logo_c.png" />
+        <span>Hello, <strong>@Html.DisplayTextFor(m => m.employee_info.name )</strong></span>
+    </div>
+    <div id="header-row" style="overflow:hidden; height:200px; width:auto;">
+        <!-- container-fluid is the same as container but spans a wider viewport,
+        it still has padding though so you need to remove this either by adding
+        another class with no padding or inline as I did below -->
+        <div class="container-fluid" style="padding: 0px; margin: 0 0 20px;">
+            <div class="row">
+                <!-- You originally has it set up for two columns, remove the second
+                column as it is unneeded and set the first to always span all 12 columns
+                even when at its smallest (xs). Set the overflow to hidden so no matter
+                the height of your image it will never show outside this div-->
+                <div class="col-xs-12">
+                    <a href="index.html">
+                        <!-- place your image here -->
+                        <img src="~/img/image_banner.jpg" alt="company logo" style="width: 100%; height:auto;">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="margin:20px 0px" />
+    
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <hr />
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

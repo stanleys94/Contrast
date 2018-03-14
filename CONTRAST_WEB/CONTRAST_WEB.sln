@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CONTRAST_WEB", "CONTRAST_WEB\CONTRAST_WEB.csproj", "{21BAA205-34A6-4460-928C-DF4550B335A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CONTRAST_WEB.Tests", "CONTRAST_WEB.Tests\CONTRAST_WEB.Tests.csproj", "{BDE7E7F6-F0E7-4452-8E6C-873DF13BBDFF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21BAA205-34A6-4460-928C-DF4550B335A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21BAA205-34A6-4460-928C-DF4550B335A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21BAA205-34A6-4460-928C-DF4550B335A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21BAA205-34A6-4460-928C-DF4550B335A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE7E7F6-F0E7-4452-8E6C-873DF13BBDFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE7E7F6-F0E7-4452-8E6C-873DF13BBDFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE7E7F6-F0E7-4452-8E6C-873DF13BBDFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE7E7F6-F0E7-4452-8E6C-873DF13BBDFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B280B5AC-C469-4AC1-BC4F-6C871A88F1ED}
+	EndGlobalSection
+EndGlobal

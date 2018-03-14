@@ -1,0 +1,64 @@
+﻿@model CONTRAST_WEB.Models.tb_m_photo_employee
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);" onclick="history.go(-1);">Home</a></li>
+        <li class="breadcrumb-item active">Profile</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:100px;" id="products" class="row list-group _3EibU">
+
+        <h2>Details Profile</h2>
+
+        <div>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Noreg
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.code)
+                </dd>
+
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.photo_emp)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.photo_emp)
+                    </dd>*@
+
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.status_photo)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.status_photo)
+                    </dd>*@
+
+                <dt>
+                    Insert Date
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.insert_date)
+                </dd>
+
+            </dl>
+
+
+
+        </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.photo_id }) |
+            @Html.ActionLink("Back to Menu", "Index", "Menu")
+        </p>
+    </div>
+</div>

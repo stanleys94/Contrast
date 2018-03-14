@@ -1,0 +1,282 @@
+﻿@model CONTRAST_WEB.Models.SettlementHelper
+
+@{
+    ViewBag.Title = "SETTLEMENT";
+    Layout = "~/Views/Shared/_Layout.Mobile.cshtml";
+}
+
+<div class="container">
+    <div style="margin-top:70px;" id="products" class="row list-group _3EibU">
+	
+	
+        @using (Html.BeginForm("Insert", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
+            @Html.HiddenFor(m => m.TotalSettlement)
+            @Html.HiddenFor(m => m.TravelRequest.id_request)
+            @Html.HiddenFor(m => m.TravelRequest.no_reg)
+            @Html.HiddenFor(m => m.TravelRequest.group_code)
+            @Html.HiddenFor(m => m.TravelRequest.login_id)
+			
+			@Html.HiddenFor(m => m.TravelRequest.destination_name)
+			@Html.HiddenFor(m => m.TravelRequest.start_date)
+			@Html.HiddenFor(m => m.TravelRequest.end_date)
+
+			
+            <div class="col-xs-12"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div>
+            <div class="col-md-12">
+                <strong class="fnt2">Destination :</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.destination_name)
+                </div>
+                <strong class="fnt2">Start Date :</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.start_date)
+                </div>
+				
+				<strong class="fnt2">End Date :</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.end_date)
+				</div>
+				
+				@if (Model.TravelRequest.final_status == "2")
+				{
+                <strong><h2>Rejected settlement</h2></strong>
+                <span style="text-align:right;margin-left:100px;"> Reason of Rejection : </span>
+                <span style="color:red"> @Model.TravelRequest.comment</span>
+				}
+            </div>
+            <div style="margin:0px auto" class="col-xs-12">
+                <label>EXTEND ?</label>               
+            </div>
+			
+			<div class="col-xs-12">
+				<div style="width:150px;" class="radio">
+                        <label style="float:left;" id="mlt">
+                            @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck", @checked = true }) YES
+                        </label>
+                        <label style="float:right;" id="sgl">
+                            @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck" }) NO
+                        </label>
+                    </div>
+			</div>
+			<br>
+            <div style="margin-bottom:0px;display:block;" class="col-xs-12" id="ifYa1"><label>DURATION Of EXTEND :</label></div>
+
+            <div style="margin-bottom:0px;display:block;" class="col-xs-12" id="ifYa2">
+                @Html.ValidationMessageFor(m => m.Start_Extend, "", new { @class = "text-danger" })<br />
+                <label>Start</label>
+                <div style="min-width:300px;max-width:300px;" class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <!--<input type="date" style="width:100%" />-->
+                    @Html.TextBoxFor(m => m.Start_Extend, new { @class = "form-control", @type = "date", placeholder = "Departure", @style = "width:100%" })
+                </div>
+            </div>
+
+            <div style="margin-bottom:0px;display:block;" class="col-xs-12" id="ifYa3">
+                @Html.ValidationMessageFor(m => m.End_Extend, "", new { @class = "text-danger" })<br />
+                <label>End</label>
+                <div style="min-width:300px;max-width:300px;" class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <!--<input type="date" style="width:100%" />-->
+                    @Html.TextBoxFor(m => m.End_Extend, new { @class = "form-control", @type = "date", placeholder = "Arrival", @style = "width:100%" })
+                    @*@Html.HiddenFor(m => m.End_Extend)*@
+                </div>
+            </div>
+
+            <div class="col-xs-12"><H5 class="h5s">MEAL</H5></div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_meal)" />
+                    @*@Html.TextBoxFor(m => m.TravelRequest.total_meal, new { placeholder = "Availability", @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
+                    @Html.HiddenFor(m => m.TravelRequest.total_meal)
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Actual</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
+                    <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_meal)" />
+                    @*@Html.TextBoxFor(m => m.TravelRequest.total_meal, new { placeholder = "Availability", @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
+                <H6 class="h6s">Reimburse</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @Value = String.Format("{0:n0}", Model.MealSettlement) })*@
+                    @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly"})
+                    @Html.HiddenFor(m => m.MealSettlement)
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:0px;display:block;" id="ifYesm1">
+                <H6 class="h6s">Please Count Your Meal :</H6>
+                <div class="form-group input-group">
+                    <button type="submit" class="btn btn-default" name="sum" value="Submit">Calculate Meal/day</button>
+                </div>
+            </div>
+            <div class="col-xs-12"><H5 class="h5s">HOTEL</H5></div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_hotel)" />
+                    @*@Html.TextBoxFor(m => m.TravelRequest.total_hotel, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
+                    @Html.HiddenFor(m => m.TravelRequest.total_hotel)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Actual</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
+                    <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_hotel)" />
+                    @*@Html.TextBoxFor(m => m.TravelRequest.total_hotel, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:0px;display:block;" id="ifYes2">
+                <H6 class="h6s">Reimburse</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @Html.TextBoxFor(m => m.HotelSettlement, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.HotelSettlement)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">@*col-xs-offset-1*@</div>
+            <div class="col-xs-12"><H5 class="h5s">TICKET</H5></div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_ticket)" />
+                    @*@Html.TextBoxFor(m => m.TravelRequest.total_ticket, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
+                    @Html.HiddenFor(m => m.TravelRequest.total_ticket)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <H6 style="text-align:left; color:darkgrey;">Actual</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
+                    <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_ticket)" />
+                    @*@Html.TextBoxFor(m => m.TravelRequest.total_ticket, new { @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-xs-offset-1" style="margin-bottom:0px;display:block;" id="ifYes3">
+                <H6 class="h6s">Reimburse</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @Html.TextBoxFor(m => m.TicketSettlement, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.TicketSettlement)
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+            </div>
+            <div class="col-xs-12">@*col-xs-offset-1*@</div>
+
+            <div class="col-xs-12"><H5 class="h5s">LAND TRANSPORTATION</H5></div>
+            <div class="col-xs-12">
+                <H6 class="h6s">Reimburse</H6>
+                <div style="min-width:200px;max-width:320px;"class="form-group input-group">
+                    @Html.TextBoxFor(m => m.TransportationSettlement, new { @class = "form-control" })
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+                <div style="position:relative;">
+                    <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
+                        Choose File...
+                        <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info5").html($(this).val());'>-->
+                        <input type="file" id="FileUpload1" name="UploadedFile1" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val());'>
+                    </a>
+                    &nbsp;
+                    <span class='label label-info' id="upload-file-info5"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+
+
+            <div class="col-xs-12"><H5 class="h5s">LAUNDRY</H5></div>
+            <div class="col-xs-12">
+                <H6 class="h6s">Reimburse</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @Html.TextBoxFor(m => m.LaundrySettlement, new { @class = "form-control" })
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+                <div style="position:relative;">
+                    <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
+                        Choose File...
+                        <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info6").html($(this).val());'>-->
+                        <input type="file" id="FileUpload2" name="UploadedFile2" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+                    </a>
+                    &nbsp;
+                    <span class='label label-info' id="upload-file-info6"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12"><H5 class="h5s">OTHER</H5></div>
+            <div class="col-xs-12">
+                <H6 class="h6s">Reimburse</H6>
+                <div style="min-width:200px;max-width:320px;" class="form-group input-group">
+                    @Html.TextBoxFor(m => m.MiscSettlement, new { @class = "form-control" })
+                    <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
+                    <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
+                </div>
+                <div style="position:relative;">
+                    <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
+                        Choose File...
+                        <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val());'>
+                    </a>
+                    &nbsp;
+                    <span class='label label-info' id="upload-file-info7"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <br />
+            </div>
+            //}
+
+
+            <div class="col-xs-12">
+                <button type="submit" style="width:145px" class="btn btn-info btn-sm" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
+            </div>
+        }
+
+    </div>
+    <hr />
+</div>
+
+
+<script>
+    function yesnoCheck() {
+        if (document.getElementById('yesCheck').checked) {
+            document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('ifYesm1').style.display = 'block';
+            document.getElementById('ifYes2').style.display = 'block';
+            document.getElementById('ifYes3').style.display = 'block';
+            document.getElementById('ifYa1').style.display = 'block';
+            document.getElementById('ifYa2').style.display = 'block';
+            document.getElementById('ifYa3').style.display = 'block';
+        }
+        else {
+            document.getElementById('ifYes').style.display = 'none';
+            document.getElementById('ifYesm1').style.display = 'none';
+            document.getElementById('ifYes2').style.display = 'none';
+            document.getElementById('ifYes3').style.display = 'none';
+            document.getElementById('ifYa1').style.display = 'none';
+            document.getElementById('ifYa2').style.display = 'none';
+            document.getElementById('ifYa3').style.display = 'none';
+        }
+    }
+</script>

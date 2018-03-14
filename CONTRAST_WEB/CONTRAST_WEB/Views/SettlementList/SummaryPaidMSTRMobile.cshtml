@@ -1,0 +1,53 @@
+﻿@model CONTRAST_WEB.Models.vw_summary_settlement
+
+@{
+    ViewBag.Title = "RECEIPT SETTLEMENT";
+    Layout = "~/Views/Shared/_LayoutM.Mobile.cshtml";
+    var a = Model;
+}
+
+@using (Html.BeginForm("Print", "SettlementList", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.create_date)
+    @Html.HiddenFor(m => m.destination_1)
+    @Html.HiddenFor(m => m.destination_2)
+    @Html.HiddenFor(m => m.destination_3)
+    @Html.HiddenFor(m => m.destination_4)
+    @Html.HiddenFor(m => m.destination_5)
+    @Html.HiddenFor(m => m.destination_6)
+    @Html.HiddenFor(m => m.emp_name)
+    @Html.HiddenFor(m => m.endDate_1)
+    @Html.HiddenFor(m => m.endDate_2)
+    @Html.HiddenFor(m => m.endDate_3)
+    @Html.HiddenFor(m => m.endDate_4)
+    @Html.HiddenFor(m => m.endDate_5)
+    @Html.HiddenFor(m => m.endDate_6)
+    @Html.HiddenFor(m => m.grand_total_settlement)
+    @Html.HiddenFor(m => m.group_code)
+    @Html.HiddenFor(m => m.no_reg)
+    @Html.HiddenFor(m => m.startDate_1)
+    @Html.HiddenFor(m => m.startDate_2)
+    @Html.HiddenFor(m => m.startDate_3)
+    @Html.HiddenFor(m => m.startDate_4)
+    @Html.HiddenFor(m => m.startDate_5)
+    @Html.HiddenFor(m => m.startDate_6)
+    @Html.HiddenFor(m => m.total_hotel)
+    @Html.HiddenFor(m => m.total_laundry)
+    @Html.HiddenFor(m => m.total_meal)
+    @Html.HiddenFor(m => m.total_miscellaneous)
+    @Html.HiddenFor(m => m.total_preparation)
+    @Html.HiddenFor(m => m.total_ticket)
+    @Html.HiddenFor(m => m.total_transportation)
+    @Html.HiddenFor(m => m.total_winter)
+
+    <div style="margin:100px 0px;" class="container containshad">
+        <div style="margin-top:110px" class="row">
+            <div class="form-group col-md-11 col-md-offset-1">
+                @*<button style="width:145px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">Submit</button>*@
+                <button style="width:145px" type="submit" class="btn btn-default btn-lg">PRINT</button>               
+                @*@Html.ActionLink("Close", "Index", "Home")*@
+                @*<a href="javascript:void(0);" onclick="history.go(-3);">CLOSE</a>*@
+            </div>
+        </div>
+    </div>
+}

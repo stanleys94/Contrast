@@ -1,0 +1,189 @@
+﻿@model IList<CONTRAST_WEB.Models.ActualCostVerifiedHelper>
+@{
+    ViewBag.Title = "Actual Cost Verivy";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    String position = ViewBag.position;
+    //var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    //grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Actual Cost Verification</li>
+    </ol>
+</div>
+
+<div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
+    @using (Html.BeginForm("Insert", "Verify", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div>
+                <div>
+                    <span><input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" /></span>
+
+                    <span style=" margin-left : 100px">
+                        Start Date Range :
+                        <input type="date" name="start" value="@ViewBag.start" class="form-control" placeholder="search" style="width:150px" />
+                    </span>
+                    <span><input type="date" name="end" value="@ViewBag.end" class="form-control" placeholder="search" style="width:150px" /></span>
+
+                    <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
+                <table style="width:1185px;margin-bottom:0px;" class="table table-condensed table-striped">
+                    <tr style="background-color:deepskyblue; text-align:center;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:95px;">
+                            BTA NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:160px;">
+                            Name
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                            Type
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:170px;">
+                            Destination
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                            Start Date
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                            End Date
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                            Provider
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            Amount
+                        </th>
+                        <th style="color:white; background-color:limegreen; text-align:left; border-right:1px solid white; width:100px;">
+                            <div style="margin:1.5px 0;" class="checkbox">
+                                <input type="checkbox" class="select-all" name="select-all" />Approve
+                            </div>
+                        </th>
+                        <th style="color:white; background-color:red; text-align:left; border-right:1px solid white; width:80px;">
+                            <div style="margin:1.5px 0;" class="checkbox">
+                                <input type="checkbox" class="select-all2" name="select-all2" />Reject
+                            </div>
+                        </th>
+                        <th style="color:white; background-color:red; text-align:left; border-right:1px solid white; width:160px;">
+                            Reason
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;padding:0 5px;">
+                <table style="width:1165px;" class="table table-condensed table-hover table-striped">
+                    @if (Model[0].ActualCost_Verified == null)
+                    {
+                        Model.Add(new CONTRAST_WEB.Models.ActualCostVerifiedHelper());
+                            @Html.HiddenFor(Model => Model[0].EmployeeInfo.code, new { @Value = Model[0].EmployeeInfo.code })
+                            @Html.HiddenFor(Model => Model[0].EmployeeInfo.position, new { @Value = Model[0].EmployeeInfo.position })
+                    }
+                    else
+                    {
+                        for (int k = 0; k < Model.Count(); k++)
+                        {
+                            @Html.HiddenFor(Model => Model[k].EmployeeInfo.code)
+                            @Html.HiddenFor(Model => Model[k].EmployeeInfo.position)
+                            @Html.HiddenFor(Model => Model[k].ActualCost_Verified.id_actualcost)
+                            @Html.HiddenFor(Model => Model[k].ActualCost_Verified.wbs_no, new { @Value = Model[k].ActualCost_Verified.wbs_no })
+                                    @Html.HiddenFor(Model => Model[k].ActualCost_Verified.cost_center, new { @Value = Model[k].ActualCost_Verified.cost_center })
+
+
+                            <tr>
+                            <td style="width:91px;" class="td">
+                                @Html.DisplayFor(Model => Model[k].ActualCost_Verified.group_code)
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.group_code)
+                            </td>
+                            <td style="width:150px;" class="td">
+                                @Html.DisplayFor(Model => Model[k].ActualCost_Verified.name)
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.name)
+                            </td>
+                            <td style="width:95px;" class="td">
+                                @Html.DisplayFor(Model => Model[k].ActualCost_Verified.jenis_transaksi)
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.jenis_transaksi)
+                            </td>
+                            <td style="width:160px;" class="td">
+                                @Html.DisplayFor(Model => Model[k].ActualCost_Verified.destination_name)
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.destination_name)
+                            </td>
+                            <td style="width:110px" class="td">
+                                @Html.DisplayFor(Model => Model[k].ActualCost_Verified.start_date)
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.start_date)
+                            </td>
+                            <td style="width:110px" class="td">
+                                @Html.DisplayFor(Model => Model[k].ActualCost_Verified.end_date)
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.end_date)
+                            </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].ActualCost_Verified.hotel_flight_name)
+                                    @Html.HiddenFor(Model => Model[k].ActualCost_Verified.hotel_flight_name)
+                                </td>
+                            <td style="width:110px;" class="td">
+                                @Html.DisplayFor(Model => Model[k].money, new { @Value = Model[k].money })
+                                @Html.HiddenFor(Model => Model[k].money, new { @Value = Model[k].money })
+                            </td>
+                            <td class="td" id="item_checkbox">
+                                <div style="margin:1.5px" class="checkbox">
+                                    @*@Html.CheckBox("false", new { value = item.ga_status, @name = "select-item", @class = "select-item" })*@
+                                    @Html.CheckBoxFor(Model => Model[k].check_verify, new { @id = "Check" + k, @name = "select-item", @class = "select-item", onclick = "selectOnlyThis(this.id)", @style = "width:80px" })
+                                </div>
+                            </td>
+                            <td class="td" id="item_checkbox">
+                                <div style="margin:1.5px" class="checkbox">
+                                    @*@Html.CheckBox("true", new { value = item.ga_status, @name = "select-item2", @class = "select-item2" })*@
+                                    @Html.CheckBoxFor(Model => Model[k].check_reject, new { @id = "Check" + k, @name = "select-item2", @class = "select-item2", onclick = "selectOnlyThis2(this.id)", @style = "width:80px; margin-right:10px;" })
+                                </div>
+                            </td>
+                            <td class="td item_requeststatus">
+                                @Html.DropDownListFor(m => m[k].comment, new SelectList(
+                                                 new[]
+                                                 {
+                                                     new { Value = "Vendor Revision", Text = "Vendor Revision" ,},
+                                                     new { Value = "Price Revision", Text = "Price Revision" },
+                                                 },
+                                                 "Value",
+                                                 "Text",
+                                                 Model
+                                                 ), "-Rejection-", new { @id = "reason" + k, @name = "reason", @class = "form-control", @style = "width:130px" })
+                            </td>
+                        </tr>
+                        }
+                    }
+                </table>
+            </div>
+
+        </div>
+
+        <div style="float:right;margin-top:10px;" class="col-lg-3 col-lg-offset-9">
+            @if ( position.ToLower().Contains("dph") || position.ToLower().Contains("ap"))
+            {
+                //<input type="submit" id="selected" class="btn btn-info" value="APPROVE" name="insert">
+                <button type="submit" id="selected" class="btn btn-info" value="SUBMIT" name="insert">APPROVE</button>
+            }
+            else
+            {
+                //<input type="submit" id="selected" class="btn btn-info" value="SUBMIT" name="insert">
+                <button type="submit" id="selected" class="btn btn-info" value="SUBMIT" name="insert">SUBMIT</button>
+            }
+            @Html.ActionLink("Cancel", "Index", "Home")
+            @*<button type="button" class="btn btn-default" onclick="goBack()">CANCEL</button>*@
+        </div>
+    }
+
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/verify.js"></script>

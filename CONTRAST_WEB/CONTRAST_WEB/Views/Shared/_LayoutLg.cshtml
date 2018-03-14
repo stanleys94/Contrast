@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 u">
+    <title>CONTRAST</title>
+    <link href="~/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/bootstrapLg.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+        <body>
+            <div style="box-shadow:1px 1px 3px #767676; border: 0px;" class="page-header navbar-fixed-top">
+                <div style="margin:0 215px;">
+                    <img style="float:left" width="150" src="~/img/small_logo_horizontal.png" />
+                    @*<span style="float:right"><span style="color:white"><strong>@ViewBag.Username</strong></span><span><img style="padding:0 5px; height:50px; width:auto;" src="~/img/small_logo_c.png" /></span></span>*@
+                </div>
+            </div>
+            <div class="container body-content">
+                @RenderBody()
+            </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
