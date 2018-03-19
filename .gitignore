@@ -263,3 +263,5 @@ __pycache__/
 Models/
 obj/
 bin/
+
+*.config

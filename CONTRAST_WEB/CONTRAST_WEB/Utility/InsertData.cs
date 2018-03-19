@@ -95,7 +95,11 @@ namespace CONTRAST_WEB.Models
                 model.end_date_extend = model.end_date_extend.Value.ToUniversalTime();
                 model.end_date_extend = model.end_date_extend + offset;
             }
-
+            if (model.amount < 2)
+            {
+                model.final_status = "8";
+                model.information_actualcost = "TRANSACTION CLOSED";
+            }
             using (var client = new HttpClient())
             {
                 //Passing service base url  
@@ -130,6 +134,34 @@ namespace CONTRAST_WEB.Models
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
                 HttpResponseMessage response = await client.PostAsync("api/TravelRequestParticipant", new StringContent(
+                               new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
+        
+        //Execute API call to post to Travel Status comment
+        public static async Task TravelStatuscomment(string comment,string group_code,string name,int no_reg)
+        {
+            tb_r_travel_request_comment model = new tb_r_travel_request_comment();
+            model.comment = comment;
+            var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
+            model.create_date = DateTime.Now.ToUniversalTime();
+            model.create_date = model.create_date + offset;
+            model.group_code = group_code;
+            model.name = name;
+            model.no_reg_comment = no_reg;
+            model.read_flag = false;
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PostAsJsonAsync("api/TravelExecution", model);
+                HttpResponseMessage response = await client.PostAsync("api/TravelRequestComment", new StringContent(
                                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
             }
         }

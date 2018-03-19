@@ -38,6 +38,60 @@ namespace CONTRAST_WEB.Controllers
 
             for (int k = 0; k < ResponseList.Count(); k++)
             {
+                if (ResponseList[k].apprv_flag_lvl20 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl20));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl19 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl19));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl18 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl18));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl17 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl17));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl16 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl16));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl15 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl15));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl14 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl14));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl13 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl13));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl12 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl12));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl11 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl11));
+                else
+                if (ResponseList[k].apprv_flag_lvl10 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl10));
+                else
+                if (ResponseList[k].apprv_flag_lvl9 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl9));
+                else
+                if (ResponseList[k].apprv_flag_lvl8 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl8));
+                else
+                if (ResponseList[k].apprv_flag_lvl7 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl7));
+                else
+                if (ResponseList[k].apprv_flag_lvl6 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl6));
+                else
                 if (ResponseList[k].apprv_flag_lvl5 != null)
                     apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl5));
                 else
@@ -102,6 +156,108 @@ namespace CONTRAST_WEB.Controllers
             {
                 temp = null;
                 ttemp = null;
+                if (k == 19)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl20);
+                    ttemp = model2.travel_request.apprv_flag_lvl20;
+                }
+                else
+                if (k == 18)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl19);
+                    ttemp = model2.travel_request.apprv_flag_lvl19;
+                }
+                else
+                if (k == 17)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl18);
+                    ttemp = model2.travel_request.apprv_flag_lvl18;
+                }
+                else
+                if (k == 16)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl17);
+                    ttemp = model2.travel_request.apprv_flag_lvl17;
+                }
+                else
+                if (k == 15)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl16);
+                    ttemp = model2.travel_request.apprv_flag_lvl16;
+                }
+                else
+                if (k == 14)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl15);
+                    ttemp = model2.travel_request.apprv_flag_lvl15;
+                }
+                else
+                if (k == 13)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl14);
+                    ttemp = model2.travel_request.apprv_flag_lvl14;
+                }                
+                else
+                if (k == 12)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl13);
+                    ttemp = model2.travel_request.apprv_flag_lvl13;
+                }
+                else
+                if (k == 13)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl12);
+                    ttemp = model2.travel_request.apprv_flag_lvl12;
+                }
+                else
+                if (k == 12)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl13);
+                    ttemp = model2.travel_request.apprv_flag_lvl13;
+                }
+                else
+                if (k == 11)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl12);
+                    ttemp = model2.travel_request.apprv_flag_lvl12;
+                }
+                else
+                if (k == 10)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl11);
+                    ttemp = model2.travel_request.apprv_flag_lvl11;
+                }
+                else
+                if (k == 9)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl10);
+                    ttemp = model2.travel_request.apprv_flag_lvl10;
+                }
+                else
+                if (k == 8)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl9);
+                    ttemp = model2.travel_request.apprv_flag_lvl9;
+                }
+                else
+                if (k == 7)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl8);
+                    ttemp = model2.travel_request.apprv_flag_lvl8;
+                }
+                else
+                if (k == 6)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl7);
+                    ttemp = model2.travel_request.apprv_flag_lvl7;
+                }
+                else
+                if (k == 5)
+                {
+                    temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl6);
+                    ttemp = model2.travel_request.apprv_flag_lvl6;
+                }
+                else
                 if (k == 4)
                 {
                     temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl5);
@@ -122,12 +278,14 @@ namespace CONTRAST_WEB.Controllers
                 else
                 if (k == 1)
                 {
+                    if (model2.travel_request.apprv_flag_lvl2 != null) 
                     temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl2);
                     ttemp = model2.travel_request.apprv_flag_lvl2;
                 }
                 else
                 if (k == 0)
                 {
+                    if (model2.travel_request.apprv_flag_lvl1 != null) 
                     temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl1);
                     ttemp = model2.travel_request.apprv_flag_lvl1;
                 }
@@ -136,6 +294,11 @@ namespace CONTRAST_WEB.Controllers
                 {
                     apprv_name.Add(temp);
                     apprv_status.Add(ttemp);
+                }
+                else
+                if (temp == null && (k == 0||k==1))
+                {
+                    
                 }
                 else
                     break;
@@ -287,6 +450,26 @@ namespace CONTRAST_WEB.Controllers
                     else if (model2.travel_request.apprv_flag_lvl5.Contains("0")) Approval_Status.Add("Pending");
                     else if (model2.travel_request.apprv_flag_lvl5.Contains("1")) Approval_Status.Add("Approved");
                     else if (model2.travel_request.apprv_flag_lvl5.Contains("2")) Approval_Status.Add("Rejected");
+                }
+
+                if (model2.travel_request.apprv_by_lvl6 != null)
+                {
+                    bossname = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl6);
+                    Approval_Name.Add(bossname);
+                    if (model2.travel_request.apprv_flag_lvl6 == null) Approval_Status.Add("Not Yet");
+                    else if (model2.travel_request.apprv_flag_lvl6.Contains("0")) Approval_Status.Add("Pending");
+                    else if (model2.travel_request.apprv_flag_lvl6.Contains("1")) Approval_Status.Add("Approved");
+                    else if (model2.travel_request.apprv_flag_lvl6.Contains("2")) Approval_Status.Add("Rejected");
+                }
+
+                if (model2.travel_request.apprv_by_lvl7 != null)
+                {
+                    bossname = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl7);
+                    Approval_Name.Add(bossname);
+                    if (model2.travel_request.apprv_flag_lvl7 == null) Approval_Status.Add("Not Yet");
+                    else if (model2.travel_request.apprv_flag_lvl7.Contains("0")) Approval_Status.Add("Pending");
+                    else if (model2.travel_request.apprv_flag_lvl7.Contains("1")) Approval_Status.Add("Approved");
+                    else if (model2.travel_request.apprv_flag_lvl7.Contains("2")) Approval_Status.Add("Rejected");
                 }
 
                 PdfDocument document = new PdfDocument();
@@ -625,6 +808,34 @@ namespace CONTRAST_WEB.Controllers
             return View("Details", model);
         }
 
+        [HttpPost]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]
+        // GET: TravelStatus
+        public async Task<ActionResult> Comment(vw_request_summary model)
+        {
+            List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
+            comment = await GetData.Comment(model.group_code);
+            ViewBag.group_code = model.group_code;
+            return View(comment);
+        }
+
+        
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]        
+        public async Task<ActionResult> AddComment(string commentbox, string groupcode)
+        {
+            await InsertData.TravelStatuscomment(commentbox, groupcode,"0",0);
+
+            List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
+            comment = await GetData.Comment(groupcode);
+
+            return View("Comment",comment);
+        }
+
+
         //[HttpPost]         
         // GET: TravelStatus
         public async Task<ActionResult> IndexMSTR(string noreg, string mstr)
@@ -898,6 +1109,26 @@ namespace CONTRAST_WEB.Controllers
                     else if (model2.travel_request.apprv_flag_lvl5.Contains("0")) Approval_Status.Add("Pending");
                     else if (model2.travel_request.apprv_flag_lvl5.Contains("1")) Approval_Status.Add("Approved");
                     else if (model2.travel_request.apprv_flag_lvl5.Contains("2")) Approval_Status.Add("Rejected");
+                }
+
+                if (model2.travel_request.apprv_by_lvl6 != null)
+                {
+                    bossname = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl6);
+                    Approval_Name.Add(bossname);
+                    if (model2.travel_request.apprv_flag_lvl6 == null) Approval_Status.Add("Not Yet");
+                    else if (model2.travel_request.apprv_flag_lvl6.Contains("0")) Approval_Status.Add("Pending");
+                    else if (model2.travel_request.apprv_flag_lvl6.Contains("1")) Approval_Status.Add("Approved");
+                    else if (model2.travel_request.apprv_flag_lvl6.Contains("2")) Approval_Status.Add("Rejected");
+                }
+
+                if (model2.travel_request.apprv_by_lvl7 != null)
+                {
+                    bossname = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl7);
+                    Approval_Name.Add(bossname);
+                    if (model2.travel_request.apprv_flag_lvl7 == null) Approval_Status.Add("Not Yet");
+                    else if (model2.travel_request.apprv_flag_lvl7.Contains("0")) Approval_Status.Add("Pending");
+                    else if (model2.travel_request.apprv_flag_lvl7.Contains("1")) Approval_Status.Add("Approved");
+                    else if (model2.travel_request.apprv_flag_lvl7.Contains("2")) Approval_Status.Add("Rejected");
                 }
 
                 PdfDocument document = new PdfDocument();

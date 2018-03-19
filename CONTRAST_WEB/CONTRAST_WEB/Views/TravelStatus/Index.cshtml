@@ -40,7 +40,12 @@
 
                         <div style="width:200px;" class="column menu">
                             <div>
-                                <strong>@Html.DisplayFor(m => item.group_code)</strong>
+                                 @using (Html.BeginForm("Comment", "TravelStatus", Model[i]))
+                                 {
+                                     @Html.AntiForgeryToken()
+                                    <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey"><strong>@Html.DisplayFor(m => item.group_code)</strong></button>
+                                    @Html.HiddenFor(m=>item.group_code)
+                                 }
                             </div>
                             @*<div>
                                 <span class="fnt3">Noreg @Html.DisplayFor(m => item.no_reg)</span>
@@ -65,7 +70,47 @@
                             </div>
                             <div>
                                 <span style="color:grey;" class="fnt1">
-                                   @if (Model[i].apprv_flag_lvl5 != null)
+                                    @if (Model[i].apprv_flag_lvl7 != null)
+                                     {
+                                       if (Model[i].apprv_flag_lvl7 == "2" || Model[i].apprv_flag_lvl7 == "3")
+                                       {
+                                        <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-right:5px;" })</span>
+
+                                       }
+                                       else
+                                        if (Model[i].apprv_flag_lvl7 == "1")
+                                       {
+                                        <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-right:5px;" })</span>
+                                       }
+                                       else
+                                        if (Model[i].apprv_flag_lvl7 == "0")
+                                       {
+                                        <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-right:5px;" })</span>
+                                       }
+                                    @ViewBag.Bossname[i]
+                                   }
+                                   else
+                                    if (Model[i].apprv_flag_lvl6 != null)
+                                    {
+                                        if (Model[i].apprv_flag_lvl6 == "2" || Model[i].apprv_flag_lvl6 == "3")
+                                        {
+                                        <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-right:5px;" })</span>
+
+                                       }
+                                       else
+                                        if (Model[i].apprv_flag_lvl6 == "1")
+                                       {
+                                        <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-right:5px;" })</span>
+                                       }
+                                       else
+                                        if (Model[i].apprv_flag_lvl6 == "0")
+                                       {
+                                        <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-right:5px;" })</span>
+                                       }
+                                    @ViewBag.Bossname[i]
+                                   }
+                                   else
+                                   if (Model[i].apprv_flag_lvl5 != null)
                                    {
                                        if (Model[i].apprv_flag_lvl5 == "2" || Model[i].apprv_flag_lvl5 == "3")
                                        {

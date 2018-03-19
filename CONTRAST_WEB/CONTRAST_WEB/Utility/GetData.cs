@@ -635,6 +635,34 @@ namespace CONTRAST_WEB.Models
             return Response;
         }
 
+        public static async Task<List<tb_r_travel_request_comment>> Comment(string group_code)
+        {
+            List<tb_r_travel_request_comment> employee_object = new List<tb_r_travel_request_comment>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/TravelRequestComment/GetComment?id=" + group_code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    employee_object = JsonConvert.DeserializeObject<List<tb_r_travel_request_comment>>(EmpResponse);
+                }
+            }
+            return employee_object;
+        }
+
         public static async Task<string> EmployeeNameInfo(int? model)
         {
             tb_m_employee employee_object = new tb_m_employee();

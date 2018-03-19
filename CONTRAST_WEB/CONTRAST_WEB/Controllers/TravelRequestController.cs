@@ -76,6 +76,8 @@ namespace CONTRAST_WEB.Controllers
             //If the direct superior is vice president, then get who is the VP from travel procedure table
             else
             if (procedures.apprv_by_lvl1 == "VP") model2.travel_request.assign_by = assignedby.vp;
+            else
+            if (procedures.apprv_by_lvl1 == "EGM") model2.travel_request.assign_by = assignedby.egm;
 
             //if still empty - for special case
             if (model2.travel_request.assign_by == null)
@@ -587,6 +589,8 @@ namespace CONTRAST_WEB.Controllers
             //If the direct superior is vice president, then get who is the VP from travel procedure table
             else
             if (procedures.apprv_by_lvl1 == "VP") model2.travel_request.assign_by = assignedby.vp;
+            else
+            if (procedures.apprv_by_lvl1 == "EGM") model2.travel_request.assign_by = assignedby.egm;
 
             //if still empty - for special case
             if (model2.travel_request.assign_by == null)

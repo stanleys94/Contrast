@@ -279,7 +279,14 @@
     <Compile Include="Models\tb_r_statusUploadMaster.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_r_travel_request.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_travel_request_comment.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TrackingHelper.cs" />
+    <Compile Include="Models\TravelStatusCommentHelper.cs" />
     <Compile Include="Models\vw_actualcost_generate_file.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -461,9 +468,6 @@
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_r_travel_payment_verification.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_travel_request.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_r_travel_request_BACKUP.cs">
@@ -738,6 +742,7 @@
     <Content Include="Views\SettlementList\IndexMSTRMobile.cshtml" />
     <Content Include="Views\SettlementList\DetailsMSTRMobile.cshtml" />
     <Content Include="Views\Link\Index.cshtml" />
+    <Content Include="Views\TravelStatus\Comment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
