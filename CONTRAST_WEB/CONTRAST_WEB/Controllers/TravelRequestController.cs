@@ -458,51 +458,95 @@ namespace CONTRAST_WEB.Controllers
             else
             if (add != null)
             {
-                List<string> ModelList = new List<string>();
-                int noreg;
-                if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
+                List<tb_m_vendor_employee> valid = await GetData.VendorEmployee(Convert.ToInt32(model.tparticipant));
+                if (ModelState.IsValid || valid.Count > 0)
                 {
-                    if (model.participants == null)
-                        model.participants = new List<tb_r_travel_request_participant>();
-                    model.participants.Add(new tb_r_travel_request_participant());
-                    model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
-                    model.participants[model.participants.Count() - 1].active_flag = true;
-                    model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
-
-                    model.travel_request.participants_flag = true;
-                }
-
-                if (model.participants != null)
-                {
-                    for (int k = 0; k < model.participants.Count(); k++)
+                    List<string> ModelList = new List<string>();
+                    int noreg;
+                    if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
                     {
-                        ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                        if (model.participants == null)
+                            model.participants = new List<tb_r_travel_request_participant>();
+                        model.participants.Add(new tb_r_travel_request_participant());
+                        model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
+                        model.participants[model.participants.Count() - 1].active_flag = true;
+                        model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
+
+                        model.travel_request.participants_flag = true;
                     }
+
+                    if (model.participants != null)
+                    {
+                        for (int k = 0; k < model.participants.Count(); k++)
+                        {
+                            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                        }
+                    }
+
+                    ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("tparticipant")));
+                    model.tparticipant = "";
+
+                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+                    if (bankName.Count != 0)
+                    {
+                        model.tbankname = bankName[0].Bank_Name;
+                        model.tbankaccount = bankName[0].account_number;
+                    }
+
+                    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+                    division.Divisi = division.Divisi.Replace("and1", "&");
+                    ViewBag.division_name = division.Divisi;
+
+                    ViewBag.RL3 = ModelList;
+
+                    ViewBag.RL = await GetData.DestinationInfo();
+                    ViewBag.RL2 = await GetData.PurposeInfo();
+                    ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+                    if (ViewBag.Bossname == null) ViewBag.Bossname = "-No data";
+                    return View("Index", model);
                 }
-
-                ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("tparticipant")));
-                model.tparticipant = "";
-
-                List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
-                bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
-                if (bankName.Count != 0)
+                else
                 {
-                    model.tbankname = bankName[0].Bank_Name;
-                    model.tbankaccount = bankName[0].account_number;
+                    ViewBag.RL = await GetData.DestinationInfo();
+                    ViewBag.RL2 = await GetData.PurposeInfo();
+                    //list participant in string
+
+                    List<string> ModelList = new List<string>();
+                    if (model.participants != null)
+                    {
+                        for (int k = 0; k < model.participants.Count(); k++)
+                        {
+                            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                        }
+                    }
+                    ViewBag.RL3 = ModelList;
+
+                    string boss = await GetData.EmployeeNameInfo(model.travel_request.assign_by);
+                    if (boss == null) boss = "-No data";
+                    ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model.travel_request.assign_by.ToString().Trim() + ")";
+
+                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+                    if (bankName.Count != 0)
+                    {
+                        model.tbankname = bankName[0].Bank_Name;
+                        model.tbankaccount = bankName[0].account_number;
+                    }
+                    //else
+                    //{
+                    //    model.tbankname    = "- Not Available -";
+                    //    model.tbankaccount = "- Not Available -";
+                    //}
+
+                    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+                    division.Divisi = division.Divisi.Replace("and1", "&");
+                    ViewBag.division_name = division.Divisi;
+
+
+                    ViewBag.Username = model.employee_info.name;
+                    return View("Index", model);
                 }
-
-                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
-                division.Divisi = division.Divisi.Replace("and1", "&");
-                ViewBag.division_name = division.Divisi;
-
-                ViewBag.RL3 = ModelList;
-
-                ViewBag.RL = await GetData.DestinationInfo();
-                ViewBag.RL2 = await GetData.PurposeInfo();
-                ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
-                if (ViewBag.Bossname == null) ViewBag.Bossname = "-No data";
-                return View("Index", model);
-
             }
             else
             if (delete != "")

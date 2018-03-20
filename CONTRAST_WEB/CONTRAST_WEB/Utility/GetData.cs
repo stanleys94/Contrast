@@ -802,6 +802,47 @@ namespace CONTRAST_WEB.Models
             return ResponseList;
         }
 
+        public static List<tb_m_vendor_employee> VendorEmployeeValidate(int noreg)
+        {
+
+            List<tb_m_vendor_employee> ListItem = new List<tb_m_vendor_employee>();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployxees using HttpClient  
+                //HttpResponseMessage response = await client.GetAsync("api/TravelRequest/Activity?noreg="+Convert.ToInt32(noreg));
+                var response = client.GetAsync("api/VendorEmployee/noreg?id=" + Convert.ToInt32(noreg)).Result;
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_m_vendor_employee> ResponseList = new List<tb_m_vendor_employee>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_m_vendor_employee>>(str);
+
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new tb_m_vendor_employee();
+                        listItem = item;
+
+                        ListItem.Add(listItem);
+                        k++;
+                    }
+                }
+            }
+
+            return ListItem;
+        }
+
         public static async Task<double> TaxValueInfo(string model)
         {
             tb_m_tax employee_object = new tb_m_tax();
