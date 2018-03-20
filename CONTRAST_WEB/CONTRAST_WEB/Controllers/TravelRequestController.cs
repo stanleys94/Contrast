@@ -36,15 +36,18 @@ namespace CONTRAST_WEB.Controllers
             return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Index()
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            Utility.Logger(identity.Name);
-            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            ViewBag.Privillege = claims;
-            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            //var identity = (ClaimsIdentity)User.Identity;
+            //Utility.Logger(identity.Name);
+            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            //ViewBag.Privillege = claims;
+            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+
+            tb_m_employee model = await GetData.EmployeeInfo("101495");
+           
 
             //Get user name
             ViewBag.Username = model.name;
@@ -139,14 +142,6 @@ namespace CONTRAST_WEB.Controllers
 
         //[Authorize]
         //[Authorize(Roles = "contrast.user")]
-        //public async Task<ActionResult> Validate()
-        //{
-        //    return RedirectToAction("Index");
-        //}
-
-
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "")
         {
             if (validate != null && model.travel_request != null)

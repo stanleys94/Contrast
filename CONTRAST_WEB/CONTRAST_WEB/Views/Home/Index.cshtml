@@ -92,10 +92,10 @@
         </div>
     </div>
 	
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.staffpac")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "ActualCost", FormMethod.Post))
@@ -117,14 +117,14 @@
                     }
                 </div>
             </div>
-            break;
+            @*break;
         }
-    }
+    }*@
 
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap" || items == "contrast.dphga" || items == "contrast.staffga" || items == "contrast.dphpac")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "Verify", FormMethod.Post))
@@ -146,14 +146,14 @@
                     }
                 </div>
             </div>
-            break;
+            @*break;
         }
-    }
+    }*@
 
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap" || items == "contrast.dphga" || items == "contrast.staffga")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "VerifySettlement", FormMethod.Post))
@@ -175,14 +175,14 @@
                     }
                 </div>
             </div>
-            break;
+            @*break;
         }
-    }
+    }*@
 
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "VerifyBPD", FormMethod.Post))
@@ -204,14 +204,14 @@
                     }
                 </div>
             </div>
-            break;
+            @*break;
         }
-    }
+    }*@
 
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.administd")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "TravelDit", FormMethod.Post))
@@ -233,14 +233,14 @@
                     }
                 </div>
             </div>
-            break;
+            @*break;
         }
-    }
+    }*@
 	
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.adminga")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "UploadMaster", FormMethod.Post))
@@ -262,14 +262,14 @@
                     }
                 </div>
             </div>
-            break;
+            @*break;
         }
-    }
+    }*@
 
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap")
-        {
+        {*@
             <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "GenerateFile", FormMethod.Post))
@@ -291,15 +291,15 @@
                     }
                 </div>
             </div>
-            // break;
+            @*// break;
         }
 
-    }
+    }*@
 
-    @foreach (var items in ViewBag.Privillege)
+    @*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap" || items == "contrast.staffga" || items == "contrast.staffpac")
-        {
+        {*@
 			<div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
                 @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
@@ -322,15 +322,15 @@
 				}
                 </div>
             </div>
-            // break;
+            @*// break;
         }
 
-    }
+    }*@
 	
-	@foreach (var items in ViewBag.Privillege)
+	@*@foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.administd")
-        {
+        {*@
 			<div class="item col-xs-12 col-lg-3">
 			<div class="thumbnail border">
             @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
@@ -353,15 +353,15 @@
 			}
 			</div>
             </div>
-            // break;
+            @*// break;
         }
 
-    }
+    }*@
 
-   @foreach (var items in ViewBag.Privillege)
+   @*@foreach (var items in ViewBag.Privillege)
    {
        if (items == "contrast.staffpac")
-       {
+       {*@
 		<div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
             @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
@@ -384,13 +384,13 @@
         </div>
 		</div>
 
-	   }
-   }
+	   @*}
+   }*@
    
-   @foreach (var items in ViewBag.Privillege)
+   @*@foreach (var items in ViewBag.Privillege)
    {
        if (items == "contrast.staffga")
-       {
+       {*@
 
 		<div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
@@ -414,8 +414,8 @@
         </div>
 		</div>
 
-		}
-   }
+		@*}
+   }*@
    
    <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">

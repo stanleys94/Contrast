@@ -39,8 +39,8 @@ namespace CONTRAST_WEB.Controllers
 
         // GET: SettlementList
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(tb_m_employee model)
         {
@@ -90,8 +90,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details(vw_travel_for_settlement model)
         {
@@ -104,8 +104,8 @@ namespace CONTRAST_WEB.Controllers
 
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert)
         {
@@ -264,8 +264,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public ActionResult SummaryPaid(vw_summary_settlement model)
         {
@@ -475,8 +475,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {

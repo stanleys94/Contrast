@@ -46,15 +46,15 @@ namespace CONTRAST_WEB.CustomValidator
                 }
 
 
-                for (int i = 0; i < request.Count(); i++)
-                {
-                    if (dt >= request[i].start_date && dt <= request[i].end_date)
-                    {
-                        string error_string = "Invalid date : " + request[i].start_date.Value.ToShortDateString() + " to " + request[i].end_date.Value.ToShortDateString() + " are used by " + request[i].group_code;
+                //for (int i = 0; i < request.Count(); i++)
+                //{
+                //    if (dt >= request[i].start_date && dt <= request[i].end_date)
+                //    {
+                //        string error_string = "Invalid date : " + request[i].start_date.Value.ToShortDateString() + " to " + request[i].end_date.Value.ToShortDateString() + " are used by " + request[i].group_code;
 
-                        return new ValidationResult(error_string);
-                    }
-                }
+                //        return new ValidationResult(error_string);
+                //    }
+                //}
 
             }
             return ValidationResult.Success;
