@@ -703,6 +703,7 @@ namespace CONTRAST_WEB.Controllers
             }
             if (GA)
             {
+                //GA check flag
                 ViewBag.outstanding = issued_filter.Count-ga_issued.Count;
                 ViewBag.issued = ga_issued.Count;
             }
