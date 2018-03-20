@@ -24,6 +24,8 @@ namespace CONTRAST_WEB.Models
         {
             return 1;
         }
+
+        
         public static string UploadSettlementReceipt(HttpPostedFileBase file, string formatter)
         {
             if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
@@ -45,6 +47,26 @@ namespace CONTRAST_WEB.Models
             return "Error";
         }
 
+        public static string UploadFileUniversal(HttpPostedFileBase file, string filepath, string formatter)
+        {
+            if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+            {
+                string fileName = file.FileName;
+                fileName = formatter + fileName;
+                string fileContentType = file.ContentType;
+                byte[] fileBytes = new byte[file.ContentLength];
+
+                var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(filepath), fileName);
+
+                var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+                file.SaveAs(path);
+                path = Constant.DocumentFolder + fileName;
+                return path;
+            }
+            return "Error";
+        }
+        
         public static string UploadPhoto(HttpPostedFileBase file, string formatter)
         {
             if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
@@ -56,9 +78,7 @@ namespace CONTRAST_WEB.Models
                 byte[] fileBytes = new byte[file.ContentLength];
 
                 var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.TPhotoEmployeeFolder), fileName);
-
-                //var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-
+                
                 file.SaveAs(path);
                 return fileName;
             }
