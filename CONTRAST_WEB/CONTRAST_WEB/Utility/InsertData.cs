@@ -81,7 +81,7 @@ namespace CONTRAST_WEB.Models
             }
         }
 
-        //Execute API call to post to ActualCost table 
+        //Execute API call to post to ActualCost table         
         public static async Task ActualCost(tb_r_travel_actualcost model)
         {
             var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
@@ -137,8 +137,65 @@ namespace CONTRAST_WEB.Models
                                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
             }
         }
-        
-        //Execute API call to post to Travel Status comment
+
+
+        public static async Task RecordGenerateFile(tb_r_record_generate_file model)
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PostAsJsonAsync("api/RecordGenerateFile", model);
+
+                HttpResponseMessage response = await client.PostAsync("api/RecordGenFile", new StringContent(
+                               new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
+
+        public static async Task InvoiceWrite(tb_r_invoice_actualcost model)
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PostAsJsonAsync("api/StatusUploadMaster", model);
+
+                HttpResponseMessage response = await client.PostAsync("api/TableInvoiceActualcost", new StringContent(
+                               new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
+
+        public static async Task StatusUpload(tb_r_statusUploadMaster model)
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PostAsJsonAsync("api/StatusUploadMaster", model);
+
+                HttpResponseMessage response = await client.PostAsync("api/StatusUploadMaster", new StringContent(
+                               new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
+                //Execute API call to post to Travel Status comment
         public static async Task TravelStatuscomment(string comment,string group_code,string name,int no_reg)
         {
             tb_r_travel_request_comment model = new tb_r_travel_request_comment();
@@ -165,45 +222,7 @@ namespace CONTRAST_WEB.Models
                                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
             }
         }
-
-        public static async Task RecordGenerateFile(tb_r_record_generate_file model)
-        {
-            using (var client = new HttpClient())
-            {
-                //Passing service base url  
-                client.BaseAddress = new Uri(Constant.Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                //Define request data format  
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                //HttpResponseMessage response = await client.PostAsJsonAsync("api/RecordGenerateFile", model);
-
-                HttpResponseMessage response = await client.PostAsync("api/RecordGenFile", new StringContent(
-                               new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
-            }
-        }
-
-        public static async Task StatusUpload(tb_r_statusUploadMaster model)
-        {
-            using (var client = new HttpClient())
-            {
-                //Passing service base url  
-                client.BaseAddress = new Uri(Constant.Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                //Define request data format  
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                //HttpResponseMessage response = await client.PostAsJsonAsync("api/StatusUploadMaster", model);
-
-                HttpResponseMessage response = await client.PostAsync("api/StatusUploadMaster", new StringContent(
-                               new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
-            }
-        }
-    }
+    }       
 
 
 

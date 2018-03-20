@@ -1595,9 +1595,11 @@ namespace CONTRAST_WEB.Models
             return ListItem;
         }
 
+
         public static async Task<tb_m_rate_flight> RateFlightInfo(TravelRequestHelper model)
         {
             tb_m_rate_flight EmpInfo = new tb_m_rate_flight();
+            string Destination = await GetData.DestinationNameInfo(model.travel_request.id_destination_city);
             using (var client = new HttpClient())
             {
 
@@ -1610,7 +1612,7 @@ namespace CONTRAST_WEB.Models
 
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage Res = await client.GetAsync("api/RateFlight/" + model.travel_request.id_destination_city);
+                HttpResponseMessage Res = await client.GetAsync("api/RateFlight/Destination?city=" + Destination);
 
                 //Checking the response is successful or not which is sent using HttpClient  
                 if (Res.IsSuccessStatusCode)
@@ -2088,6 +2090,7 @@ namespace CONTRAST_WEB.Models
             return ListItem;
         }
 
+        //15/3 add 5 list tracking
         public static async Task<List<vw_tracking_transaction_data_new>> TrackingListAll()
         {
             List<vw_tracking_transaction_data_new> ListItem = new List<vw_tracking_transaction_data_new>();
@@ -2128,116 +2131,6 @@ namespace CONTRAST_WEB.Models
             }
 
             return ListItem;
-        }
-
-        public static async Task<List<vw_tracking_transaction_data_new>> TrackingList(string search, DateTime? start = null, DateTime? end = null)
-        {
-            string lower_search = search.ToLower();
-            List<vw_tracking_transaction_data_new> ListItem = new List<vw_tracking_transaction_data_new>();
-            List<vw_tracking_transaction_data_new> LastFilter = new List<vw_tracking_transaction_data_new>();
-
-            using (var client = new HttpClient())
-            {
-
-                //Passing service base url  
-                client.BaseAddress = new Uri(Constant.Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                //Define request data format  
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew");
-
-                //Checking the response is successful or not which is sent using HttpClient  
-                if (response.IsSuccessStatusCode)
-                {
-                    List<vw_tracking_transaction_data_new> ResponseList = new List<vw_tracking_transaction_data_new>();
-                    var str = response.Content.ReadAsStringAsync().Result;
-                    ResponseList = JsonConvert.DeserializeObject<List<vw_tracking_transaction_data_new>>(str);
-
-                    int k = 1;
-
-                    foreach (var item in ResponseList)
-                    {
-                        var temp = new vw_tracking_transaction_data_new();
-                        //if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
-                        //{
-                        //    temp = item;
-
-                        //    ListItem.Add(temp);
-                        //    k++;
-                        //}
-                        if (item.jenis_transaksi != null)
-                        {
-                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
-                            {
-                                temp = item;
-
-                                ListItem.Add(temp);
-                                k++;
-                            }
-                        }
-                        else
-                        {
-                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
-                            {
-                                temp = item;
-
-                                ListItem.Add(temp);
-                                k++;
-                            }
-                        }
-                    }
-
-                    if (start.HasValue && end.HasValue)
-                    {
-                        foreach (var item in ListItem)
-                        {
-                            var temp = new vw_tracking_transaction_data_new();
-                            if (item.create_date >= start && item.create_date <= end)
-                            {
-                                temp = item;
-
-                                LastFilter.Add(temp);
-                                k++;
-                            }
-                        }
-                    }
-                    else if (start.HasValue)
-                    {
-                        foreach (var item in ListItem)
-                        {
-                            var temp = new vw_tracking_transaction_data_new();
-                            if (item.create_date >= start)
-                            {
-                                temp = item;
-
-                                LastFilter.Add(temp);
-                                k++;
-                            }
-                        }
-                    }
-                    else if (end.HasValue)
-                    {
-                        foreach (var item in ListItem)
-                        {
-                            var temp = new vw_tracking_transaction_data_new();
-                            if (item.create_date <= end)
-                            {
-                                temp = item;
-
-                                LastFilter.Add(temp);
-                                k++;
-                            }
-                        }
-                    }
-                    else LastFilter = ListItem;
-                }
-            }
-
-            return LastFilter;
         }
 
         public static async Task<List<vw_tracking_transaction_data_new>> TrackingListDivisonAll(string code)
@@ -2281,8 +2174,37 @@ namespace CONTRAST_WEB.Models
 
             return ListItem;
         }
-        
-        public static async Task<List<vw_tracking_transaction_data_new>> TrackingListDivison(string code, string search, DateTime? start = null, DateTime? end = null)
+
+        public static async Task<List<vw_tracking_transaction_data_new>> TrackingListIndividual(string code)
+        {
+            List<vw_tracking_transaction_data_new> ListItem = new List<vw_tracking_transaction_data_new>();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew/Single/?code=" + code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<vw_tracking_transaction_data_new> ResponseList = new List<vw_tracking_transaction_data_new>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ListItem = JsonConvert.DeserializeObject<List<vw_tracking_transaction_data_new>>(str);
+                }
+            }
+
+            return ListItem;
+        }
+
+        public static async Task<List<vw_tracking_transaction_data_new>> TrackingListAllSearch(string search, DateTime? start = null, DateTime? end = null)
         {
             string lower_search = search.ToLower();
             List<vw_tracking_transaction_data_new> ListItem = new List<vw_tracking_transaction_data_new>();
@@ -2300,7 +2222,7 @@ namespace CONTRAST_WEB.Models
 
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew/Division/?code=" + code);
+                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew");
 
                 //Checking the response is successful or not which is sent using HttpClient  
                 if (response.IsSuccessStatusCode)
@@ -2321,9 +2243,10 @@ namespace CONTRAST_WEB.Models
                         //    ListItem.Add(temp);
                         //    k++;
                         //}
+
                         if (item.jenis_transaksi != null)
                         {
-                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.no_reg.ToString().ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
                             {
                                 temp = item;
 
@@ -2333,7 +2256,7 @@ namespace CONTRAST_WEB.Models
                         }
                         else
                         {
-                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.no_reg.ToString().ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
                             {
                                 temp = item;
 
@@ -2392,6 +2315,221 @@ namespace CONTRAST_WEB.Models
             return LastFilter;
         }
 
+        public static async Task<List<vw_tracking_transaction_data_new>> TrackingListDivisonAllSearch(string code, string search, DateTime? start = null, DateTime? end = null)
+        {
+            string lower_search = search.ToLower();
+            List<vw_tracking_transaction_data_new> ListItem = new List<vw_tracking_transaction_data_new>();
+            List<vw_tracking_transaction_data_new> LastFilter = new List<vw_tracking_transaction_data_new>();
+
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew/Division/?code=" + code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<vw_tracking_transaction_data_new> ResponseList = new List<vw_tracking_transaction_data_new>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_tracking_transaction_data_new>>(str);
+
+                    int k = 1;
+
+                    foreach (var item in ResponseList)
+                    {
+                        var temp = new vw_tracking_transaction_data_new();
+                         
+                        if (item.jenis_transaksi != null)
+                        {
+                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.no_reg.ToString().ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                            {
+                                temp = item;
+
+                                ListItem.Add(temp);
+                                k++;
+                            }
+                        }
+                        else
+                        {
+                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.no_reg.ToString().ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                            {
+                                temp = item;
+
+                                ListItem.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+
+                    if (start.HasValue && end.HasValue)
+                    {
+                        foreach (var item in ListItem)
+                        {
+                            var temp = new vw_tracking_transaction_data_new();
+                            if (item.create_date >= start && item.create_date <= end)
+                            {
+                                temp = item;
+
+                                LastFilter.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+                    else if (start.HasValue)
+                    {
+                        foreach (var item in ListItem)
+                        {
+                            var temp = new vw_tracking_transaction_data_new();
+                            if (item.create_date >= start)
+                            {
+                                temp = item;
+
+                                LastFilter.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+                    else if (end.HasValue)
+                    {
+                        foreach (var item in ListItem)
+                        {
+                            var temp = new vw_tracking_transaction_data_new();
+                            if (item.create_date <= end)
+                            {
+                                temp = item;
+
+                                LastFilter.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+                    else LastFilter = ListItem;
+                }
+            }
+
+            return LastFilter;
+        }
+
+        public static async Task<List<vw_tracking_transaction_data_new>> TrackingListIndividualSearch(string code, string search, DateTime? start = null, DateTime? end = null)
+        {
+            string lower_search = search.ToLower();
+            List<vw_tracking_transaction_data_new> ListItem = new List<vw_tracking_transaction_data_new>();
+            List<vw_tracking_transaction_data_new> LastFilter = new List<vw_tracking_transaction_data_new>();
+
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew/Single/?code=" + code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<vw_tracking_transaction_data_new> ResponseList = new List<vw_tracking_transaction_data_new>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_tracking_transaction_data_new>>(str);
+
+                    int k = 1;
+
+                    foreach (var item in ResponseList)
+                    {
+                        var temp = new vw_tracking_transaction_data_new();
+                        //if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                        //{
+                        //    temp = item;
+
+                        //    ListItem.Add(temp);
+                        //    k++;
+                        //}
+                        if (item.jenis_transaksi != null)
+                        {
+                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.no_reg.ToString().ToLower().Contains(lower_search) || item.jenis_transaksi.ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                            {
+                                temp = item;
+
+                                ListItem.Add(temp);
+                                k++;
+                            }
+                        }
+                        else
+                        {
+                            if (item.name.ToLower().Contains(lower_search) || item.destination_name.ToLower().Contains(lower_search) || item.no_reg.ToString().ToLower().Contains(lower_search) || item.group_code.ToLower().Contains(lower_search) || item.TYPES_OF_TRANSACTIONS.ToLower().Contains(search) || item.verified_flag.ToLower().Contains(search))
+                            {
+                                temp = item;
+
+                                ListItem.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+
+                    if (start.HasValue && end.HasValue)
+                    {
+                        foreach (var item in ListItem)
+                        {
+                            var temp = new vw_tracking_transaction_data_new();
+                            if (item.create_date >= start && item.create_date <= end)
+                            {
+                                temp = item;
+
+                                LastFilter.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+                    else if (start.HasValue)
+                    {
+                        foreach (var item in ListItem)
+                        {
+                            var temp = new vw_tracking_transaction_data_new();
+                            if (item.create_date >= start)
+                            {
+                                temp = item;
+
+                                LastFilter.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+                    else if (end.HasValue)
+                    {
+                        foreach (var item in ListItem)
+                        {
+                            var temp = new vw_tracking_transaction_data_new();
+                            if (item.create_date <= end)
+                            {
+                                temp = item;
+
+                                LastFilter.Add(temp);
+                                k++;
+                            }
+                        }
+                    }
+                    else LastFilter = ListItem;
+                }
+            }
+
+            return LastFilter;
+        }
+
+        //rate
         public static async Task<List<tb_m_rate_hotel>> RateHotelList()
         {
             List<tb_m_rate_hotel> ListItem = new List<tb_m_rate_hotel>();
@@ -2934,6 +3072,68 @@ namespace CONTRAST_WEB.Models
             }
         }
 
+        public static async Task<List<tb_r_invoice_actualcost>> TableInvoiceActualcostAll()
+        {
+            using (var client = new HttpClient())
+            {
+                List<tb_r_invoice_actualcost> ListItem = new List<tb_r_invoice_actualcost>();
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TableInvoiceActualcost");
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_invoice_actualcost> ResponseList = new List<tb_r_invoice_actualcost>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_invoice_actualcost>>(str);
+
+                    foreach (var item in ResponseList)
+                    {
+                        ListItem.Add(item);
+                    }
+                }
+                return ListItem;
+            }
+
+        }
+
+        public static async Task<List<tb_r_invoice_actualcost>> TableInvoiceActualcostSingle(string bta, string transaction)
+        {
+            using (var client = new HttpClient())
+            {
+                List<tb_r_invoice_actualcost> ListItem = new List<tb_r_invoice_actualcost>();
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TableInvoiceActualcost/BTA?bta=" + bta + "&transaction=" + transaction);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_invoice_actualcost> ResponseList = new List<tb_r_invoice_actualcost>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_invoice_actualcost>>(str);
+                    ListItem = ResponseList;
+                }
+                return ListItem;
+            }
+
+        }
+
         public static async Task<vw_invoice_actualcost_new> InvoiceActualCostNewID(int id)
         {
             using (var client = new HttpClient())
@@ -2961,6 +3161,33 @@ namespace CONTRAST_WEB.Models
                     {
                         if (item.id_data == id) ListItem = item;
                     }
+                }
+                return ListItem;
+            }
+
+        }
+
+        public static async Task<List<vw_invoice_actualcost_new>> InvoiceActualCostNewBTA(string bta, string transaction)
+        {
+            using (var client = new HttpClient())
+            {
+                List<vw_invoice_actualcost_new> ListItem = new List<vw_invoice_actualcost_new>();
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/InvoiceActualcostNew/BTA?bta=" + bta + "&transaction=" + transaction);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ListItem = JsonConvert.DeserializeObject<List<vw_invoice_actualcost_new>>(str);
                 }
                 return ListItem;
             }

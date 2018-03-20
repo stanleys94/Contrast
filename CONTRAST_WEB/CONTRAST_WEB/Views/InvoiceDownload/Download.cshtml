@@ -13,13 +13,55 @@
     @Html.HiddenFor(m => m.loged_employee.code)
     @Html.HiddenFor(m => m.loged_employee.name)
 
+    @Html.HiddenFor(m => m.invoice.amount_1)
+    @Html.HiddenFor(m => m.invoice.amount_2)
+    @Html.HiddenFor(m => m.invoice.amount_3)
+    @Html.HiddenFor(m => m.invoice.amount_4)
+    @Html.HiddenFor(m => m.invoice.amount_5)
+    @Html.HiddenFor(m => m.invoice.amount_6)
+
+    @Html.HiddenFor(m => m.invoice.amount_total)
+    @Html.HiddenFor(m => m.invoice.bank_account)
     @Html.HiddenFor(m => m.invoice.cost_center)
     @Html.HiddenFor(m => m.invoice.create_date)
 
+    @Html.HiddenFor(m => m.invoice.destination_1)
+    @Html.HiddenFor(m => m.invoice.destination_2)
+    @Html.HiddenFor(m => m.invoice.destination_3)
+    @Html.HiddenFor(m => m.invoice.destination_4)
+    @Html.HiddenFor(m => m.invoice.destination_5)
+    @Html.HiddenFor(m => m.invoice.destination_6)
+
+    @Html.HiddenFor(m => m.invoice.Duration_1)
+    @Html.HiddenFor(m => m.invoice.Duration_2)
+    @Html.HiddenFor(m => m.invoice.Duration_3)
+    @Html.HiddenFor(m => m.invoice.Duration_4)
+    @Html.HiddenFor(m => m.invoice.Duration_5)
+    @Html.HiddenFor(m => m.invoice.Duration_6)
+
     @Html.HiddenFor(m => m.invoice.employee_input)
 
-    @Html.HiddenFor(m => m.invoice.invoice_number)
+    @Html.HiddenFor(m => m.invoice.endDate_1)
+    @Html.HiddenFor(m => m.invoice.endDate_2)
+    @Html.HiddenFor(m => m.invoice.endDate_3)
+    @Html.HiddenFor(m => m.invoice.endDate_4)
+    @Html.HiddenFor(m => m.invoice.endDate_5)
+    @Html.HiddenFor(m => m.invoice.endDate_6)
 
+    @Html.HiddenFor(m => m.invoice.group_code)
+
+    @Html.HiddenFor(m => m.invoice.hotel_flight_name_1)
+    @Html.HiddenFor(m => m.invoice.hotel_flight_name_2)
+    @Html.HiddenFor(m => m.invoice.hotel_flight_name_3)
+    @Html.HiddenFor(m => m.invoice.hotel_flight_name_4)
+    @Html.HiddenFor(m => m.invoice.hotel_flight_name_5)
+    @Html.HiddenFor(m => m.invoice.hotel_flight_name_6)
+
+    @Html.HiddenFor(m => m.invoice.id_data)
+    @Html.HiddenFor(m => m.invoice.invoice_number)
+    @Html.HiddenFor(m => m.invoice.jenis_transaksi)
+    @Html.HiddenFor(m => m.invoice.name)
+    @Html.HiddenFor(m => m.invoice.no_reg)
     @Html.HiddenFor(m => m.invoice.qty)
 
     @Html.HiddenFor(m => m.invoice.startDate_1)
@@ -29,47 +71,15 @@
     @Html.HiddenFor(m => m.invoice.startDate_5)
     @Html.HiddenFor(m => m.invoice.startDate_6)
 
-    @Html.HiddenFor(m => m.invoice.endDate_1)
-    @Html.HiddenFor(m => m.invoice.endDate_2)
-    @Html.HiddenFor(m => m.invoice.endDate_3)
-    @Html.HiddenFor(m => m.invoice.endDate_4)
-    @Html.HiddenFor(m => m.invoice.endDate_5)
-    @Html.HiddenFor(m => m.invoice.endDate_6)
-
-    @Html.HiddenFor(m => m.invoice.destination_1)
-    @Html.HiddenFor(m => m.invoice.destination_2)
-    @Html.HiddenFor(m => m.invoice.destination_3)
-    @Html.HiddenFor(m => m.invoice.destination_4)
-    @Html.HiddenFor(m => m.invoice.destination_5)
-    @Html.HiddenFor(m => m.invoice.destination_6)
-
+    @Html.HiddenFor(m => m.invoice.tax_invoice_number)
     @Html.HiddenFor(m => m.invoice.vendor_code)
-
     @Html.HiddenFor(m => m.invoice.vendor_name)
-
-    @Html.HiddenFor(m => m.invoice.amount_1)
-    @Html.HiddenFor(m => m.invoice.amount_2)
-    @Html.HiddenFor(m => m.invoice.amount_3)
-    @Html.HiddenFor(m => m.invoice.amount_4)
-    @Html.HiddenFor(m => m.invoice.amount_5)
-    @Html.HiddenFor(m => m.invoice.amount_6)
-
-    @Html.HiddenFor(m => m.invoice.Duration_1)
-    @Html.HiddenFor(m => m.invoice.Duration_2)
-    @Html.HiddenFor(m => m.invoice.Duration_3)
-    @Html.HiddenFor(m => m.invoice.Duration_4)
-    @Html.HiddenFor(m => m.invoice.Duration_5)
-    @Html.HiddenFor(m => m.invoice.Duration_6)
-
-    @Html.HiddenFor(m => m.invoice.hotel_flight_name_1)
-    @Html.HiddenFor(m => m.invoice.hotel_flight_name_2)
-    @Html.HiddenFor(m => m.invoice.hotel_flight_name_3)
-    @Html.HiddenFor(m => m.invoice.hotel_flight_name_4)
-    @Html.HiddenFor(m => m.invoice.hotel_flight_name_5)
-    @Html.HiddenFor(m => m.invoice.hotel_flight_name_6)
-
-
-
+    @Html.HiddenFor(m => m.invoice.wbs_no)
+    for (int k = 0; k < Model.from.Count(); k++)
+    {
+        @Html.HiddenFor(m => m.from[k].City)
+        @Html.HiddenFor(m => m.from[k].Destination)
+    }
     <button type="submit" style="float:right"> PRINT </button>
 
 
@@ -102,37 +112,34 @@
                 @for (int i = 0; i < count; i++)
                 {
                     <tr>
+                        <td>@Model.from[i].City</td>
                         @if (i == 0)
                         {
-                            <td>Jakarta</td>
+                            
                             <td>@Model.invoice.destination_1</td>
                             <td>@Model.invoice.startDate_1</td>
                             <td>@Model.invoice.endDate_1</td>
                         }
                         else if (i == 1)
                         {
-                            <td>@Model.invoice.destination_1</td>
                             <td>@Model.invoice.destination_2</td>
                             <td>@Model.invoice.startDate_2</td>
                             <td>@Model.invoice.endDate_2</td>
                         }
                         else if (i == 3)
                         {
-                            <td>@Model.invoice.destination_3</td>
                             <td>@Model.invoice.destination_4</td>
                             <td>@Model.invoice.startDate_4</td>
                             <td>@Model.invoice.endDate_4</td>
                         }
                         else if (i == 4)
                         {
-                            <td>@Model.invoice.destination_4</td>
                             <td>@Model.invoice.destination_5</td>
                             <td>@Model.invoice.startDate_5</td>
                             <td>@Model.invoice.endDate_5</td>
                         }
                         else if (i == 5)
                         {
-                            <td>@Model.invoice.destination_5</td>
                             <td>@Model.invoice.destination_6</td>
                             <td>@Model.invoice.startDate_6</td>
                             <td>@Model.invoice.endDate_6</td>
@@ -277,7 +284,7 @@
                 @*<button style="width:145px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">Submit</button>*@
                 @*@Html.ActionLink("Close", "Index2", "Menu")*@
                 @*<button style="width:145px" type="submit" class="btn btn-default btn-lg">CLOSE</button>*@
-                <a href="javascript:void(0);" onclick="history.go(-1);">CLOSE</a>
+                @Html.ActionLink("CLOSE", "Index", "Home")
             </div>
 
 

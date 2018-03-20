@@ -78,7 +78,7 @@
                         <span><strong>CURRENT STATUS :</strong></span>
                     </div>
                     <div style="margin-bottom:0px; padding-bottom:0px;" class="clearfix main">
-                        @for (int k = 0; k < ViewBag.StatusState.Count; k++)
+                        @for (int k = 0; k < ViewBag.Approvalnum; k++)
                         {
                             if (ViewBag.Bossname[k] == null) { break; }
                             //if (ViewBag.StatusState[k] == null)
@@ -86,14 +86,14 @@
                             //    continue;
                             //}
                             <div class="main1">
-                                @if ((k == ViewBag.StatusState.Count - 1))
+                                @if ((k == ViewBag.Approvalnum - 1))
                                 {
                                     <div class="buled">
                                         <div class="bulet1" style="background: rgb(246, 246, 246);">
                                             <div class="buled2" style="background: rgb(128, 128, 128);">
                                             </div>
                                         </div>
-                                    </div>                                  
+                                    </div>
                                 }
                                 else
                                 {
@@ -102,30 +102,38 @@
                                             <div class="buled2" style="background: rgb(128, 128, 128);">
                                             </div>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                 }
                                 <div class="teks">
-                                       <div style="color:gray" class="teks1">
-                                            
-                                        @if (ViewBag.StatusState[k] == "1")
-                                        {
-                                            <span>@Html.Label("Approved By ", new { @style = "color:blue; margin-right:5px;" })</span>
-                                            <span>@ViewBag.Bossname[k]</span>
-                                        }
-                                        else
-                                        if (ViewBag.StatusState[k] == "2" || ViewBag.StatusState[k] == "3")
-                                        {
-                                            <span>@Html.Label("Rejected By ", new { @style = "color:red; margin-right:5px;" })</span>
-                                            <span>@ViewBag.Bossname[k]</span>
-                                            k = ViewBag.StatusState.Count - 1;
-                                        }
-                                        else
+                                    <div style="color:gray" class="teks1">
+
+                                        @if (k >= ViewBag.StatusState.Count)
                                         {
                                             <span>@Html.Label("Waiting For ", new { @style = "color:orange; margin-right:5px;" })</span>
                                             <span>@ViewBag.Bossname[k]</span>
                                         }
-                                       </div>
-                                 </div>
+                                        else
+                                        {
+                                            if (ViewBag.StatusState[k] == "1")
+                                            {
+                                                <span>@Html.Label("Approved By ", new { @style = "color:blue; margin-right:5px;" })</span>
+                                                <span>@ViewBag.Bossname[k]</span>
+                                            }
+                                            else
+                                            if (ViewBag.StatusState[k] == "2" || ViewBag.StatusState[k] == "3")
+                                            {
+                                                <span>@Html.Label("Rejected By ", new { @style = "color:red; margin-right:5px;" })</span>
+                                                <span>@ViewBag.Bossname[k]</span>
+                                                k = ViewBag.Approvalnum - 1;
+                                            }
+                                            else
+                                            {
+                                                <span>@Html.Label("Waiting For ", new { @style = "color:orange; margin-right:5px;" })</span>
+                                                <span>@ViewBag.Bossname[k]</span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
 
 
                                 <div class="lab">
@@ -157,8 +165,8 @@
                     </div>
                     <br />
                     <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
-		    <button style="width:145px;position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-lg">Download</button>
-                    
+                    <button style="width:145px;position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-lg">Download</button>
+
                     @if (Model.travel_request.status_request == null)
                     {
                         <button type="button" style="width:145px; position:relative;left:10px" class="btn btn-danger btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
@@ -186,7 +194,7 @@
                             </div>
                         </div>
                     }
-		<br />
+                    <br />
                 </div>
             </form>
         </div>

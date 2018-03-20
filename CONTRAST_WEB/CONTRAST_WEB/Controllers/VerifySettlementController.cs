@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using CONTRAST_WEB.Models;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Web.Hosting;
+using System.IO;
 
 namespace CONTRAST_WEB.Controllers
 {
@@ -275,6 +277,18 @@ namespace CONTRAST_WEB.Controllers
                 return View("Index", ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
             }
             else return View("Index", model.OrderBy(m => m.Settlement_Verified.create_date).ToList());
+        }
+
+        [HttpPost]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        //[ValidateAntiForgeryToken]
+        public ActionResult DownloadAttach()
+        {
+            //string[] name_file = 
+            string file = HostingEnvironment.MapPath("~/SettlementFolder/Laundry_101795.png");
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            return File(file, contentType, Path.GetFileName(file));
         }
     }
 }

@@ -15,6 +15,7 @@ using System.IO;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp;
+using PdfSharp.Drawing.Layout;
 
 namespace CONTRAST_WEB.Controllers
 {
@@ -135,7 +136,13 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
-                    ActualCostObject.vendor_code = model.TravelRequest.no_reg.ToString();
+                    // ActualCostObject.vendor_code = model.TravelRequest.no_reg.ToString();
+                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+
+                    bankName = await GetData.VendorEmployee((model.TravelRequest.no_reg));
+
+                    ActualCostObject.vendor_code =bankName[0].vendor_code_employee ;
+
                     ActualCostObject.group_code = model.TravelRequest.group_code;
                     ActualCostObject.id_request = model.TravelRequest.id_request;
                     ActualCostObject.create_date = DateTime.Now;
@@ -206,13 +213,33 @@ namespace CONTRAST_WEB.Controllers
                     }
 
                     //update data
-                    vw_summary_settlement SummarySettlementObject = new vw_summary_settlement();
-                    SummarySettlementObject = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
+                    //vw_summary_settlement SummarySettlementObject = new vw_summary_settlement();
+                    //SummarySettlementObject = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
+                    SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
+                    SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
                     if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
                         await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
                     else
                         await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+
+                    //migrate ke helper baru
+
+                    if (model.HotelSettlement > 0) SummarySettlementObject.HotelSettlement = model.HotelSettlement;
+                    else SummarySettlementObject.HotelSettlement = 0;
+
+                    if (model.MealSettlement > 0) SummarySettlementObject.MealSettlement = model.MealSettlement;
+                    else SummarySettlementObject.MealSettlement = 0;
+
+                    if (model.TicketSettlement > 0) SummarySettlementObject.TicketSettlement = model.TicketSettlement;
+                    else SummarySettlementObject.TicketSettlement = 0;
+
+                    if (model.Start_Extend.HasValue) SummarySettlementObject.StartSettlement = model.Start_Extend;
+                    if (model.End_Extend.HasValue) SummarySettlementObject.EndSettlement = model.End_Extend;
+
+                    SummarySettlementObject.Summary.total_meal = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_meal) - SummarySettlementObject.MealSettlement);
+                    SummarySettlementObject.Summary.total_hotel = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_hotel) - SummarySettlementObject.HotelSettlement);
+                    SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
 
                     //if (!model.extend_flag)
                     return View("SummaryPaid", SummarySettlementObject);
@@ -451,8 +478,7 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-
-        public async Task<ActionResult> Print(vw_summary_settlement model)
+        public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
             PdfDocument document = new PdfDocument();
             document.Info.Title = "Purchase Receipt";
@@ -467,9 +493,11 @@ namespace CONTRAST_WEB.Controllers
             XFont head = new XFont("Arial Narrow", 16, XFontStyle.Regular);
             XFont address = new XFont("Arial Narrow", 11, XFontStyle.Regular);
             XFont body = new XFont("Calibri", 10, XFontStyle.Regular);
-            XFont body_title = new XFont("Calibri", 11, XFontStyle.Regular);
+            XFont bodyBold = new XFont("Calibri", 10, XFontStyle.Bold);
+            XFont body_title = new XFont("Calibri", 10, XFontStyle.Regular);
             XFont total = new XFont("Lucida Grande", 11, XFontStyle.Bold);
             XFont title = new XFont("Lucida Grande", 12, XFontStyle.Regular);
+            XFont titleBold = new XFont("Lucida Grande", 12, XFontStyle.Bold);
             XFont credit = new XFont("Lucida Sans", 9, XFontStyle.Regular);
 
             XPen header_line = new XPen(XColors.Black, 2);
@@ -482,25 +510,26 @@ namespace CONTRAST_WEB.Controllers
             string add2 = "Jakarta Utara - Indonesia";
             string add3 = "Phone :62-21 - 6515551(Hunting)";
 
-            string btr = model.group_code;
-            string name = model.emp_name.ToUpper();
-            string noreg = model.no_reg.ToString();
+            string btr = model.Summary.group_code;
+            string name = model.Summary.emp_name.ToUpper();
+            string noreg = model.Summary.no_reg.ToString();
             string TAMPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.ImgPath), "tam_logo.PNG");
             string Paid = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.ImgPath), "receipt-paid4.png");
             string ContrastPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.ImgPath), "small_logo_horizontal.png");
 
             // string date = model.invoice.start_date.ToString();
 
+            int total_Reimburse = 0;
+            int total_Actual = 0;
 
+            List<string> start_date = new List<string>();
+            List<string> start_time = new List<string>();
 
-            string[] start_date = new string[6];
-            string[] start_time = new string[6];
+            List<string> end_date = new List<string>();
+            List<string> end_time = new List<string>();
 
-            string[] end_date = new string[6];
-            string[] end_time = new string[6];
-
-            string[] destination = new string[6];
-            string[] from = new string[6];
+            List<string> destination = new List<string>();
+            List<string> from = new List<string>();
 
             int x_pad_max = 0;
             int x_pad = 0;
@@ -508,79 +537,90 @@ namespace CONTRAST_WEB.Controllers
             int y_pad_max = 0;
             int legend = 0;
 
-            if (model.startDate_6.HasValue)
+            int count = 0;
+            if (model.Summary.startDate_1.HasValue)
             {
-                start_date[5] = Convert.ToDateTime(model.startDate_6).ToString("dd MMM yyyy");
-                end_date[5] = Convert.ToDateTime(model.endDate_6).ToString("dd MMM yyyy");
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_1).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_1).ToString("dd MMM yyyy"));
 
-                start_time[5] = Convert.ToDateTime(model.startDate_6).ToString("hh:mm tt");
-                end_time[5] = Convert.ToDateTime(model.endDate_6).ToString("hh:mm tt");
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_1).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_1).ToString("hh:mm tt"));
 
-                destination[5] = model.destination_6;
-                from[5] = model.destination_5;
+                destination.Add(model.Summary.destination_1);
+                from.Add("Jakarta");
+                count++;
             }
-
-            if (model.startDate_5.HasValue)
+            if (model.Summary.startDate_2.HasValue)
             {
-                start_date[4] = Convert.ToDateTime(model.startDate_5).ToString("dd MMM yyyy");
-                end_date[4] = Convert.ToDateTime(model.endDate_5).ToString("dd MMM yyyy");
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_2).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_2).ToString("dd MMM yyyy"));
 
-                start_time[4] = Convert.ToDateTime(model.startDate_5).ToString("hh:mm tt");
-                end_time[4] = Convert.ToDateTime(model.endDate_5).ToString("hh:mm tt");
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_2).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_2).ToString("hh:mm tt"));
 
-                destination[4] = model.destination_5;
-                from[4] = model.destination_4;
+                destination.Add(model.Summary.destination_2);
+                from.Add(model.Summary.destination_1);
+                count++;
             }
-
-            if (model.startDate_4.HasValue)
+            if (model.Summary.startDate_3.HasValue)
             {
-                start_date[3] = Convert.ToDateTime(model.startDate_4).ToString("dd MMM yyyy");
-                end_date[3] = Convert.ToDateTime(model.endDate_4).ToString("dd MMM yyyy");
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_3).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_3).ToString("dd MMM yyyy"));
 
-                start_time[3] = Convert.ToDateTime(model.startDate_4).ToString("hh:mm tt");
-                end_time[3] = Convert.ToDateTime(model.endDate_4).ToString("hh:mm tt");
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_3).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_3).ToString("hh:mm tt"));
 
-                destination[3] = model.destination_4;
-                from[3] = model.destination_3;
+                destination.Add(model.Summary.destination_3);
+                from.Add(model.Summary.destination_2);
+                count++;
             }
-
-            if (model.startDate_3.HasValue)
+            if (model.Summary.startDate_4.HasValue)
             {
-                start_date[2] = Convert.ToDateTime(model.startDate_3).ToString("dd MMM yyyy");
-                end_date[2] = Convert.ToDateTime(model.endDate_3).ToString("dd MMM yyyy");
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_4).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_4).ToString("dd MMM yyyy"));
 
-                start_time[2] = Convert.ToDateTime(model.startDate_3).ToString("hh:mm tt");
-                end_time[2] = Convert.ToDateTime(model.endDate_3).ToString("hh:mm tt");
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_4).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_4).ToString("hh:mm tt"));
 
-                destination[2] = model.destination_3;
-                from[2] = model.destination_2;
+                destination.Add(model.Summary.destination_4);
+                from.Add(model.Summary.destination_3);
+                count++;
             }
-
-            if (model.startDate_2.HasValue)
+            if (model.Summary.startDate_5.HasValue)
             {
-                start_date[1] = Convert.ToDateTime(model.startDate_2).ToString("dd MMM yyyy");
-                end_date[1] = Convert.ToDateTime(model.endDate_2).ToString("dd MMM yyyy");
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_5).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_5).ToString("dd MMM yyyy"));
 
-                start_time[1] = Convert.ToDateTime(model.startDate_2).ToString("hh:mm tt");
-                end_time[1] = Convert.ToDateTime(model.endDate_2).ToString("hh:mm tt");
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_5).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_5).ToString("hh:mm tt"));
 
-                destination[1] = model.destination_2;
-                from[1] = model.destination_1;
+                destination.Add(model.Summary.destination_5);
+                from.Add(model.Summary.destination_4);
+                count++;
             }
-
-            if (model.startDate_1.HasValue)
+            if (model.Summary.startDate_6.HasValue)
             {
-                start_date[0] = Convert.ToDateTime(model.startDate_1).ToString("dd MMM yyyy");
-                end_date[0] = Convert.ToDateTime(model.endDate_1).ToString("dd MMM yyyy");
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_6).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_6).ToString("dd MMM yyyy"));
 
-                start_time[0] = Convert.ToDateTime(model.startDate_1).ToString("hh:mm tt");
-                end_time[0] = Convert.ToDateTime(model.endDate_1).ToString("hh:mm tt");
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_6).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_6).ToString("hh:mm tt"));
 
-                destination[0] = model.destination_1;
-                from[0] = "Jakarta";
+                destination.Add(model.Summary.destination_6);
+                from.Add(model.Summary.destination_5);
+                count++;
             }
+            if (model.StartSettlement.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.StartSettlement).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.EndSettlement).ToString("dd MMM yyyy"));
 
+                start_time.Add(Convert.ToDateTime(model.StartSettlement).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.EndSettlement).ToString("hh:mm tt"));
 
+                destination.Add("Extend");
+                from.Add(destination[count - 1]);
+            }
 
             //gfx.DrawRectangle(XBrushes.GhostWhite, 50, 735, 495, 63);
 
@@ -593,13 +633,11 @@ namespace CONTRAST_WEB.Controllers
             XImage paid = XImage.FromFile(Paid);
             gfx.DrawImage(paid, 60, 675, 150, 150);
 
-
             gfx.DrawString(PT_TAM, head, XBrushes.Black, 105, 60, XStringFormats.TopLeft);
             gfx.DrawRectangle(XBrushes.GhostWhite, 377, 55, 168, 28);
             gfx.DrawLine(POLine, 377, 55, 377, 83);
 
             gfx.DrawString(receipt, head, XBrushes.Gray, 385, 60, XStringFormats.TopLeft);
-
 
             gfx.DrawLine(header_line, 50, 95, 545, 95);
 
@@ -631,8 +669,8 @@ namespace CONTRAST_WEB.Controllers
             gfx.DrawString("From", body, XBrushes.Black, 85, 240, XStringFormats.TopLeft);
             gfx.DrawString("To", body, XBrushes.Black, 180, 240, XStringFormats.TopLeft);
 
-            gfx.DrawString("Depart", body, XBrushes.Black, 285 + x_pad, 240, XStringFormats.TopLeft);
-            gfx.DrawString("Return", body, XBrushes.Black, 395 + x_pad, 240, XStringFormats.TopLeft);
+            gfx.DrawString("Depart", body, XBrushes.Black, 280 + x_pad, 240, XStringFormats.TopLeft);
+            gfx.DrawString("Return", body, XBrushes.Black, 385 + x_pad, 240, XStringFormats.TopLeft);
 
             int i = 0;
             foreach (var item in start_date)
@@ -641,60 +679,115 @@ namespace CONTRAST_WEB.Controllers
                 gfx.DrawString(from[i], body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(destination[i], body, XBrushes.Black, 180, 240 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(start_date[i], body, XBrushes.Black, 285 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(start_time[i], body, XBrushes.Black, 340 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(start_date[i], body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(start_time[i], body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(end_date[i], body, XBrushes.Black, 395 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(end_time[i], body, XBrushes.Black, 450 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
-
+                gfx.DrawString(end_date[i], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(end_time[i], body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                i++;
             }
+            int xItem = 120;
+            int xSuspense = 260;
+            int xReimburse = 400;
+
 
             gfx.DrawLine(body_line, 75, 280 + gap_now, 520, 280 + gap_now);
-            gfx.DrawString("DETAIL BUDGET", title, XBrushes.Black, 85, 287 + gap_now, XStringFormats.TopLeft);
+
+            gfx.DrawString("ITEM", title, XBrushes.Black, xItem, 287 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawString("SUSPENSE", title, XBrushes.Black, xSuspense, 287 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawString("REIMBURSE", title, XBrushes.Black, xReimburse, 287 + gap_now, XStringFormats.TopLeft);
             gfx.DrawLine(body_line, 75, 310 + gap_now, 520, 310 + gap_now);
 
             // BUDGET DETAIL PER ITEM
+            XTextFormatter tx = new XTextFormatter(gfx);
+            XTextFormatter rx = new XTextFormatter(gfx);
 
-            gfx.DrawRectangle(XBrushes.GhostWhite, 82, 320 + gap_now, 210, 20);
-            gfx.DrawLine(POLine, 85, 320 + gap_now, 82, 340 + gap_now);
-            gfx.DrawString("MEAL", title, XBrushes.DarkBlue, 95, 323 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + model.total_meal.ToString("N"), body, XBrushes.Black, 95, 343 + gap_now, XStringFormats.TopLeft);
+            tx.Alignment = XParagraphAlignment.Right;
+            rx.Alignment = XParagraphAlignment.Left;
 
-            gfx.DrawRectangle(XBrushes.GhostWhite, 82, 365 + gap_now, 210, 20);
-            gfx.DrawLine(POLine, 85, 365 + gap_now, 82, 385 + gap_now);
-            gfx.DrawString("HOTEL", title, XBrushes.DarkBlue, 95, 368 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + model.total_hotel.ToString("N"), body, XBrushes.Black, 95, 388 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawRectangle(XBrushes.GhostWhite, 85 - 3, 320 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 320 + gap_now, 85 - 3, 340 + gap_now);
 
-            gfx.DrawRectangle(XBrushes.GhostWhite, 82, 410 + gap_now, 210, 20);
-            gfx.DrawLine(POLine, 85, 410 + gap_now, 82, 430 + gap_now);
-            gfx.DrawString("TICKET", title, XBrushes.DarkBlue, 95, 413 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + model.total_ticket.ToString("N"), body, XBrushes.Black, 95, 433 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawRectangle(XBrushes.GhostWhite, 85 - 3, 360 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 360 + gap_now, 85 - 3, 380 + gap_now);
 
-            gfx.DrawRectangle(XBrushes.GhostWhite, 302, 320 + gap_now, 210, 20);
-            gfx.DrawLine(POLine, 305, 320 + gap_now, 302, 340 + gap_now);
-            gfx.DrawString("LAND TRANSPORTATION", title, XBrushes.DarkBlue, 315, 323 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + model.total_transportation.ToString("N"), body, XBrushes.Black, 315, 343 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawRectangle(XBrushes.GhostWhite, 85 - 3, 400 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 400 + gap_now, 85 - 3, 420 + gap_now);
 
-            gfx.DrawRectangle(XBrushes.GhostWhite, 302, 365 + gap_now, 210, 20);
-            gfx.DrawLine(POLine, 305, 365 + gap_now, 302, 385 + gap_now);
-            gfx.DrawString("LAUNDRY", title, XBrushes.DarkBlue, 315, 368 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + model.total_laundry.ToString("N"), body, XBrushes.Black, 315, 388 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawRectangle(XBrushes.LightCyan, 85 - 3, 450 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 450 + gap_now, 85 - 3, 470 + gap_now);
 
-            gfx.DrawRectangle(XBrushes.GhostWhite, 302, 410 + gap_now, 210, 20);
-            gfx.DrawLine(POLine, 305, 410 + gap_now, 302, 430 + gap_now);
-            gfx.DrawString("OTHER", title, XBrushes.DarkBlue, 315, 413 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + model.total_miscellaneous.ToString("N"), body, XBrushes.Black, 315, 433 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawRectangle(XBrushes.LightCyan, 85 - 3, 516 + gap_now, 432, 34);
+            gfx.DrawLine(POLine, 85, 516 + gap_now, 85 - 3, 550 + gap_now);
 
-            gap_now = gap_now + 20;
-            gfx.DrawRectangle(XBrushes.LightCyan, 82, 450 + gap_now, 428, 50);
-            gfx.DrawLine(POLine, 85, 450 + gap_now, 82, 500 + gap_now);
-            gfx.DrawString("TOTAL BUDGET", title, XBrushes.DarkBlue, 85 + 10, 457 + gap_now, XStringFormats.TopLeft);
-            gfx.DrawString("Rp. " + Convert.ToInt32(model.grand_total_settlement).ToString("N"), body, XBrushes.Black, 85 + 10, 480 + gap_now, XStringFormats.TopLeft);
+
+            XRect rect1 = new XRect(xItem + 5, 323 + gap_now, 200, 20);
+            XRect rect1s = new XRect(xItem + 205, 323 + gap_now, 150, 20);
+
+            rx.DrawString("Meal", body_title, XBrushes.DarkBlue, rect1);
+            tx.DrawString("Rp. " + model.Summary.total_meal.ToString("N"), body, XBrushes.Black, rect1);
+            tx.DrawString("Rp. " + model.MealSettlement.ToString("N"), body, XBrushes.Black, rect1s);
+
+
+            XRect rect2 = new XRect(xItem + 5, 343 + gap_now, 200, 20);
+            XRect rect2s = new XRect(xItem + 205, 343 + gap_now, 150, 20);
+
+            rx.DrawString("Hotel", body_title, XBrushes.DarkBlue, rect2);
+            tx.DrawString("Rp. " + model.Summary.total_hotel.ToString("N"), body, XBrushes.Black, rect2);
+            tx.DrawString("Rp. " + model.HotelSettlement.ToString("N"), body, XBrushes.Black, rect2s);
+
+
+
+            XRect rect3 = new XRect(xItem + 5, 363 + gap_now, 200, 20);
+            XRect rect3s = new XRect(xItem + 205, 363 + gap_now, 150, 20);
+
+            rx.DrawString("Ticket", body_title, XBrushes.DarkBlue, rect3);
+            tx.DrawString("Rp. " + model.Summary.total_ticket.ToString("N"), body, XBrushes.Black, rect3);
+            tx.DrawString("Rp. " + model.TicketSettlement.ToString("N"), body, XBrushes.Black, rect3s);
+
+
+            XRect rect4 = new XRect(xItem + 5, 383 + gap_now, 200, 20);
+            XRect rect4s = new XRect(xItem + 205, 383 + gap_now, 150, 20);
+
+            rx.DrawString("Land Transport", body_title, XBrushes.DarkBlue, rect4);
+            tx.DrawString("Rp. 0.00", body, XBrushes.Black, rect4);
+            tx.DrawString("Rp. " + model.Summary.total_transportation.ToString("N"), body, XBrushes.Black, rect4s);
+
+            XRect rect5 = new XRect(xItem + 5, 403 + gap_now, 200, 20);
+            XRect rect5s = new XRect(xItem + 205, 403 + gap_now, 150, 20);
+
+            rx.DrawString("Laundry", body_title, XBrushes.DarkBlue, rect5);
+            tx.DrawString("Rp. 0.00", body, XBrushes.Black, rect5);
+            tx.DrawString("Rp. " + model.Summary.total_laundry.ToString("N"), body, XBrushes.Black, rect5s);
+
+            XRect rect6 = new XRect(xItem + 5, 423 + gap_now, 200, 20);
+            XRect rect6s = new XRect(xItem + 205, 423 + gap_now, 150, 20);
+            rx.DrawString("Misc", body_title, XBrushes.DarkBlue, rect6);
+            tx.DrawString("Rp. 0.00", body, XBrushes.Black, rect6);
+            tx.DrawString("Rp. " + model.Summary.total_miscellaneous.ToString("N"), body, XBrushes.Black, rect6s);
+
+
+
+            // Perhitungan Total
+            total_Actual = model.Summary.total_meal + model.Summary.total_ticket + model.Summary.total_hotel;
+            total_Reimburse = model.Summary.total_laundry + model.Summary.total_transportation + model.Summary.total_miscellaneous;
+
+
+            XRect rect7 = new XRect(xItem + 5, 454 + gap_now, 200, 20);
+            XRect rect7s = new XRect(xItem + 205, 454 + gap_now, 150, 20);
+            rx.DrawString("TOTAL", title, XBrushes.DarkBlue, rect7);
+            tx.DrawString("Rp. " + total_Actual.ToString("N"), body, XBrushes.Black, rect7);
+            tx.DrawString("Rp. " + total_Reimburse.ToString("N"), body, XBrushes.Black, rect7s);
+
+            XRect rect9 = new XRect(xItem + 5, 526 + gap_now, 350, 20);
+            rx.DrawString("GRAND TOTAL", titleBold, XBrushes.DarkBlue, rect9);
+            tx.DrawString("Rp. " + Convert.ToInt32(model.Summary.grand_total_settlement).ToString("N"), bodyBold, XBrushes.Black, rect9);
+
 
             MemoryStream stream = new MemoryStream();
             document.Save(stream, false);
             stream.Position = 0;
-            return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.group_code.Trim(' ') + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
+            return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.Summary.group_code.Trim(' ') + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
         }
 
     }

@@ -239,13 +239,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ActualCostHelper.cs" />
-    <Compile Include="Models\ActualCostShtHelper.cs" />
-    <Compile Include="Models\ActualCostVerifiedHelper.cs" />
-    <Compile Include="Models\AllowanceHelper.cs" />
+    <Compile Include="Helper\ActualCostHelper.cs" />
+    <Compile Include="Helper\ActualCostShtHelper.cs" />
+    <Compile Include="Helper\ActualCostVerifiedHelper.cs" />
+    <Compile Include="Helper\AllowanceHelper.cs" />
     <Compile Include="Models\CONTRAST_DB.Views.cs" />
-    <Compile Include="Models\GenerateFileHelper.cs" />
-    <Compile Include="Models\InvoiceHelper.cs" />
+    <Compile Include="Helper\GenerateFileHelper.cs" />
+    <Compile Include="Helper\InvoiceHelper.cs" />
+    <Compile Include="Helper\SettlementPaidHelper.cs" />
     <Compile Include="Models\tb_m_budget.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -270,6 +271,7 @@
     <Compile Include="Models\tb_m_vendor_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_r_invoice_actualcost.cs" />
     <Compile Include="Models\tb_r_record_generate_file.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -279,14 +281,17 @@
     <Compile Include="Models\tb_r_statusUploadMaster.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_r_travel_actualcost.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_r_travel_request.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_r_travel_request_comment.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TrackingHelper.cs" />
-    <Compile Include="Models\TravelStatusCommentHelper.cs" />
+    <Compile Include="Helper\TrackingHelper.cs" />
+    <Compile Include="Helper\TravelStatusCommentHelper.cs" />
     <Compile Include="Models\vw_actualcost_generate_file.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -340,16 +345,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\FixedCostVerifierHelper.cs" />
+    <Compile Include="Helper\FixedCostVerifierHelper.cs" />
     <Compile Include="Utility\DeleteData.cs" />
     <Compile Include="Utility\FileType.cs" />
     <Compile Include="Utility\GetData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Utility\InsertData.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\RequestSummaryHelper.cs" />
-    <Compile Include="Models\SettlementHelper.cs" />
-    <Compile Include="Models\SettlementVerifiedHelper.cs" />
+    <Compile Include="Helper\RequestSummaryHelper.cs" />
+    <Compile Include="Helper\SettlementHelper.cs" />
+    <Compile Include="Helper\SettlementVerifiedHelper.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -449,9 +454,6 @@
     <Compile Include="Models\tb_m_winter_period.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tb_r_travel_actualcost.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\tb_r_travel_actualcost_BACKUP.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -489,10 +491,10 @@
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Utility\TokenJwt.cs" />
-    <Compile Include="Models\TravelDitHelper.cs" />
-    <Compile Include="Models\TravelExecutionHelper.cs" />
-    <Compile Include="Models\TravelRequestHelper.cs" />
-    <Compile Include="Models\TravelStatusHelper.cs" />
+    <Compile Include="Helper\TravelDitHelper.cs" />
+    <Compile Include="Helper\TravelExecutionHelper.cs" />
+    <Compile Include="Helper\TravelRequestHelper.cs" />
+    <Compile Include="Helper\TravelStatusHelper.cs" />
     <Compile Include="Models\vw_employee_display_name.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -620,6 +622,7 @@
     <Content Include="Files\DIT_DOMESTIC_TEMPLATE.xlsx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -278,22 +278,22 @@ namespace CONTRAST_WEB.Controllers
                 else
                 if (k == 1)
                 {
-                    if (model2.travel_request.apprv_flag_lvl2 != null) 
+                    //if (model2.travel_request.apprv_flag_lvl2 != null) 
                     temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl2);
                     ttemp = model2.travel_request.apprv_flag_lvl2;
                 }
                 else
                 if (k == 0)
                 {
-                    if (model2.travel_request.apprv_flag_lvl1 != null) 
+                    //if (model2.travel_request.apprv_flag_lvl1 != null) 
                     temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl1);
                     ttemp = model2.travel_request.apprv_flag_lvl1;
                 }
 
-                if (temp != null)
+                if (temp != null|| ttemp != null)
                 {
-                    apprv_name.Add(temp);
-                    apprv_status.Add(ttemp);
+                    if(temp!=null)apprv_name.Add(temp);
+                    if(ttemp != null) apprv_status.Add(ttemp);
                 }
                 else
                 if (temp == null && (k == 0||k==1))
@@ -308,6 +308,7 @@ namespace CONTRAST_WEB.Controllers
 
             ViewBag.Bossname = apprv_name;
             ViewBag.StatusState = apprv_status;
+            ViewBag.Approvalnum = k;
 
             return View(model2);
         }

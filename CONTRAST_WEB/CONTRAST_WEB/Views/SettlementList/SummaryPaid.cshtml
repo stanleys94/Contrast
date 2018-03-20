@@ -1,4 +1,4 @@
-﻿@model CONTRAST_WEB.Models.vw_summary_settlement
+﻿@model CONTRAST_WEB.Models.SettlementPaidHelper
 
 @{
     ViewBag.Title = "SETTLEMENT";
@@ -8,37 +8,43 @@
 
 @using (Html.BeginForm("Print", "SettlementList", FormMethod.Post))
 {
-    @Html.HiddenFor(m => m.create_date)
-    @Html.HiddenFor(m => m.destination_1)
-    @Html.HiddenFor(m => m.destination_2)
-    @Html.HiddenFor(m => m.destination_3)
-    @Html.HiddenFor(m => m.destination_4)
-    @Html.HiddenFor(m => m.destination_5)
-    @Html.HiddenFor(m => m.destination_6)
-    @Html.HiddenFor(m => m.emp_name)
-    @Html.HiddenFor(m => m.endDate_1)
-    @Html.HiddenFor(m => m.endDate_2)
-    @Html.HiddenFor(m => m.endDate_3)
-    @Html.HiddenFor(m => m.endDate_4)
-    @Html.HiddenFor(m => m.endDate_5)
-    @Html.HiddenFor(m => m.endDate_6)
-    @Html.HiddenFor(m => m.grand_total_settlement)
-    @Html.HiddenFor(m => m.group_code)
-    @Html.HiddenFor(m => m.no_reg)
-    @Html.HiddenFor(m => m.startDate_1)
-    @Html.HiddenFor(m => m.startDate_2)
-    @Html.HiddenFor(m => m.startDate_3)
-    @Html.HiddenFor(m => m.startDate_4)
-    @Html.HiddenFor(m => m.startDate_5)
-    @Html.HiddenFor(m => m.startDate_6)
-    @Html.HiddenFor(m => m.total_hotel)
-    @Html.HiddenFor(m => m.total_laundry)
-    @Html.HiddenFor(m => m.total_meal)
-    @Html.HiddenFor(m => m.total_miscellaneous)
-    @Html.HiddenFor(m => m.total_preparation)
-    @Html.HiddenFor(m => m.total_ticket)
-    @Html.HiddenFor(m => m.total_transportation)
-    @Html.HiddenFor(m => m.total_winter)
+    @Html.HiddenFor(m => m.Summary.create_date)
+    @Html.HiddenFor(m => m.Summary.destination_1)
+    @Html.HiddenFor(m => m.Summary.destination_2)
+    @Html.HiddenFor(m => m.Summary.destination_3)
+    @Html.HiddenFor(m => m.Summary.destination_4)
+    @Html.HiddenFor(m => m.Summary.destination_5)
+    @Html.HiddenFor(m => m.Summary.destination_6)
+    @Html.HiddenFor(m => m.Summary.emp_name)
+    @Html.HiddenFor(m => m.Summary.endDate_1)
+    @Html.HiddenFor(m => m.Summary.endDate_2)
+    @Html.HiddenFor(m => m.Summary.endDate_3)
+    @Html.HiddenFor(m => m.Summary.endDate_4)
+    @Html.HiddenFor(m => m.Summary.endDate_5)
+    @Html.HiddenFor(m => m.Summary.endDate_6)
+    @Html.HiddenFor(m => m.Summary.grand_total_settlement)
+    @Html.HiddenFor(m => m.Summary.group_code)
+    @Html.HiddenFor(m => m.Summary.no_reg)
+    @Html.HiddenFor(m => m.Summary.startDate_1)
+    @Html.HiddenFor(m => m.Summary.startDate_2)
+    @Html.HiddenFor(m => m.Summary.startDate_3)
+    @Html.HiddenFor(m => m.Summary.startDate_4)
+    @Html.HiddenFor(m => m.Summary.startDate_5)
+    @Html.HiddenFor(m => m.Summary.startDate_6)
+    @Html.HiddenFor(m => m.Summary.total_hotel)
+    @Html.HiddenFor(m => m.Summary.total_laundry)
+    @Html.HiddenFor(m => m.Summary.total_meal)
+    @Html.HiddenFor(m => m.Summary.total_miscellaneous)
+    @Html.HiddenFor(m => m.Summary.total_preparation)
+    @Html.HiddenFor(m => m.Summary.total_ticket)
+    @Html.HiddenFor(m => m.Summary.total_transportation)
+    @Html.HiddenFor(m => m.Summary.total_winter)
+    @Html.HiddenFor(m => m.MealSettlement)
+    @Html.HiddenFor(m => m.HotelSettlement)
+    @Html.HiddenFor(m => m.TicketSettlement)
+    @Html.HiddenFor(m => m.StartSettlement)
+    @Html.HiddenFor(m => m.EndSettlement)
+
 
 
 
@@ -54,10 +60,10 @@
             <div style="border-bottom:2px solid black; width:1000px; margin-bottom:20px;" class="col-md-11 col-md-offset-1"></div>
 
             <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Jl. Laks. Yos Sudarso, Sunter II</h6></div>
-            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">ID :<strong> @Html.DisplayFor(m => m.group_code, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
+            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">ID :<strong> @Html.DisplayFor(m => m.Summary.group_code, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
 
             <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Jakarta Utara - Indonesia</h6></div>
-            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">NOREG :<strong>@Html.DisplayFor(m => m.no_reg, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
+            <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">NOREG :<strong>@Html.DisplayFor(m => m.Summary.no_reg, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
 
             <div style="width:950px;" class="col-md-11 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Phone :62-21 - 6515551(Hunting)</h6></div>
 
@@ -78,7 +84,7 @@
                     </div>
                     <div class="lab">
                         <div class="lab1">
-                            Date : @Html.DisplayFor(m => m.startDate_1, "{dd/MM/yyyy}", new { @type = "datetime", placeholder = "Availability", @class = "form-control" })
+                            Date : @Html.DisplayFor(m => m.Summary.startDate_1, "{dd/MM/yyyy}", new { @type = "datetime", placeholder = "Availability", @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -93,16 +99,16 @@
                         <div style="color:#00b4ee" class="teks1">
                             To
                             <span>
-                                @Html.DisplayFor(m => m.destination_1, new { placeholder = "Availability", @class = "form-control" })
+                                @Html.DisplayFor(m => m.Summary.destination_1, new { placeholder = "Availability", @class = "form-control" })
                             </span>
                         </div>
                     </div>
                     <div class="lab">
-                        <div style="color:#00b4ee" class="lab1">Return : @Html.DisplayFor(m => m.endDate_1, new { placeholder = "Availability", @class = "form-control", @type = "date" })</div>
+                        <div style="color:#00b4ee" class="lab1">Return : @Html.DisplayFor(m => m.Summary.endDate_1, new { placeholder = "Availability", @class = "form-control", @type = "date" })</div>
                     </div>
                 </div>
 
-                @if (Model.destination_2 != null && Model.destination_1 != null && Model.destination_3 != null)
+                @if (Model.Summary.destination_2 != null && Model.Summary.destination_1 != null && Model.Summary.destination_3 != null)
                 {
                     <div class="main1">
                         <div class="bulet">
@@ -119,7 +125,7 @@
                         </div>
                         <div class="lab">
                             <div class="lab1">
-                                Date : @Html.DisplayFor(m => m.startDate_1.Value.Date, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })
+                                Date : @Html.DisplayFor(m => m.Summary.startDate_1.Value.Date, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })
                             </div>
                         </div>
                     </div>
@@ -135,13 +141,13 @@
                             <div style="color:#00b4ee" class="teks1">
                                 To
                                 <span>
-                                    @Html.DisplayFor(m => m.destination_1, new { placeholder = "Availability", @class = "form-control" })
+                                    @Html.DisplayFor(m => m.Summary.destination_1, new { placeholder = "Availability", @class = "form-control" })
                                 </span>
                             </div>
                         </div>
                         <div class="lab">
                             <div class="lab1">
-                                Date : @Html.DisplayFor(m => m.startDate_1.Value.Date, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })
+                                Date : @Html.DisplayFor(m => m.Summary.startDate_1.Value.Date, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })
                             </div>
                         </div>
                     </div>
@@ -156,17 +162,17 @@
                             <div style="color:#00b4ee" class="teks1">
                                 To
                                 <span>
-                                    @Html.DisplayFor(m => m.destination_2, new { placeholder = "Availability", @class = "form-control" })
+                                    @Html.DisplayFor(m => m.Summary.destination_2, new { placeholder = "Availability", @class = "form-control" })
                                 </span>
                             </div>
                         </div>
                         <div class="lab">
-                            <div style="color:#00b4ee" class="lab1">Return : @Html.DisplayFor(m => m.endDate_1, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
+                            <div style="color:#00b4ee" class="lab1">Return : @Html.DisplayFor(m => m.Summary.endDate_1, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
                         </div>
                     </div>
                 }
 
-                @if (Model.destination_3 != null)
+                @if (Model.Summary.destination_3 != null)
                 {
                     <div class="main1">
                         <div class="buled">
@@ -178,17 +184,17 @@
                             <div style="color:#00b4ee" class="teks1">
                                 To
                                 <span>
-                                    @Html.DisplayFor(m => m.destination_3, new { placeholder = "Availability", @class = "form-control" })
+                                    @Html.DisplayFor(m => m.Summary.destination_3, new { placeholder = "Availability", @class = "form-control" })
                                 </span>
                             </div>
                         </div>
                         <div class="lab">
-                            <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.endDate_3, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
+                            <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.Summary.endDate_3, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
                         </div>
                     </div>
                 }
 
-                @if (Model.destination_4 != null)
+                @if (Model.Summary.destination_4 != null)
                 {
                     <div class="main1">
                         <div class="buled">
@@ -200,16 +206,16 @@
                             <div style="color:#00b4ee" class="teks1">
                                 To
                                 <span>
-                                    @Html.DisplayFor(m => m.destination_4, new { placeholder = "Availability", @class = "form-control" })
+                                    @Html.DisplayFor(m => m.Summary.destination_4, new { placeholder = "Availability", @class = "form-control" })
                                 </span>
                             </div>
                         </div>
                         <div class="lab">
-                            <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.endDate_4, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
+                            <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.Summary.endDate_4, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
                         </div>
                     </div>
                 }
-                @if (Model.destination_5 != null)
+                @if (Model.Summary.destination_5 != null)
                 {
                     <div class="main1">
                         <div class="buled">
@@ -221,12 +227,12 @@
                             <div style="color:#00b4ee" class="teks1">
                                 To
                                 <span>
-                                    @Html.DisplayFor(m => m.destination_5, new { placeholder = "Availability", @class = "form-control" })
+                                    @Html.DisplayFor(m => m.Summary.destination_5, new { placeholder = "Availability", @class = "form-control" })
                                 </span>
                             </div>
                         </div>
                         <div class="lab">
-                            <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.endDate_5, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
+                            <div style="color:#00b4ee" class="lab1">Date : @Html.DisplayFor(m => m.Summary.endDate_5, new { @type = "datetime", placeholder = "Availability", @class = "form-control" })</div>
                         </div>
                     </div>
                 }
@@ -241,7 +247,7 @@
                     <h5 class="h5sl">MEAL</h5>
                 </div>
                 <div class="col-md-12">
-                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.total_meal) @*@Html.DisplayFor(m => m.total_meal, new { placeholder = "Availability", @class = "form-control" })*@</H6>
+                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.Summary.total_meal) @*@Html.DisplayFor(m => m.total_meal, new { placeholder = "Availability", @class = "form-control" })*@</H6>
                     <div class="form-group input-group">
                         <H6 style="text-align:left; color:darkgrey;">
                             @*@Html.DisplayFor(m => m.settlement_meal, new { placeholder = "Budget", @class = "form-control" })*@
@@ -254,7 +260,7 @@
                     <h5 class="h5sl">HOTEL</h5>
                 </div>
                 <div class="col-md-12">
-                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.total_hotel) @*@Html.DisplayFor(m => m.total_hotel, new { placeholder = "Availability", @class = "form-control" })*@</H6>
+                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.Summary.total_hotel) @*@Html.DisplayFor(m => m.total_hotel, new { placeholder = "Availability", @class = "form-control" })*@</H6>
                     <div class="form-group input-group">
                         <H6 style="text-align:left; color:darkgrey;"></H6>
                         <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
@@ -265,7 +271,7 @@
                     <h5 class="h5sl">TICKET</h5>
                 </div>
                 <div class="col-md-12">
-                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.total_ticket) @*@Html.DisplayFor(m => m.total_ticket, new { placeholder = "Availability", @class = "form-control" })*@</H6>
+                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.Summary.total_ticket) @*@Html.DisplayFor(m => m.total_ticket, new { placeholder = "Availability", @class = "form-control" })*@</H6>
                     <div class="form-group input-group">
                         <H6 style="text-align:left; color:darkgrey;"></H6>
                         <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
@@ -278,7 +284,7 @@
                     <h5 class="h5sl">LAND TRANSPORTATION</h5>
                 </div>
                 <div class="col-md-12">
-                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.total_transportation) @*@Html.DisplayFor(m => m.total_transportation, new { placeholder = "Availability", @class = "form-control" })*@</H6>
+                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.Summary.total_transportation) @*@Html.DisplayFor(m => m.total_transportation, new { placeholder = "Availability", @class = "form-control" })*@</H6>
                     <div class="form-group input-group">
                         <H6 style="text-align:left; color:darkgrey;">
                             @*@Html.DisplayFor(m => m.settlement_transportation, new { @class = "form-control" })*@
@@ -291,7 +297,7 @@
                     <h5 class="h5sl">LAUNDRY</h5>
                 </div>
                 <div class="col-md-12">
-                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.total_laundry) @*@Html.DisplayFor(m => m.total_laundry, new { placeholder = "Availability", @class = "form-control" })*@</H6>
+                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.Summary.total_laundry) @*@Html.DisplayFor(m => m.total_laundry, new { placeholder = "Availability", @class = "form-control" })*@</H6>
                     <div class="form-group input-group">
                         <H6 style="text-align:left; color:darkgrey;">
                             @*@Html.DisplayFor(m => m.settlement_laundry, new { @class = "form-control" })*@
@@ -305,7 +311,7 @@
                     <h5 class="h5sl">OTHER</h5>
                 </div>
                 <div class="col-md-12">
-                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.total_miscellaneous) @*@Html.DisplayFor(m => m.total_miscellaneous, new { placeholder = "Availability", @class = "form-control" })*@</H6>
+                    <H6 style="text-align:left; color:darkgrey;">RP. @String.Format("{0:n0}", Model.Summary.total_miscellaneous) @*@Html.DisplayFor(m => m.total_miscellaneous, new { placeholder = "Availability", @class = "form-control" })*@</H6>
                     <div class="form-group input-group">
                         @*@Html.DisplayFor(m => m.settlement_miscellaneous, new { @class = "form-control" })*@
                         <!--<input class="form-control" type="text" name='preparation_allowance' placeholder="Budget" />-->
@@ -316,7 +322,7 @@
 
             <div class="col-md-11 col-md-offset-1 h5x">
                 <h5 class="h5a">Total Budget</h5>
-                <label>RP.&nbsp;@String.Format("{0:n0}", Model.grand_total_settlement) @*@Html.DisplayFor(m => m.grand_total_settlement)*@</label>
+                <label>RP.&nbsp;@String.Format("{0:n0}", Model.Summary.grand_total_settlement) @*@Html.DisplayFor(m => m.grand_total_settlement)*@</label>
 
             </div>
             <div class="col-md-11 col-md-offset-1">
@@ -327,7 +333,7 @@
             <div class="form-group col-md-11 col-md-offset-1">
                 @*<button style="width:145px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">Submit</button>*@
                 <button style="width:145px" type="submit" class="btn btn-default btn-lg">PRINT</button>
-                
+
                 @Html.ActionLink("Close", "Index", "Home")
                 @*<a href="javascript:void(0);" onclick="history.go(-3);">CLOSE</a>*@
             </div>

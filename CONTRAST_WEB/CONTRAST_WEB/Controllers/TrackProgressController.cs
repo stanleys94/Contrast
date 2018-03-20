@@ -17,20 +17,52 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(tb_m_employee model)
+        public async Task<ActionResult> Index(tb_m_employee model, string user = "")
         {
+         
             List<TrackingHelper> track = new List<TrackingHelper>();
             List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
             int privillage = 0;
+            tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
             tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
 
-            if (verifier.position != null) privillage = 1;
-            else privillage = 2;
+            string division = Admin.Divisi;
+            if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
+
+            //if (verifier.position != null) privillage = 1;
+            //else privillage = 2;
+            if (user.Contains("all")) privillage = 1;
+            else if (user.Contains("admin")) privillage = 2;
+            else if (user.Contains("user")) privillage = 3;
+
+            //if (privillage == 1) new_list = await GetData.TrackingListAll();
+            //else if (privillage == 2) new_list = await GetData.TrackingListAll();
+            ////else if (privillage == 2) new_list = await GetData.TrackingListDivisonAll(model.unit_code_code);
+
+            //if (new_list.Count > 0)
+            //{
+            //    foreach (var item in new_list)
+            //    {
+            //        TrackingHelper temp = new TrackingHelper();
+            //        temp.login_id = model.code;
+            //        temp.login_name = model.name;
+            //        temp.TrackedList = item;
+            //        track.Add(temp);
+            //    }
+            //}
+            //else
+            //{
+            //    TrackingHelper temp = new TrackingHelper();
+            //    temp.login_id = model.code;
+            //    temp.login_name = model.name;
+            //    track.Add(temp);
+            //    return View(track);
+            //}
+            //return View(track.OrderBy(m => m.TrackedList.create_date).ToList());
 
             if (privillage == 1) new_list = await GetData.TrackingListAll();
-            else if (privillage == 2) new_list = await GetData.TrackingListAll();
-            //else if (privillage == 2) new_list = await GetData.TrackingListDivisonAll(model.unit_code_code);
-
+            else if (privillage == 2) new_list = await GetData.TrackingListDivisonAll(Admin.Divisi.Trim());
+            else if (privillage == 3) new_list = await GetData.TrackingListIndividual(model.code);
             if (new_list.Count > 0)
             {
                 foreach (var item in new_list)
@@ -38,6 +70,7 @@ namespace CONTRAST_WEB.Controllers
                     TrackingHelper temp = new TrackingHelper();
                     temp.login_id = model.code;
                     temp.login_name = model.name;
+                    temp.privilage = user;
                     temp.TrackedList = item;
                     track.Add(temp);
                 }
@@ -47,6 +80,7 @@ namespace CONTRAST_WEB.Controllers
                 TrackingHelper temp = new TrackingHelper();
                 temp.login_id = model.code;
                 temp.login_name = model.name;
+                temp.privilage = user;
                 track.Add(temp);
                 return View(track);
             }
@@ -63,17 +97,52 @@ namespace CONTRAST_WEB.Controllers
             int privillage = 0;
             tb_m_verifier_employee employee = await GetData.EmployeeVerifier(Convert.ToInt32(Model[0].login_id));
             tb_m_employee logged_employee = new tb_m_employee();
+
+            //if (employee.position != null) privillage = 1;
+            //else privillage = 2;
             logged_employee.code = Model[0].login_id;
             logged_employee = await GetData.EmployeeInfo(logged_employee);
 
-            if (employee.position != null) privillage = 1;
-            else privillage = 2;
+            tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(logged_employee.code));
+            
+            string division = Admin.Divisi;
+            if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
+
+            if (Model[0].privilage.Contains("all")) privillage = 1;
+            else if (Model[0].privilage.Contains("admin")) privillage = 2;
+            else if (Model[0].privilage.Contains("user")) privillage = 3;
 
             if (insert == "Search")
             {
+                //List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
+                //if (privillage == 1) new_list = await GetData.TrackingList(search, start, end);
+                //else new_list = await GetData.TrackingListDivison(logged_employee.unit_code_code, search, start, end);
+
+                //if (new_list.Count > 0)
+                //{
+                //    foreach (var item in new_list)
+                //    {
+                //        TrackingHelper temp = new TrackingHelper();
+                //        temp.login_id = Model[0].login_id;
+                //        temp.login_name = Model[0].login_name;
+                //        temp.TrackedList = item;
+                //        track.Add(temp);
+                //    }
+                //}
+                //else
+                //{
+                //    TrackingHelper temp = new TrackingHelper();
+                //    temp.login_id = Model[0].login_id;
+                //    temp.login_name = Model[0].login_name;
+                //    track.Add(temp);
+                //    return View("Index", track);
+                //}
+                //ModelState.Clear();
+                //return View("Index", track.OrderBy(m => m.TrackedList.create_date).ToList());
                 List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
-                if (privillage == 1) new_list = await GetData.TrackingList(search, start, end);
-                else new_list = await GetData.TrackingListDivison(logged_employee.unit_code_code, search, start, end);
+                if (privillage == 1) new_list = await GetData.TrackingListAllSearch(search, start, end);
+                else if (privillage == 2) new_list = await GetData.TrackingListDivisonAllSearch(Admin.Divisi, search, start, end);
+                else if (privillage == 3) new_list = await GetData.TrackingListIndividualSearch(logged_employee.code, search, start, end);
 
                 if (new_list.Count > 0)
                 {
@@ -82,6 +151,7 @@ namespace CONTRAST_WEB.Controllers
                         TrackingHelper temp = new TrackingHelper();
                         temp.login_id = Model[0].login_id;
                         temp.login_name = Model[0].login_name;
+                        temp.privilage = Model[0].privilage;
                         temp.TrackedList = item;
                         track.Add(temp);
                     }
@@ -91,6 +161,7 @@ namespace CONTRAST_WEB.Controllers
                     TrackingHelper temp = new TrackingHelper();
                     temp.login_id = Model[0].login_id;
                     temp.login_name = Model[0].login_name;
+                    temp.privilage = Model[0].privilage;
                     track.Add(temp);
                     return View("Index", track);
                 }

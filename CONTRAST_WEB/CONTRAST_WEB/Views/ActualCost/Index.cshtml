@@ -73,7 +73,7 @@
                                         <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                             ACTUAL COST
                                         </th>
-					<th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+										<th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                             EMPLOYEE SUGGESTION
                                         </th>
                                         <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
@@ -117,7 +117,7 @@
                                             <td class="td" style="width:200px;">
                                                 @Html.DisplayFor(Model => Model[k].TravelRequest.destination_name)
                                                 @Html.HiddenFor(Model => Model[k].TravelRequest.destination_name)
-						@Html.HiddenFor(Model => Model[k].TravelRequest.id_destination_city)
+												@Html.HiddenFor(Model => Model[k].TravelRequest.id_destination_city)
                                             </td>
                                             <td class="td" style="width:200px;">
                                                 @Html.DisplayFor(Model => Model[k].TravelRequest.jenis_transaksi)
@@ -135,13 +135,13 @@
                                                 @Html.TextBoxFor(Model => Model[k].ActualCost.amount, new { id = "renci_" + @k, @type = "number", @class = "hidden" })
                                             </td>
 
-					   <td class="td" style="width:200px;">
-						@Html.TextAreaFor(Model => Model[k].TravelRequest.hotel_flight_name, new { @class = "form-control",@style="max-width:250px;min-width:250px;max-height:34px;min-height:34px;" })  
+											<td class="td" style="width:200px;">
+						                        @Html.TextAreaFor(Model => Model[k].TravelRequest.hotel_flight_name, new { @class = "form-control",@style="max-width:250px;min-width:250px;max-height:34px;min-height:34px;" })  
                                                 @Html.HiddenFor(Model => Model[k].TravelRequest.hotel_flight_name)
                                             </td>
 
                                             <td class="td" style="width:200px;">
-                                                @Html.DropDownListFor(Model => Model[k].ActualCost.vendor_code, asd[k], "Vendor", new { @class = "form-control", style = "width:150px", placeholder = "Vendor" })
+                                                @Html.DropDownListFor(Model => Model[k].ActualCost.vendor_code, asd[k], new { @class = "form-control", style = "width:150px", placeholder = "Vendor" })
                                             </td>
 
                                             <td class="td" style="width:200px;">
@@ -254,6 +254,7 @@
                                                 <td class="td" style="width:200px;">
                                                     @Html.DisplayFor(Model => Model[k].TravelRequestRejected.destination_name)
                                                     @Html.HiddenFor(Model => Model[k].TravelRequestRejected.id_destination_city)
+													@Html.HiddenFor(Model => Model[k].TravelRequestRejected.destination_name)
                                                 </td>
                                                 <td class="td" style="width:200px;">
                                                     @Html.DisplayFor(Model => Model[k].TravelRequestRejected.jenis_transaksi)

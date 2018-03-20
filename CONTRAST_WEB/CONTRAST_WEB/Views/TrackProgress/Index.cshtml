@@ -38,17 +38,17 @@
         </div>
 
         <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
-            <div style="width:2500px;text-align:left;border:0px;padding:0 5px;">
+            <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
                 <table style="width:2500px;margin-bottom:0px;" class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:50px;">
                             BTA NO
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            Name
+                            NAME
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
-                            No REG
+                            NOREG
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:130px;">
                             WBS NO
@@ -63,31 +63,31 @@
                             TAX
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
-                            Vendor Code
+                            VENDOR
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            Invoice Number
+                            INVOICE NO
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
-                            Start Date
+                            START DATE
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
-                            End Date
+                            END DATE
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            Destination
+                            DESTINATION
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
-                            Transaction
+                            TRANSACTION
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            Transaction Type
+                            STATUS
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
-                            Aproval
+                            OUTSTANDING
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
-                            Created Date
+                            GENERATED DATE
                         </th>
                     </tr>
 
@@ -95,6 +95,7 @@
                     {
                         @Html.HiddenFor(m => m[0].login_name)
                         @Html.HiddenFor(m => m[0].login_id)
+                        @Html.HiddenFor(m => m[0].privilage)
                     }
                     else if (Model[0].TrackedList != null)
                     {
@@ -102,6 +103,7 @@
                         {
                             @Html.HiddenFor(m => m[k].login_name)
                             @Html.HiddenFor(m => m[k].login_id)
+			    @Html.HiddenFor(m => m[k].privilage)
                             @Html.HiddenFor(m => m[k].TrackedList.id_data)
                             @Html.HiddenFor(m => m[k].TrackedList.amount, new { @value = Model[k].TrackedList.amount })
                             @Html.HiddenFor(m => m[k].TrackedList.amount_total, new { @value = Model[k].TrackedList.amount_total })
