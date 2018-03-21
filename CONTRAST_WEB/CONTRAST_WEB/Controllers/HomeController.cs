@@ -18,7 +18,7 @@ namespace CONTRAST_WEB.Controllers
 
         private CONTRASTEntities db = new CONTRASTEntities();
 
-        //[Authorize(Roles = "contrast.user")]       
+        [Authorize(Roles = "contrast.user")]       
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
             //var identity = (ClaimsIdentity)User.Identity;
@@ -42,10 +42,7 @@ namespace CONTRAST_WEB.Controllers
 
             ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
-            int a = 1;
-            int b = 2;
-            int d = a + b;
-            string aasd = "asfhiuasyhruiqyu21u409u21094u21";
+        
             return View(model);
         }
         
