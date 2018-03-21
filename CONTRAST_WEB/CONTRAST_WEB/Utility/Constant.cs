@@ -8,26 +8,30 @@ namespace CONTRAST_WEB.Models
 {
     public static class Constant
     {
+        //dev	       
+        //public static string Baseurl = "http://10.85.40.68:90/";	
+        //local	
+        //public static string Baseurl = "http://10.86.110.96:89/";	
+        //QA	
+        //public static string Baseurl = "http://10.85.26.25/";	
+        //Production	
+        public static string Baseurl = "http://10.185.48.83:444/";
+    
         //dev
-        public static string Baseurl = "http://10.85.40.68:90/";
-        //local
-        //public static string Baseurl = "http://10.86.110.96:89/";
-        //QA
-        //public static string Baseurl = "http://10.85.26.25/";
-        //Production
-        //public static string Baseurl = "http://10.185.48.83:444/";
-                    
-        //dev
-        public static string PhotoFolder = "http://10.85.40.68:91/PhotoFolder/";
+        //public static string PhotoFolder = "http://10.85.40.68:91/PhotoFolder/";
         //local
         //public static string PhotoFolder = "http://10.86.110.92:56552/PhotoFolder/";
         //QA
         //public static string PhotoFolder = "http://10.85.25.24/PhotoFolder/";
         //Production
-        //public static string PhotoFolder = "https://passport.toyota.astra.co.id:5006/PhotoFolder/";
+        public static string PhotoFolder = "https://passport.toyota.astra.co.id:5006/PhotoFolder/";
 
         //local
-        public static string DocumentFolder = "http://10.86.110.96:88/TravelDocuments/";
+        //public static string DocumentFolder = "http://10.86.110.96:88/TravelDocuments/";
+        //development
+        //public static string DocumentFolder = "http://10.85.40.68:91/TravelDocuments/";
+        //Production
+        public static string DocumentFolder = "https://passport.toyota.astra.co.id:5006/TravelDocuments/";
 
 
         public static string ImgPath = "~/img";
