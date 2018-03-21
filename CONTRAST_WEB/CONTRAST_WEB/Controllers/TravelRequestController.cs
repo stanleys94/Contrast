@@ -36,8 +36,8 @@ namespace CONTRAST_WEB.Controllers
             return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Index()
         {
             //var identity = (ClaimsIdentity)User.Identity;
@@ -140,8 +140,8 @@ namespace CONTRAST_WEB.Controllers
 
         }
 
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "")
         {
             if (validate != null && model.travel_request != null)
