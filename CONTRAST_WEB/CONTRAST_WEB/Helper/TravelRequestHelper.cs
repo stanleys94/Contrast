@@ -182,6 +182,13 @@ namespace CONTRAST_WEB.Models
         [ParticipantValidator]
         public string tparticipant { get; set; }
 
+        public HttpPostedFileBase generaldoc_file { get; set; }
+        public HttpPostedFileBase itinerary_file { get; set; }
+        public HttpPostedFileBase invitation_file { get; set; }
+
+        public HttpPostedFileBase proposaldoc_file { get; set; }
+
+
         public TravelRequestHelper() { }
 
     }

@@ -23,7 +23,7 @@
     <div style="margin-top:100px" class="row">
         <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
         <div class="col-md-3"></div>
-        @using (Html.BeginForm("Submitted", "Home", FormMethod.Post))
+        @using (Html.BeginForm("Submitted", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="col-md-5 col-md-offset-1">
@@ -137,8 +137,6 @@
                     <label>
                         @ViewBag.Duration Days
                     </label>
-                    
-
                 </div>
 
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">List Participants</label>
@@ -193,6 +191,10 @@
                     @Html.HiddenFor(m => m[k].travel_request.no_reg)
                     @Html.HiddenFor(m => m[k].travel_request.participants_flag)
                     @Html.HiddenFor(m => m[k].travel_request.status_request)
+                    @Html.HiddenFor(m => m[k].travel_request.path_general)
+                    @Html.HiddenFor(m => m[k].travel_request.path_invitation)
+                    @Html.HiddenFor(m => m[k].travel_request.path_itinerary)
+                    @Html.HiddenFor(m => m[k].travel_request.comments_by20)
                 }
                 <div class="col-lg-12">
 
@@ -315,6 +317,7 @@
                     @for (int k = 0; k < Model.Count; k++)
                     {
                         @Html.HiddenFor(m => m[k].travel_request.grand_total_allowance);
+                        @Html.HiddenFor(m => m[k].generaldoc_file)
                     }
                     <label>
                         &nbsp;RP.&nbsp;@String.Format("{0:n0}", ViewBag.Total, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })

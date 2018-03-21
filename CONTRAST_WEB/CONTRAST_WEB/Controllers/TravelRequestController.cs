@@ -153,6 +153,27 @@ namespace CONTRAST_WEB.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (Request.Files["generaldoc"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["generaldoc"];
+                        model.generaldoc_file = file;
+                    }
+                    if (Request.Files["itinerarydoc"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["itinerarydoc"];
+                        model.itinerary_file = file;
+                    }
+                    if (Request.Files["invitationdoc"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["invitationdoc"];
+                        model.invitation_file = file;
+                    }
+                    if (Request.Files["proposaldoc"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["proposaldoc"];
+                        model.proposaldoc_file = file;
+                    }
+                   
                     var config = new MapperConfiguration(cfg =>
                     {
                         cfg.CreateMap<tb_r_travel_request, tb_r_travel_request>();
@@ -163,9 +184,7 @@ namespace CONTRAST_WEB.Controllers
 
                     DateTime now = DateTime.Now;
 
-                    ViewBag.Title = model.employee_info.code;
-                    //request no reg name
-                    //model.employee_info = await GetData.EmployeeInfo(model.employee_info);
+                    ViewBag.Title = model.employee_info.code;                    
 
                     ViewBag.Username = model.employee_info.name;
                     model.travel_request.active_flag = false;
@@ -173,7 +192,6 @@ namespace CONTRAST_WEB.Controllers
                     model.travel_request.comments = "Comment";
 
                     model.travel_request.invited_by = model.travel_request.no_reg;
-                    //model.travel_request.multiple_destination_flag = false;
                     model.travel_request.create_date = now;
 
                     //list participant in string
@@ -189,10 +207,7 @@ namespace CONTRAST_WEB.Controllers
                     List<TravelRequestHelper> ListModel = new List<TravelRequestHelper>();
 
                     for (int c = 0; c < 3; c++)
-                    //int c = 0;
-                    //while (model.travel_request.multiple_destination_flag == true)
                     {
-                        //if (model.tend_date[c] != null && model.tstart_date[c]!= null && model.toverseas_flag[c]!= null && model.tid_destination_city[c]!= null)
                         {
                             //if (model.tend_date[c] == null) break;
                             if (c == 0 && model.tend_date0 == null) break;
@@ -201,14 +216,35 @@ namespace CONTRAST_WEB.Controllers
                             else
                             if (c == 2 && model.tend_date2 == null) break;
 
-
-
                             ListModel.Add(new TravelRequestHelper());
                             ListModel[c].employee_info = new tb_m_employee();
                             ListModel[c].employee_info = model.employee_info;
                             ListModel[c].travel_request = new tb_r_travel_request();
                             ListModel[c].travel_request = mapper.Map<tb_r_travel_request>(model.travel_request);
 
+                            //travel documents
+                            if (model.generaldoc_file.FileName != "")
+                            {
+                                ListModel[c].generaldoc_file = model.generaldoc_file;
+                                ListModel[c].travel_request.path_general = Utility.UploadFileUniversal(ListModel[c].generaldoc_file, Constant.TravelDocumentsFolder, "GENERAL_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                            }
+                            if (model.invitation_file.FileName != "")
+                            {
+                                ListModel[c].invitation_file = model.invitation_file;
+                                ListModel[c].travel_request.path_invitation = Utility.UploadFileUniversal(ListModel[c].invitation_file, Constant.TravelDocumentsFolder, "INVITE_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                            }
+                            if (model.itinerary_file.FileName != "")
+                            {
+                                ListModel[c].itinerary_file = model.itinerary_file;
+                                ListModel[c].travel_request.path_itinerary = Utility.UploadFileUniversal(ListModel[c].itinerary_file, Constant.TravelDocumentsFolder, "PLAN_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                            }
+                            
+                            if (model.proposaldoc_file.FileName != "")
+                            {
+                                ListModel[c].proposaldoc_file = model.proposaldoc_file;
+                                ListModel[c].travel_request.additional1 = Utility.UploadFileUniversal(ListModel[c].proposaldoc_file, Constant.TravelDocumentsFolder, "PROPOSAL_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                            }
+                             
                             if (c == 0)
                             {
                                 ListModel[c].travel_request.start_date = model.tstart_date0;
