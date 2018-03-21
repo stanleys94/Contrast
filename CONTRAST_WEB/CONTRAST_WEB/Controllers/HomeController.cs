@@ -26,7 +26,7 @@ namespace CONTRAST_WEB.Controllers
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
 
-            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
 
             //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
@@ -38,7 +38,7 @@ namespace CONTRAST_WEB.Controllers
             //tb_m_employee model = await GetData.EmployeeInfo("100354");
             //percobaan
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
-            tb_m_employee model = await GetData.EmployeeInfo("101795");
+            //tb_m_employee model = await GetData.EmployeeInfo("101795");
 
             ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
