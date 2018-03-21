@@ -65,7 +65,8 @@ namespace CONTRAST_WEB.Controllers
         public async System.Threading.Tasks.Task<ActionResult> Submitted(TravelRequestHelper[] ListModel)
         {
             for (int k = 0; k < ListModel.Count(); k++)
-            {
+            {              
+
                 await InsertData.TravelRequest(ListModel[k]);
                 if (ListModel[k].travel_request.participants_flag == true)
                 {

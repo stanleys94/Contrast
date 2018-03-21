@@ -232,6 +232,7 @@
     <Compile Include="CustomValidator\DateValidator2.cs" />
     <Compile Include="CustomValidator\DateValidator3.cs" />
     <Compile Include="CustomValidator\NoCache.cs" />
+    <Compile Include="CustomValidator\ParticipantValidator.cs" />
     <Compile Include="CustomValidator\SessionExpire.cs" />
     <Compile Include="CustomValidator\SettlementDateValidator.cs" />
     <Compile Include="CustomValidator\ValidTdate.cs" />

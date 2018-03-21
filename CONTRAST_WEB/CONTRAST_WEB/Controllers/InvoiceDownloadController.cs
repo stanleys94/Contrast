@@ -272,7 +272,7 @@ namespace CONTRAST_WEB.Controllers
             }
             if (division.Departemen.Contains("GENERAL"))
             {
-                ViewBag.outstanding = issued.Count;
+                ViewBag.outstanding = issued.Count-ga_issued.Count();
                 ViewBag.issued = ga_issued.Count;
             }
             else
@@ -703,7 +703,8 @@ namespace CONTRAST_WEB.Controllers
             }
             if (GA)
             {
-                ViewBag.outstanding = issued_filter.Count;
+                //GA check flag
+                ViewBag.outstanding = issued_filter.Count-ga_issued.Count;
                 ViewBag.issued = ga_issued.Count;
             }
             else
@@ -724,14 +725,90 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Download(List<InvoiceHelper> model, int download)
         {
-            ModelState.Clear();
             InvoiceHelper temp = new InvoiceHelper();
-            vw_invoice_actualcost_new newModel = await GetData.InvoiceActualCostNewID(Convert.ToInt32(model[download].invoice.id_data));
-            List<vw_invoice_actualcost_new> BTA = await GetData.InvoiceActualCostNewBTA(newModel.group_code, newModel.jenis_transaksi);
+            List<tb_r_invoice_actualcost> tb_temp = new List<tb_r_invoice_actualcost>();
+            tb_r_invoice_actualcost tb_temp2 = new tb_r_invoice_actualcost();
+            vw_invoice_actualcost_new newModel = new vw_invoice_actualcost_new();
+            List<vw_invoice_actualcost_new> BTA = new List<vw_invoice_actualcost_new>();
+
+            tb_m_employee_source_data logged = await GetData.GetDivisionSource(Convert.ToInt32(model[download].loged_employee.code));
+            if (logged.Departemen.Contains("GENERAL"))
+            {
+                tb_temp = await GetData.TableInvoiceActualcostSingle(model[download].invoice.group_code, model[download].invoice.jenis_transaksi);
+                foreach (var item in tb_temp)
+                {
+                    vw_invoice_actualcost_new bta_add = new vw_invoice_actualcost_new();
+                    if (item.vendor_code.ToString().Contains(model[download].invoice.vendor_code.Trim(' '))) tb_temp2 = item;
+                    bta_add.destination_1 = item.destination_1;
+                    bta_add.destination_2 = item.destination_2;
+                    bta_add.destination_3 = item.destination_3;
+                    bta_add.destination_4 = item.destination_4;
+                    bta_add.destination_5 = item.destination_5;
+                    bta_add.destination_6 = item.destination_6;
+                }
+
+                newModel.amount_1 = tb_temp2.amount_1;
+                newModel.amount_2 = tb_temp2.amount_2;
+                newModel.amount_3 = tb_temp2.amount_3;
+                newModel.amount_4 = tb_temp2.amount_4;
+                newModel.amount_5 = tb_temp2.amount_5;
+                newModel.amount_6 = tb_temp2.amount_6;
+                newModel.amount_total = tb_temp2.amount_total;
+                newModel.bank_account = tb_temp2.bank_account;
+                newModel.cost_center = tb_temp2.cost_center;
+                newModel.create_date = tb_temp2.create_date;
+                newModel.destination_1 = tb_temp2.destination_1;
+                newModel.destination_2 = tb_temp2.destination_2;
+                newModel.destination_3 = tb_temp2.destination_3;
+                newModel.destination_4 = tb_temp2.destination_4;
+                newModel.destination_5 = tb_temp2.destination_5;
+                newModel.destination_6 = tb_temp2.destination_6;
+                newModel.Duration_1 = tb_temp2.Duration_1;
+                newModel.Duration_2 = tb_temp2.Duration_2;
+                newModel.Duration_3 = tb_temp2.Duration_3;
+                newModel.Duration_4 = tb_temp2.Duration_4;
+                newModel.Duration_5 = tb_temp2.Duration_5;
+                newModel.Duration_6 = tb_temp2.Duration_6;
+                newModel.employee_input = tb_temp2.employee_input;
+                newModel.endDate_1 = tb_temp2.endDate_1;
+                newModel.endDate_2 = tb_temp2.endDate_2;
+                newModel.endDate_3 = tb_temp2.endDate_3;
+                newModel.endDate_4 = tb_temp2.endDate_4;
+                newModel.endDate_5 = tb_temp2.endDate_5;
+                newModel.endDate_6 = tb_temp2.endDate_6;
+                newModel.group_code = tb_temp2.group_code;
+                newModel.hotel_flight_name_1 = tb_temp2.hotel_flight_name_1;
+                newModel.hotel_flight_name_2 = tb_temp2.hotel_flight_name_2;
+                newModel.hotel_flight_name_3 = tb_temp2.hotel_flight_name_3;
+                newModel.hotel_flight_name_4 = tb_temp2.hotel_flight_name_4;
+                newModel.hotel_flight_name_5 = tb_temp2.hotel_flight_name_5;
+                newModel.hotel_flight_name_6 = tb_temp2.hotel_flight_name_6;
+                newModel.id_data = tb_temp2.id_data;
+                newModel.invoice_number = tb_temp2.invoice_number;
+                newModel.jenis_transaksi = tb_temp2.jenis_transaksi;
+                newModel.name = tb_temp2.name;
+                newModel.no_reg = Convert.ToInt32(tb_temp2.no_reg);
+                newModel.qty = tb_temp2.qty;
+                newModel.startDate_1 = tb_temp2.startDate_1;
+                newModel.startDate_2 = tb_temp2.startDate_2;
+                newModel.startDate_3 = tb_temp2.startDate_3;
+                newModel.startDate_4 = tb_temp2.startDate_4;
+                newModel.startDate_5 = tb_temp2.startDate_5;
+                newModel.startDate_6 = tb_temp2.startDate_6;
+                newModel.tax_invoice_number = tb_temp2.tax_invoice_number;
+                newModel.vendor_code = tb_temp2.vendor_code.ToString();
+                newModel.vendor_name = tb_temp2.vendor_name;
+                newModel.wbs_no = tb_temp2.wbs_no;
+            }
+            else
+            {
+                newModel = await GetData.InvoiceActualCostNewID(Convert.ToInt32(model[download].invoice.id_data));
+                BTA = await GetData.InvoiceActualCostNewBTA(newModel.group_code, newModel.jenis_transaksi);
+            }
 
             List<Departure_City> from = new List<Departure_City>();
             Departure_City fromTemp = new Departure_City();
@@ -949,20 +1026,87 @@ namespace CONTRAST_WEB.Controllers
         [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Print(InvoiceHelper model)
         {
-            List<vw_invoice_actualcost_new> ListModel = await GetData.InvoiceActualCostNewBTA(model.invoice.group_code, model.invoice.jenis_transaksi);
+            tb_r_invoice_actualcost saved = new tb_r_invoice_actualcost();
+            tb_r_invoice_actualcost updated = new tb_r_invoice_actualcost();
+            List<tb_r_invoice_actualcost> List_Model = new List<tb_r_invoice_actualcost>();
+            tb_m_employee_source_data pos = new tb_m_employee_source_data();
             vw_invoice_actualcost_new newModel = new vw_invoice_actualcost_new();
+
+            pos = await GetData.GetDivisionSource(Convert.ToInt32(model.loged_employee.code));
+            bool copy = false, copyGA = false, update = false;
+
+            List<vw_invoice_actualcost_new> ListModel = new List<vw_invoice_actualcost_new>();
+            if (pos.Departemen.Contains("GENERAL"))
+            {
+                List_Model = await GetData.TableInvoiceActualcostSingle(model.invoice.group_code, model.invoice.jenis_transaksi);
+                foreach (var item in List_Model)
+                {
+                    vw_invoice_actualcost_new insert = new vw_invoice_actualcost_new();
+                    insert.amount_1 = item.amount_1;
+                    insert.amount_2 = item.amount_2;
+                    insert.amount_3 = item.amount_3;
+                    insert.amount_4 = item.amount_4;
+                    insert.amount_5 = item.amount_5;
+                    insert.amount_6 = item.amount_6;
+                    insert.amount_total = item.amount_total;
+                    insert.bank_account = item.bank_account;
+                    insert.cost_center = item.cost_center;
+                    insert.create_date = item.create_date;
+                    insert.destination_1 = item.destination_1;
+                    insert.destination_2 = item.destination_2;
+                    insert.destination_3 = item.destination_3;
+                    insert.destination_4 = item.destination_4;
+                    insert.destination_5 = item.destination_5;
+                    insert.destination_6 = item.destination_6;
+                    insert.Duration_1 = item.Duration_1;
+                    insert.Duration_2 = item.Duration_2;
+                    insert.Duration_3 = item.Duration_3;
+                    insert.Duration_4 = item.Duration_4;
+                    insert.Duration_5 = item.Duration_5;
+                    insert.Duration_6 = item.Duration_6;
+                    insert.employee_input = item.employee_input;
+                    insert.endDate_1 = item.endDate_1;
+                    insert.endDate_2 = item.endDate_2;
+                    insert.endDate_3 = item.endDate_3;
+                    insert.endDate_4 = item.endDate_4;
+                    insert.endDate_5 = item.endDate_5;
+                    insert.endDate_6 = item.endDate_6;
+                    insert.group_code = item.group_code;
+                    insert.hotel_flight_name_1 = item.hotel_flight_name_1;
+                    insert.hotel_flight_name_2 = item.hotel_flight_name_2;
+                    insert.hotel_flight_name_3 = item.hotel_flight_name_3;
+                    insert.hotel_flight_name_4 = item.hotel_flight_name_4;
+                    insert.hotel_flight_name_5 = item.hotel_flight_name_5;
+                    insert.hotel_flight_name_6 = item.hotel_flight_name_6;
+                    insert.id_data = item.id_data;
+                    insert.invoice_number = item.invoice_number;
+                    insert.jenis_transaksi = item.jenis_transaksi;
+                    insert.name = item.name;
+                    insert.no_reg = Convert.ToInt32(item.no_reg);
+                    insert.qty = item.qty;
+                    insert.startDate_1 = item.startDate_1;
+                    insert.startDate_2 = item.startDate_2;
+                    insert.startDate_3 = item.startDate_3;
+                    insert.startDate_4 = item.startDate_4;
+                    insert.startDate_5 = item.startDate_5;
+                    insert.startDate_6 = item.startDate_6;
+                    insert.tax_invoice_number = item.tax_invoice_number;
+                    insert.vendor_code = item.vendor_code.ToString();
+                    insert.vendor_name = item.vendor_name;
+                    insert.wbs_no = item.wbs_no;
+                    ListModel.Add(insert);
+                }
+            }
+            else
+            {
+                ListModel = await GetData.InvoiceActualCostNewBTA(model.invoice.group_code, model.invoice.jenis_transaksi);
+            }
             foreach (var item in ListModel)
             {
                 if (item.vendor_code == model.invoice.vendor_code) newModel = item;
             }
             List<tb_r_invoice_actualcost> list = await GetData.TableInvoiceActualcostSingle(model.invoice.group_code, model.invoice.jenis_transaksi);
-            tb_r_invoice_actualcost saved = new tb_r_invoice_actualcost();
-            tb_r_invoice_actualcost updated = new tb_r_invoice_actualcost();
-
-            tb_m_employee_source_data pos = new tb_m_employee_source_data();
-            pos = await GetData.GetDivisionSource(Convert.ToInt32(model.loged_employee.code));
-            bool copy = false, copyGA = false, update = false;
-            DateTime print_date = DateTime.Now;
+           
             if (list.Count() > 0)
             {
                 int index = 0;
@@ -1019,6 +1163,10 @@ namespace CONTRAST_WEB.Controllers
 
                         if (check == 6)
                         {
+                            if (pos.Departemen.Contains("GENERAL"))
+                            {
+                                if (list[index].GR_issued_flag == null) copy = false;
+                            }
                             copy = true;
                             saved = list[index];
                             update = false;
@@ -1423,7 +1571,8 @@ namespace CONTRAST_WEB.Controllers
             {
                  await UpdateData.InvoiceActualCost(saved);
             }
-            return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
+            if (!copy) return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
+            else return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + "_COPY_" + ".pdf");
         }
 
 
