@@ -40,7 +40,7 @@ namespace CONTRAST_WEB.Controllers
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
             //tb_m_employee model = await GetData.EmployeeInfo("101795");
 
-            ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
+            ViewBag.photo = await GetData.PhotoEmployeeInfo(identity.Name);
             ViewBag.Username = model.name;
         
             return View(model);
