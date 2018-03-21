@@ -1560,12 +1560,12 @@ namespace CONTRAST_WEB.Controllers
 
             if (!copy && !pos.Departemen.Contains("GENERAL"))
             {
-                // await InsertData.InvoiceWrite(saved);
+                await InsertData.InvoiceWrite(saved);
             }
 
             if (!copyGA && pos.Departemen.Contains("GENERAL"))
             {
-                //await UpdateData.InvoiceActualCost(saved);
+                await UpdateData.InvoiceActualCost(saved);
             }
             if (!copy) return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
             else return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + "_COPY_" + ".pdf");
