@@ -17,8 +17,8 @@ namespace CONTRAST_WEB.Controllers
 {
     public class InvoiceDownloadController : Controller
     {
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         // GET: InvoiceDownload
         public async Task<ActionResult> Index(tb_m_employee model)
         {
@@ -272,7 +272,7 @@ namespace CONTRAST_WEB.Controllers
             }
             if (division.Departemen.Contains("GENERAL"))
             {
-                ViewBag.outstanding = issued.Count-ga_issued.Count();
+                ViewBag.outstanding = issued.Count - ga_issued.Count;
                 ViewBag.issued = ga_issued.Count;
             }
             else
@@ -292,8 +292,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Search(List<InvoiceHelper> model, string search, DateTime? start, DateTime? end)
         {
 
@@ -703,8 +703,7 @@ namespace CONTRAST_WEB.Controllers
             }
             if (GA)
             {
-                //GA check flag
-                ViewBag.outstanding = issued_filter.Count-ga_issued.Count;
+                ViewBag.outstanding = issued_filter.Count - ga_issued.Count;
                 ViewBag.issued = ga_issued.Count;
             }
             else
@@ -725,9 +724,9 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Download(List<InvoiceHelper> model, int download)
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        public async Task<ActionResult> Download(List<InvoiceHelper> model, int download, string all = "")
         {
             InvoiceHelper temp = new InvoiceHelper();
             List<tb_r_invoice_actualcost> tb_temp = new List<tb_r_invoice_actualcost>();
@@ -736,6 +735,7 @@ namespace CONTRAST_WEB.Controllers
             List<vw_invoice_actualcost_new> BTA = new List<vw_invoice_actualcost_new>();
 
             tb_m_employee_source_data logged = await GetData.GetDivisionSource(Convert.ToInt32(model[download].loged_employee.code));
+
             if (logged.Departemen.Contains("GENERAL"))
             {
                 tb_temp = await GetData.TableInvoiceActualcostSingle(model[download].invoice.group_code, model[download].invoice.jenis_transaksi);
@@ -809,7 +809,6 @@ namespace CONTRAST_WEB.Controllers
                 newModel = await GetData.InvoiceActualCostNewID(Convert.ToInt32(model[download].invoice.id_data));
                 BTA = await GetData.InvoiceActualCostNewBTA(newModel.group_code, newModel.jenis_transaksi);
             }
-
             List<Departure_City> from = new List<Departure_City>();
             Departure_City fromTemp = new Departure_City();
             temp.loged_employee = model[download].loged_employee;
@@ -1022,10 +1021,11 @@ namespace CONTRAST_WEB.Controllers
 
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Print(InvoiceHelper model)
         {
+
             tb_r_invoice_actualcost saved = new tb_r_invoice_actualcost();
             tb_r_invoice_actualcost updated = new tb_r_invoice_actualcost();
             List<tb_r_invoice_actualcost> List_Model = new List<tb_r_invoice_actualcost>();
@@ -1106,7 +1106,8 @@ namespace CONTRAST_WEB.Controllers
                 if (item.vendor_code == model.invoice.vendor_code) newModel = item;
             }
             List<tb_r_invoice_actualcost> list = await GetData.TableInvoiceActualcostSingle(model.invoice.group_code, model.invoice.jenis_transaksi);
-           
+
+            DateTime print_date = DateTime.Now;
             if (list.Count() > 0)
             {
                 int index = 0;
@@ -1167,7 +1168,7 @@ namespace CONTRAST_WEB.Controllers
                             {
                                 if (list[index].GR_issued_flag == null) copy = false;
                             }
-                            copy = true;
+                            else copy = true;
                             saved = list[index];
                             update = false;
                         }
@@ -1185,7 +1186,6 @@ namespace CONTRAST_WEB.Controllers
                     }
 
                 }
-
             }
 
             if (update || saved.id_data == null)
@@ -1280,10 +1280,6 @@ namespace CONTRAST_WEB.Controllers
 
             if (copy)
             {
-
-                //gfx.TranslateTransform(page.Width / 2, page.Height / 2);
-
-                //gfx.TranslateTransform(-page.Width / 2, -page.Height / 2);
 
                 // Create a string format
                 XStringFormat format = new XStringFormat();
@@ -1564,15 +1560,16 @@ namespace CONTRAST_WEB.Controllers
 
             if (!copy && !pos.Departemen.Contains("GENERAL"))
             {
-                 await InsertData.InvoiceWrite(saved);
+                // await InsertData.InvoiceWrite(saved);
             }
 
             if (!copyGA && pos.Departemen.Contains("GENERAL"))
             {
-                 await UpdateData.InvoiceActualCost(saved);
+                //await UpdateData.InvoiceActualCost(saved);
             }
             if (!copy) return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
             else return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.invoice.group_code.Trim(' ') + "_" + model.invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + "_COPY_" + ".pdf");
+
         }
 
 
