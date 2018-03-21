@@ -51,7 +51,7 @@ namespace CONTRAST_WEB.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "contrast.user")]     
+        [Authorize(Roles = "contrast.user")]     
         public async System.Threading.Tasks.Task<ActionResult> Back(tb_m_employee model)
         {
             ViewBag.Username = model.name;
@@ -60,7 +60,7 @@ namespace CONTRAST_WEB.Controllers
         
        
         [HttpPost]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async System.Threading.Tasks.Task<ActionResult> Submitted(TravelRequestHelper[] ListModel)
         {
