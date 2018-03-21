@@ -40,13 +40,13 @@ namespace CONTRAST_WEB.Controllers
         [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Index()
         {
-            //var identity = (ClaimsIdentity)User.Identity;
-            //Utility.Logger(identity.Name);
-            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            //ViewBag.Privillege = claims;
-            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            var identity = (ClaimsIdentity)User.Identity;
+            Utility.Logger(identity.Name);
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
-            tb_m_employee model = await GetData.EmployeeInfo("101495");
+            //tb_m_employee model = await GetData.EmployeeInfo("101495");
            
 
             //Get user name
