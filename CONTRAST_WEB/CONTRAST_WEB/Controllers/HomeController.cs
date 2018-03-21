@@ -21,10 +21,10 @@ namespace CONTRAST_WEB.Controllers
         [Authorize(Roles = "contrast.user")]       
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
-            //var identity = (ClaimsIdentity)User.Identity;
-            //Utility.Logger(identity.Name);
-            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            //ViewBag.Privillege = claims;
+            var identity = (ClaimsIdentity)User.Identity;
+            Utility.Logger(identity.Name);
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
 
             //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
