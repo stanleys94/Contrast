@@ -17,8 +17,8 @@ namespace CONTRAST_WEB.Controllers
 {
     public class InvoiceDownloadController : Controller
     {
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         // GET: InvoiceDownload
         public async Task<ActionResult> Index(tb_m_employee model)
         {
@@ -292,8 +292,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Search(List<InvoiceHelper> model, string search, DateTime? start, DateTime? end)
         {
 
@@ -724,8 +724,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Download(List<InvoiceHelper> model, int download, string all = "")
         {
             InvoiceHelper temp = new InvoiceHelper();
@@ -1021,8 +1021,8 @@ namespace CONTRAST_WEB.Controllers
 
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Print(InvoiceHelper model)
         {
 
