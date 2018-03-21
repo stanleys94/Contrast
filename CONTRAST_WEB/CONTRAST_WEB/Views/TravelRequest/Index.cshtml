@@ -66,6 +66,8 @@
 
                 <div>
                     <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
+                    @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
+
                     <div style="width:450px;" class="input-group">
                         <!--<a href="/Participant/" class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Participant</a>-->
                         @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
@@ -75,14 +77,14 @@
                         </span>
                     </div>
                     @if (Model.participants != null)
-                    {
-                        for (int i = 0; i < Model.participants.Count(); i++)
-                        {
-                            @Html.HiddenFor(m => m.participants[i].no_reg, new { @value = Model.participants[i].no_reg })
-                            @Html.HiddenFor(m => m.participants[i].no_reg_parent, new { @value = Model.participants[i].no_reg_parent })
-                            @Html.HiddenFor(m => m.participants[i].active_flag, new { @value = Model.participants[i].active_flag })
-                        }
-                    }
+    {
+        for (int i = 0; i < Model.participants.Count(); i++)
+        {
+                @Html.HiddenFor(m => m.participants[i].no_reg, new { @value = Model.participants[i].no_reg })
+                @Html.HiddenFor(m => m.participants[i].no_reg_parent, new { @value = Model.participants[i].no_reg_parent })
+                @Html.HiddenFor(m => m.participants[i].active_flag, new { @value = Model.participants[i].active_flag })
+}
+}
                 </div>
 
             </div>
