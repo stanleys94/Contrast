@@ -25,10 +25,10 @@ namespace CONTRAST_WEB.Controllers
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-            
+
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
-            
-            
+
+
             //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
             //AP
             //tb_m_employee model = await GetData.EmployeeInfo("101419");
@@ -38,13 +38,11 @@ namespace CONTRAST_WEB.Controllers
             //tb_m_employee model = await GetData.EmployeeInfo("100354");
             //percobaan
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
+            //tb_m_employee model = await GetData.EmployeeInfo("101795");
 
             ViewBag.photo = await GetData.PhotoEmployeeInfo(identity.Name);
             ViewBag.Username = model.name;
-            int a = 1;
-            int b = 2;
-            int d = a + b;
-            string aasd = "asfhiuasyhruiqyu21u409u21094u21";
+        
             return View(model);
         }
         
@@ -64,7 +62,8 @@ namespace CONTRAST_WEB.Controllers
         public async System.Threading.Tasks.Task<ActionResult> Submitted(TravelRequestHelper[] ListModel)
         {
             for (int k = 0; k < ListModel.Count(); k++)
-            {
+            {              
+
                 await InsertData.TravelRequest(ListModel[k]);
                 if (ListModel[k].travel_request.participants_flag == true)
                 {

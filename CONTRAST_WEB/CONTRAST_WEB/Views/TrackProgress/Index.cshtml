@@ -15,9 +15,7 @@
         <li class="breadcrumb-item active">Transaction Tracking</li>
     </ol>
 </div>
-
 <div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
-
     @using (Html.BeginForm("Search", "TrackProgress", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
@@ -25,13 +23,11 @@
             <div>
                 <div>
                     <span><input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" /></span>
-
                     <span style=" margin-left : 100px">
                         Start Date Range :
                         <input type="date" name="start" value="@ViewBag.start" class="form-control" placeholder="search" style="width:150px" />
                     </span>
                     <span><input type="date" name="end" value="@ViewBag.end" class="form-control" placeholder="search" style="width:150px" /></span>
-
                     <span><button type="submit" name="insert" value="Search" class="btn btn-success">Search</button></span>
                 </div>
             </div>
@@ -39,7 +35,7 @@
 
         <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
             <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
-                <table style="width:2500px;margin-bottom:0px;" class="table table-condensed table-striped">
+                <table style="width:2450px;margin-bottom:0px;" class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:50px;">
                             BTA NO
@@ -50,14 +46,26 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
                             NOREG
                         </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
+                            TRANSACTION
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                            AMOUNT
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            DESTINATION
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            STATUS
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            OUTSTANDING
+                        </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:130px;">
                             WBS NO
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
                             COST CENTER
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:130px;">
-                            AMOUNT
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
                             TAX
@@ -74,23 +82,10 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
                             END DATE
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            DESTINATION
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
-                            TRANSACTION
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            STATUS
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
-                            OUTSTANDING
-                        </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
                             GENERATED DATE
                         </th>
                     </tr>
-
                     @if (Model[0].TrackedList == null)
                     {
                         @Html.HiddenFor(m => m[0].login_name)
@@ -103,7 +98,7 @@
                         {
                             @Html.HiddenFor(m => m[k].login_name)
                             @Html.HiddenFor(m => m[k].login_id)
-			    @Html.HiddenFor(m => m[k].privilage)
+                            @Html.HiddenFor(m => m[k].privilage)
                             @Html.HiddenFor(m => m[k].TrackedList.id_data)
                             @Html.HiddenFor(m => m[k].TrackedList.amount, new { @value = Model[k].TrackedList.amount })
                             @Html.HiddenFor(m => m[k].TrackedList.amount_total, new { @value = Model[k].TrackedList.amount_total })
@@ -133,11 +128,31 @@
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.name)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.name, new { Value = @Model[k].TrackedList.name })
-
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.no_reg)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.no_reg, new { Value = @Model[k].TrackedList.no_reg })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi, new { Value = @Model[k].TrackedList.jenis_transaksi })
+                                </td>
+                                <td class="td">
+                                    @*@Html.DisplayFor(Model => Model[k].TrackedList.amount)*@
+                                    Rp. @String.Format("{0:n0}", Model[k].TrackedList.amount, new { style = "width:500px" })
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.destination_name, new { Value = @Model[k].TrackedList.destination_name })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS, new { Value = @Model[k].TrackedList.TYPES_OF_TRANSACTIONS })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.verified_flag, new { Value = @Model[k].TrackedList.verified_flag })
                                 </td>
                                 @*add*@
                                 <td class="td">
@@ -147,10 +162,6 @@
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.cost_center)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.cost_center, new { Value = @Model[k].TrackedList.cost_center })
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.amount)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.tax)
@@ -172,28 +183,10 @@
                                     @Html.DisplayFor(Model => Model[k].TrackedList.end_date)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.end_date, new { Value = @Model[k].TrackedList.end_date })
                                 </td>
-
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.destination_name, new { Value = @Model[k].TrackedList.destination_name })
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi, new { Value = @Model[k].TrackedList.jenis_transaksi })
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS, new { Value = @Model[k].TrackedList.TYPES_OF_TRANSACTIONS })
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.verified_flag, new { Value = @Model[k].TrackedList.verified_flag })
-                                </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.create_date, new { Value = @Model[k].TrackedList.create_date })
                                 </td>
-
                             </tr>
 
 
@@ -201,16 +194,13 @@
                     }
                 </table>
             </div>
-
         </div>
         <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-10">
             <button type="submit" class="btn btn-info" value="Download" name="download">Download</button>
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
         </div>
     }
-
 </div>
-
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script src="~/Scripts/verify.js"></script>

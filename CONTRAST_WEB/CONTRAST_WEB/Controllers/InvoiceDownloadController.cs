@@ -726,6 +726,7 @@ namespace CONTRAST_WEB.Controllers
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
+
         public async Task<ActionResult> Download(List<InvoiceHelper> model, Nullable<int> download, int outstanding, string all_download = "")
         {
             int down = 0;
@@ -736,6 +737,7 @@ namespace CONTRAST_WEB.Controllers
             if (download.HasValue) down = Convert.ToInt32(download);
             List<InvoiceHelper> newList = new List<InvoiceHelper>();
             tb_m_employee_source_data pos = await GetData.GetDivisionSource(Convert.ToInt32(model[0].loged_employee.code));
+
 
             if (all_download != null)
             {
@@ -1037,8 +1039,6 @@ namespace CONTRAST_WEB.Controllers
         public async Task<ActionResult> Print(List<InvoiceHelper> model)
         {
 
-
-
             string receipt = "";
             tb_m_employee_source_data pos = new tb_m_employee_source_data();
             pos = await GetData.GetDivisionSource(Convert.ToInt32(model[0].loged_employee.code));
@@ -1047,6 +1047,7 @@ namespace CONTRAST_WEB.Controllers
             document.Info.Title = "Purchase Receipt";
 
             for (int loop = 0; loop < model.Count; loop++)
+
             {
                 tb_r_invoice_actualcost saved = new tb_r_invoice_actualcost();
                 tb_r_invoice_actualcost updated = new tb_r_invoice_actualcost();
@@ -1274,8 +1275,10 @@ namespace CONTRAST_WEB.Controllers
                     {
                         if (saved.GR_issued_flag == 1)
                         {
+
                             copy = true;
                             copyGA = true;
+
                         }
                         else
                         {
@@ -1308,6 +1311,7 @@ namespace CONTRAST_WEB.Controllers
                     // Create a dimmed red brush
                     XBrush brush = new XSolidBrush(XColor.FromArgb(150, 200, 200, 200));
 
+
                     // Draw the string
                     gfx.RotateTransform(-45);
                     gfx.DrawString("COPY", watermark_font, brush, new XPoint(-350, 400), format);
@@ -1323,6 +1327,7 @@ namespace CONTRAST_WEB.Controllers
                 XFont subtitle = new XFont("Lucida Grande", 10, XFontStyle.Bold);
                 XFont credit = new XFont("Lucida Sans", 9, XFontStyle.Regular);
                 XFont valid = new XFont("Lucida Sans", 8, XFontStyle.Regular);
+
 
                 XPen header_line = new XPen(XColors.Black, 2);
                 XPen body_line = new XPen(XColors.DimGray, 0.5);

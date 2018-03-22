@@ -179,7 +179,15 @@ namespace CONTRAST_WEB.Models
         [Required(ErrorMessage = "WBS data for this account is empty, contact finance division")]
         public int twbsnumber { get; set; }
 
+        [ParticipantValidator]
         public string tparticipant { get; set; }
+
+        public HttpPostedFileBase generaldoc_file { get; set; }
+        public HttpPostedFileBase itinerary_file { get; set; }
+        public HttpPostedFileBase invitation_file { get; set; }
+
+        public HttpPostedFileBase proposaldoc_file { get; set; }
+
 
         public TravelRequestHelper() { }
 

@@ -1,10 +1,8 @@
 ﻿@model CONTRAST_WEB.Models.SettlementHelper
-
 @{
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
-
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
         <li>
@@ -13,13 +11,12 @@
                 <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
             }
         </li>
-        @*<li class="breadcrumb-item"><a style="color:gray;" href="javascript:void(0);" onclick="history.go(-1);">Settlement List</a></li>*@
         <li class="breadcrumb-item active">Settlement</li>
     </ol>
 </div>
-
 <div class="container">
     <div style="margin-top:110px" class="row">
+        @* if travel execution false , please upload file foto/boarding pass travel yesterday then muncul details settlements for submit final *@
         @using (Html.BeginForm("Insert", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
 
         {
@@ -38,27 +35,27 @@
             if (Model.TravelRequest.final_status == "2")
             {
                 <strong><h2>Rejected settlement</h2></strong>
-                <span style="text-align:right;margin-left:100px;"> Reason of Rejection : </span>
+                <span style="text-align:right;margin-left:100px;">REASON OF REJECTION : </span>
                 <span style="color:red"> @Model.TravelRequest.comment</span>
             }
 
-            <div class="col-md-11 col-md-offset-1"><H5 class="h5s">Current Travel Details</H5></div><br />
+            <div class="col-md-11 col-md-offset-1"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div><br />
             <div class="col-md-11 col-md-offset-1">
-                <strong class="fnt2">Destination :</strong>
+                <strong class="fnt2">DESTINATION :</strong>
                 <div class="form-group input-group">
-                    @Html.DisplayFor(m => m.TravelRequest.destination_name)
+                    <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
                 </div>
             </div>
 
             <div class="col-md-5 col-md-offset-1">
-                <strong class="fnt2">Start Date :</strong>
+                <strong class="fnt2">DEPARTURE DATE :</strong>
                 <div class="form-group input-group">
                     @Html.DisplayFor(m => m.TravelRequest.start_date)
                 </div>
             </div>
 
             <div class="col-md-5">
-                <strong class="fnt2">End Date :</strong>
+                <strong class="fnt2">RETURN DATE :</strong>
                 <div class="form-group input-group">
                     @Html.DisplayFor(m => m.TravelRequest.end_date)
                 </div>
@@ -66,23 +63,19 @@
 
             <br />
             <div class="col-md-11 col-md-offset-1">
-                <label>EXTEND ?</label>
+                <span><h5 style="width:940px;color:darkslateblue;" class="h5c">EXTEND TRAVEL ?</h5></span>
                 <div style="width:125px;" class="radio">
-                    <label style="float:right;">
-                        @*<input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" value="false">
-                            NO*@
-                        @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck" }) NO
+                    <label>
+                        @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:Check();", name = "yes", id = "yesCheck" })<span>YES</span>
                     </label>
-                    <label style="float:left;">
-                        @*<input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck" value="true" checked>
-                            YES*@
-                        @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck", @checked = true }) YES
+                    <label style="float:right;">
+                        @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:Check();", name = "no", id = "noCheck", @checked = "checked" })<span>NO</span>
                     </label>
                 </div>
             </div>
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-lg-11 col-lg-offset-1" id="ifYa1"><label>DURATION Of EXTEND :</label></div>
+            <div style="margin-bottom:0px;display:none;float:left;" class="col-lg-11 col-lg-offset-1" id="ifYa1"><h5 style="width:940px;margin-bottom:0px;padding-bottom:0px;" class="h5z2">DURATION Of EXTEND :</h5></div>
 
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5 col-lg-offset-1" id="ifYa2">
+            <div style="margin-bottom:0px;display:none;float:left;" class="col-md-5 col-lg-offset-1" id="ifYa2">
                 @Html.ValidationMessageFor(m => m.Start_Extend, "", new { @class = "text-danger" })<br />
                 <label>Start</label>
                 <div class="form-group input-group">
@@ -93,7 +86,7 @@
                 </div>
             </div>
 
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5" id="ifYa3">
+            <div style="margin-bottom:0px;display:none;float:left;" class="col-md-5" id="ifYa3">
                 @Html.ValidationMessageFor(m => m.End_Extend, "", new { @class = "text-danger" })<br />
                 <label>End</label>
                 <div class="form-group input-group">
@@ -123,7 +116,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
+            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:none;float:left;" id="ifYes">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
                     @*@Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @Value = String.Format("{0:n0}", Model.MealSettlement) })*@
@@ -132,7 +125,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5" style="margin-bottom:0px;display:block;float:left;" id="ifYesm1">
+            <div class="col-md-5" style="margin-bottom:0px;display:none;float:left;" id="ifYesm1">
                 <H6 class="h6s">Please Count Your Meal :</H6>
                 <div class="form-group input-group">
                     <button type="submit" class="btn btn-default" name="sum" value="Submit">Calculate Meal/day</button>
@@ -158,7 +151,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes2">
+            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:none;float:left;" id="ifYes2">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
                     @Html.TextBoxFor(m => m.HotelSettlement, new { @class = "form-control" })
@@ -188,7 +181,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes3">
+            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:none;float:left;" id="ifYes3">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
                     @Html.TextBoxFor(m => m.TicketSettlement, new { @class = "form-control" })
@@ -215,7 +208,7 @@
                     </a>
                     &nbsp;
                     <span class='label label-info' id="upload-file-info5"></span>
-                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB (.jpeg Format)</p>
                 </div>
             </div>
 
@@ -237,7 +230,7 @@
                     </a>
                     &nbsp;
                     <span class='label label-info' id="upload-file-info6"></span>
-                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB (.jpeg Format)</p>
                 </div>
             </div>
 
@@ -257,7 +250,7 @@
                     </a>
                     &nbsp;
                     <span class='label label-info' id="upload-file-info7"></span>
-                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB (.jpeg Format)</p>
                 </div>
             </div>
 
@@ -271,14 +264,12 @@
                 <button type="submit" style="width:145px" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
             </div>
         }
-
     </div>
     <hr />
 </div>
 
-
 <script>
-    function yesnoCheck() {
+    function Check() {
         if (document.getElementById('yesCheck').checked) {
             document.getElementById('ifYes').style.display = 'block';
             document.getElementById('ifYesm1').style.display = 'block';
@@ -288,7 +279,7 @@
             document.getElementById('ifYa2').style.display = 'block';
             document.getElementById('ifYa3').style.display = 'block';
         }
-        else {
+        else if (document.getElementById('noCheck').checked) {
             document.getElementById('ifYes').style.display = 'none';
             document.getElementById('ifYesm1').style.display = 'none';
             document.getElementById('ifYes2').style.display = 'none';
@@ -296,6 +287,14 @@
             document.getElementById('ifYa1').style.display = 'none';
             document.getElementById('ifYa2').style.display = 'none';
             document.getElementById('ifYa3').style.display = 'none';
+        } else {
+            document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('ifYesm1').style.display = 'block';
+            document.getElementById('ifYes2').style.display = 'block';
+            document.getElementById('ifYes3').style.display = 'block';
+            document.getElementById('ifYa1').style.display = 'block';
+            document.getElementById('ifYa2').style.display = 'block';
+            document.getElementById('ifYa3').style.display = 'block';
         }
     }
 </script>

@@ -149,10 +149,9 @@ namespace CONTRAST_WEB.Controllers
             List<string> apprv_name = new List<string>();
             List<string> apprv_status = new List<string>();
 
-            int k = 0;
             string temp = "";
             string ttemp = "";
-            for (; ; )
+            for (int k = 0; k < 19; k++)
             {
                 temp = null;
                 ttemp = null;
@@ -196,7 +195,7 @@ namespace CONTRAST_WEB.Controllers
                 {
                     temp = await GetData.EmployeeNameInfo(model2.travel_request.apprv_by_lvl14);
                     ttemp = model2.travel_request.apprv_flag_lvl14;
-                }                
+                }
                 else
                 if (k == 12)
                 {
@@ -290,25 +289,15 @@ namespace CONTRAST_WEB.Controllers
                     ttemp = model2.travel_request.apprv_flag_lvl1;
                 }
 
-                if (temp != null|| ttemp != null)
+                if (temp != null)
                 {
-                    if(temp!=null)apprv_name.Add(temp);
-                    if(ttemp != null) apprv_status.Add(ttemp);
+                    apprv_name.Add(temp);
+                    apprv_status.Add(ttemp);
                 }
-                else
-                if (temp == null && (k == 0||k==1))
-                {
-                    
-                }
-                else
-                    break;
-
-                k++;
             }
-
             ViewBag.Bossname = apprv_name;
             ViewBag.StatusState = apprv_status;
-            ViewBag.Approvalnum = k;
+            ViewBag.Approvalnum = apprv_status.Count;
 
             return View(model2);
         }

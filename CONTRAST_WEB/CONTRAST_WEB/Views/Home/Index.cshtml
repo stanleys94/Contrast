@@ -1,8 +1,7 @@
-﻿@model CONTRAST_WEB.Models.tb_m_employee
+﻿﻿@model CONTRAST_WEB.Models.tb_m_employee
 @{
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
-
 <div id="products" class="_3EibU">
     <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
@@ -25,7 +24,6 @@
             }
         </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TravelStatus", FormMethod.Post))
@@ -39,7 +37,6 @@
                 </div>}
         </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TravelExecution", FormMethod.Post))
@@ -49,12 +46,11 @@
                 @Html.AntiForgeryToken()
                 <div style="padding:10px 5px;">
                     <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Execution-icon.png" alt="" />
-                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">EXECUTION</div>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL EXECUTION</div>
                 </div>
             }
         </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
             @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post))
@@ -64,12 +60,11 @@
                 @Html.AntiForgeryToken()
                 <div style="padding:10px 5px;">
                     <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Settlement-icon.png" alt="" />
-                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">SETTLEMENT</div>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL SETTLEMENT</div>
                 </div>
             }
         </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TravelConfirmation", FormMethod.Post))
@@ -86,12 +81,11 @@
                 @Html.AntiForgeryToken()
                 <div style="padding:10px 5px;">
                     <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/travel-confirmation-menu.png" alt="" />
-                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL CONFIRMATION</div>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">CONFIRM TRAVEL PLAN</div>
                 </div>
             }
         </div>
     </div>
-	
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.staffpac")
@@ -120,7 +114,6 @@
             break;
         }
     }
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap" || items == "contrast.dphga" || items == "contrast.staffga" || items == "contrast.dphpac")
@@ -149,7 +142,6 @@
             break;
         }
     }
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap" || items == "contrast.dphga" || items == "contrast.staffga")
@@ -178,7 +170,6 @@
             break;
         }
     }
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap")
@@ -207,7 +198,6 @@
             break;
         }
     }
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.administd")
@@ -228,7 +218,7 @@
                         @Html.AntiForgeryToken()
                         <div style="padding:10px 5px;">
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/menu-upload-dit.png" alt="" />
-                            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">UPLOAD PLANNING TRAVEL</div>
+                            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">UPLOAD PLAN TRAVEL</div>
                         </div>
                     }
                 </div>
@@ -236,7 +226,6 @@
             break;
         }
     }
-	
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.adminga")
@@ -265,7 +254,6 @@
             break;
         }
     }
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap")
@@ -295,15 +283,127 @@
         }
 
     }
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap" || items == "contrast.staffga" || items == "contrast.staffpac")
         {
-			<div class="item col-xs-12 col-lg-3">
+            <div class="item col-xs-12 col-lg-3">
                 <div class="thumbnail border">
-                @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
-				{
+                    @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.code)
+                        @Html.HiddenFor(m => m.name)
+                        @Html.HiddenFor(m => m.@class)
+                        @Html.HiddenFor(m => m.entry_date)
+                        @Html.HiddenFor(m => m.position)
+                        @Html.HiddenFor(m => m.bank_account)
+                        @Html.HiddenFor(m => m.unit_code_code)
+                        @Html.HiddenFor(m => m.unit_code_id)
+                        @Html.HiddenFor(m => m.unit_code_name)
+                        @Html.Hidden("user", "all")
+                        @Html.AntiForgeryToken()
+                        <div style="padding:10px 5px;">
+                            <a name="user" value="all"><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="all" /></a>
+                            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRANSACTION TRACKING</div>
+                        </div>
+                    }
+                </div>
+            </div>
+            // break;
+        }
+
+    }
+    @foreach (var items in ViewBag.Privillege)
+    {
+        if (items == "contrast.administd")
+        {
+            <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
+                    @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.code)
+                        @Html.HiddenFor(m => m.name)
+                        @Html.HiddenFor(m => m.@class)
+                        @Html.HiddenFor(m => m.entry_date)
+                        @Html.HiddenFor(m => m.position)
+                        @Html.HiddenFor(m => m.bank_account)
+                        @Html.HiddenFor(m => m.unit_code_code)
+                        @Html.HiddenFor(m => m.unit_code_id)
+                        @Html.HiddenFor(m => m.unit_code_name)
+                        @Html.Hidden("user", "admin")
+                        @Html.AntiForgeryToken()
+                        <div style="padding:10px 5px;">
+                            <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="division" id="user" /></a>
+                            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">DIVISON TRACKING</div>
+                        </div>
+                    }
+                </div>
+            </div>
+            // break;
+        }
+
+    }
+    @foreach (var items in ViewBag.Privillege)
+    {
+        if (items == "contrast.staffpac")
+        {
+            <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
+                    @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.code)
+                        @Html.HiddenFor(m => m.name)
+                        @Html.HiddenFor(m => m.@class)
+                        @Html.HiddenFor(m => m.entry_date)
+                        @Html.HiddenFor(m => m.position)
+                        @Html.HiddenFor(m => m.bank_account)
+                        @Html.HiddenFor(m => m.unit_code_code)
+                        @Html.HiddenFor(m => m.unit_code_id)
+                        @Html.HiddenFor(m => m.unit_code_name)
+
+                        <div style="padding:10px 5px;">
+                            <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/download-invoice.png" alt="" />
+                            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PURCHASE ORDER</div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        }
+    }
+    @foreach (var items in ViewBag.Privillege)
+    {
+        if (items == "contrast.staffga")
+        {
+
+            <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
+                    @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.code)
+                        @Html.HiddenFor(m => m.name)
+                        @Html.HiddenFor(m => m.@class)
+                        @Html.HiddenFor(m => m.entry_date)
+                        @Html.HiddenFor(m => m.position)
+                        @Html.HiddenFor(m => m.bank_account)
+                        @Html.HiddenFor(m => m.unit_code_code)
+                        @Html.HiddenFor(m => m.unit_code_id)
+                        @Html.HiddenFor(m => m.unit_code_name)
+
+                        <div style="padding:10px 5px;">
+                            <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/download-invoice.png" alt="" />
+                            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">GOOD RECEIPT</div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        }
+    }
+    <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
+            {
                 @Html.HiddenFor(m => m.code)
                 @Html.HiddenFor(m => m.name)
                 @Html.HiddenFor(m => m.@class)
@@ -313,134 +413,16 @@
                 @Html.HiddenFor(m => m.unit_code_code)
                 @Html.HiddenFor(m => m.unit_code_id)
                 @Html.HiddenFor(m => m.unit_code_name)
-                @Html.Hidden("user", "all")
+                @Html.Hidden("user", "user")
                 @Html.AntiForgeryToken()
                 <div style="padding:10px 5px;">
-                    <a name="user" value="all"><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="all" /></a>
-                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRANSACTION TRACKING</div>
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="user" id="user" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL TRACKING</div>
                 </div>
-				}
-                </div>
-            </div>
-            // break;
-        }
-
-    }
-	
-	@foreach (var items in ViewBag.Privillege)
-    {
-        if (items == "contrast.administd")
-        {
-			<div class="item col-xs-12 col-lg-3">
-			<div class="thumbnail border">
-            @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
-			{
-				@Html.HiddenFor(m => m.code)
-				@Html.HiddenFor(m => m.name)
-				@Html.HiddenFor(m => m.@class)
-				@Html.HiddenFor(m => m.entry_date)
-				@Html.HiddenFor(m => m.position)
-				@Html.HiddenFor(m => m.bank_account)
-				@Html.HiddenFor(m => m.unit_code_code)
-				@Html.HiddenFor(m => m.unit_code_id)
-				@Html.HiddenFor(m => m.unit_code_name)
-				@Html.Hidden("user", "admin")
-				@Html.AntiForgeryToken()
-				<div style="padding:10px 5px;">
-					<a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="division" id="user" /></a>
-					<div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRACKING DIVISON</div>
-				</div>
-			}
-			</div>
-            </div>
-            // break;
-        }
-
-    }
-
-   @foreach (var items in ViewBag.Privillege)
-   {
-       if (items == "contrast.staffpac")
-       {
-		<div class="item col-xs-12 col-lg-3">
-        <div class="thumbnail border">
-            @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
-            {
-                        @Html.HiddenFor(m => m.code)
-                        @Html.HiddenFor(m => m.name)
-                        @Html.HiddenFor(m => m.@class)
-                        @Html.HiddenFor(m => m.entry_date)
-                        @Html.HiddenFor(m => m.position)
-                        @Html.HiddenFor(m => m.bank_account)
-                        @Html.HiddenFor(m => m.unit_code_code)
-                        @Html.HiddenFor(m => m.unit_code_id)
-                        @Html.HiddenFor(m => m.unit_code_name)
-
-                    <div style="padding:10px 5px;">
-                        <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/download-invoice.png" alt="" />
-                        <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PURCHASE ORDER</div>
-                    </div>
             }
         </div>
-		</div>
-
-	   }
-   }
-   
-   @foreach (var items in ViewBag.Privillege)
-   {
-       if (items == "contrast.staffga")
-       {
-
-		<div class="item col-xs-12 col-lg-3">
-        <div class="thumbnail border">
-            @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
-            {
-                        @Html.HiddenFor(m => m.code)
-                        @Html.HiddenFor(m => m.name)
-                        @Html.HiddenFor(m => m.@class)
-                        @Html.HiddenFor(m => m.entry_date)
-                        @Html.HiddenFor(m => m.position)
-                        @Html.HiddenFor(m => m.bank_account)
-                        @Html.HiddenFor(m => m.unit_code_code)
-                        @Html.HiddenFor(m => m.unit_code_id)
-                        @Html.HiddenFor(m => m.unit_code_name)
-
-                    <div style="padding:10px 5px;">
-                        <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/download-invoice.png" alt="" />
-                        <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">GOOD RECEIPT</div>
-                    </div>
-            }
-        </div>
-		</div>
-
-		}
-   }
-   
-   <div class="item col-xs-12 col-lg-3">
-        <div class="thumbnail border">
-		@using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
-		{
-			@Html.HiddenFor(m => m.code)
-			@Html.HiddenFor(m => m.name)
-			@Html.HiddenFor(m => m.@class)
-			@Html.HiddenFor(m => m.entry_date)
-			@Html.HiddenFor(m => m.position)
-			@Html.HiddenFor(m => m.bank_account)
-			@Html.HiddenFor(m => m.unit_code_code)
-			@Html.HiddenFor(m => m.unit_code_id)
-			@Html.HiddenFor(m => m.unit_code_name)
-			@Html.Hidden("user", "user")
-			@Html.AntiForgeryToken()
-			<div style="padding:10px 5px;">
-				<a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="user" id="user" /></a>
-				<div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRACKING USER</div>
-			</div>
-		}
-		</div>
-	</div>
-   
-   <div class="item col-xs-12 col-lg-3">
+    </div>
+    <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
             @using (Html.BeginForm("Index", "Profile", FormMethod.Post))
             {
@@ -462,5 +444,4 @@
         </div>
     </div>
 </div>
-
 
