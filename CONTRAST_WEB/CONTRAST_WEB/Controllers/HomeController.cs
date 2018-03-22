@@ -38,14 +38,11 @@ namespace CONTRAST_WEB.Controllers
             //tb_m_employee model = await GetData.EmployeeInfo("100354");
             //percobaan
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
-            tb_m_employee model = await GetData.EmployeeInfo("101795");
+            tb_m_employee model = await GetData.EmployeeInfo("101495");
 
             ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
-            int a = 1;
-            int b = 2;
-            int d = a + b;
-            string aasd = "asfhiuasyhruiqyu21u409u21094u21";
+            
             return View(model);
         }
         

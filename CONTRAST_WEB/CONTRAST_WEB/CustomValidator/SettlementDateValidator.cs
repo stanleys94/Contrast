@@ -46,6 +46,7 @@ namespace CONTRAST_WEB.CustomValidator
                 }
 
 
+                //departure & return date travel
                 //for (int i = 0; i < request.Count(); i++)
                 //{
                 //    if (dt >= request[i].start_date && dt <= request[i].end_date)

@@ -20,7 +20,6 @@
 </div>
 
 
-<div class="container">
     <div style="margin-top:105px;" id="products" class="row list-group _3EibU">
         @using (Html.BeginForm("Insert", "VerifySettlement", FormMethod.Post))
         {
@@ -40,13 +39,14 @@
                     </div>
                 </div>
             </div>
+
             <div style="width:100%;text-align:left;height:80px;border:0px;" class="clearfix">
                 <table class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
                             Group Code
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
                             Name
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
@@ -64,6 +64,9 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
                             Ammount
                         </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                            Attachment
+                        </th>
                         <th style="color:white; background-color:limegreen; text-align:left; border-right:1px solid white; width:60px;">
                             <div style="margin:1.5px 0;" class="checkbox">
                                 <label>
@@ -72,7 +75,7 @@
                                 <label>Approve</label>
                             </div>
                         </th>
-                        <th style="color:white; background-color:red; text-align:left; border-right:1px solid white; width:70px;">
+                        <th style="color:white; background-color:red; text-align:left; border-right:1px solid white; width:60px;">
                             <div style="margin:1.5px 0;" class="checkbox">
                                 <label>
                                     <input type="checkbox" onClick="toggle(this)" class="select-all2" name="select-all2" />
@@ -100,59 +103,62 @@
                         @Html.HiddenFor(Model => Model[k].Settlement_Verified.wbs_no, new { @Value = Model[k].Settlement_Verified.wbs_no })
                         @Html.HiddenFor(Model => Model[k].Settlement_Verified.cost_center, new { @Value = Model[k].Settlement_Verified.cost_center })
 
-                        <tr class="table-responsive">
-                            <td style="width:130px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].Settlement_Verified.group_code)
-                                @Html.HiddenFor(Model => Model[k].Settlement_Verified.group_code, new { @Value = Model[k].Settlement_Verified.group_code })
-                            </td>
-                            <td style="width:130px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].Settlement_Verified.name)
-                                @Html.HiddenFor(Model => Model[k].Settlement_Verified.name, new { @Value = Model[k].Settlement_Verified.name })
-                            </td>
-                            <td style="width:130px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].Settlement_Verified.jenis_transaksi)
-                                @Html.HiddenFor(Model => Model[k].Settlement_Verified.jenis_transaksi, new { @Value = Model[k].Settlement_Verified.jenis_transaksi })
-                            </td>
-                            <td style="width:140px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].Settlement_Verified.destination_name)
-                                @Html.HiddenFor(Model => Model[k].Settlement_Verified.destination_name, new { @Value = Model[k].Settlement_Verified.destination_name })
-                            </td>
-                            <td style="width:140px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].Settlement_Verified.start_date)
-                                @Html.HiddenFor(Model => Model[k].Settlement_Verified.start_date, new { @Value = Model[k].Settlement_Verified.start_date })
-                            </td>
-                            <td style="width:140px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].Settlement_Verified.end_date)
-                                @Html.HiddenFor(Model => Model[k].Settlement_Verified.end_date, new { @Value = Model[k].Settlement_Verified.end_date })
-                            </td>
-                            <td style="width:115px;" class="td">
-                                @Html.DisplayFor(Model => Model[k].money, new { @Value = Model[k].money })
-                                @Html.HiddenFor(Model => Model[k].money, new { @Value = Model[k].money })
-                            </td>
+                    <tr class="table-responsive">
+                        <td style="width:60px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].Settlement_Verified.group_code)
+                            @Html.HiddenFor(Model => Model[k].Settlement_Verified.group_code, new { @Value = Model[k].Settlement_Verified.group_code })
+                        </td>
+                        <td style="width:100px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].Settlement_Verified.name)
+                            @Html.HiddenFor(Model => Model[k].Settlement_Verified.name, new { @Value = Model[k].Settlement_Verified.name })
+                        </td>
+                        <td style="width:100px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].Settlement_Verified.jenis_transaksi)
+                            @Html.HiddenFor(Model => Model[k].Settlement_Verified.jenis_transaksi, new { @Value = Model[k].Settlement_Verified.jenis_transaksi })
+                        </td>
+                        <td style="width:50px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].Settlement_Verified.destination_name)
+                            @Html.HiddenFor(Model => Model[k].Settlement_Verified.destination_name, new { @Value = Model[k].Settlement_Verified.destination_name })
+                        </td>
+                        <td style="width:50px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].Settlement_Verified.start_date)
+                            @Html.HiddenFor(Model => Model[k].Settlement_Verified.start_date, new { @Value = Model[k].Settlement_Verified.start_date })
+                        </td>
+                        <td style="width:50px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].Settlement_Verified.end_date)
+                            @Html.HiddenFor(Model => Model[k].Settlement_Verified.end_date, new { @Value = Model[k].Settlement_Verified.end_date })
+                        </td>
+                        <td style="width:100px;" class="td">
+                            @Html.DisplayFor(Model => Model[k].money, new { @Value = Model[k].money })
+                            @Html.HiddenFor(Model => Model[k].money, new { @Value = Model[k].money })
+                        </td>
+                        <td style="width:100px;" class="td">
+                            Link
+                        </td>
 
-                            <td style="width:110px;" class="td" id="item_checkbox">
-                                <div style="margin:1.5px" class="checkbox">
-                                    <label>
-                                        @*@Html.CheckBox("false", new { value = item.ga_status, @name = "select-item", @class = "select-item" })*@
-                                        @if (k==0||Model[k].Settlement_Verified.group_code != Model[k - 1].Settlement_Verified.group_code)
-                                        {
-                                            @Html.CheckBoxFor(Model => Model[k].check_verify, new { @id = "check" + k, @name = "select-item", @class = "select-item", onclick = "selectOnlyThis(this.id)" })
-                                        }                                            
-                                    </label>
-                                </div>
-                            </td>
-                            <td style="width:80px;" class="td" id="item_checkbox">
-                                <div style="margin:1.5px" class="checkbox">
-                                    <label>
-                                        @*@Html.CheckBox("true", new { value = item.ga_status, @name = "select-item2", @class = "select-item2" })*@
-                                        @if (k == 0 || Model[k].Settlement_Verified.group_code != Model[k - 1].Settlement_Verified.group_code)
-                                        {
-                                            @Html.CheckBoxFor(Model => Model[k].check_reject, new { @id = "check" + k, @name = "select-item2", @class = "select-item2", onclick = "selectOnlyThis2(this.id)" })
-                                        }
-                                    </label>
-                                </div>
-                            </td>
-                        </tr>
+                        <td style="width:60px;" class="td" id="item_checkbox">
+                            <div style="margin:1.5px" class="checkbox">
+                                <label>
+                                    @*@Html.CheckBox("false", new { value = item.ga_status, @name = "select-item", @class = "select-item" })*@
+                                    @if (k == 0 || Model[k].Settlement_Verified.group_code != Model[k - 1].Settlement_Verified.group_code)
+                {
+                    @Html.CheckBoxFor(Model => Model[k].check_verify, new { @id = "check" + k, @name = "select-item", @class = "select-item", onclick = "selectOnlyThis(this.id)" })
+}
+                                </label>
+                            </div>
+                        </td>
+                        <td style="width:60px;" class="td" id="item_checkbox">
+                            <div style="margin:1.5px" class="checkbox">
+                                <label>
+                                    @*@Html.CheckBox("true", new { value = item.ga_status, @name = "select-item2", @class = "select-item2" })*@
+                                    @if (k == 0 || Model[k].Settlement_Verified.group_code != Model[k - 1].Settlement_Verified.group_code)
+                {
+                    @Html.CheckBoxFor(Model => Model[k].check_reject, new { @id = "check" + k, @name = "select-item2", @class = "select-item2", onclick = "selectOnlyThis2(this.id)" })
+}
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
 
                     }
                      }  
@@ -178,7 +184,6 @@
             </div>
         }
     </div>
-</div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>

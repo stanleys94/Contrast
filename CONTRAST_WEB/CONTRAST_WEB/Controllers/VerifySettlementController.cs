@@ -14,9 +14,9 @@ namespace CONTRAST_WEB.Controllers
     public class VerifySettlementController : Controller
     {
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(tb_m_employee model)
         {
             //tb_m_verifier_employee access_status = new tb_m_verifier_employee();
@@ -70,9 +70,9 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Index2(tb_m_employee model, string search = "")
         {
             //string noreg = TempData["Data"].ToString();
@@ -128,9 +128,9 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Insert(List<SettlementVerifiedHelper> model, string search = "", string insert = "", DateTime? start = null, DateTime? end = null)
         {
             tb_m_verifier_employee access_status = new tb_m_verifier_employee();

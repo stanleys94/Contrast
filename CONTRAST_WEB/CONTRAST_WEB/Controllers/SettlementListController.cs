@@ -136,7 +136,7 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
-                    // ActualCostObject.vendor_code = model.TravelRequest.no_reg.ToString();
+                    
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
 
                     bankName = await GetData.VendorEmployee((model.TravelRequest.no_reg));
