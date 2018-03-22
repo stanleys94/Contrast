@@ -1589,13 +1589,14 @@ namespace CONTRAST_WEB.Controllers
                     MemoryStream memoryStream = new MemoryStream();
                     document.Save(memoryStream, false);
                     memoryStream.Position = 0;
-                    return File(memoryStream, "application/pdf", receipt.Replace(" ", "_") + "_" + model[loop].invoice.group_code.Trim(' ') + "_" + model[loop].invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + "_COPY_" + ".pdf");
+                    if (copy) return File(memoryStream, "application/pdf", receipt.Replace(" ", "_") + "_" + model[loop].invoice.group_code.Trim(' ') + "_" + model[loop].invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + "_COPY_" + ".pdf");
+                    else return File(memoryStream, "application/pdf", receipt.Replace(" ", "_") + "_" + model[loop].invoice.group_code.Trim(' ') + "_" + model[loop].invoice.jenis_transaksi.Trim(' ').ToUpper() + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
                 }
             }
             MemoryStream stream = new MemoryStream();
             document.Save(stream, false);
             stream.Position = 0;
-            return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + "BATCH_DOWNLOAD" + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + "_COPY_" + ".pdf");
+            return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + "BATCH_DOWNLOAD" + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
 
         }
     }
