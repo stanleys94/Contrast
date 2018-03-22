@@ -3141,7 +3141,9 @@ namespace CONTRAST_WEB.Models
                         ListItem.Add(item);
                     }
                 }
-                return ListItem;
+                if (ListItem.Count > 0) return ListItem.OrderBy(m => m.GR_issued_flag).ToList();
+                else return ListItem;
+
             }
 
         }
