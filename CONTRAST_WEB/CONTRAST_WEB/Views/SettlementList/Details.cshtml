@@ -1,10 +1,8 @@
 ﻿@model CONTRAST_WEB.Models.SettlementHelper
-
 @{
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
-
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
         <li>
@@ -16,9 +14,9 @@
         <li class="breadcrumb-item active">Settlement</li>
     </ol>
 </div>
-
 <div class="container">
     <div style="margin-top:110px" class="row">
+        @* if travel execution false , please upload file foto/boarding pass travel yesterday then muncul details settlements for submit final *@
         @using (Html.BeginForm("Insert", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
 
         {
@@ -71,7 +69,7 @@
                         @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:Check();", name = "yes", id = "yesCheck" })<span>YES</span>
                     </label>
                     <label style="float:right;">
-                        @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:Check();", name = "no", id = "noCheck", @checked = "checked" })<span>NO</span >
+                        @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:Check();", name = "no", id = "noCheck", @checked = "checked" })<span>NO</span>
                     </label>
                 </div>
             </div>
@@ -266,11 +264,9 @@
                 <button type="submit" style="width:145px" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
             </div>
         }
-
     </div>
     <hr />
 </div>
-
 
 <script>
     function Check() {
