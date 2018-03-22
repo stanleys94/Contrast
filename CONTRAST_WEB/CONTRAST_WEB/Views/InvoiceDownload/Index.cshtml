@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
     //var grid = new WebGrid(canPage: true, rowsPerPage: 10);
     //grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+    int outstanding = ViewBag.outstanding;
 }
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
@@ -56,6 +57,7 @@
 
     @using (Html.BeginForm("Download", "InvoiceDownload", FormMethod.Post))
     {
+        @Html.Hidden("outstanding", outstanding)
 
         <div class="clearfix">
             @*@foreach (var items in ViewBag.outstanding)
@@ -125,94 +127,94 @@
                     </tr>
 
                     @if (Model[0].invoice != null)
-        {
-            for (int k = 0; k < ViewBag.outstanding; k++)
-            {
-                @Html.HiddenFor(m => m[k].loged_employee.code)
-                @Html.HiddenFor(m => m[k].loged_employee.name)
-                @Html.HiddenFor(m => m[k].loged_employee.unit_code_name)
-                @Html.HiddenFor(m => m[k].loged_employee.unit_code_id)
+                    {
+                        for (int k = 0; k < ViewBag.outstanding; k++)
+                        {
+                            @Html.HiddenFor(m => m[k].loged_employee.code)
+                            @Html.HiddenFor(m => m[k].loged_employee.name)
+                            @Html.HiddenFor(m => m[k].loged_employee.unit_code_name)
+                            @Html.HiddenFor(m => m[k].loged_employee.unit_code_id)
 
-                @Html.HiddenFor(Model => Model[k].invoice.id_data)
+                            @Html.HiddenFor(Model => Model[k].invoice.id_data)
 
-                <tr>
-                    <td style="width:55px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.group_code)
-                        @Html.HiddenFor(Model => Model[k].invoice.group_code)
-                    </td>
-                    <td style="width:100px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.no_reg)
-                        @Html.HiddenFor(Model => Model[k].invoice.no_reg)
-                    </td>
-                    <td style="width:200px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.name)
-                        @Html.HiddenFor(Model => Model[k].invoice.name)
-                    </td>
-                    <td style="width:100px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.jenis_transaksi)
-                        @Html.HiddenFor(Model => Model[k].invoice.jenis_transaksi)
-                    </td>
-                    <td style="width:250px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.wbs_no)
-                        @Html.HiddenFor(Model => Model[k].invoice.wbs_no)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.cost_center)
-                        @Html.HiddenFor(Model => Model[k].invoice.cost_center)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.qty)
-                        @Html.HiddenFor(Model => Model[k].invoice.qty)
-                    </td>
+                            <tr>
+                                <td style="width:55px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.group_code)
+                                    @Html.HiddenFor(Model => Model[k].invoice.group_code)
+                                </td>
+                                <td style="width:100px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.no_reg)
+                                    @Html.HiddenFor(Model => Model[k].invoice.no_reg)
+                                </td>
+                                <td style="width:200px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.name)
+                                    @Html.HiddenFor(Model => Model[k].invoice.name)
+                                </td>
+                                <td style="width:100px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.jenis_transaksi)
+                                    @Html.HiddenFor(Model => Model[k].invoice.jenis_transaksi)
+                                </td>
+                                <td style="width:250px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.wbs_no)
+                                    @Html.HiddenFor(Model => Model[k].invoice.wbs_no)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.cost_center)
+                                    @Html.HiddenFor(Model => Model[k].invoice.cost_center)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.qty)
+                                    @Html.HiddenFor(Model => Model[k].invoice.qty)
+                                </td>
 
-                    <td style="width:110px" class="td">
-                        @Html.HiddenFor(Model => Model[k].invoice.amount_total)
-                        <span>Rp.</span>
-                        @Html.DisplayFor(Model => Model[k].invoice.amount_total)
-                    </td>
-                    <td style="width:150px" class="td">
+                                <td style="width:110px" class="td">
+                                    @Html.HiddenFor(Model => Model[k].invoice.amount_total)
+                                    <span>Rp.</span>
+                                    @Html.DisplayFor(Model => Model[k].invoice.amount_total)
+                                </td>
+                                <td style="width:150px" class="td">
 
-                        @Html.DisplayFor(Model => Model[k].invoice.vendor_code)
-                        @Html.HiddenFor(Model => Model[k].invoice.vendor_code)
-                    </td>
-                    <td style="width:350px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.vendor_name)
-                        @Html.HiddenFor(Model => Model[k].invoice.vendor_name)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.invoice_number)
-                        @Html.HiddenFor(Model => Model[k].invoice.invoice_number)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.tax_invoice_number)
-                        @Html.HiddenFor(Model => Model[k].invoice.tax_invoice_number)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.destination_1)
-                        @Html.HiddenFor(Model => Model[k].invoice.destination_1)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.startDate_1)
-                        @Html.HiddenFor(Model => Model[k].invoice.startDate_1)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.endDate_1)
-                        @Html.HiddenFor(Model => Model[k].invoice.endDate_1)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.employee_input)
-                        @Html.HiddenFor(Model => Model[k].invoice.employee_input)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.create_date)
-                        @Html.HiddenFor(Model => Model[k].invoice.create_date)
-                    </td>
-                    <td style="width:110px" class="td">
-                        <button type="submit" name="download" value=@k class="btn btn-info">Download</button>
-                    </td>
-                </tr>
-}
-}
+                                    @Html.DisplayFor(Model => Model[k].invoice.vendor_code)
+                                    @Html.HiddenFor(Model => Model[k].invoice.vendor_code)
+                                </td>
+                                <td style="width:350px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.vendor_name)
+                                    @Html.HiddenFor(Model => Model[k].invoice.vendor_name)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].invoice.invoice_number)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.tax_invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].invoice.tax_invoice_number)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.destination_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.destination_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.startDate_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.startDate_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.endDate_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.endDate_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.employee_input)
+                                    @Html.HiddenFor(Model => Model[k].invoice.employee_input)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.create_date)
+                                    @Html.HiddenFor(Model => Model[k].invoice.create_date)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    <button type="submit" name="download" value=@k class="btn btn-info">Download</button>
+                                </td>
+                            </tr>
+                        }
+                    }
 
                 </table>
             </div>
@@ -287,94 +289,94 @@
                     </tr>
 
                     @if (Model[0].invoice != null)
-        {
-            for (int k = ViewBag.outstanding; k < Model.Count(); k++)
-            {
-                @Html.HiddenFor(m => m[k].loged_employee.code)
-                @Html.HiddenFor(m => m[k].loged_employee.name)
-                @Html.HiddenFor(m => m[k].loged_employee.unit_code_name)
-                @Html.HiddenFor(m => m[k].loged_employee.unit_code_id)
+                    {
+                        for (int k = ViewBag.outstanding; k < Model.Count(); k++)
+                        {
+                            @Html.HiddenFor(m => m[k].loged_employee.code)
+                            @Html.HiddenFor(m => m[k].loged_employee.name)
+                            @Html.HiddenFor(m => m[k].loged_employee.unit_code_name)
+                            @Html.HiddenFor(m => m[k].loged_employee.unit_code_id)
 
-                @Html.HiddenFor(Model => Model[k].invoice.id_data)
+                            @Html.HiddenFor(Model => Model[k].invoice.id_data)
 
-                <tr>
-                    <td style="width:55px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.group_code)
-                        @Html.HiddenFor(Model => Model[k].invoice.group_code)
-                    </td>
-                    <td style="width:100px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.no_reg)
-                        @Html.HiddenFor(Model => Model[k].invoice.no_reg)
-                    </td>
-                    <td style="width:200px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.name)
-                        @Html.HiddenFor(Model => Model[k].invoice.name)
-                    </td>
-                    <td style="width:100px;" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.jenis_transaksi)
-                        @Html.HiddenFor(Model => Model[k].invoice.jenis_transaksi)
-                    </td>
-                    <td style="width:250px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.wbs_no)
-                        @Html.HiddenFor(Model => Model[k].invoice.wbs_no)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.cost_center)
-                        @Html.HiddenFor(Model => Model[k].invoice.cost_center)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.qty)
-                        @Html.HiddenFor(Model => Model[k].invoice.qty)
-                    </td>
+                            <tr>
+                                <td style="width:55px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.group_code)
+                                    @Html.HiddenFor(Model => Model[k].invoice.group_code)
+                                </td>
+                                <td style="width:100px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.no_reg)
+                                    @Html.HiddenFor(Model => Model[k].invoice.no_reg)
+                                </td>
+                                <td style="width:200px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.name)
+                                    @Html.HiddenFor(Model => Model[k].invoice.name)
+                                </td>
+                                <td style="width:100px;" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.jenis_transaksi)
+                                    @Html.HiddenFor(Model => Model[k].invoice.jenis_transaksi)
+                                </td>
+                                <td style="width:250px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.wbs_no)
+                                    @Html.HiddenFor(Model => Model[k].invoice.wbs_no)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.cost_center)
+                                    @Html.HiddenFor(Model => Model[k].invoice.cost_center)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.qty)
+                                    @Html.HiddenFor(Model => Model[k].invoice.qty)
+                                </td>
 
-                    <td style="width:110px" class="td">
-                        @Html.HiddenFor(Model => Model[k].invoice.amount_total)
-                        <span>Rp.</span>
-                        @Html.DisplayFor(Model => Model[k].invoice.amount_total)
-                    </td>
-                    <td style="width:150px" class="td">
+                                <td style="width:110px" class="td">
+                                    @Html.HiddenFor(Model => Model[k].invoice.amount_total)
+                                    <span>Rp.</span>
+                                    @Html.DisplayFor(Model => Model[k].invoice.amount_total)
+                                </td>
+                                <td style="width:150px" class="td">
 
-                        @Html.DisplayFor(Model => Model[k].invoice.vendor_code)
-                        @Html.HiddenFor(Model => Model[k].invoice.vendor_code)
-                    </td>
-                    <td style="width:350px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.vendor_name)
-                        @Html.HiddenFor(Model => Model[k].invoice.vendor_name)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.invoice_number)
-                        @Html.HiddenFor(Model => Model[k].invoice.invoice_number)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.tax_invoice_number)
-                        @Html.HiddenFor(Model => Model[k].invoice.tax_invoice_number)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.destination_1)
-                        @Html.HiddenFor(Model => Model[k].invoice.destination_1)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.startDate_1)
-                        @Html.HiddenFor(Model => Model[k].invoice.startDate_1)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.endDate_1)
-                        @Html.HiddenFor(Model => Model[k].invoice.endDate_1)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.employee_input)
-                        @Html.HiddenFor(Model => Model[k].invoice.employee_input)
-                    </td>
-                    <td style="width:110px" class="td">
-                        @Html.DisplayFor(Model => Model[k].invoice.create_date)
-                        @Html.HiddenFor(Model => Model[k].invoice.create_date)
-                    </td>
-                    <td style="width:110px" class="td">
-                        <button type="submit" name="download" value=@k class="btn btn-info">Download</button>
-                    </td>
-                </tr>
-}
-}
+                                    @Html.DisplayFor(Model => Model[k].invoice.vendor_code)
+                                    @Html.HiddenFor(Model => Model[k].invoice.vendor_code)
+                                </td>
+                                <td style="width:350px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.vendor_name)
+                                    @Html.HiddenFor(Model => Model[k].invoice.vendor_name)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].invoice.invoice_number)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.tax_invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].invoice.tax_invoice_number)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.destination_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.destination_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.startDate_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.startDate_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.endDate_1)
+                                    @Html.HiddenFor(Model => Model[k].invoice.endDate_1)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.employee_input)
+                                    @Html.HiddenFor(Model => Model[k].invoice.employee_input)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    @Html.DisplayFor(Model => Model[k].invoice.create_date)
+                                    @Html.HiddenFor(Model => Model[k].invoice.create_date)
+                                </td>
+                                <td style="width:110px" class="td">
+                                    <button type="submit" name="download" value=@k class="btn btn-info">Download</button>
+                                </td>
+                            </tr>
+                        }
+                    }
                 </table>
             </div>
 
@@ -383,8 +385,10 @@
 
 
         </div>
-        <div style="float:right;margin-top:10px;" class="col-lg-1 col-lg-offset-11">
+        <div style="float:left;margin-top:10px;">
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
+            <button type="submit" class="btn btn-default" name="all_download" value="outstanding">Download(NEW)</button>
+            <button type="submit" class="btn btn-default" name="all_download" value="issued">Download(ISSUED)</button>
         </div>
     }
 

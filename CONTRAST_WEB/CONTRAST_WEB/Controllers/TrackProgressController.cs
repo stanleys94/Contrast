@@ -84,7 +84,7 @@ namespace CONTRAST_WEB.Controllers
                 track.Add(temp);
                 return View(track);
             }
-            return View(track.OrderBy(m => m.TrackedList.create_date).ToList());
+            return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
         }
 
         [HttpPost]
@@ -166,7 +166,7 @@ namespace CONTRAST_WEB.Controllers
                     return View("Index", track);
                 }
                 ModelState.Clear();
-                return View("Index", track.OrderBy(m => m.TrackedList.create_date).ToList());
+                return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
             }
             else if (download == "Download")
             {
@@ -249,7 +249,7 @@ namespace CONTRAST_WEB.Controllers
                     return View("Index", track);
                 }
                 ModelState.Clear();
-                return View("Index", track.OrderBy(m => m.TrackedList.create_date).ToList());
+                return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
             }
         }
     }
