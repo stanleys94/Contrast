@@ -764,13 +764,14 @@ namespace CONTRAST_WEB.Controllers
                     if (all_download == "issued") issued = true;
                 }
 
-                if (pos.Departemen.Contains("GENERAL") || issued && i >= outstanding)
+                if (pos.Departemen.Contains("GENERAL") || issued || down >= outstanding)
                 {
-                    List<tb_r_invoice_actualcost> placeholder = await GetData.TableInvoiceActualcostSingle(model[i].invoice.group_code, model[i].invoice.jenis_transaksi);
+
+                    List<tb_r_invoice_actualcost> placeholder = await GetData.TableInvoiceActualcostSingle(model[down].invoice.group_code, model[down].invoice.jenis_transaksi);
                     tb_r_invoice_actualcost holder = new tb_r_invoice_actualcost();
                     foreach (var item in placeholder)
                     {
-                        if (model[i].invoice.vendor_code.Contains(item.vendor_code.ToString())) holder = item;
+                        if (model[down].invoice.vendor_code.Contains(item.vendor_code.ToString())) holder = item;
                         vw_invoice_actualcost_new destination_holder = new vw_invoice_actualcost_new();
                         if (item.destination_1 != null) destination_holder.destination_1 = item.destination_1;
                         if (item.destination_2 != null) destination_holder.destination_2 = item.destination_2;
