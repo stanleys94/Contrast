@@ -239,6 +239,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\TrackingDetailHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Helper\ActualCostHelper.cs" />
     <Compile Include="Helper\ActualCostShtHelper.cs" />
@@ -747,6 +748,7 @@
     <Content Include="Views\SettlementList\DetailsMSTRMobile.cshtml" />
     <Content Include="Views\Link\Index.cshtml" />
     <Content Include="Views\TravelStatus\Comment.cshtml" />
+    <Content Include="Views\TrackProgress\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

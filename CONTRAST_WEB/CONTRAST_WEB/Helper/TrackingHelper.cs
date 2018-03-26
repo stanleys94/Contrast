@@ -11,5 +11,6 @@ namespace CONTRAST_WEB.Models
         public string login_name { get; set; }
         public string login_id { get; set; }
         public string privilage { get; set; }
+        public int id_data { get; set; }
     }
 }
