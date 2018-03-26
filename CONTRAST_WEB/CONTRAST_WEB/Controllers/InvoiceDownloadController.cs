@@ -735,7 +735,6 @@ namespace CONTRAST_WEB.Controllers
             List<InvoiceHelper> newList = new List<InvoiceHelper>();
             tb_m_employee_source_data pos = await GetData.GetDivisionSource(Convert.ToInt32(model[0].loged_employee.code));
 
-
             if (all_download != null)
             {
                 if (all_download == "outstanding")
@@ -1026,13 +1025,12 @@ namespace CONTRAST_WEB.Controllers
             }
             ViewBag.Count = Counter;
             ModelState.Clear();
-            View("Download", newList);
+            return View("Download", newList);
         }
 
-
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Print(List<InvoiceHelper> model)
         {
 

@@ -18,13 +18,21 @@ namespace CONTRAST_WEB.Controllers
 
         private CONTRASTEntities db = new CONTRASTEntities();
 
-        [Authorize(Roles = "contrast.user")]       
+        [Authorize(Roles = "contrast.user")]
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
             var identity = (ClaimsIdentity)User.Identity;
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
+
+            //List<string> claims = new List<string>();
+            //claims.Add("contrast.administd");
+            //claims.Add("contrast.staffga");
+            //claims.Add("contrast.user");
+            //claims.Add("contrast.staffpac");
+            //claims.Add("contrast.ap");
+            //ViewBag.Privillege = claims;
 
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
@@ -33,14 +41,14 @@ namespace CONTRAST_WEB.Controllers
             //AP
             //tb_m_employee model = await GetData.EmployeeInfo("101419");
             //staff ga
-            //tb_m_employee model = await GetData.EmployeeInfo("101495");
+           // tb_m_employee model = await GetData.EmployeeInfo("101495");
             // dph ga 100354  
             //tb_m_employee model = await GetData.EmployeeInfo("100354");
             //percobaan
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
             //tb_m_employee model = await GetData.EmployeeInfo("101795");
 
-            ViewBag.photo = await GetData.PhotoEmployeeInfo(identity.Name);
+            ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
         
             return View(model);
