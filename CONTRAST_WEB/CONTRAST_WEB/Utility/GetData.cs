@@ -3236,6 +3236,67 @@ namespace CONTRAST_WEB.Models
             }
 
         }
+
+        public static async Task<List<tb_r_travel_actualcost>> ActualCostBTA(string group_code)
+        {
+            List<tb_r_travel_actualcost> Response = new List<tb_r_travel_actualcost>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/ActualCost/GetBTA?gcode=" + group_code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Response = JsonConvert.DeserializeObject<List<tb_r_travel_actualcost>>(EmpResponse);
+                }
+            }
+            return Response;
+        }
+
+        public static async Task<List<tb_r_travel_execution>> TravelExecution(string bta)
+        {
+            using (var client = new HttpClient())
+            {
+                List<tb_r_travel_execution> ListItem = new List<tb_r_travel_execution>();
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TravelExecution/BTA?bta=" + bta);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_travel_execution> ResponseList = new List<tb_r_travel_execution>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_travel_execution>>(str);
+                    foreach (var item in ResponseList)
+                    {
+                        if (item.group_code.Contains(bta.Trim(' '))) ListItem.Add(item);
+                    }
+                }
+                return ListItem;
+            }
+
+
+        }
     }
 
 

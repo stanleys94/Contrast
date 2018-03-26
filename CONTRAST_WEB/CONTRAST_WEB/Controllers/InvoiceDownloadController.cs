@@ -285,7 +285,6 @@ namespace CONTRAST_WEB.Controllers
                 InvoiceHelper temp = new InvoiceHelper();
                 temp.loged_employee = loged;
                 invoice.Add(temp);
-                return View(invoice);
             }
 
             return View(invoice);
@@ -716,8 +715,6 @@ namespace CONTRAST_WEB.Controllers
                 InvoiceHelper temp = new InvoiceHelper();
                 temp.loged_employee = model[0].loged_employee;
                 Filter.Add(temp);
-                ModelState.Clear();
-                return View("Index", Filter);
             }
             ModelState.Clear();
             return View("Index", Filter);
@@ -1029,8 +1026,7 @@ namespace CONTRAST_WEB.Controllers
             }
             ViewBag.Count = Counter;
             ModelState.Clear();
-            if (newList.Count > 0) return View("Download", newList);
-            else return View("Download", newList);
+            View("Download", newList);
         }
 
 
