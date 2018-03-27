@@ -13,11 +13,11 @@ namespace CONTRAST_WEB.Controllers
 {
     public class PaymentProposalController : Controller
     {
-        // GET: PaymentProposal
-        //[HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
+        //GET: PaymentProposal
+        [HttpPost]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(tb_m_employee model)
         {
             List<PaymentProposalHelper> Generate = new List<PaymentProposalHelper>();
@@ -35,10 +35,10 @@ namespace CONTRAST_WEB.Controllers
             return View("Index", Generate.OrderBy(b => b.Entity.vendor_code).ToList());
         }
 
-        //[HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Filter(List<PaymentProposalHelper> model, DateTime? startdate, DateTime? enddate, string search = "")
         {
             string lower = search.ToLower();
@@ -75,133 +75,9 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-
-
-        /*public async Task<ActionResult> Generate(List<PaymentListHelper> model)
-        {
-            //todo: add some data from your database into that string:
-            MemoryStream memoryStream = new MemoryStream();
-            TextWriter tw = new StreamWriter(memoryStream);
-            string MANDT, PV_NO, PV_YEAR, ITEM_NO, PV_DATE, PV_TYPE, TRANS_TYPE, VENDOR, VENDOR_GRP, INVOICE_NO, TAX_NO, PAYMENT_TERM, PAYMENT_METHOD, PLAN_PAYMENT_DT, POSTING_DT, TOTAL_AMOUNT, DPP_AMOUNT, CURRENCY, TAX_CODE, HEADER_TEXT, BANK_TYPE, gl_account, AMOUNT, COST_CENTER, WBS_ELEMENT, ITEM_TEXT, STATUS, SAP_DOC_NO, SAP_DOC_YEAR;
-            tw.Write("MANDT\t" +
-                "PV_NO\t" +
-                "PV_YEAR\t" +
-                "ITEM_NO\t" +
-                "PV_DATE\t" +
-                "PV_TYPE\t" +
-                "TRANS_TYPE\t" +
-                "VENDOR\t" +
-                "VENDOR_GRP\t" +
-                "INVOICE_NO\t" +
-                "TAX_NO\t" +
-                "PAYMENT_TERM\t" +
-                "PAYMENT_METHOD\t" +
-                "PLAN_PAYMENT_DT\t" +
-                "POSTING_DT\t" +
-                "TOTAL_AMOUNT\t" +
-                "DPP_AMOUNT\t" +
-                "CURRENCY\t" +
-                "TAX_CODE\t" +
-                "HEADER TEXT\t" +
-                "BANK_TYPE\t" +
-                "gl_account\t" +
-                "AMOUNT\t" +
-                "COST_CENTER\t" +
-                "WBS_ELEMENT\t" +
-                "ITEM_TEXT\t" +
-                "STATUS\t" +
-                "SAP_DOC_NO\t" +
-                "SAP_DOC_YEAR");
-
-            foreach (var item in model)
-            {
-                tb_r_record_payment_list record = new tb_r_record_payment_list();
-                record.generate_by = item.No_Reg.ToString();
-                record.group_code = item.Entity.PV_NO;
-                record.pv_date = DateTime.ParseExact(item.Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-                record.trans_type = item.Entity.TRANS_TYPE;
-                record.vendor_code = item.Entity.VENDOR;
-                record.item_no = item.Entity.ITEM_NO.ToString();
-                record.generate_date = DateTime.Now;
-
-                //await InsertData.RecordGenerateFile(record);
-
-                MANDT = (item.Entity.MANDT == null) ? "" : item.Entity.MANDT.ToString();
-                PV_NO = (item.Entity.PV_NO == null) ? "" : item.Entity.PV_NO;
-                PV_YEAR = (item.Entity.PV_YEAR == null) ? "" : item.Entity.PV_YEAR.ToString();
-                ITEM_NO = item.Entity.ITEM_NO.ToString();
-                PV_DATE = (item.Entity.PV_DATE == null) ? "" : item.Entity.PV_DATE;
-                PV_TYPE = item.Entity.PV_TYPE.ToString();
-                TRANS_TYPE = (item.Entity.TRANS_TYPE == null) ? "" : item.Entity.TRANS_TYPE.ToString();
-                VENDOR = (item.Entity.VENDOR == null) ? "" : item.Entity.VENDOR.ToString();
-                VENDOR_GRP = item.Entity.VENDOR_GRP.ToString();
-                INVOICE_NO = (item.Entity.INVOICE_NO == null) ? "" : item.Entity.INVOICE_NO;
-                TAX_NO = (item.Entity.TAX_NO == null) ? "" : item.Entity.TAX_NO;
-                PAYMENT_TERM = (item.Entity.PAYMENT_TERM == null) ? "" : item.Entity.PAYMENT_TERM;
-                PAYMENT_METHOD = (item.Entity.PAYMENT_METHOD == null) ? "" : item.Entity.PAYMENT_METHOD;
-                PLAN_PAYMENT_DT = (item.Entity.PLAN_PAYMENT_DT == null) ? "" : item.Entity.PLAN_PAYMENT_DT;
-                POSTING_DT = (item.Entity.POSTING_DT == null) ? "" : item.Entity.POSTING_DT.ToString();
-                TOTAL_AMOUNT = (item.Entity.TOTAL_AMOUNT == null) ? "" : item.Entity.TOTAL_AMOUNT.ToString();
-                DPP_AMOUNT = item.Entity.DPP_AMOUNT.ToString();
-                CURRENCY = (item.Entity.CURRENCY == null) ? "" : item.Entity.CURRENCY;
-                TAX_CODE = (item.Entity.TAX_CODE == null) ? "" : item.Entity.TAX_CODE;
-                HEADER_TEXT = (item.Entity.HEADER_TEXT == null) ? "" : item.Entity.HEADER_TEXT;
-                BANK_TYPE = (item.Entity.BANK_TYPE == null) ? "" : item.Entity.BANK_TYPE;
-                gl_account = (item.Entity.gl_account == null) ? "" : item.Entity.gl_account.ToString();
-                AMOUNT = (item.Entity.AMOUNT == null) ? "" : item.Entity.AMOUNT.ToString();
-                COST_CENTER = (item.Entity.COST_CENTER == null) ? "" : item.Entity.COST_CENTER.ToString();
-
-                WBS_ELEMENT = (item.Entity.WBS_ELEMENT == null) ? "" : item.Entity.WBS_ELEMENT;
-                ITEM_TEXT = (item.Entity.ITEM_TEXT == null) ? "" : item.Entity.ITEM_TEXT;
-                STATUS = (item.Entity.STATUS == null) ? "" : item.Entity.STATUS.ToString();
-                SAP_DOC_NO = (item.Entity.SAP_DOC_NO == null) ? "" : item.Entity.SAP_DOC_NO.ToString();
-                SAP_DOC_YEAR = (item.Entity.SAP_DOC_YEAR == null) ? "" : item.Entity.SAP_DOC_YEAR.ToString();
-
-                string textwrite = "\r\n" + (MANDT + "\t" +
-                    PV_NO + "\t" +
-                    PV_YEAR + "\t" +
-                    ITEM_NO + "\t" +
-                    PV_DATE + "\t" +
-                    PV_TYPE + "\t" +
-                    TRANS_TYPE + "\t" +
-                    VENDOR + "\t" +
-                    VENDOR_GRP + "\t" +
-                    INVOICE_NO + "\t" +
-                    TAX_NO + "\t" +
-                    PAYMENT_TERM + "\t" +
-                    PAYMENT_METHOD + "\t" +
-                    PLAN_PAYMENT_DT + "\t" +
-                    POSTING_DT + "\t" +
-                    TOTAL_AMOUNT + "\t" +
-                    DPP_AMOUNT + "\t" +
-                    CURRENCY + "\t" +
-                    TAX_CODE + "\t" +
-                    HEADER_TEXT + "\t" +
-                    BANK_TYPE + "\t" +
-                    gl_account + "\t" +
-                    AMOUNT + "\t" +
-                    COST_CENTER + "\t" +
-                    WBS_ELEMENT + "\t" +
-                    ITEM_TEXT + "\t" +
-                    STATUS + "\t" +
-                    SAP_DOC_NO + "\t" +
-                    SAP_DOC_YEAR);
-
-
-                tw.Write(textwrite);
-            }
-            tw.Flush();
-            tw.Close();
-            return View("Index");
-        }*/
-
-        //[HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Generate(List<PaymentProposalHelper> model, string download = "", string submit = "", string division_input = "")
         {
             //
