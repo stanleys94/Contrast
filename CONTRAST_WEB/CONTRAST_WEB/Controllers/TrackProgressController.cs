@@ -788,7 +788,9 @@ namespace CONTRAST_WEB.Controllers
                     {
 
                         //new_cost.Path = "http://passport.toyota.astra.co.id:5006/";
-                        new_cost.Path = "http://10.85.40.68:91/";
+                        //new_cost.Path = "http://10.85.40.68:91/";
+                        new_cost.Path = Constant.Baseurl;
+                        
                         string[] newPath = item.path_file.Split('\\');
                         for (int k = newPath.Count() - 2; k < newPath.Count(); k++)
                         {
@@ -829,8 +831,10 @@ namespace CONTRAST_WEB.Controllers
                 if (Detailed.Executed[i].pic_path != null)
                 {
                     string[] path = Detailed.Executed[i].pic_path.Split('\\');  
+                    //ojo hardcode
                     //Detailed.Executed[i].pic_path = "http://passport.toyota.astra.co.id:5006/";
-                    Detailed.Executed[i].pic_path = "http://10.85.40.68:91/";
+                    //Detailed.Executed[i].pic_path = "http://10.85.40.68:91/";
+                    Detailed.Executed[i].pic_path =Constant.Baseurl;
                     for (int k = 2; k < path.Count(); k++)
                     {
                         if (k < path.Count() - 1) Detailed.Executed[i].pic_path = Detailed.Executed[i].pic_path + path[k].Replace(" ", "%20") + '/';
