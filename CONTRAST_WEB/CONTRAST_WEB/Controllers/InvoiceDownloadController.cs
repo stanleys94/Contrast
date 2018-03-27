@@ -1029,8 +1029,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Print(List<InvoiceHelper> model)
         {
 
