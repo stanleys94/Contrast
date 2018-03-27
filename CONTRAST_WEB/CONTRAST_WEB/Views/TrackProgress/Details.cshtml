@@ -53,10 +53,10 @@
             {
                 <label>Actual Cost Details</label>
                 <table>
-                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approved By</th><th style="width:250px">Aproved On</th><th style="width:250px">Pending</th></tr>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
                     @for (int k = 0; k < Model.ActualCost.Count; k++)
                     {
-                        <tr><td>@Model.ActualCost[k].Transaction</td><td>Rp. @Model.ActualCost[k].Amount.ToString("N")</td><td>@Model.ActualCost[k].Approved</td><td>@Model.ActualCost[k].ApprovedDate</td><td>@Model.ActualCost[k].Pending</td></tr>
+                        <tr><td>@Model.ActualCost[k].Transaction</td><td>Rp. @Model.ActualCost[k].Amount.ToString("N")</td><td>@Model.ActualCost[k].Approved</td><td>@Model.ActualCost[k].Approved_Status</td><td>@Model.ActualCost[k].ApprovedDate</td><td>@Model.ActualCost[k].Pending</td></tr>
 
                     }
                 </table><br />
@@ -66,10 +66,10 @@
             {
                 <label>BPD Details</label>
                 <table>
-                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approved By</th><th style="width:250px">Aproved On</th><th style="width:250px">Pending</th></tr>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
                     @for (int k = 0; k < Model.BPD.Count; k++)
                     {
-                        <tr><td>@Model.BPD[k].Transaction</td><td>Rp. @Model.BPD[k].Amount.ToString("N")</td><td>@Model.BPD[k].Approved</td><td>@Model.BPD[k].ApprovedDate</td><td>@Model.BPD[k].Pending</td></tr>
+                        <tr><td>@Model.BPD[k].Transaction</td><td>Rp. @Model.BPD[k].Amount.ToString("N")</td><td>@Model.BPD[k].Approved</td><td>@Model.BPD[k].Approved_Status</td><td>@Model.BPD[k].ApprovedDate</td><td>@Model.BPD[k].Pending</td></tr>
 
                     }
                 </table><br />
@@ -79,13 +79,14 @@
             {
                 <label>Settlement Cost Details</label>
                 <table>
-                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approved By</th><th style="width:250px">Aproved On</th><th style="width:250px">Pending</th><th>Proof</th></tr>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th><th>Proof</th></tr>
                     @for (int k = 0; k < Model.SettlementCost.Count; k++)
                     {
                         <tr>
                             <td>@Model.SettlementCost[k].Transaction</td>
                             <td>Rp. @Model.SettlementCost[k].Amount.ToString("N")</td>
                             <td>@Model.SettlementCost[k].Approved</td>
+                            <td>@Model.SettlementCost[k].Approved_Status</td>
                             <td>@Model.SettlementCost[k].ApprovedDate</td>
                             <td>@Model.SettlementCost[k].Pending</td>
                             @if (Model.SettlementCost[k].Path != null)

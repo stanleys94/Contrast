@@ -3297,6 +3297,48 @@ namespace CONTRAST_WEB.Models
 
 
         }
+
+        public static async Task<vw_tracking_transaction_data_new> TrackingListID(int id)
+        {
+            vw_tracking_transaction_data_new ListItem = new vw_tracking_transaction_data_new();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew");
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<vw_tracking_transaction_data_new> ResponseList = new List<vw_tracking_transaction_data_new>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_tracking_transaction_data_new>>(str);
+
+                    int k = 1;
+
+                    foreach (var item in ResponseList)
+                    {
+                        var temp = new vw_tracking_transaction_data_new();
+
+                        if (item.id_data == id)
+                        {
+                            ListItem = item;
+                        }
+                        k++;
+                    }
+                }
+            }
+
+            return ListItem;
+        }
     }
 
 
