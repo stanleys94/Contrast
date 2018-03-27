@@ -3297,6 +3297,210 @@ namespace CONTRAST_WEB.Models
 
 
         }
+
+        public static async Task<List<vw_payment_list>> PaymentListData()
+        {
+            List<vw_payment_list> ResponseList = new List<vw_payment_list>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentList/");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_list>>(str);
+                }
+
+            }
+            return ResponseList;
+        }
+
+
+        public static async Task<List<vw_payment_list>> PaymentListDataFiltered(string search, DateTime? start, DateTime? end)
+        {
+            List<vw_payment_list> ResponseList = new List<vw_payment_list>();
+            List<vw_payment_list> FilteredList = new List<vw_payment_list>();
+            List<vw_payment_list> ReturnList = new List<vw_payment_list>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentList");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_list>>(str);
+                }
+                foreach (var item in ResponseList)
+                {
+                    if (item.BTR_NO.ToLower().Contains(search) ||
+                        item.EMPLOYEE_NAME.ToLower().Contains(search) ||
+                        item.DESTINATION.ToLower().Contains(search) ||
+                        item.ID_CITY.ToString().Contains(search) ||
+                        item.COST_CENTER_.ToLower().Contains(search) ||
+                        item.WBS_ELEMENT_.ToLower().Contains(search) ||
+                        item.TRAVEL_TYPE.ToLower().Contains(search) ||
+                        item.BUDGET.ToLower().Contains(search)
+                        )
+                    {
+                        FilteredList.Add(item);
+                    }
+                }
+
+                if (start.HasValue && end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start && end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else if (start.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start) ReturnList.Add(item);
+                    }
+
+                }
+                else if (end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else ReturnList = FilteredList;
+            }
+            return ReturnList;
+        }
+
+        public static async Task<List<vw_payment_proposal>> PaymentProposalData()
+        {
+            List<vw_payment_proposal> ResponseList = new List<vw_payment_proposal>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentProposal/");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_proposal>>(str);
+                }
+
+            }
+            return ResponseList;
+        }
+
+        public static async Task<List<vw_payment_proposal>> PaymentProposalDataFiltered(string search, DateTime? start, DateTime? end)
+        {
+            List<vw_payment_proposal> ResponseList = new List<vw_payment_proposal>();
+            List<vw_payment_proposal> FilteredList = new List<vw_payment_proposal>();
+            List<vw_payment_proposal> ReturnList = new List<vw_payment_proposal>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentProposal");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_proposal>>(str);
+                }
+                foreach (var item in ResponseList)
+                {
+                    if (//item.id_data.Contains(search) ||
+                        item.vendor_code.ToLower().Contains(search) ||
+                        item.currency.ToLower().Contains(search) ||
+                        item.total_amount.ToString().Contains(search) ||
+                        item.beneficiary_name.ToLower().Contains(search) ||
+                        item.account_number.ToLower().Contains(search) ||
+                        item.employee_name.ToLower().Contains(search) ||
+                        item.refference.ToLower().Contains(search)
+                        )
+                    {
+                        FilteredList.Add(item);
+                    }
+                }
+
+                if (start.HasValue && end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start && end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else if (start.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start) ReturnList.Add(item);
+                    }
+
+                }
+                else if (end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else ReturnList = FilteredList;
+            }
+            return ReturnList;
+        }
+
     }
 
 
