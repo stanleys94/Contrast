@@ -4,8 +4,11 @@
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
     List<SelectListItem> asd = new List<SelectListItem>();
     List<SelectListItem> asd2 = new List<SelectListItem>();
+    List<SelectListItem> division = new List<SelectListItem>();
+
     asd = ViewBag.RL;
     asd2 = ViewBag.RL2;
+    division = ViewBag.division_name2;
 
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
@@ -41,48 +44,48 @@
 
         @using (Html.BeginForm("Validate", "TravelRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <div class="col-md-5">
-                @Html.HiddenFor(m => m.employee_info.code)
-                @Html.HiddenFor(m => m.employee_info.name)
-                @Html.HiddenFor(m => m.employee_info.@class)
-                @Html.HiddenFor(m => m.employee_info.unit_code_code)
-                @Html.HiddenFor(m => m.employee_info.unit_code_name)
-                @Html.HiddenFor(m => m.travel_request.travel_purpose)
-                @Html.HiddenFor(m => m.travel_request.assign_by)
-                @Html.HiddenFor(m => m.travel_request.start_date)
-                @Html.HiddenFor(m => m.travel_request.end_date)
-                @Html.HiddenFor(m => m.travel_request.reason_of_assigment)
-                @Html.HiddenFor(m => m.travel_request.request_type)
-                @Html.HiddenFor(m => m.travel_request.overseas_flag)
-                @Html.HiddenFor(m => m.travel_request.id_destination_city)
+        <div class="col-md-5">
+            @Html.HiddenFor(m => m.employee_info.code)
+            @Html.HiddenFor(m => m.employee_info.name)
+            @Html.HiddenFor(m => m.employee_info.@class)
+            @Html.HiddenFor(m => m.employee_info.unit_code_code)
+            @Html.HiddenFor(m => m.travel_request.travel_purpose)
+            @Html.HiddenFor(m => m.travel_request.assign_by)
+            @Html.HiddenFor(m => m.travel_request.start_date)
+            @Html.HiddenFor(m => m.travel_request.end_date)
+            @Html.HiddenFor(m => m.travel_request.reason_of_assigment)
+            @Html.HiddenFor(m => m.travel_request.request_type)
+            @Html.HiddenFor(m => m.travel_request.overseas_flag)
+            @Html.HiddenFor(m => m.travel_request.id_destination_city)
+            @Html.HiddenFor(m => m.travel_request.exep_empolyee)
 
-                @Html.HiddenFor(m => m.employee_info.bank_account)
-                @Html.HiddenFor(m => m.travel_request.destination_code)
+            @Html.HiddenFor(m => m.employee_info.bank_account)
+            @Html.HiddenFor(m => m.travel_request.destination_code)
 
-                <div>
-                    <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
-                    @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
+            <div>
+                <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
+                @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
 
-                    <div style="width:450px;" class="input-group">
-                        <!--<a href="/Participant/" class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Participant</a>-->
-                        @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
-                        <input type="text" id="code" name="code" value=@Model.employee_info.code hidden>
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-info btn-lg form-control" name="Add" value="Submit">Add</button>
-                        </span>
-                    </div>
-                    @if (Model.participants != null)
-    {
-        for (int i = 0; i < Model.participants.Count(); i++)
+                <div style="width:450px;" class="input-group">
+                    <!--<a href="/Participant/" class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Participant</a>-->
+                    @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
+                    <input type="text" id="code" name="code" value=@Model.employee_info.code hidden>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-info btn-lg form-control" name="Add" value="Submit">Add</button>
+                    </span>
+                </div>
+                @if (Model.participants != null)
         {
+            for (int i = 0; i < Model.participants.Count(); i++)
+            {
                 @Html.HiddenFor(m => m.participants[i].no_reg, new { @value = Model.participants[i].no_reg })
                 @Html.HiddenFor(m => m.participants[i].no_reg_parent, new { @value = Model.participants[i].no_reg_parent })
                 @Html.HiddenFor(m => m.participants[i].active_flag, new { @value = Model.participants[i].active_flag })
+    }
 }
-}
-                </div>
-
             </div>
+
+        </div>
 
             <div class="col-md-5 col-md-offset-1">
                 <div class="form-group input-group">
@@ -99,10 +102,16 @@
                 </div>
                 <div style="margin-bottom:-10px;" class="form-group input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                    @*@Html.TextBoxFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })*@
-                    @Html.TextBox("asd", (string)@ViewBag.division_name, new { @class = "form-control", @readonly = "readonly" })
-                    @*@Html.TextBoxFor(m => m.employee_info.unit_code_name, new { @class = "form-control", @readonly = "readonly" })*@
-                    @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
+                    @if(Model.special_employee_flag==true)
+                    {
+                      @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "-Division-", new { @class = "form-control", placeholder = "Purpose" })
+                    }
+                    else
+                    {
+                      @Html.TextBox("asd", (string)@ViewBag.division_name, new { @class = "form-control", @readonly = "readonly" })
+                      @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })                        
+                      @Html.HiddenFor(m => m.employee_info.unit_code_name)
+                    }
                 </div>
             </div>
 

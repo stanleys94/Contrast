@@ -46,8 +46,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Privillege = claims;
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
-            //tb_m_employee model = await GetData.EmployeeInfo("101495");
-           
+            //tb_m_employee model = await GetData.EmployeeInfo("102181");
 
             //Get user name
             ViewBag.Username = model.name;
@@ -124,9 +123,29 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.ebankaccount = "No bank name registered,contact finance division";
             }
 
-            tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
-            division.Divisi = division.Divisi.Replace("and1", "&");
-            ViewBag.division_name = division.Divisi;
+
+            //special employee
+            //List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(identity.Name);
+            List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(model.code);
+            if (special_model.Count != 0)
+            {
+                List<string> division_model = new List<string>(); 
+                for (int k = 0; k < special_model.Count; k++)
+                {
+                    division_model.Add(special_model[k].Divisi);
+                }
+                model2.special_employee_flag = true;
+                model2.travel_request.exep_empolyee = true;
+                var selectListItems = division_model.Select(x => new SelectListItem() { Value = x, Text = x }).ToList();
+                ViewBag.division_name2 = selectListItems;
+            }
+            else
+            { 
+                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
+                division.Divisi = division.Divisi.Replace("and1", "&");
+                ViewBag.division_name = division.Divisi;
+                model2.special_employee_flag = false;
+            }
 
             ViewBag.Username = model2.employee_info.name;
             var headers = Request.Headers.GetValues("User-Agent");
@@ -185,6 +204,10 @@ namespace CONTRAST_WEB.Controllers
                     model.travel_request.active_flag = false;
                     model.travel_request.status_request = "0";
                     model.travel_request.comments = "Comment";
+
+                    model.travel_request.exep_empolyee = model.travel_request.exep_empolyee;
+                    model.travel_request.additional2 = model.employee_info.unit_code_name;
+
 
                     model.travel_request.invited_by = model.travel_request.no_reg;
                     model.travel_request.create_date = now;
@@ -257,6 +280,8 @@ namespace CONTRAST_WEB.Controllers
                                 ListModel[c].travel_request.start_date = model.tstart_date2;
                                 ListModel[c].travel_request.end_date = model.tend_date2;
                             }
+
+                            ListModel[c].travel_request.additional2 = model.travel_request.additional2;
 
                             ListModel[c].travel_request.id_destination_city = model.tid_destination_city[c];
                             ListModel[c].travel_request.air_ticket_flag = model.tair_ticket_flag[c];

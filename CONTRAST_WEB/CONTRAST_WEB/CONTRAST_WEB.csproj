@@ -269,6 +269,9 @@
     <Compile Include="Models\tb_m_photo_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_m_special_employee.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_vendor_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -429,9 +432,6 @@
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_request_type.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_spec_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_tax.cs">
