@@ -50,12 +50,12 @@ namespace CONTRAST_WEB.Controllers
             if (startdate != null)
                 ViewBag.startdate = startdate;
             else
-                ViewBag.startdate = DateTime.MinValue;
+                ViewBag.startdate = null;
 
             if (enddate != null)
                 ViewBag.enddate = enddate;
             else
-                ViewBag.enddate = DateTime.MaxValue;
+                ViewBag.enddate = null;
 
             //filter
             if (!String.IsNullOrEmpty(searchString) || (startdate != null && enddate != null))
@@ -71,6 +71,22 @@ namespace CONTRAST_WEB.Controllers
                                ResultObject2[k].FixedCost_Verified.start_date >= startdate
                                && ResultObject2[k].FixedCost_Verified.end_date <= enddate
                            )
+                       )
+                        temp.Add(ResultObject2[k]);
+                }
+                if (temp.Count() > 0) ResultObject2 = temp;
+            }
+
+            //date filter
+            if (startdate != null && enddate != null)
+            {
+                List<FixedCostVerifierHelper> temp = new List<FixedCostVerifierHelper>();
+                for (int k = 0; k < ResultObject2.Count; k++)
+                {
+                    //by group code
+                    if (
+                        ResultObject2[k].FixedCost_Verified.start_date >= startdate
+                        && ResultObject2[k].FixedCost_Verified.start_date <= enddate
                        )
                         temp.Add(ResultObject2[k]);
                 }

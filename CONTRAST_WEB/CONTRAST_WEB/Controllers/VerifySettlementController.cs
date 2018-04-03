@@ -40,7 +40,6 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
             }
           
-
             //if search / page empty
             if (searchString != null)
                 page = 1;
@@ -50,17 +49,17 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.CurrentFilter = searchString;
             if (startdate != null)
                 ViewBag.startdate = startdate;
-            else
-                ViewBag.startdate = DateTime.MinValue;
+             else
+                ViewBag.startdate = null;
 
             if (enddate != null)
                 ViewBag.enddate = enddate;
             else
-                ViewBag.enddate = DateTime.MaxValue;
+                ViewBag.enddate = null;
 
 
             //filter
-            if (!String.IsNullOrEmpty(searchString) || (startdate!=null && enddate!=null))
+            if (!String.IsNullOrEmpty(searchString) )
             {
                 List<SettlementVerifiedHelper> temp = new List<SettlementVerifiedHelper>();
                 for (int k = 0; k < ResultObject2.Count; k++)
@@ -68,14 +67,26 @@ namespace CONTRAST_WEB.Controllers
                     //by group code
                     if (   ResultObject2[k].Settlement_Verified.group_code.ToLower().Contains(searchString.ToLower())
                         || ResultObject2[k].Settlement_Verified.name.ToLower().Contains(searchString.ToLower())
-                        || ResultObject2[k].Settlement_Verified.destination_name.ToLower().Contains(searchString.ToLower())
-                        || (
-                               ResultObject2[k].Settlement_Verified.start_date >= startdate
-                               && ResultObject2[k].Settlement_Verified.end_date <= enddate
-                           )
+                        || ResultObject2[k].Settlement_Verified.destination_name.ToLower().Contains(searchString.ToLower())                        
                        )
                         temp.Add(ResultObject2[k]);
                 } 
+                if (temp.Count() > 0) ResultObject2 = temp;
+            }
+
+            //date filter
+            if (startdate != null && enddate != null)
+            {
+                List<SettlementVerifiedHelper> temp = new List<SettlementVerifiedHelper>();
+                for (int k = 0; k < ResultObject2.Count; k++)
+                {
+                    //by group code
+                    if (
+                        ResultObject2[k].Settlement_Verified.start_date >= startdate
+                        && ResultObject2[k].Settlement_Verified.start_date <= enddate
+                       )
+                        temp.Add(ResultObject2[k]);
+                }
                 if (temp.Count() > 0) ResultObject2 = temp;
             }
 

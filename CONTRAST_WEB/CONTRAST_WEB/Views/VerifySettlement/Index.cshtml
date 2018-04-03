@@ -27,20 +27,35 @@
                 <div>
                     <div>
                         <span>
-                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
-                        @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
+                            <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
+                            @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
                         </span>
                         <span style=" margin-left : 100px">
                             Start Date Range :
-                            <input type="date" name="startdate" value=@ViewBag.startdate.Date class="form-control" placeholder="search" style="width:150px" />
+                            @if (ViewBag.startdate != null)
+                            {
+                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                            }
+                            else
+                            {
+                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                            }
                         </span>
-                        <span><input type="date" name="enddate" value=@ViewBag.enddate.Date class="form-control" placeholder="search" style="width:150px" /></span>
 
-                        <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
-                     </div>
+                         @if (ViewBag.startdate != null)
+                         {
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                         }
+                         else
+                         {
+                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
+                         }
+                         <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                    </div>
                </div>
               </div>
          }
+
          @using (Html.BeginForm("Insert", "VerifySettlement", FormMethod.Post))
          {
             @Html.AntiForgeryToken()
@@ -179,9 +194,16 @@
          }
         <br />
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
+        @if (ViewBag.startdate != null || ViewBag.enddate != null)
+        {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                                           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate,enddate = ViewBag.enddate }))
+        }
+        else
+        {
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+                                           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+        }
     </div>
 </div>
 
