@@ -60,6 +60,12 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
     </Reference>
@@ -269,10 +275,15 @@
     <Compile Include="Models\tb_m_photo_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_m_special_employee.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_vendor_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tb_r_invoice_actualcost.cs" />
+    <Compile Include="Models\tb_r_invoice_actualcost.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_r_record_generate_file.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -431,9 +442,6 @@
     <Compile Include="Models\tb_m_request_type.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tb_m_spec_employee.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\tb_m_tax.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -559,6 +567,7 @@
     <Content Include="Content\mobile\css\bootstrap.min.css" />
     <Content Include="Content\mobile\css\bootstrapLg.css" />
     <Content Include="Content\mobile\css\test.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\test.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -747,6 +756,7 @@
     <Content Include="Views\SettlementList\DetailsMSTRMobile.cshtml" />
     <Content Include="Views\Link\Index.cshtml" />
     <Content Include="Views\TravelStatus\Comment.cshtml" />
+    <Content Include="Views\ActualCost\Rejected.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

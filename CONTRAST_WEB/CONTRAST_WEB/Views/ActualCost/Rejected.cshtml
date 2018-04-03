@@ -23,7 +23,7 @@
                 <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
             }
         </li>
-        <li class="breadcrumb-item active">Actual Cost List</li>
+        <li class="breadcrumb-item active">Actual Cost Rejected List</li>
     </ol>
 </div>
 
@@ -31,15 +31,16 @@
         <div style="margin-top:90px;" id="products" class="row list-group _3EibU">
             <div style="width:auto" class="clearfix">
                 <div style="padding:0 5px; width:auto;">
-                    @using (Html.BeginForm("Index", "ActualCost", FormMethod.Get))
+                    @using (Html.BeginForm("Rejected", "ActualCost", FormMethod.Get))
                     {
                         <div class="well">
                             <label style="margin:5px">
-                                NEW LIST : &nbsp;
+                                REJECTED LIST : &nbsp;
                                 @*<input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.New)&nbsp;
-                                <input type="radio" id="c2" name="scheck" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
-                                 @Html.ActionLink("New", "Index")<label style="color:green;">(@ViewBag.New Pending)</label>
-                                 @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
+                                  <input type="radio" id="c2" name="s<label style="color:red;">(@ViewBag.Rejected)</label>check" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
+                                @Html.ActionLink("New", "Index")<label style="color:green;">(@ViewBag.New Pending)</label>
+                                @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
+
                             </label>
                             Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
                             <input type="submit" value="Search" />
@@ -47,128 +48,8 @@
                     }
                     @using (Html.BeginForm("Insert", "ActualCost", FormMethod.Post)) {
                         @Html.AntiForgeryToken()
-                        <div id="new" style="width:100%;height:350px;overflow-x:scroll;overflow-y:scroll;">
-                            <div style="width:1500px;">
-                                <table class="table table-condensed" style="text-align:center; width:2200px;">
-                                    <tr style="color:white;">
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            BTA NO
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            NAME
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            DEPARTURE
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            RETURN
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            DESTINATION
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            TYPE
-                                        </th>
-                                        <th style="width:120px; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            EXPENSE
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            ACTUAL COST
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            EMPLOYEE SUGGESTION
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            VENDOR
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            PROVIDER
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            TAX
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            NO INVOICE
-                                        </th>
-                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                            NO TAX INVOICE
-                                        </th>
-                                    </tr>
-                                    @for (int k = 0; k < Model.Count; k++)
-                                    {
-                                        <tr class="table-responsive">
-                                            <td class="td" style="width:200px;">
-                                                @Html.DisplayFor(Model => Model[k].TravelRequest.group_code)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.group_code)
-                                            </td>
-                                            <td class="td" style="width:200px;">
-                                                @Html.DisplayFor(Model => Model[k].TravelRequest.name)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.name)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.no_reg)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.id_request)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.overseas_flag)
-                                            </td>
-                                            <td class="td" style="width:200px">
-                                                @Html.DisplayFor(Model => Model[k].TravelRequest.start_date)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.start_date)
-                                            </td>
-                                            <td class="td" style="width:200px;">
-                                                @Html.DisplayFor(Model => Model[k].TravelRequest.end_date)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.end_date)
-                                            </td>
-                                            <td class="td" style="width:200px;">
-                                                @Html.DisplayFor(Model => Model[k].TravelRequest.destination_name)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.destination_name)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.id_destination_city)
-                                            </td>
-                                            <td class="td" style="width:200px;">
-                                                @Html.DisplayFor(Model => Model[k].TravelRequest.jenis_transaksi)
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.jenis_transaksi)
-
-                                            </td>
-                                            <td class="td" style="width:300px;">
-                                                <span>Rp.</span>
-                                                @String.Format("{0:n0}", Model[k].TravelRequest.amount, new { style = "width:500px" })
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.amount)
-
-                                            </td>
-                                            <td class="td" style="width:200px;">
-                                                <input type="text" id="i_@k" name="renc" class="form-control" style="width:200px">
-                                                @Html.TextBoxFor(Model => Model[k].ActualCost.amount, new { id = "renci_" + @k, @type = "number", @class = "hidden" })
-                                            </td>
-
-                                            <td class="td" style="width:200px;">
-                                                @Html.TextAreaFor(Model => Model[k].TravelRequest.hotel_flight_name, new { @class = "form-control", @style = "max-width:250px;min-width:250px;max-height:34px;min-height:34px;" })
-                                                @Html.HiddenFor(Model => Model[k].TravelRequest.hotel_flight_name)
-                                            </td>
-
-                                            <td class="td" style="width:200px;">
-                                                @Html.DropDownListFor(Model => Model[k].ActualCost.vendor_code, asd[k], new { @class = "form-control", style = "width:150px", placeholder = "Vendor" })
-                                            </td>
-
-                                            <td class="td" style="width:200px;">
-                                                @Html.TextBoxFor(Model => Model[k].ActualCost.path_file, new { @class = "form-control", style = "width:150px", placeholder = "Airlines/Hotel" })
-                                            </td>
-
-                                            <td class="td" style="width:200px;">
-                                                @Html.DropDownListFor(Model => Model[k].ActualCost.tax, asd3, new { @class = "form-control", style = "width:70px", placeholder = "Tax" })
-                                            </td>
-
-                                            <td class="td">
-                                                @Html.TextBoxFor(Model => Model[k].ActualCost.invoice_number, new { @class = "form-control", style = "width:200px", @Value = @Model[k].ActualCost.invoice_number })
-                                            </td>
-                                            <td class="td">
-                                                @Html.TextBoxFor(Model => Model[k].ActualCost.tax_invoice_number, new { @class = "form-control", style = "width:200px", @Value = @Model[k].ActualCost.tax_invoice_number })
-                                            </td>
-                                        </tr>
-                                    }
-
-
-                                </table>
-                            </div>
-                        </div>
-
-                        @*<div id="reject" style="width:1200px;height:450px;overflow-x:scroll;overflow-y:scroll;" hidden>
+                        
+                        <div id="reject" style="width:1200px;height:350px;overflow-x:scroll;overflow-y:scroll;">
                             <div style="width:1800px">
                                 <table class="table table-condensed" style="text-align:center;">
                                     <tr style="color:white;">
@@ -223,7 +104,7 @@
                                     </tr>
                                     @if (Model[0].ActualCost != null)
                                     {
-                                        for (int k = ViewBag.New; k < ViewBag.Total; k++)
+                                        for (int k = 0; k < Model.Count; k++)
                                         {
                                             <tr class="table-responsive">
                                                 <td class="td" style="width:200px;">
@@ -279,7 +160,7 @@
                                                     @Html.TextBoxFor(Model => Model[k].ActualCost.amount, new { @class = "form-control required numeric", id = "CurrentBalance", style = "width:100px", @type = "number", @Value = @Model[k].ActualCost.amount })
                                                 </td>
                                                 <td class="td" style="width:200px;">
-                                                    @Html.DropDownListFor(Model => Model[k].ActualCost.vendor_code, asd[k], "Vendor", new { @class = "form-control", style = "width:150px", placeholder = "Vendor" })
+                                                    @Html.DropDownListFor(Model => Model[k].ActualCost.vendor_code, asd[k], new { @class = "form-control", style = "width:150px", placeholder = "Vendor" })
                                                 </td>
                                                 <td class="td" style="width:200px;">
                                                     @Html.TextBoxFor(Model => Model[k].ActualCost.path_file, new { @class = "form-control", style = "width:150px", placeholder = "Airlines/Hotel" })
@@ -307,7 +188,7 @@
 
                                 </table>
                             </div>
-                        </div>*@
+                        </div>
 
                         <div style="margin-top:10px; float:right;">
                             <input name="insert" type="submit" id="selected" class="btn btn-danger" value="SUBMIT">
@@ -317,7 +198,7 @@
                              <br />
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-                    @Html.PagedListPager(Model, page => Url.Action("Index",
+                    @Html.PagedListPager(Model, page => Url.Action("Rejected",
                              new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
                 </div>
             </div>
@@ -347,26 +228,7 @@
 
         <script src="~/Scripts/jquery-1.10.2.min.js"></script>
         <script type="text/javascript">
-            $(document).ready(function () {
-                $('#c1').click(function () {
-                    var $this = $(this);
-                    if ($this.is(':checked')) {
-                        $('#reject').hide();
-                        $('#new').show();
-                    }
-                });
-            });
-
-            $(document).ready(function () {
-                $('#c2').click(function () {
-                    var $this = $(this);
-                    if ($this.is(':checked')) {
-                        $('#new').hide();
-                        $('#reject').show();
-                    }
-                });
-            });
-
+            
             var new_name = document.getElementsByName("renc");
             for (i = 0; i < new_name.length; i++) {
                 document.getElementById(new_name[i].id).onblur = function () {
