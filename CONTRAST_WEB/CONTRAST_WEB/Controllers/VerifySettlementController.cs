@@ -8,41 +8,21 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Web.Hosting;
 using System.IO;
+using System.Security.Claims;
+using PagedList;
 
 namespace CONTRAST_WEB.Controllers
 {
     public class VerifySettlementController : Controller
-    {
-        [HttpPost]
+    {        
         [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(tb_m_employee model)
+        [Authorize(Roles = "contrast.user")]       
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page,DateTime? startdate, DateTime? enddate)
         {
-            //tb_m_verifier_employee access_status = new tb_m_verifier_employee();
-            //access_status = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
-            //List<vw_settlement_verified> ResultObject = new List<vw_settlement_verified>();
-            //ResultObject = await GetData.SettlementVerifiedList(access_status.position);
-
-            //List<SettlementVerifiedHelper> ResultObject2 = new List<SettlementVerifiedHelper>();
-
-            //for (int k = 0; k < ResultObject.Count(); k++)
-            //{
-            //    ResultObject2.Add(new SettlementVerifiedHelper());
-            //    ResultObject2[k].Settlement_Verified = ResultObject[k];
-            //    ResultObject2[k].EmployeeInfo = model;
-
-            //    ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-            //}
-            //if (ResultObject2.Count > 0) return View(ResultObject2);
-            //else
-            //{
-            //    SettlementVerifiedHelper temp = new SettlementVerifiedHelper();
-            //    temp.EmployeeInfo = model;
-            //    ResultObject2.Add(temp);
-            //    return View(ResultObject2);
-            //}
-            //return View(ResultObject2);
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
             tb_m_verifier_employee access_status = new tb_m_verifier_employee();
             access_status = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
@@ -65,73 +45,55 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[0].EmployeeInfo = model;
                 return View("Index", ResultObject2);
             }
-            //ModelState.Clear();
-            return View(ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
-        }
 
+            //if search / page empty
+            if (searchString != null)
+                page = 1;
+            else
+                searchString = currentFilter;
+            
+            ViewBag.CurrentFilter = searchString;
+            if (startdate != null)
+                ViewBag.startdate = startdate;
+            else
+                ViewBag.startdate = DateTime.MinValue;
+
+            if (enddate != null)
+                ViewBag.enddate = enddate;
+            else
+                ViewBag.enddate = DateTime.MaxValue;
+
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString) || (startdate!=null && enddate!=null))
+            {
+                List<SettlementVerifiedHelper> temp = new List<SettlementVerifiedHelper>();
+                for (int k = 0; k < ResultObject2.Count; k++)
+                {
+                    //by group code
+                    if (   ResultObject2[k].Settlement_Verified.group_code.ToLower().Contains(searchString.ToLower())
+                        || ResultObject2[k].Settlement_Verified.name.ToLower().Contains(searchString.ToLower())
+                        || ResultObject2[k].Settlement_Verified.destination_name.ToLower().Contains(searchString.ToLower())
+                        || (
+                               ResultObject2[k].Settlement_Verified.start_date >= startdate
+                               && ResultObject2[k].Settlement_Verified.end_date <= enddate
+                           )
+                       )
+                        temp.Add(ResultObject2[k]);
+                } 
+                if (temp.Count() > 0) ResultObject2 = temp;
+            }
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+            return View(ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToPagedList(pageNumber, pageSize));
+        }
+        
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index2(tb_m_employee model, string search = "")
-        {
-            //string noreg = TempData["Data"].ToString();
-            //model = await GetData.EmployeeInfo(noreg);
-            //tb_m_verifier_employee access_status = new tb_m_verifier_employee();
-            //access_status = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
-            //List<vw_settlement_verified> ResultObject = new List<vw_settlement_verified>();
-            //string lower_search = search.ToLower();
-            //ViewBag.search = search;
-
-            //ResultObject = await GetData.SettlementVerifiedListFiltered(access_status.position, lower_search);
-            //List<SettlementVerifiedHelper> ResultObject2 = new List<SettlementVerifiedHelper>();
-
-            //for (int k = 0; k < ResultObject.Count(); k++)
-            //{
-            //    ResultObject2.Add(new SettlementVerifiedHelper());
-            //    ResultObject2[k].Settlement_Verified = ResultObject[k];
-            //    ResultObject2[k].EmployeeInfo = model;
-            //    ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-            //}
-            //ViewBag.Noreg = model.code;
-            //return View("Index", ResultObject2);
-
-            string noreg = TempData["Data"].ToString();
-            model = await GetData.EmployeeInfo(noreg);
-            tb_m_verifier_employee access_status = new tb_m_verifier_employee();
-            access_status = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
-            ViewBag.position = access_status.position;
-            List<vw_settlement_verified> ResultObject = new List<vw_settlement_verified>();
-            string lower_search = search.ToLower();
-            ViewBag.search = search;
-
-            ResultObject = await GetData.SettlementVerifiedListFiltered(access_status.position, lower_search);
-            List<SettlementVerifiedHelper> ResultObject2 = new List<SettlementVerifiedHelper>();
-
-            for (int k = 0; k < ResultObject.Count(); k++)
-            {
-                ResultObject2.Add(new SettlementVerifiedHelper());
-                ResultObject2[k].Settlement_Verified = ResultObject[k];
-                ResultObject2[k].EmployeeInfo = model;
-                ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-            }
-            ViewBag.Noreg = model.code;
-
-            if (ResultObject2.Count == 0)
-            {
-                ResultObject2.Add(new SettlementVerifiedHelper());
-                ResultObject2[0].EmployeeInfo = model;
-                return View("Index", ResultObject2);
-            }
-
-            return View("Index", ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
-        }
-
-        [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Insert(List<SettlementVerifiedHelper> model, string search = "", string insert = "", DateTime? start = null, DateTime? end = null)
+        public async Task<ActionResult> Insert(List<SettlementVerifiedHelper> model, string search, string insert, DateTime? start, DateTime? end,string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
             tb_m_verifier_employee access_status = new tb_m_verifier_employee();
 
@@ -226,10 +188,10 @@ namespace CONTRAST_WEB.Controllers
                         rejected.created_date = DateTime.Now;
 
                         //await Utility.RecordRejected(rejected);
-                        
+
                         model[k].flag = "2";
-                        await UpdateData.SettlementRejected(model[k], access_status.position,rejected);
-                        
+                        await UpdateData.SettlementRejected(model[k], access_status.position, rejected);
+
                     }
                     else
                     if (model[k].check_verify == true && model[k].check_reject == false)
@@ -244,7 +206,7 @@ namespace CONTRAST_WEB.Controllers
                             model[k].money = model[k].money.Replace("Rp", "");
 
                             await UpdateData.Budget(model[k].Settlement_Verified.wbs_no, model[k].Settlement_Verified.cost_center, Convert.ToDouble(model[k].money));
-                            //await UpdateData.Budget(model[k].Settlement_Verified.wbs_no, model[k].Settlement_Verified.cost_center, double.Parse(model[k].money, NumberStyles.Currency));
+
                         }
                         await UpdateData.Settlement(model[k], access_status.position);
                     }
@@ -265,7 +227,7 @@ namespace CONTRAST_WEB.Controllers
                     ResultObject2[k].Settlement_Verified = ResultObject[k];
                     ResultObject2[k].EmployeeInfo = model[0].EmployeeInfo;
                 }
-                
+
 
                 if (ResultObject2.Count == 0)
                 {
@@ -273,16 +235,17 @@ namespace CONTRAST_WEB.Controllers
                     ResultObject2[0].EmployeeInfo = model[0].EmployeeInfo;
                     return View("Index", ResultObject2);
                 }
-                ModelState.Clear();
-                return View("Index", ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
+                //ModelState.Clear();
+                //return View("Index", ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
+                return RedirectToAction("Index", new { @searchString = searchString});
             }
             else return View("Index", model.OrderBy(m => m.Settlement_Verified.create_date).ToList());
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]
         public ActionResult DownloadAttach()
         {
             //string[] name_file = 

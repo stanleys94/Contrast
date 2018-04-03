@@ -26,8 +26,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Privillege = claims;
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
-            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
-           
+            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();           
             List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
 
             //get rejected list number
