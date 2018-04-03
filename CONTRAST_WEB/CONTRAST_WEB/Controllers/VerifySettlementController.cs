@@ -39,12 +39,7 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].EmployeeInfo = model;
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
             }
-            if (ResultObject2.Count == 0)
-            {
-                ResultObject2.Add(new SettlementVerifiedHelper());
-                ResultObject2[0].EmployeeInfo = model;
-                return View("Index", ResultObject2);
-            }
+          
 
             //if search / page empty
             if (searchString != null)
@@ -86,6 +81,14 @@ namespace CONTRAST_WEB.Controllers
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+
+            if (ResultObject2.Count == 0)
+            {
+                ResultObject2.Add(new SettlementVerifiedHelper());
+                ResultObject2[0].EmployeeInfo = model;
+                return View("Index", ResultObject2.ToPagedList(pageNumber, pageSize));
+            }
+            else
             return View(ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToPagedList(pageNumber, pageSize));
         }
         

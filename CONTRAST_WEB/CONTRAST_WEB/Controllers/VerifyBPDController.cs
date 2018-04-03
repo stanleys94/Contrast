@@ -6,24 +6,28 @@ using System.Web.Mvc;
 using CONTRAST_WEB.Models;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Security.Claims;
+using PagedList;
 
 namespace CONTRAST_WEB.Controllers
 {
     public class VerifyBPDController : Controller
     {
         // GET: VerifyBPD
-        [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(tb_m_employee model)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+
             tb_m_verifier_employee access_status = new tb_m_verifier_employee();
             access_status = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
             ViewBag.position = access_status.position;
             List<vw_BPD_verified> ResultObject = new List<vw_BPD_verified>();
             ResultObject = await GetData.FixedCostVerifiedList(access_status.position);
-
 
             List<FixedCostVerifierHelper> ResultObject2 = new List<FixedCostVerifierHelper>();
 
@@ -34,22 +38,63 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].EmployeeInfo = model;
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
             }
+            
+            
+            //if search / page empty
+            if (searchString != null)
+                page = 1;
+            else
+                searchString = currentFilter;
+
+            ViewBag.CurrentFilter = searchString;
+            if (startdate != null)
+                ViewBag.startdate = startdate;
+            else
+                ViewBag.startdate = DateTime.MinValue;
+
+            if (enddate != null)
+                ViewBag.enddate = enddate;
+            else
+                ViewBag.enddate = DateTime.MaxValue;
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString) || (startdate != null && enddate != null))
+            {
+                List<FixedCostVerifierHelper> temp = new List<FixedCostVerifierHelper>();
+                for (int k = 0; k < ResultObject2.Count; k++)
+                {
+                    //by group code
+                    if (ResultObject2[k].FixedCost_Verified.group_code.ToLower().Contains(searchString.ToLower())
+                        || ResultObject2[k].FixedCost_Verified.name.ToLower().Contains(searchString.ToLower())
+                        || ResultObject2[k].FixedCost_Verified.destination_name.ToLower().Contains(searchString.ToLower())
+                        || (
+                               ResultObject2[k].FixedCost_Verified.start_date >= startdate
+                               && ResultObject2[k].FixedCost_Verified.end_date <= enddate
+                           )
+                       )
+                        temp.Add(ResultObject2[k]);
+                }
+                if (temp.Count() > 0) ResultObject2 = temp;
+            }
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
             if (ResultObject2.Count == 0)
             {
                 FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
                 temp.EmployeeInfo = model;
                 ResultObject2.Add(temp);
-                return View(ResultObject2);
+                return View("Index", ResultObject2.ToPagedList(pageNumber, pageSize));
             }
-            ModelState.Clear();
-            return View(ResultObject2.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
+            else
+            return View(ResultObject2.OrderBy(m => m.FixedCost_Verified.create_date).ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Insert(List<FixedCostVerifierHelper> model, string search = "", string insert = "", DateTime? start = null, DateTime? end = null)
+        public async Task<ActionResult> Insert(List<FixedCostVerifierHelper> model, string search, string insert, DateTime? start, DateTime? end, string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
             tb_m_verifier_employee access_status = new tb_m_verifier_employee();
             ViewBag.search = search;
@@ -142,8 +187,8 @@ namespace CONTRAST_WEB.Controllers
                         model[k].flag = "2";
 
                         tb_r_record_rejected_verification rejected = new tb_r_record_rejected_verification();
-                    
-                        
+
+
                         rejected.comment = "Cancel Travel By AP";
                         rejected.id_actualcost = model[k].FixedCost_Verified.id_actualcost;
                         rejected.process_reject = access_status.position;
@@ -201,7 +246,8 @@ namespace CONTRAST_WEB.Controllers
                     return View("Index", ResultObject2);
                 }
                 ModelState.Clear();
-                return View("Index", ResultObject2.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
+                //return View("Index", ResultObject2.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
+                return RedirectToAction("Index", new { @searchString = searchString });
             }
             else return View("Index", model.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
         }
