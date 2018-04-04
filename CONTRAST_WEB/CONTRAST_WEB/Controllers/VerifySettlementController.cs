@@ -110,78 +110,8 @@ namespace CONTRAST_WEB.Controllers
         public async Task<ActionResult> Insert(List<SettlementVerifiedHelper> model, string search, string insert, DateTime? start, DateTime? end,string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
             tb_m_verifier_employee access_status = new tb_m_verifier_employee();
-
-            if (insert == "")
-            {
-                string noreg = model[0].EmployeeInfo.code;
-                tb_m_employee employee = await GetData.EmployeeInfo(noreg);
-
-                access_status = await GetData.EmployeeVerifier(Convert.ToInt32(employee.code));
-                ViewBag.position = access_status.position;
-                List<vw_settlement_verified> ResultObject = new List<vw_settlement_verified>();
-                string lower_search = search.ToLower();
-                ViewBag.search = search;
-
-                ResultObject = await GetData.SettlementVerifiedListFiltered(access_status.position, lower_search);
-                List<SettlementVerifiedHelper> ResultObject2 = new List<SettlementVerifiedHelper>();
-
-                for (int k = 0; k < ResultObject.Count(); k++)
-                {
-                    if (start != null && end != null)
-                    {
-                        if (ResultObject[k].start_date >= start && ResultObject[k].start_date <= end)
-                        {
-                            SettlementVerifiedHelper temp = new SettlementVerifiedHelper();
-                            temp.Settlement_Verified = ResultObject[k];
-                            temp.EmployeeInfo = employee;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-
-                        }
-                    }
-                    else if (start != null)
-                    {
-                        if (ResultObject[k].start_date >= start)
-                        {
-                            SettlementVerifiedHelper temp = new SettlementVerifiedHelper();
-                            temp.Settlement_Verified = ResultObject[k];
-                            temp.EmployeeInfo = employee;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else if (end != null)
-                    {
-                        if (ResultObject[k].start_date <= end)
-                        {
-                            SettlementVerifiedHelper temp = new SettlementVerifiedHelper();
-                            temp.Settlement_Verified = ResultObject[k];
-                            temp.EmployeeInfo = employee;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else
-                    {
-                        SettlementVerifiedHelper temp = new SettlementVerifiedHelper();
-                        temp.Settlement_Verified = ResultObject[k];
-                        temp.EmployeeInfo = employee;
-                        temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                        ResultObject2.Add(temp);
-                    }
-                }
-
-                if (ResultObject2.Count == 0)
-                {
-                    SettlementVerifiedHelper temp = new SettlementVerifiedHelper();
-                    temp.EmployeeInfo = employee;
-                    ResultObject2.Add(temp);
-                }
-                ModelState.Clear();
-                ViewBag.Noreg = model[0].EmployeeInfo.code;
-                return View("Index", ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
-            }
-            if (insert == "submit")
+            
+            if (insert.ToLower() == "submit")
             {
                 for (int k = 0; k < model.Count(); k++)
                 {
@@ -227,33 +157,13 @@ namespace CONTRAST_WEB.Controllers
                     else
                         model[k].flag = "0";
                 }
-
-
-                //reset         
-                List<vw_settlement_verified> ResultObject = new List<vw_settlement_verified>();
-                ResultObject = await GetData.SettlementVerifiedList(access_status.position);
-
-                List<SettlementVerifiedHelper> ResultObject2 = new List<SettlementVerifiedHelper>();
-
-                for (int k = 0; k < ResultObject.Count(); k++)
-                {
-                    ResultObject2.Add(new SettlementVerifiedHelper());
-                    ResultObject2[k].Settlement_Verified = ResultObject[k];
-                    ResultObject2[k].EmployeeInfo = model[0].EmployeeInfo;
-                }
-
-
-                if (ResultObject2.Count == 0)
-                {
-                    ResultObject2.Add(new SettlementVerifiedHelper());
-                    ResultObject2[0].EmployeeInfo = model[0].EmployeeInfo;
-                    return View("Index", ResultObject2);
-                }
-                //ModelState.Clear();
+                
+                ModelState.Clear();
                 //return View("Index", ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToList());
                 return RedirectToAction("Index", new { @searchString = searchString});
             }
-            else return View("Index", model.OrderBy(m => m.Settlement_Verified.create_date).ToList());
+            //else return View("Index", model.OrderBy(m => m.Settlement_Verified.create_date).ToList());
+            return RedirectToAction("Index", new { @searchString = searchString });
         }
 
         [HttpPost]

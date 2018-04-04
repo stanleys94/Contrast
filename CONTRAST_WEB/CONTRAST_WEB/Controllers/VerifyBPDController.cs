@@ -116,78 +116,8 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.search = search;
             ViewBag.start = start;
             ViewBag.end = end;
-            if (insert == "")
-            {
-                string noreg = model[0].EmployeeInfo.code;
-                tb_m_employee employee = await GetData.EmployeeInfo(noreg);
-
-                access_status = await GetData.EmployeeVerifier(Convert.ToInt32(noreg));
-                ViewBag.position = access_status.position;
-                List<vw_BPD_verified> ResultObject = new List<vw_BPD_verified>();
-
-                string lower_search = search.ToLower();
-                ViewBag.search = search;
-                ResultObject = await GetData.FixedCostVerifiedListFiltered(access_status.position, lower_search);
-
-
-                List<FixedCostVerifierHelper> ResultObject2 = new List<FixedCostVerifierHelper>();
-
-                for (int k = 0; k < ResultObject.Count(); k++)
-                {
-                    if (start != null && end != null)
-                    {
-                        if (ResultObject[k].start_date >= start && ResultObject[k].start_date <= end)
-                        {
-                            FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
-                            temp.FixedCost_Verified = ResultObject[k];
-                            temp.EmployeeInfo = model[0].EmployeeInfo;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else if (start != null)
-                    {
-                        if (ResultObject[k].start_date >= start)
-                        {
-                            FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
-                            temp.FixedCost_Verified = ResultObject[k];
-                            temp.EmployeeInfo = model[0].EmployeeInfo;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else if (end != null)
-                    {
-                        if (ResultObject[k].start_date <= end)
-                        {
-                            FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
-                            temp.FixedCost_Verified = ResultObject[k];
-                            temp.EmployeeInfo = model[0].EmployeeInfo;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else
-                    {
-                        FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
-                        temp.FixedCost_Verified = ResultObject[k];
-                        temp.EmployeeInfo = model[0].EmployeeInfo;
-                        temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                        ResultObject2.Add(temp);
-                    }
-                }
-                if (ResultObject2.Count == 0)
-                {
-                    FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
-                    temp.EmployeeInfo = model[0].EmployeeInfo;
-                    ResultObject2.Add(temp);
-                    return View("Index", ResultObject2);
-                }
-                ModelState.Clear();
-                ViewBag.Noreg = employee.code;
-                return View("Index", ResultObject2.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
-            }
-            else if (insert == "submit")
+            
+            if (insert.ToLower() == "submit")
             {
                 for (int k = 0; k < model.Count(); k++)
                 {
@@ -238,34 +168,13 @@ namespace CONTRAST_WEB.Controllers
                         model[k].flag = "0";
                 }
 
-
-                //reset         
-                List<vw_BPD_verified> ResultObject = new List<vw_BPD_verified>();
-                ResultObject = await GetData.FixedCostVerifiedList(access_status.position);
-
-                List<FixedCostVerifierHelper> ResultObject2 = new List<FixedCostVerifierHelper>();
-
-                for (int k = 0; k < ResultObject.Count(); k++)
-                {
-                    ResultObject2.Add(new FixedCostVerifierHelper());
-                    ResultObject2[k].FixedCost_Verified = ResultObject[k];
-                    ResultObject2[k].EmployeeInfo = model[0].EmployeeInfo;
-                    ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-                }
-                ModelState.Clear();
-
-                if (ResultObject2.Count == 0)
-                {
-                    FixedCostVerifierHelper temp = new FixedCostVerifierHelper();
-                    temp.EmployeeInfo = model[0].EmployeeInfo;
-                    ResultObject2.Add(temp);
-                    return View("Index", ResultObject2);
-                }
                 ModelState.Clear();
                 //return View("Index", ResultObject2.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
                 return RedirectToAction("Index", new { @searchString = searchString });
             }
-            else return View("Index", model.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
+            else
+                //return View("Index", model.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
+                return RedirectToAction("Index", new { @searchString = searchString });
         }
     }
 }

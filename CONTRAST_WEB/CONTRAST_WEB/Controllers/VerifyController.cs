@@ -115,79 +115,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.start = start;
             ViewBag.end = end;
 
-            if (insert == "")
-            {
-                string noreg = model[0].EmployeeInfo.code;
-                tb_m_employee employee = new tb_m_employee();
-                employee = await GetData.EmployeeInfo(noreg);
-                tb_m_verifier_employee access_status = new tb_m_verifier_employee();
-                access_status = await GetData.EmployeeVerifier(Convert.ToInt32(employee.code));
-                ViewBag.position = access_status.position;
-                List<vw_actualCost_verified> ResultObject = new List<vw_actualCost_verified>();
-
-                string lower_search = search.ToLower();
-
-                ResultObject = await GetData.ActualCostVerifiedListFiltered(access_status.position, lower_search);
-                List<ActualCostVerifiedHelper> ResultObject2 = new List<ActualCostVerifiedHelper>();
-
-
-                for (int k = 0; k < ResultObject.Count(); k++)
-                {
-                    if (start != null && end != null)
-                    {
-                        if (ResultObject[k].start_date >= start && ResultObject[k].start_date <= end)
-                        {
-                            ActualCostVerifiedHelper temp = new ActualCostVerifiedHelper();
-                            temp.ActualCost_Verified = ResultObject[k];
-                            temp.EmployeeInfo = employee;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else if (start != null)
-                    {
-                        if (ResultObject[k].start_date >= start)
-                        {
-                            ActualCostVerifiedHelper temp = new ActualCostVerifiedHelper();
-                            temp.ActualCost_Verified = ResultObject[k];
-                            temp.EmployeeInfo = employee;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else if (end != null)
-                    {
-                        if (ResultObject[k].start_date <= end)
-                        {
-                            ActualCostVerifiedHelper temp = new ActualCostVerifiedHelper();
-                            temp.ActualCost_Verified = ResultObject[k];
-                            temp.EmployeeInfo = employee;
-                            temp.money = ResultObject[k].amount.ToString("c", Constant.culture);
-                            ResultObject2.Add(temp);
-                        }
-                    }
-                    else
-                    {
-                        ResultObject2.Add(new ActualCostVerifiedHelper());
-                        ResultObject2[k].ActualCost_Verified = ResultObject[k];
-                        ResultObject2[k].EmployeeInfo = employee;
-                        ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-                    }
-                }
-
-                if (ResultObject2.Count == 0)
-                {
-                    ActualCostVerifiedHelper temp = new ActualCostVerifiedHelper();
-                    temp.EmployeeInfo = model[0].EmployeeInfo;
-                    ResultObject2.Add(temp);
-                    return View("Index", ResultObject2);
-                }
-                ViewBag.Noreg = employee.code;
-                ModelState.Clear();
-                return View("Index", ResultObject2.OrderBy(m => m.ActualCost_Verified.create_date).ToList());
-            }
-
-            else if (insert.ToLower() == "submit")
+            if (insert.ToLower() == "submit")
             {
                 tb_m_verifier_employee access_status = new tb_m_verifier_employee();
                 for (int k = 0; k < model.Count(); k++)
@@ -233,35 +161,15 @@ namespace CONTRAST_WEB.Controllers
                     else
                         model[k].flag = "0";
                 }
-
-
-                //reset         
-                List<vw_actualCost_verified> ResultObject = new List<vw_actualCost_verified>();
-                ResultObject = await GetData.ActualCostVerifiedList(access_status.position);
-
-                List<ActualCostVerifiedHelper> ResultObject2 = new List<ActualCostVerifiedHelper>();
-
-                for (int k = 0; k < ResultObject.Count(); k++)
-                {
-                    ResultObject2.Add(new ActualCostVerifiedHelper());
-                    ResultObject2[k].ActualCost_Verified = ResultObject[k];
-                    ResultObject2[k].EmployeeInfo = model[0].EmployeeInfo;
-                    ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-
-                }
+                
                 ModelState.Clear();
-
-                if (ResultObject2.Count == 0)
-                {
-                    ActualCostVerifiedHelper temp = new ActualCostVerifiedHelper();
-                    temp.EmployeeInfo = model[0].EmployeeInfo;
-                    ResultObject2.Add(temp);
-                    return View("Index", ResultObject2);
-                }
+                
                 //return View("Index", ResultObject2.OrderBy(r => r.ActualCost_Verified.create_date).ToList());
                 return RedirectToAction("Index", new { @searchString = searchString });
             }
-            else return View("index", model.OrderBy(r => r.ActualCost_Verified.create_date).ToList());
+            else
+                return RedirectToAction("Index", new { @searchString = searchString });
+            //else return View("index", model.OrderBy(r => r.ActualCost_Verified.create_date).ToList());
         }
     }
 }
