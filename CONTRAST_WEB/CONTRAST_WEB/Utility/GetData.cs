@@ -3321,7 +3321,6 @@ namespace CONTRAST_WEB.Models
             return ResponseList;
         }
 
-
         public static async Task<List<vw_payment_list>> PaymentListDataFiltered(string search, DateTime? start, DateTime? end)
         {
             List<vw_payment_list> ResponseList = new List<vw_payment_list>();
