@@ -30,6 +30,8 @@ namespace CONTRAST_WEB.Controllers
             List<vw_settlement_verified> ResultObject = new List<vw_settlement_verified>();
             ResultObject = await GetData.SettlementVerifiedList(access_status.position);
 
+            List<tb_r_travel_actualcost> Attachment = new List<tb_r_travel_actualcost>();
+
             List<SettlementVerifiedHelper> ResultObject2 = new List<SettlementVerifiedHelper>();
 
             for (int k = 0; k < ResultObject.Count(); k++)
@@ -38,8 +40,9 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].Settlement_Verified = ResultObject[k];
                 ResultObject2[k].EmployeeInfo = model;
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
+                              
             }
-          
+
             //if search / page empty
             if (searchString != null)
                 page = 1;
@@ -89,6 +92,23 @@ namespace CONTRAST_WEB.Controllers
                 }
                 if (temp.Count() > 0) ResultObject2 = temp;
             }
+
+            List<string> AttachmentPath = new List<string>();
+            //attachment
+            for (int k = 0; k < ResultObject2.Count; k++)
+            {
+                Attachment.Add(await GetData.ActualCostOrigin(ResultObject2[k].Settlement_Verified.id_actualcost));
+                string temp = Attachment[k].path_file;
+                if (temp != null)
+                {
+                    temp = temp.Split('\\').Last();
+                    temp = Constant.Baseurl + "SettlementFolder/" + temp;
+                    ResultObject2[k].path = temp;
+                    //AttachmentPath.Add(temp);
+                }
+            }
+            //attachment viewbag
+            //ViewBag.Attachment = AttachmentPath;
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);

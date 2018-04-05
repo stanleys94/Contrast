@@ -146,8 +146,7 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.group_code = model.TravelRequest.group_code;
                     ActualCostObject.id_request = model.TravelRequest.id_request;
                     ActualCostObject.create_date = DateTime.Now;
-
-
+                    
                     string division_r = await GetData.GetDivMapping(model.TravelRequest.no_reg.ToString());
                     var region = await GetData.RegionInfo(model.TravelRequest.id_destination_city);
                     tb_m_budget budget = await GetData.GetCostWbs(region == 4 ? false : true, division_r.Trim());
@@ -166,11 +165,18 @@ namespace CONTRAST_WEB.Controllers
                         ResponseList[i].login_id = model.TravelRequest.login_id;
                     }
 
+                    //temporary time container
+                    DateTime? temp_start = ActualCostObject.start_date_extend;
+                    DateTime? temp_end = ActualCostObject.end_date_extend;
+
+
                     if (model.MealSettlement > 0)
                     {
                         ActualCostObject.amount = (int)model.MealSettlement;
                         ActualCostObject.jenis_transaksi = "Meal";
                         await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
                     }
 
                     if (model.HotelSettlement > 0)
@@ -178,6 +184,8 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.HotelSettlement;
                         ActualCostObject.jenis_transaksi = "Hotel";
                         await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
                     }
 
                     if (model.TicketSettlement > 0)
@@ -186,6 +194,8 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.TicketSettlement;
                         ActualCostObject.jenis_transaksi = "Ticket";
                         await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
                     }
 
                     if (model.LaundrySettlement > 0)
@@ -194,6 +204,8 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.jenis_transaksi = "Laundry";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileLaundry, "Laundry_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
                         await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
                     }
 
                     if (model.TransportationSettlement > 0)
@@ -202,6 +214,8 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.jenis_transaksi = "Transportation";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileTransportation, "Transport_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
                         await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
                     }
 
                     if (model.MiscSettlement > 0)
@@ -210,6 +224,8 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.jenis_transaksi = "Miscellaneous";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileOther, "Other_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
                         await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
                     }
 
                     //update data

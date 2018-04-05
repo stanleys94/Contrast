@@ -84,6 +84,9 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
                             Ammount
                         </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                            Document
+                        </th>
                         <th style="color:white; background-color:limegreen; text-align:left; border-right:1px solid white; width:60px;">
                             <div style="margin:1.5px 0;" class="checkbox">
                                 <label>
@@ -100,6 +103,7 @@
                                 <label>Reject</label>
                             </div>
                         </th>
+
                     </tr>
                 </table>
             </div>
@@ -149,7 +153,13 @@
                                     @Html.DisplayFor(Model => Model[k].money, new { @Value = Model[k].money })
                                     @Html.HiddenFor(Model => Model[k].money, new { @Value = Model[k].money })
                                 </td>
-
+                                <td style="width:130px;" class="td">
+                                    @*@Html.ActionLink("Link", Model[k].path)*@
+                                    @if (Model[k].path != null)
+                                    {
+                                        <a href="@Model[k].path">Link</a>
+                                    }
+                                </td>
                                 <td style="width:110px;" class="td" id="item_checkbox">
                                     <div style="margin:1.5px" class="checkbox">
                                         <label>
@@ -172,6 +182,8 @@
                                         </label>
                                     </div>
                                 </td>
+
+                               
                             </tr>
 
                         }
