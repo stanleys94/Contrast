@@ -224,6 +224,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SettlementListController.cs" />
     <Compile Include="Controllers\TrackProgressController.cs" />
+    <Compile Include="Controllers\TrackProgressPersonalController.cs" />
     <Compile Include="Controllers\TravelConfirmationController.cs" />
     <Compile Include="Controllers\TravelDitController.cs" />
     <Compile Include="Controllers\TravelExecutionController.cs" />
@@ -757,6 +758,7 @@
     <Content Include="Views\Link\Index.cshtml" />
     <Content Include="Views\TravelStatus\Comment.cshtml" />
     <Content Include="Views\ActualCost\Rejected.cshtml" />
+    <Content Include="Views\TrackProgressPersonal\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

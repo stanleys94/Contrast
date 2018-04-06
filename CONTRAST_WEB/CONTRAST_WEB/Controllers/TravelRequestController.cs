@@ -87,6 +87,8 @@ namespace CONTRAST_WEB.Controllers
             {
                 if (assignedby.dh_code != null) model2.travel_request.assign_by = assignedby.dh_code;
                 else
+                    if (assignedby.egm != null) model2.travel_request.assign_by = assignedby.egm;
+                else
                     if (assignedby.director != null) model2.travel_request.assign_by = assignedby.director;
                 else
                     if (assignedby.local_fd != null) model2.travel_request.assign_by = assignedby.local_fd;

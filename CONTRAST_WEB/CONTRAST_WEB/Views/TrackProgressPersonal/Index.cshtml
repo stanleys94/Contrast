@@ -18,7 +18,7 @@
 </div>
 <div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
    
-     @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Get))
+     @using (Html.BeginForm("Index", "TrackProgressPersonal", FormMethod.Get))
      { 
             @Html.AntiForgeryToken()
               <div class="navbar-form navbar-left" style="padding-left:10px">
@@ -54,7 +54,7 @@
               </div>
      }
 
-     @using (Html.BeginForm("Search", "TrackProgress", FormMethod.Post))
+     @using (Html.BeginForm("Search", "TrackProgressPersonal", FormMethod.Post))
      {
         @Html.AntiForgeryToken()
         <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">

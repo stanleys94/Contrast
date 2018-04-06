@@ -110,6 +110,32 @@ namespace CONTRAST_WEB.Controllers
             //attachment viewbag
             //ViewBag.Attachment = AttachmentPath;
 
+            //sorting
+            if (ResultObject2.Count > 0)
+            {
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        ResultObject2 = ResultObject2.OrderByDescending(m => m.Settlement_Verified.name).ToList();
+                        break;
+                    case "group_desc":
+                        ResultObject2 = ResultObject2.OrderByDescending(m => m.Settlement_Verified.group_code).ToList();
+                        break;
+                    case "type_desc":
+                        ResultObject2 = ResultObject2.OrderByDescending(m => m.Settlement_Verified.jenis_transaksi).ToList();
+                        break;
+                    case "dest_desc":
+                        ResultObject2 = ResultObject2.OrderByDescending(m => m.Settlement_Verified.destination_name).ToList();
+                        break;
+                    case "sdate_desc":
+                        ResultObject2 = ResultObject2.OrderByDescending(m => m.Settlement_Verified.start_date).ToList();
+                        break;
+                    case "edate_desc":
+                        ResultObject2 = ResultObject2.OrderByDescending(m => m.Settlement_Verified.end_date).ToList();
+                        break;
+                }
+            }
+
             int pageSize = 15;
             int pageNumber = (page ?? 1);
 
@@ -120,7 +146,7 @@ namespace CONTRAST_WEB.Controllers
                 return View("Index", ResultObject2.ToPagedList(pageNumber, pageSize));
             }
             else
-            return View(ResultObject2.OrderBy(m => m.Settlement_Verified.create_date).ToPagedList(pageNumber, pageSize));
+            return View(ResultObject2.ToPagedList(pageNumber, pageSize));
         }
         
         [HttpPost]

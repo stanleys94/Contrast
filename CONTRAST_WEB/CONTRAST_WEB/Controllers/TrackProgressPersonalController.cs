@@ -12,7 +12,7 @@ using PagedList;
 
 namespace CONTRAST_WEB.Controllers
 {
-    public class TrackProgressController : Controller
+    public class TrackProgressPersonalController : Controller
     {
         [Authorize]
         [Authorize(Roles = "contrast.user")]
@@ -22,11 +22,11 @@ namespace CONTRAST_WEB.Controllers
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
-            
+
             List<TrackingHelper> track = new List<TrackingHelper>();
             List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
             int privillage = 0;
-            string privillage_desc="";
+            string privillage_desc = "";
             tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
             tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
 
@@ -37,28 +37,9 @@ namespace CONTRAST_WEB.Controllers
             //#3 individual
 
             //cek privillege
-            for (int k = 0; k < claims.Count(); k++)
-            {
-                if (claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
-                {
-                    privillage = 1;
-                    privillage_desc = "all";
-                    break;
-                }
-                else
-                if (claims[k] == "contrast.administd")
-                {
-                    privillage = 2;
-                    privillage_desc = " admin";
-                    break;
-                }
-                else
-                {
-                    privillage_desc = " user";
-                    privillage = 3;
-                }
-            }
-
+            privillage_desc = " user";
+            privillage = 3;
+            
             //if (user.Contains("all")) privillage = 1;
             //else if (user.Contains("admin")) privillage = 2;
             //else if (user.Contains("user")) privillage = 3;            
@@ -94,7 +75,7 @@ namespace CONTRAST_WEB.Controllers
                 return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
             }
             //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
-            
+
             //if search / page empty
             if (searchString != null)
                 page = 1;
@@ -119,7 +100,7 @@ namespace CONTRAST_WEB.Controllers
                 List<TrackingHelper> temp = new List<TrackingHelper>();
                 for (int k = 0; k < track.Count; k++)
                 {
-                    //by group code
+                    //by anything
                     if (track[k].TrackedList.group_code.ToLower().Contains(searchString.ToLower())
                         || track[k].TrackedList.name.ToLower().Contains(searchString.ToLower())
                         || track[k].TrackedList.destination_name.ToLower().Contains(searchString.ToLower())
@@ -166,7 +147,7 @@ namespace CONTRAST_WEB.Controllers
             logged_employee = await GetData.EmployeeInfo(logged_employee);
 
             tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(logged_employee.code));
-            
+
             string division = Admin.Divisi;
             if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
 
@@ -175,7 +156,7 @@ namespace CONTRAST_WEB.Controllers
             else if (Model[0].privilage.Contains("user")) privillage = 3;
 
             if (insert == "Search")
-            {              
+            {
                 List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
                 if (privillage == 1) new_list = await GetData.TrackingListAllSearch(search, start, end);
                 else if (privillage == 2) new_list = await GetData.TrackingListDivisonAllSearch(Admin.Divisi, search, start, end);
@@ -286,12 +267,8 @@ namespace CONTRAST_WEB.Controllers
                     return View("Index", track);
                 }
                 ModelState.Clear();
-                //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
-                return View("Index", track.OrderBy(m => m.TrackedList.create_date).ToList());
-
+                return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
             }
         }
-
-
     }
 }

@@ -43,7 +43,7 @@
                             }
                         </span>
 
-                         @if (ViewBag.startdate != null)
+                         @if (ViewBag.enddate != null)
                          {
                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
                          }
