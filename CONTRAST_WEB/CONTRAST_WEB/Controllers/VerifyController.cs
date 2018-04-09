@@ -72,7 +72,7 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(ResultObject2[k]);
                 }
-                if (temp.Count() > 0) ResultObject2 = temp;
+                /*if (temp.Count() > 0) */ResultObject2 = temp;
             }
 
             //date filter
@@ -88,7 +88,7 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(ResultObject2[k]);
                 }
-                if (temp.Count() > 0) ResultObject2 = temp;
+               /* if (temp.Count() > 0) */ResultObject2 = temp;
             }
 
             int pageSize = 15;

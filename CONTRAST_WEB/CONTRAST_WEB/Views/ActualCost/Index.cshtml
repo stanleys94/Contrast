@@ -94,8 +94,10 @@
                                             NO TAX INVOICE
                                         </th>
                                     </tr>
-                                    @for (int k = 0; k < Model.Count; k++)
+                                    @if (Model.Count > 0)
                                     {
+                                        for (int k = 0; k < Model.Count; k++)
+                                        {
                                         <tr class="table-responsive">
                                             <td class="td" style="width:200px;">
                                                 @Html.DisplayFor(Model => Model[k].TravelRequest.group_code)
@@ -161,6 +163,7 @@
                                                 @Html.TextBoxFor(Model => Model[k].ActualCost.tax_invoice_number, new { @class = "form-control", style = "width:200px", @Value = @Model[k].ActualCost.tax_invoice_number })
                                             </td>
                                         </tr>
+                                        }
                                     }
                                 </table>
                             </div>

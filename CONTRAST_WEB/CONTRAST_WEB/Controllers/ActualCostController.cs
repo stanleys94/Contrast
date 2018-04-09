@@ -51,11 +51,16 @@ namespace CONTRAST_WEB.Controllers
                 List<ActualCostShtHelper> temp = new List<ActualCostShtHelper>();
                 for (int k = 0; k < ActualCostHelperObject.Count; k++)
                 {
-                    if (ActualCostHelperObject[k].TravelRequest.name.ToLower().Contains(searchString.ToLower()))
+                    if (ActualCostHelperObject[k].TravelRequest.name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequest.group_code.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequest.destination_name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower().Contains(searchString.ToLower())
+                        )
+                        
                         temp.Add(ActualCostHelperObject[k]);                       
                     
                 }
-                if(temp.Count()>0)ActualCostHelperObject = temp;    
+                /*if(temp.Count()>0)*/ActualCostHelperObject = temp;    
             }
 
             //get vendor info
@@ -127,11 +132,17 @@ namespace CONTRAST_WEB.Controllers
                 List<ActualCostShtHelper> temp = new List<ActualCostShtHelper>();
                 for (int k = 0; k < ActualCostHelperObject.Count; k++)
                 {
-                    if (ActualCostHelperObject[k].TravelRequestRejected.name.ToLower().Contains(searchString.ToLower()))
+                    if (
+                        ActualCostHelperObject[k].TravelRequestRejected.name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequestRejected.group_code.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequestRejected.destination_name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower().Contains(searchString.ToLower())
+                        )
+
                         temp.Add(ActualCostHelperObject[k]);
 
                 }
-                if (temp.Count() > 0) ActualCostHelperObject = temp;
+                /*if (temp.Count() > 0)*/ ActualCostHelperObject = temp;
             }
 
             //get vendor info
