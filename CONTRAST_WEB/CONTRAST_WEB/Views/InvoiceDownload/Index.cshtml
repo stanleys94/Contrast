@@ -5,6 +5,7 @@
     //var grid = new WebGrid(canPage: true, rowsPerPage: 10);
     //grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
     int outstanding = ViewBag.outstanding;
+
 }
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
@@ -16,7 +17,12 @@
         </li>
 
         @*dikasih validasi PO/GR by identity*@
-        <li class="breadcrumb-item active">Purchase Order</li>
+        @if (ViewBag.division == "staffga")
+        {
+            <li class="breadcrumb-item active">Goods Receipt</li>}
+        else if (ViewBag.division == "staffpac")
+        {
+            <li class="breadcrumb-item active">Purchase Order</li>}
     </ol>
 </div>
 
@@ -30,7 +36,7 @@
         @Html.HiddenFor(m => m[0].loged_employee.unit_code_name)
         @Html.HiddenFor(m => m[0].loged_employee.unit_code_id)
 
-        <div class="navbar-form navbar-left well" style="padding-left:10px">
+        <div class="navbar-form navbar-left well" style="padding-left:5px">
             <div>
                 <div>
                     <span><input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" /></span>
@@ -46,8 +52,8 @@
                     <span>Invoice :</span>
 
                     <label style="margin:5px">
-                        <input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.outstanding)&nbsp;
-                        <input type="radio" id="c2" name="scheck" value="request">Issued <label style="color:red;">(@ViewBag.issued)</label>
+                        <input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.outstandingTotal)&nbsp;
+                        <input type="radio" id="c2" name="scheck" value="request">Issued <label style="color:red;">(@ViewBag.issuedTotal)</label>
                     </label>
 
                 </div>
@@ -391,7 +397,80 @@
             <button type="submit" class="btn btn-default" name="all_download" value="issued">Download All (ISSUED)</button>
         </div>
     }
+    @using (Html.BeginForm("Search", "InvoiceDownload", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m[0].loged_employee.code)
+        @Html.HiddenFor(m => m[0].loged_employee.name)
+        @Html.HiddenFor(m => m[0].loged_employee.unit_code_name)
+        @Html.HiddenFor(m => m[0].loged_employee.unit_code_id)
+        @Html.Hidden("search", (object)ViewBag.search)
+        @Html.Hidden("start", (object)ViewBag.start)
+        @Html.Hidden("end", (object)ViewBag.end)
 
+        <div style="float:right;margin-top:10px;" id="newPaged">
+            <label>Page @ViewBag.pageNew of @ViewBag.newPageMax</label>
+            @if (ViewBag.newPageMax > 1)
+            {
+                if (ViewBag.pageNew - 2 > 1)
+                {
+                    <span><button type="submit" class="btn btn-default" name="pageNew" value=1>1</button></span>
+                    <span>...</span>
+                }
+                for (int i = ViewBag.pageNew - 2; i < ViewBag.pageNew + 3; i++)
+                {
+
+                    if (i == ViewBag.pageNew)
+                    {
+                        <button type="submit" class="btn btn-default" name="pageNew" value=@i>@i</button>
+                    }
+                    else
+                    if (i > 0 && i <= ViewBag.newPageMax)
+                    {
+                        <button type="submit" style="color:blue" class="btn btn-info" name="pageNew" value=@i>@i</button>
+                    }
+
+                }
+                if (ViewBag.pageNew + 3 <= ViewBag.newPageMax)
+                {
+                    <label>...</label> <button style="color:blue" type="submit" class="btn btn-info" name="pageNew" value=@ViewBag.newPageMax>@ViewBag.newPageMax</button>
+                }
+            }
+
+
+        </div>
+
+        <div style="float:right;margin-top:10px;" id="issuedPaged" hidden>
+            <label>Page @ViewBag.pageIssued of @ViewBag.issuedPageMax</label>
+            @if (ViewBag.issuedPageMax > 1)
+            {
+                if (ViewBag.pageIssued - 2 > 1)
+                {
+                    <span><button type="submit" class="btn btn-default" name="pageIssued" value=1>1</button></span>
+                    <span>...</span>
+                }
+                for (int i = ViewBag.pageIssued - 2; i < ViewBag.pageIssued + 3; i++)
+                {
+
+                    if (i == ViewBag.pageIssued)
+                    {
+                        <button type="submit" class="btn btn-default" name="pageIssued" value=@i>@i</button>
+                    }
+                    else
+                    if (i > 0 && i <= ViewBag.issuedPageMax)
+                    {
+                        <button type="submit" style="color:blue" class="btn btn-info" name="pageIssued" value=@i>@i</button>
+                    }
+
+                }
+                if (ViewBag.pageIssued + 3 <= ViewBag.issuedPageMax)
+                {
+                    <label>...</label> <button style="color:blue" type="submit" class="btn btn-info" name="pageIssued" value=@ViewBag.issuedPageMax>@ViewBag.issuedPageMax</button>
+                }
+            }
+
+
+        </div>
+    }
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
@@ -405,6 +484,8 @@
             if ($this.is(':checked')) {
                 $('#issued').hide();
                 $('#new').show();
+                $('#issuedPaged').hide();
+                $('#newPaged').show();
             }
         });
     });
@@ -415,6 +496,8 @@
             if ($this.is(':checked')) {
                 $('#new').hide();
                 $('#issued').show();
+                $('#issuedPaged').show();
+                $('#newPaged').hide();
             }
         });
     });

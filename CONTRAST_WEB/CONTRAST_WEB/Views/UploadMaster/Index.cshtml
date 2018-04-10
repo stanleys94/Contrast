@@ -15,10 +15,8 @@
         <li class="breadcrumb-item active">Upload Master Data</li>
     </ol>
 </div>
-
 <div class="container">
     <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
-
 
         @using (Html.BeginForm("Upload", "UploadMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
@@ -37,31 +35,30 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
                                     @Html.DropDownListFor(m => m.excell_type,
-                                        new SelectList(
-                                        new List<object>
-                                        {
+                                             new SelectList(
+                                             new List<object>
+                                             {
 
-                                             new { Value = "Master Rate Hotel" ,      Text = "Master Rate Hotel"},
-                                             new { Value = "Master Rate Flight",      Text = "Master Rate Flight" },
-                                             new { Value = "Master Rate Visa",        Text = "Master Rate Visa" },
-                                             new { Value = "Master Rate Passport",    Text = "Master Rate Passport"},
-                                             //new { Value = "Master Budget",           Text = "Master Budget"},
-                                             new { Value = "Master Budget Source Data" ,      Text = "Master Budget Source Data"},
-                                             new { Value = "Master Vendor Employee",  Text = "Master Vendor Employee"},
-                                             new { Value = "Master Vendor Travel",    Text = "Master Vendor Travel"},
-                                             new { Value = "Travel Procedure",        Text = "Travel Procedure"},
-                                             new { Value = "Organization Structure",  Text = "Organization Structure"},
+                                                                 new { Value = "Master Rate Hotel" ,      Text = "Master Rate Hotel"},
+                                                                 new { Value = "Master Rate Flight",      Text = "Master Rate Flight" },
+                                                                 new { Value = "Master Rate Visa",        Text = "Master Rate Visa" },
+                                                                 new { Value = "Master Rate Passport",    Text = "Master Rate Passport"},
+                                                                 //new { Value = "Master Budget",           Text = "Master Budget"},
+                                                                 new { Value = "Master Budget Source Data" ,      Text = "Master Budget Source Data"},
+                                                                 new { Value = "Master Vendor Employee",  Text = "Master Vendor Employee"},
+                                                                 new { Value = "Master Vendor Travel",    Text = "Master Vendor Travel"},
+                                                                 new { Value = "Travel Procedure",        Text = "Travel Procedure"},
+                                                                 new { Value = "Organization Structure",  Text = "Organization Structure"},
 
-                                        }, "Value",
+                                             }, "Value",
 
-                                        "Text"), "-Select Table-", new { @class = "form-control", placeholder = "Purpose" })
+                                             "Text"), "-Select Table-", new { @class = "form-control", placeholder = "Purpose" })
                                 </div>
                             </td>
                             <td>
                                 <div style="padding-left:10px;">
                                     <button id="button" class="btn btn-info btn-sm" type="submit" name="submit" value="Submit"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>
                                 </div>
-
                             </td>
                             <td>
                                 <div style="padding-left:10px;">
@@ -97,7 +94,6 @@
         <br />
     </div>
 </div>
-
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script>
     $(document).ready(function () {

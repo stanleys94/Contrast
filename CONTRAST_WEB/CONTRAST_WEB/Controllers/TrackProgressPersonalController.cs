@@ -4,16 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
-using PagedList.Mvc;
-using System.Security.Claims;
 
 namespace CONTRAST_WEB.Controllers
 {
-    public class TrackProgressController : Controller
+    public class TrackProgressPersonalController : Controller
     {
         [Authorize]
         [Authorize(Roles = "contrast.user")]
@@ -38,27 +37,8 @@ namespace CONTRAST_WEB.Controllers
             //#3 individual
 
             //cek privillege
-            for (int k = 0; k < claims.Count(); k++)
-            {
-                if (claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
-                {
-                    privillage = 1;
-                    privillage_desc = "all";
-                    break;
-                }
-                else
-                if (claims[k] == "contrast.administd")
-                {
-                    privillage = 2;
-                    privillage_desc = " admin";
-                    break;
-                }
-                else
-                {
-                    privillage_desc = " user";
-                    privillage = 3;
-                }
-            }
+            privillage_desc = " user";
+            privillage = 3;
 
             //if (user.Contains("all")) privillage = 1;
             //else if (user.Contains("admin")) privillage = 2;
@@ -120,7 +100,7 @@ namespace CONTRAST_WEB.Controllers
                 List<TrackingHelper> temp = new List<TrackingHelper>();
                 for (int k = 0; k < track.Count; k++)
                 {
-                    //by group code
+                    //by anything
                     if (track[k].TrackedList.group_code.ToLower().Contains(searchString.ToLower())
                         || track[k].TrackedList.name.ToLower().Contains(searchString.ToLower())
                         || track[k].TrackedList.destination_name.ToLower().Contains(searchString.ToLower())
@@ -128,7 +108,8 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(track[k]);
                 }
-                if (temp.Count() > 0) track = temp;
+                /*if (temp.Count() > 0)*/
+                track = temp;
             }
 
             //date filter
@@ -144,32 +125,19 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(track[k]);
                 }
-                /*if (temp.Count() > 0)*/
-                track = temp;
+                if (temp.Count() > 0) track = temp;
             }
 
             //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
             return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
-
         }
 
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Search(List<TrackingHelper> Model, string search = "", DateTime? start = null, DateTime? end = null, string insert = "", string download = "", int? detail = null, int? page = null)
+        public async Task<ActionResult> Search(List<TrackingHelper> Model, string search = "", DateTime? start = null, DateTime? end = null, string insert = "", string download = "")
         {
-            int pageSize = 15;
-            int pageNumber = (page ?? 1);
-
-            if (detail.HasValue)
-            {
-                int id_data = Convert.ToInt32(detail);
-                Model[id_data].id_data = Model[id_data].TrackedList.id_data;
-                TrackingHelper newModel = new TrackingHelper();
-                newModel = Model[id_data];
-                return RedirectToAction("Details", "TrackProgress", newModel);
-            }
             List<TrackingHelper> track = new List<TrackingHelper>();
             int privillage = 0;
             tb_m_verifier_employee employee = await GetData.EmployeeVerifier(Convert.ToInt32(Model[0].login_id));
@@ -182,8 +150,6 @@ namespace CONTRAST_WEB.Controllers
 
             tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(logged_employee.code));
 
-            ViewBag.user = Model[0].privilage;
-
             string division = Admin.Divisi;
             if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
 
@@ -193,31 +159,6 @@ namespace CONTRAST_WEB.Controllers
 
             if (insert == "Search")
             {
-                //List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
-                //if (privillage == 1) new_list = await GetData.TrackingList(search, start, end);
-                //else new_list = await GetData.TrackingListDivison(logged_employee.unit_code_code, search, start, end);
-
-                //if (new_list.Count > 0)
-                //{
-                //    foreach (var item in new_list)
-                //    {
-                //        TrackingHelper temp = new TrackingHelper();
-                //        temp.login_id = Model[0].login_id;
-                //        temp.login_name = Model[0].login_name;
-                //        temp.TrackedList = item;
-                //        track.Add(temp);
-                //    }
-                //}
-                //else
-                //{
-                //    TrackingHelper temp = new TrackingHelper();
-                //    temp.login_id = Model[0].login_id;
-                //    temp.login_name = Model[0].login_name;
-                //    track.Add(temp);
-                //    return View("Index", track);
-                //}
-                //ModelState.Clear();
-                //return View("Index", track.OrderBy(m => m.TrackedList.create_date).ToList());
                 List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
                 if (privillage == 1) new_list = await GetData.TrackingListAllSearch(search, start, end);
                 else if (privillage == 2) new_list = await GetData.TrackingListDivisonAllSearch(Admin.Divisi, search, start, end);
@@ -231,7 +172,6 @@ namespace CONTRAST_WEB.Controllers
                         temp.login_id = Model[0].login_id;
                         temp.login_name = Model[0].login_name;
                         temp.privilage = Model[0].privilage;
-
                         temp.TrackedList = item;
                         track.Add(temp);
                     }
@@ -243,27 +183,12 @@ namespace CONTRAST_WEB.Controllers
                     temp.login_name = Model[0].login_name;
                     temp.privilage = Model[0].privilage;
                     track.Add(temp);
-                    return View("Index", track.ToList().ToPagedList(pageNumber, pageSize));
+                    return View("Index", track);
                 }
-
                 ModelState.Clear();
-                ViewBag.search = search;
-                ViewBag.start = Convert.ToDateTime(start).Date;
-                ViewBag.end = Convert.ToDateTime(end).Date;
+                return View("Index", track.OrderByDescending(m => m.TrackedList.id_data).ToList());
+                //return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
 
-                if (start != null)
-                    ViewBag.start = start;
-                else
-                    ViewBag.start = null;
-
-                if (end != null)
-                    ViewBag.end = end;
-                else
-                    ViewBag.end = null;
-
-                //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
-                //return View("Index", track.OrderByDescending(m => m.TrackedList.create_date).ThenBy(m => m.TrackedList.group_code).ToList().ToPagedList(pageNumber, pageSize));
-                return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
             }
             else if (download == "Download")
             {
@@ -343,15 +268,12 @@ namespace CONTRAST_WEB.Controllers
                     temp.login_id = Model[0].login_id;
                     temp.login_name = Model[0].login_name;
                     track.Add(temp);
-                    return View("Index", track.ToList().ToPagedList(pageNumber, pageSize));
+                    return View("Index", track);
                 }
                 ModelState.Clear();
-                //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
-                //return View("Index", track.OrderByDescending(m => m.TrackedList.create_date).ThenBy(m => m.TrackedList.group_code).ToList().ToPagedList(pageNumber, pageSize));
-                return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
+                return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
             }
         }
-
 
         //wates
         public async Task<ActionResult> Details(TrackingHelper mood)

@@ -1,11 +1,9 @@
 ﻿@model CONTRAST_WEB.Models.SettlementPaidHelper
-
 @{
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
     var a = Model;
 }
-
 @using (Html.BeginForm("Print", "SettlementList", FormMethod.Post))
 {
     @Html.HiddenFor(m => m.Summary.create_date)
@@ -56,22 +54,16 @@
                 <span style="font-size:20px;">PT. TOYOTA ASTRA MOTOR</span>
             </div>
             <div style="width:450px; margin-bottom:10px;" class="col-md-11 col-md-offset-1"><h5 class="h5c">SETTLEMENT RECEIPT</h5></div>
-
             <div style="border-bottom:2px solid black; width:1000px; margin-bottom:20px;" class="col-md-11 col-md-offset-1"></div>
-
             <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Jl. Laks. Yos Sudarso, Sunter II</h6></div>
             <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">ID :<strong> @Html.DisplayFor(m => m.Summary.group_code, new { placeholder = "Availability", @class = "form-control" })</strong></h6></div>
-
             <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Jakarta Utara - Indonesia</h6></div>
             <div class="col-md-5 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">NAME : <strong>@Html.DisplayFor(m => m.Summary.emp_name, new { placeholder = "Availability", @class = "form-control" })</strong>( <strong>@Html.DisplayFor(m => m.Summary.no_reg, new { placeholder = "Availability", @class = "form-control" })</strong> )</h6></div>
 
-
             <div style="width:950px;" class="col-md-11 col-md-offset-1"><h6 style="text-align:left; margin-top:0px;">Phone :62-21 - 6515551(Hunting)</h6></div>
-
 
             <div style="width:950px; margin-top:20px;" class="col-md-11 col-md-offset-1"><h5 class="h5z">DETAIL TRAVEL</h5></div>
             <div style="margin-left:150px" class="clearfix main">
-
                 @if (Model.Summary.destination_2 == null && Model.Summary.destination_1 != null && Model.Summary.destination_3 == null)
                 {
                     <div class="main1">
@@ -113,7 +105,6 @@
                         </div>
                     </div>
                 }
-
                 @if (Model.Summary.destination_2 != null && Model.Summary.destination_1 != null && Model.Summary.destination_3 != null)
                 {
                     <div class="main1">
@@ -177,7 +168,6 @@
                         </div>
                     </div>
                 }
-
                 @if (Model.Summary.destination_3 != null)
                 {
                     <div class="main1">
@@ -199,7 +189,6 @@
                         </div>
                     </div>
                 }
-
                 @if (Model.Summary.destination_4 != null)
                 {
                     <div class="main1">
@@ -242,11 +231,8 @@
                         </div>
                     </div>
                 }
-
             </div>
-
             <div style="width:950px" class="col-md-11 col-md-offset-1"><h5 class="h5z"><span style="margin-left:50px;">ITEM</span><span style="margin-left:250px;">SUSPENSE</span><span style="margin-left:200px;">REIMBURSE</span></h5></div>
-
             <div class="col-md-3 col-md-offset-1">
                 <div style="width:200px" class="col-md-12">
                     <span><h5 class="h5c">MEAL</h5></span>
@@ -267,7 +253,6 @@
                     <span><h5 class="h5c">OTHER</h5></span>
                 </div>
             </div>
-
             <div class="col-md-3">
                 <div style="width:200px" class="col-md-12">
                     <span><h5 style="text-align:left; color:darkgrey;margin:8px;" class="h5z">RP. @String.Format("{0:n0}", Model.Summary.total_meal)</h5></span>
@@ -288,7 +273,6 @@
                     <span><h5 style="text-align:left; color:darkgrey;margin:8px;" class="h5z">RP. 0</h5></span>
                 </div>
             </div>
-
             <div class="col-md-3">
                 <div style="width:200px" class="col-md-12">
                     <span><h5 style="text-align:left; color:darkgrey;margin:8px;" class="h5z">RP. @String.Format("{0:n0}", Model.MealSettlement)</h5></span>
@@ -309,17 +293,15 @@
                     <span><h5 style="text-align:left; color:darkgrey;margin:8px;" class="h5z">RP. @String.Format("{0:n0}", Model.Summary.total_miscellaneous)</h5></span>
                 </div>
             </div>
-            
+
             <div style="margin-top:20px;" class="col-md-11 col-md-offset-1 h5x">
                 <h5 class="h5a">Total Budget</h5>
                 <label>RP.&nbsp;@String.Format("{0:n0}", Model.Summary.grand_total_settlement) @*@Html.DisplayFor(m => m.grand_total_settlement)*@</label>
-
             </div>
             <div class="col-md-11 col-md-offset-1">
                 <img style="height:200px" src="~/img/receipt-paid4.png" />
             </div>
             <div class="col-md-11 col-md-offset-1"><h5 class="h5z2"></h5></div>
-
             <div class="form-group col-md-11 col-md-offset-1">
                 <span>
                     <strong>Save Document for Proof of Receipt :</strong>
@@ -335,10 +317,8 @@
                 </span>
                 @*<a href="javascript:void(0);" onclick="history.go(-3);">CLOSE</a>*@
 
-               
-               
-                <!--wates-->
 
+                <!--wates-->
                 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
@@ -354,7 +334,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

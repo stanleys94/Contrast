@@ -5,7 +5,6 @@
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
 }
-
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -17,7 +16,6 @@
         <li class="breadcrumb-item active">Travel Verification</li>
     </ol>
 </div>
-
 
 <div class="container">
     <div style="margin-top:100px" class="row">
@@ -34,7 +32,6 @@
                     {@Html.HiddenFor(m => m[k].employee_info.code);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">USERNAME</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey;max-width:400px;min-width:400px;color:grey; text-align:left; ">
                     @Html.DisplayFor(m => m[0].employee_info.name, new { @class = "form-control", @readonly = "readonly" })
@@ -42,7 +39,6 @@
                     {@Html.HiddenFor(m => m[k].employee_info.name);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Class</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey;max-width:400px;min-width:400px;color:grey; text-align:left; ">
                     @Html.DisplayFor(m => m[0].employee_info.@class, new { @class = "form-control", @readonly = "readonly" })
@@ -50,7 +46,6 @@
                     {@Html.HiddenFor(m => m[k].employee_info.@class);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Division</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     @ViewBag.division_name
@@ -58,7 +53,6 @@
                     {@Html.HiddenFor(m => m[k].employee_info.unit_code_code);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Travel Purpose</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     <!--<input class="form-control" type="text" name='division' placeholder="Assigned By" />-->
@@ -67,7 +61,6 @@
                     {@Html.HiddenFor(m => m[k].travel_request.travel_purpose);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Assigned By</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     <!--<input class="form-control" type="text" name='division' placeholder="Assigned By" />-->
@@ -77,7 +70,6 @@
                     {@Html.HiddenFor(m => m[k].travel_request.assign_by);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Reason Of Assignment</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     @Html.TextAreaFor(m => m[0].travel_request.reason_of_assigment, new { @class = "form-control", @style = "max-width:400px;min-width:400px;" })
@@ -85,7 +77,6 @@
                     {@Html.HiddenFor(m => m[k].travel_request.reason_of_assigment);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray; ">Request Type</label>
                 <div class="form-group input-group" style="color:grey; text-align:left; ">
                     @Html.TextBox("adasd", Model[0].travel_request.request_type.Value == true ? "Planned" : "Unplanned", new { @style = "padding:0px; border:0px;border-bottom:0.5px solid grey; max-width:400px;min-width:400px;color:grey; ", @readonly = "readonly" })
@@ -93,22 +84,18 @@
                     {@Html.HiddenFor(m => m[k].travel_request.request_type);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Destination Type</label>
                 <div class="form-group input-group" style="color:grey; text-align:left; ">
                     @Html.TextBox("adasd", Model[0].travel_request.overseas_flag.Value == true ? "Overseas" : "Domestic", new { @style = "border:0px;border-bottom:0.5px solid grey; max-width:400px;min-width:400px;color:grey;", @readonly = "readonly" })
                     @for (int k = 0; k < Model.Count; k++)
                     {@Html.HiddenFor(m => m[k].travel_request.overseas_flag);
                 }
-
                 </div>
-
 
                 @for (int k = 0; k < Model.Count; k++)
                 {
                     @Html.HiddenFor(m => m[k].travel_request.id_destination_city);
                 }
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">New or Renewal Passport ?</label>
                 <div class="form-group input-group" style=" ">
                     @Html.TextBox("adasd", Model[0].travel_request.passport_flag == true ? "Yes" : "No", new { @style = "color:grey; text-align:left; border:0px;border-bottom:0.5px solid grey; max-width:400px;min-width:400px; ", placeholder = "Reason Assigment", @readonly = "readonly" })
@@ -116,7 +103,6 @@
                     {@Html.HiddenFor(m => m[k].travel_request.passport_flag);
                 }
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Bank Account</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     @*@Html.DisplayFor(m => m[0].employee_info.bank_account, new { @class = "form-control", @readonly = "readonly" })*@
@@ -127,7 +113,6 @@
                     <!--<input class="form-control" type="text" name='destination' style="margin-top: 3px; display:block;" placeholder="No. Rekening" />-->
                     <br />
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Duration</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     @for (int k = 0; k < Model.Count; k++)
@@ -138,7 +123,6 @@
                         @ViewBag.Duration Days
                     </label>
                 </div>
-
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">List Participants</label>
                 <div style="border-radius: 4px;max-width:400px;min-width:400px;height:100px;overflow-y: scroll;" class="wellNo">
                     <div style="text-align:left;margin-top:10px;" class="input-group">
@@ -167,11 +151,9 @@
                                     }
                                 }
                             }
-
                         </ol>
                     </div>
                 </div>
-
                 @for (int k = 0; k < Model.Count; k++)
                 {
                     @Html.HiddenFor(m => m[k].travel_request.destination_code)
@@ -197,7 +179,6 @@
                     @Html.HiddenFor(m => m[k].travel_request.comments_by20)
                 }
                 <div class="col-lg-12">
-
                 </div>
             </div>
 
@@ -234,10 +215,9 @@
                         @Html.HiddenFor(m => m[k].travel_request.allowance_meal_idr);
                     }
                     <label>
-                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", ViewBag.Meal) 
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", ViewBag.Meal)
                     </label>
                 </div>
-
                 <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
                     <label class="fnt2">Hotel Allowance&nbsp;</label>
                     <br />
@@ -246,10 +226,9 @@
                         @Html.HiddenFor(m => m[k].travel_request.allowance_hotel);
                     }
                     <label>
-                    &nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Hotel)
+                        &nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Hotel)
                     </label>
                 </div>
-
                 <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
                     <label class="fnt2">Ticket Allowance&nbsp;</label>
                     <br />
@@ -259,7 +238,6 @@
                     }
                     <label>&nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Ticket)</label>
                 </div>
-
                 @if (Model[0].travel_request.allowance_winter == 0)
                 {
 
@@ -276,7 +254,6 @@
                         }
                     </div>
                 }
-
                 @if (Model[0].travel_request.allowance_preparation == 0)
                 {
 
@@ -293,7 +270,6 @@
                         }
                     </div>
                 }
-
                 <label class="fnt1">BUDGETARY DETAILS</label>
                 <div style="text-align:left; padding:15px 15px; margin-bottom:10px;" class="form-control input-group wellIn">
                     <label>WBS Number</label>
@@ -311,7 +287,6 @@
                     { @Html.Label("This account cost center is not available, contact finance division", new { @class = "text-danger" })}
                     </div>
                 </div>
-
                 <label class="fnt1">GRAND TOTAL</label>
                 <div class="form-group" style="padding:10px 10px; background-color: #228B22;color: white; text-align: center;font-weight: bold;">
                     @for (int k = 0; k < Model.Count; k++)
@@ -323,7 +298,6 @@
                         &nbsp;RP.&nbsp;@String.Format("{0:n0}", ViewBag.Total, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })
                     </label>
                 </div>
-
                 @if (ViewBag.budget != null)
                 {
                     <label class="fnt1">REMAINING BUDGET</label>
@@ -331,7 +305,6 @@
                         RP. @String.Format("{0:n0}", ViewBag.budget, new { @class = "form-control", @readonly = "readonly", @style = " background-color: red;color: white; text-align: center;font-weight: bold;" }) @*@Html.TextBox("asda", "RP. " + Model[0].travel_request.grand_total_allowance, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })*@
                     </div>
                 }
-
                 <div class="form-group" style="padding:10px 10px; margin-bottom:10px; center;font-weight: bold;">
                     @if (ViewBag.wbs != null && ViewBag.costcenter != null)
                     {
@@ -339,7 +312,6 @@
                     }
                     <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Cancel</button>
                 </div>
-
 
             </div>
 

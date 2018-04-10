@@ -6,7 +6,7 @@
 }
 
 <div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
-    
+
 </div>
 
 <div class="container">
@@ -26,18 +26,18 @@
                 <div style="width:125px;" class="radio">
                     <label style="float:right;">
                         @*<input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" value="false">
-                        NO*@
+                            NO*@
                         @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck" }) NO
                     </label>
                     <label style="float:left;">
                         @*<input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck" value="true" checked>
-                        YES*@
+                            YES*@
                         @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck", @checked = true }) YES
                     </label>
                 </div>
             </div>
             <div style="margin-bottom:0px;display:block;float:left;" class="col-lg-11 col-lg-offset-1" id="ifYa1"><label>DURATION Of EXTEND :</label></div>
-            
+
             <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5 col-lg-offset-1" id="ifYa2">
                 @Html.ValidationMessageFor(m => m.Start_Extend, "", new { @class = "text-danger" })<br />
                 <label>Start</label>
@@ -48,7 +48,7 @@
                     @*@Html.HiddenFor(m => m.Start_Extend)*@
                 </div>
             </div>
-           
+
             <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5" id="ifYa3">
                 @Html.ValidationMessageFor(m => m.End_Extend, "", new { @class = "text-danger" })<br />
                 <label>End</label>
@@ -220,7 +220,7 @@
             </div>
             //}
 
-         
+
             <div style="margin-left:100px" class="col-md-11 col-md-offset-1">
                 <button type="submit" style="width:145px" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
             </div>
