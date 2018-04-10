@@ -10,18 +10,23 @@ using CONTRAST_WEB.Models;
 using System.Text;
 using System.IO;
 using System.Globalization;
+using System.Security.Claims;
+using PagedList;
 
 namespace CONTRAST_WEB.Controllers
 {
     public class GenerateFileController : Controller
     {
         // GET: GenerateFile
-        [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(tb_m_employee model)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page,DateTime? startdate, DateTime? enddate)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+
             List<GenerateFileHelper> Generate = new List<GenerateFileHelper>();
             List<vw_actualcost_generate_file> data = new List<vw_actualcost_generate_file>();
             data = await GetData.GenerateFileData();
@@ -34,48 +39,73 @@ namespace CONTRAST_WEB.Controllers
                 temp.No_Reg = Convert.ToInt32(model.code);
                 Generate.Add(temp);
             }
-            return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());
-        }
 
-        [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Filter(List<GenerateFileHelper> model, DateTime? startdate, DateTime? enddate, string search = "")
-        {
-            string lower = search.ToLower();
-            List<GenerateFileHelper> Generate = new List<GenerateFileHelper>();
-            List<vw_actualcost_generate_file> data = new List<vw_actualcost_generate_file>();
-            if (search == "" && !startdate.HasValue && !enddate.HasValue) data = await GetData.GenerateFileData();
-            else
-                data = await GetData.GenerateFileDataFiltered(lower, startdate, enddate);
 
-            if (data.Count > 0)
+            ViewBag.CurrentSort = sortOrder;
+            if (searchString != null)
             {
-                foreach (var item in data)
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            if (startdate != null)
+                ViewBag.startdate = startdate;
+            else
+                ViewBag.startdate = null;
+
+            if (enddate != null)
+                ViewBag.enddate = enddate;
+            else
+                ViewBag.enddate = null;
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                List<GenerateFileHelper> temp = new List<GenerateFileHelper>();
+                for (int k = 0; k < Generate.Count; k++)
                 {
-                    GenerateFileHelper temp = new GenerateFileHelper();
-                    temp.Entity = item;
-                    temp.Name = model[0].Name;
-                    temp.No_Reg = model[0].No_Reg;
-                    if (startdate.HasValue) temp.StartDate = Convert.ToDateTime(startdate);
-                    if (enddate.HasValue) temp.EndDate = Convert.ToDateTime(enddate);
-                    Generate.Add(temp);
+                    if (Generate[k].Entity.EMPLOYEE_NAME.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.BTR_NO.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.DESTINATION.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.COST_CENTER.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.WBS_ELEMENT.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.TRAVEL_TYPE.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.BUDGET.ToLower().Contains(searchString.ToLower()))
+                    {
+                        temp.Add(Generate[k]);
+                    }
                 }
+                if (temp.Count() > 0) Generate = temp;
+                else Generate = temp;
             }
-            else
-            {
-                GenerateFileHelper temp = new GenerateFileHelper();
-                temp.Name = model[0].Name;
-                temp.No_Reg = model[0].No_Reg;
-                if (startdate.HasValue) temp.StartDate = Convert.ToDateTime(startdate);
-                if (enddate.HasValue) temp.EndDate = Convert.ToDateTime(enddate);
-                Generate.Add(temp);
-            }
-            ModelState.Clear();
-            return View("Index", Generate);
-        }
 
+
+            //date filter
+            if (startdate != null && enddate != null)
+            {
+                List<GenerateFileHelper> temp = new List<GenerateFileHelper>();
+                for (int k = 0; k < Generate.Count; k++)
+                {
+                    //by group code
+                    if (
+                        DateTime.ParseExact(Generate[k].Entity.PV_DATE,"dd.MM.yyyy", CultureInfo.CurrentCulture) >= startdate
+                        && DateTime.ParseExact(Generate[k].Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.CurrentCulture) <= enddate
+                       )
+                        temp.Add(Generate[k]);
+                }
+                if (temp.Count() > 0) Generate = temp;
+            }
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+            return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList().ToPagedList(pageNumber, pageSize));
+            //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());
+        }
+        
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]

@@ -1,4 +1,6 @@
-﻿@model IList<CONTRAST_WEB.Models.GenerateFileHelper>
+﻿@*@model IList<CONTRAST_WEB.Models.GenerateFileHelper>*@
+@model PagedList.IPagedList<CONTRAST_WEB.Models.GenerateFileHelper>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "PARTICIPANT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
@@ -21,139 +23,52 @@
         <div class="col-sm-12 col-md-10">
             <div>
                 <div class="collapse navbar-collapse">
-
-                    @using (Html.BeginForm("Filter", "GenerateFile", FormMethod.Post, new { @class = "navbar-form navbar-left" }))
+                    @using (Html.BeginForm("Index", "GenerateFile", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
                     {
-                        @Html.AntiForgeryToken()
-                        if(Model.Count()>0)
-                        { 
-                        @Html.HiddenFor(m => m[0].Name, new { @value = Model[0].Name })
-                        @Html.HiddenFor(m => m[0].No_Reg, new { @value = Model[0].Name })
-
                         <table>
                             <tr>
-                                <td>
-                                    <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="search" />
+                                <td>                                    
+                                    Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "width:300px", placeholder = "No BTA, Noreg, Name, Destination, Vendor Code" })
                                 </td>
                                 <td>
-                                    <input type="date" name="startdate" value=@Model[0].StartDate.ToString("yyyy-mm-dd") class="form-control" placeholder="search" />
-                                    @* <input type="date" name="startdate" value=@Model[0].StartDate.ToString("yyyy-MM-dd") class="form-control" placeholder="search" />*@
+                                   @if (ViewBag.startdate != null)
+                                   {
+                                        @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                                   }   
+                                   else
+                                   {
+                                        @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                                    }
+                                </td>
+                                
+                                <td>
+                                  @if (ViewBag.enddate != null)
+                                  {
+                                     @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                                  }
+                                  else
+                                  {
+                                     @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
+                                  }
                                 </td>
                                 <td>
-                                    <input type="date" name="enddate" value=@Model[0].EndDate.ToString("yyyy-mm-dd") class="form-control" placeholder="search" />
-                                    @*<input type="date" name="enddate" value=@Model[0].EndDate.ToString("yyyy-MM-dd") class="form-control" placeholder="search" />*@
-                                </td>
-                                <td>
-                                    <button type="submit" value="Search" class="btn btn-success">Search</button>
-
+                                    <input type="submit" value="Search" class="btn btn-success" />
                                 </td>
                             </tr>
-
                         </table>
-                        }
 
                     }
                 </div>
             </div>
         </div>
-
         <div class="well">
             @using (Html.BeginForm("Generate", "GenerateFile", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
-
                     <div style="padding:0 5px">
-                        <table style="width:1450px;" class="table table-condensed table-striped">
+                        <table style="width:1700px;" class="table table-condensed table-striped">
                             <tr style="background-color:deepskyblue; text-align:center;">
-
-                                @*<th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        MANDT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PV NO
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PV YEAR
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        ITEM NO
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PV DATE
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PV TYPE
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        TRANS TYPE
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        VENDOR
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        VENDOR GRP
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        INVOICE NO
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        TAX NO
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PAYMENT TERM
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PAYMENT METHOD
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        PLAN PAYMENT DT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        POSTING DT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        TOTAL AMOUNT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        DPP AMOUNT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        CURRENCY
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        TAX CODE
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        HEADER TEXT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        BANK TYPE
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        GL ACCOUNT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        AMOUNT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        COST CENTER
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        WBS ELEMENT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        ITEM TEXT
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        STATUS
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        SAP DOC NO
-                                    </th>
-                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                        SAP DOC YEAR
-                                    </th>*@
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     BTR_NO
                                 </th>
@@ -164,7 +79,7 @@
                                     DESTINATION
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    ID_CITY
+                                    VENDOR
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     BUDGET
@@ -190,9 +105,7 @@
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     PAYMENT_METHOD
                                 </th>
-
                             </tr>
-
 
                             @for (int k = 0; k < Model.Count(); k++)
                             {
@@ -241,98 +154,6 @@
                                 @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
                                 @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD_)
                                 <tr class="table-responsive">
-                                    @*<td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.MANDT)
-
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PV_NO)
-
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PV_YEAR)
-
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.ITEM_NO)
-
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PV_DATE)
-
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PV_TYPE)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.TRANS_TYPE)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.VENDOR)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.VENDOR_GRP)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.INVOICE_NO)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.TAX_NO)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PAYMENT_TERM)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PAYMENT_METHOD)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.PLAN_PAYMENT_DT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.POSTING_DT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.TOTAL_AMOUNT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.DPP_AMOUNT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.CURRENCY)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.TAX_CODE)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.HEADER_TEXT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.BANK_TYPE)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.gl_account)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.AMOUNT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.COST_CENTER)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.WBS_ELEMENT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.ITEM_TEXT)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.STATUS)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.SAP_DOC_NO)
-                                        </td>
-                                        <td style="width:auto;" class="td">
-                                            @Html.DisplayFor(Model => Model[k].Entity.SAP_DOC_YEAR)
-                                        </td>*@
                                     <td style="width:auto;" class="td">
                                         @Html.DisplayFor(Model => Model[k].Entity.BTR_NO)
                                     </td>
@@ -343,7 +164,7 @@
                                         @Html.DisplayFor(Model => Model[k].Entity.DESTINATION)
                                     </td>
                                     <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.ID_CITY)
+                                        @Html.DisplayFor(Model => Model[k].Entity.VENDOR_NAME)
                                     </td>
                                     <td style="width:auto;" class="td">
                                         @Html.DisplayFor(Model => Model[k].Entity.BUDGET)
@@ -369,14 +190,11 @@
                                     <td style="width:auto;" class="td">
                                         @Html.DisplayFor(Model => Model[k].Entity.PAYMENT_METHOD_)
                                     </td>
-
                                 </tr>
 
                             }
                         </table>
-
                     </div>
-
 
                 </div>
                 //@Html.Partial("_BreadCrum");
@@ -391,12 +209,17 @@
                 </table>
             }
         </div>
+        <div style="float:left;margin-top:10px;" class="col-lg-4">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+                                              new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
         <div id="show" class="alert alert-success" hidden>
             <strong>Success!</strong> Check File Download on Folder.
         </div>
     </div>
 </div>
-
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script>
     $(document).ready(function () {

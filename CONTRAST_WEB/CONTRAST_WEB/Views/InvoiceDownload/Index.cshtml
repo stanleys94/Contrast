@@ -46,8 +46,8 @@
                     <span>Invoice :</span>
 
                     <label style="margin:5px">
-                        <input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.outstanding)&nbsp;
-                        <input type="radio" id="c2" name="scheck" value="request">Issued <label style="color:red;">(@ViewBag.issued)</label>
+                        <input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.outstandingTotal)&nbsp;
+                        <input type="radio" id="c2" name="scheck" value="request">Issued <label style="color:red;">(@ViewBag.issuedTotal)</label>
                     </label>
 
                 </div>
@@ -60,10 +60,12 @@
         @Html.Hidden("outstanding", outstanding)
 
         <div class="clearfix">
+
+
             @*@foreach (var items in ViewBag.outstanding)
-                {*@
-            @*@if (items == "contrast.staffpac")
-                {*@
+                    {
+                if (items == "contrast.staffpac")
+                    {*@
 
             <div id="new" style="width:100%;text-align:left;height:415px;overflow-y:scroll; overflow-x:scroll; border:0px;padding:0 5px;">
                 <h4>INVOICE NEW</h4>
@@ -223,9 +225,9 @@
                 }*@
 
             @*@foreach (var items in ViewBag.issued)
-                {*@
-            @*@if (items == "contrast.staffga")
-                {*@
+                    {
+                if (items == "contrast.staffga")
+                    {*@
 
             <div id="issued" style="width:100%;text-align:left;height:415px;overflow-y:scroll; overflow-x:scroll; border:0px;padding:0 5px;" hidden>
                 <h4>INVOICE ISSUED</h4>
@@ -385,13 +387,40 @@
 
 
         </div>
+
         <div style="float:left;margin-top:10px;">
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
-            <button type="submit" class="btn btn-default" name="all_download" value="outstanding">Download(NEW)</button>
-            <button type="submit" class="btn btn-default" name="all_download" value="issued">Download(ISSUED)</button>
+            <button type="submit" class="btn btn-default" name="all_download" value="outstanding">Download All (NEW)</button>
+            <button type="submit" class="btn btn-default" name="all_download" value="issued">Download All (ISSUED)</button>
         </div>
     }
+    @using (Html.BeginForm("Search", "InvoiceDownload", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m[0].loged_employee.code)
+        @Html.HiddenFor(m => m[0].loged_employee.name)
+        @Html.HiddenFor(m => m[0].loged_employee.unit_code_name)
+        @Html.HiddenFor(m => m[0].loged_employee.unit_code_id)
 
+        <div style="float:right;margin-top:10px;" id="newPaged">
+            @if (ViewBag.paged > 1)
+            {
+                for (int i = ViewBag.pageNow - 1; i < ViewBag.pageNow + 2; i++)
+                {
+                    if (i > 0 && i <= ViewBag.paged)
+                    {
+                        <button type="submit" class="btn btn-default" name="page" value=@i>@i</button>
+                    }
+
+                }
+                if (ViewBag.pageNow + 2 < ViewBag.paged)
+                {
+                    <p>...</p> <button type="submit" class="btn btn-default" name="page" value=@ViewBag.paged>@ViewBag.paged</button>
+                }
+            }
+
+
+        </div>
+    }
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

@@ -15,5 +15,7 @@ namespace CONTRAST_WEB.Models
         public string position { get; set; }
         public string money { get; set; }
         public string comment { get; set; }
+
+        public string path { get; set; }
     }
 }
