@@ -1,0 +1,132 @@
+﻿@model  CONTRAST_WEB.Models.TrackingDetailHelper
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<div>
+    @using (Html.BeginForm("Index", "Home"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.logged_id.name)
+        @Html.HiddenFor(m => m.logged_id.code)
+
+        <div>
+            <label><b>@Model.GroupCode.Trim(' ') DETAILS</b></label><br />
+            <label>User Info</label><br />
+            <table>
+                <tr><td>Name</td><td>@Model.Name</td></tr>
+                <tr><td>Employee Code</td><td>@Model.EmployeeCode</td></tr>
+                <tr><td>Division</td><td>@Model.Division</td></tr>
+            </table><br />
+            <label>Travel Info</label>
+            <table style="border:none;">
+                <tr><th style="width:250px">From</th><th style="width:250px">To</th><th style="width:250px">Start Date</th><th style="width:250px">End Date</th></tr>
+                @if (Model.Destination.Count > 0)
+                {
+                    for (int k = 0; k < Model.Destination.Count; k++)
+                    {
+                        if (k == 0)
+                        {
+                            <tr><td>Jakarta</td><td>@Model.Destination[k]</td><td>@Model.StartDate[k]</td><td>@Model.EndDate[k]</td></tr>
+                        }
+                        else
+                        {
+                            <tr><td>@Model.Destination[k - 1]</td><td>@Model.Destination[k]</td><td>@Model.StartDate[k]</td><td>@Model.EndDate[k]</td></tr>
+
+                        }
+                    }
+                }
+            </table>
+            <br />
+            <table style="border:none;">
+                <tr><th style="width:250px">Approver</th><th style="width:250px">Approver Code</th><th style="width:250px">Status</th><th style="width:250px">Approval Date</th></tr>
+                @if (Model.Destination.Count > 0)
+                {
+                    for (int k = 0; k < Model.HigherUp.Count; k++)
+                    {
+                        <tr><td>@Model.HigherUp[k]</td><td>@Model.HigherUpCode[k]</td><td>@Model.HigherUpApprovalStatus[k]</td><td>@Model.HigherUpApprovalDate[k]</td></tr>
+                    }
+                }
+            </table><br /><br />
+            @if (Model.ActualCost.Count > 0)
+            {
+                <label>Actual Cost Details</label>
+                <table>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
+                    @for (int k = 0; k < Model.ActualCost.Count; k++)
+                    {
+                        <tr><td>@Model.ActualCost[k].Transaction</td><td>Rp. @Model.ActualCost[k].Amount.ToString("N")</td><td>@Model.ActualCost[k].Approved</td><td>@Model.ActualCost[k].Approved_Status</td><td>@Model.ActualCost[k].ApprovedDate</td><td>@Model.ActualCost[k].Pending</td></tr>
+
+                    }
+                </table><br />
+            }
+
+            @if (Model.BPD.Count > 0)
+            {
+                <label>BPD Details</label>
+                <table>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
+                    @for (int k = 0; k < Model.BPD.Count; k++)
+                    {
+                        <tr><td>@Model.BPD[k].Transaction</td><td>Rp. @Model.BPD[k].Amount.ToString("N")</td><td>@Model.BPD[k].Approved</td><td>@Model.BPD[k].Approved_Status</td><td>@Model.BPD[k].ApprovedDate</td><td>@Model.BPD[k].Pending</td></tr>
+
+                    }
+                </table><br />
+            }
+
+            @if (Model.SettlementCost.Count > 0)
+            {
+                <label>Settlement Cost Details</label>
+                <table>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th><th>Proof</th></tr>
+                    @for (int k = 0; k < Model.SettlementCost.Count; k++)
+                    {
+                        <tr>
+                            <td>@Model.SettlementCost[k].Transaction</td>
+                            <td>Rp. @Model.SettlementCost[k].Amount.ToString("N")</td>
+                            <td>@Model.SettlementCost[k].Approved</td>
+                            <td>@Model.SettlementCost[k].Approved_Status</td>
+                            <td>@Model.SettlementCost[k].ApprovedDate</td>
+                            <td>@Model.SettlementCost[k].Pending</td>
+                            @if (Model.SettlementCost[k].Path != null)
+                            {
+                                <td><a href=@Model.SettlementCost[k].Path id="link" target="_blank">Link</a></td>
+                            }
+                            else
+                            {
+                                <td>None</td>
+                            }
+                        </tr>
+
+                    }
+                </table><br />
+            }
+
+            @if (Model.Executed.Count > 0)
+            {
+                <label>Travel Execution Details</label>
+                <table>
+                    <tr><th>Lat Coor</th><th>Long Coor</th><th>Execute Date</th><th>Proof</th></tr>
+                    @for (int i = 0; i < Model.Executed.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model.Executed[i].latitude</td>
+                            <td>@Model.Executed[i].longitude</td>
+                            <td>@Model.Executed[i].execution_date</td>
+                            @if (Model.Executed[i].pic_path != null)
+                            {
+                                <td><a href=@Model.Executed[i].pic_path target="_blank">Available</a></td>
+                            }
+                            else
+                            {
+                                <td>Not Available</td>
+                            }
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+        <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+    }
+</div>

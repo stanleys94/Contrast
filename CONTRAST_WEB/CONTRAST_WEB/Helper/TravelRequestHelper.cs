@@ -188,6 +188,7 @@ namespace CONTRAST_WEB.Models
 
         public HttpPostedFileBase proposaldoc_file { get; set; }
 
+        public bool special_employee_flag { get; set; }
 
         public TravelRequestHelper() { }
 

@@ -53,9 +53,9 @@
 
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Division</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
-                    @ViewBag.division_name
+                    @Html.DisplayFor(m => m[0].employee_info.unit_code_name, new { @class = "form-control", @readonly = "readonly" })
                     @for (int k = 0; k < Model.Count; k++)
-                    {@Html.HiddenFor(m => m[k].employee_info.unit_code_code);
+                    {@Html.HiddenFor(m => m[k].employee_info.unit_code_name);
                 }
                 </div>
 
@@ -195,6 +195,7 @@
                     @Html.HiddenFor(m => m[k].travel_request.path_invitation)
                     @Html.HiddenFor(m => m[k].travel_request.path_itinerary)
                     @Html.HiddenFor(m => m[k].travel_request.comments_by20)
+                    @Html.HiddenFor(m => m[k].travel_request.additional2)
                 }
                 <div class="col-lg-12">
 

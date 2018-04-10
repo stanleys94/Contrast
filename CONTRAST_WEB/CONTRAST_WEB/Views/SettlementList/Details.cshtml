@@ -85,6 +85,10 @@
                     @Html.TextBoxFor(m => m.Start_Extend, new { @class = "form-control", @type = "date", placeholder = "Departure" })
                     @*@Html.HiddenFor(m => m.Start_Extend)*@
                 </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-offset-0" id="ifYa4">
+                    @Html.CheckBoxFor(m => m.halfday_flag)
+                    <label>HALF DAY</label>
+                </div>
             </div>
 
             <div style="margin-bottom:0px;display:none;float:left;" class="col-md-5" id="ifYa3">
