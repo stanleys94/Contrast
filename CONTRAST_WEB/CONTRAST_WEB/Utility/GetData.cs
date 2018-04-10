@@ -960,6 +960,7 @@ namespace CONTRAST_WEB.Models
                 client.BaseAddress = new Uri(Constant.Baseurl);
 
 
+              
                 client.DefaultRequestHeaders.Clear();
                 //Define request data format  
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -3112,7 +3113,7 @@ namespace CONTRAST_WEB.Models
                 return ListItem;
             }
         }
-
+        
         public static async Task<List<tb_r_invoice_actualcost>> TableInvoiceActualcostAll()
         {
             using (var client = new HttpClient())
@@ -3542,5 +3543,35 @@ namespace CONTRAST_WEB.Models
     }
 
 
+        public static async Task<List<tb_m_special_employee>> SpecialEmployee(string no_reg)
+        {
+            List<tb_m_special_employee> model = new List<tb_m_special_employee>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
 
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/SpecialEmployee/GetEmployee?id=" + no_reg);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    model = JsonConvert.DeserializeObject<List<tb_m_special_employee>>(EmpResponse);
+                }
+            }
+            return model;
+        }
+    }
+     
+   
+    
 }
