@@ -38,8 +38,6 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].EmployeeInfo = model;
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
             }
-
-
             //if search / page empty
             if (searchString != null)
                 page = 1;
@@ -90,8 +88,10 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(ResultObject2[k]);
                 }
+
                 /*if (temp.Count() > 0)*/
                 ResultObject2 = temp;
+
             }
 
             int pageSize = 15;
@@ -105,6 +105,7 @@ namespace CONTRAST_WEB.Controllers
             }
             else
                 return View(ResultObject2.OrderBy(m => m.FixedCost_Verified.create_date).ToPagedList(pageNumber, pageSize));
+
         }
 
         [HttpPost]

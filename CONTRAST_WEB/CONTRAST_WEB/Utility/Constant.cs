@@ -9,14 +9,14 @@ namespace CONTRAST_WEB.Models
     public static class Constant
     {
         //dev	       
-        public static string Baseurl = "http://10.85.40.68:90/";	
+        //public static string Baseurl = "http://10.85.40.68:90/";	
         //local	
-        //public static string Baseurl = "http://10.86.110.96:89/";	
+        public static string Baseurl = "http://10.86.110.14:89/";	
         //QA	
         //public static string Baseurl = "http://10.85.26.25/";	
         //Production	
         //public static string Baseurl = "http://10.185.48.83:444/";
-    
+
         //dev
         public static string PhotoFolder = "http://10.85.40.68:91/PhotoFolder/";
         //local
@@ -30,6 +30,7 @@ namespace CONTRAST_WEB.Models
         //public static string DocumentFolder = "http://10.85.40.68:91/TravelDocuments/";
         //local
         public static string DocumentFolder = "http://10.86.110.96:88/TravelDocuments/";
+
         //Production
         //public static string DocumentFolder = "https://passport.toyota.astra.co.id:5006/TravelDocuments/";
 

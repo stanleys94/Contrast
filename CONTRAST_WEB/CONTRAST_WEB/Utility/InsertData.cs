@@ -222,6 +222,40 @@ namespace CONTRAST_WEB.Models
                                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
             }
         }
+
+        public static async Task RecordPaymentList(tb_r_record_payment_list model)
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.PostAsync("api/RecordPaymentList", new StringContent(
+                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
+
+        public static async Task RecordPaymentProposal(tb_r_record_payment_proposal model)
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.PostAsync("api/RecordPaymentProposal", new StringContent(
+                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
     }       
 
 

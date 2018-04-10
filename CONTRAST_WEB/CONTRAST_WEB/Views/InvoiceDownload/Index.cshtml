@@ -66,10 +66,12 @@
         @Html.Hidden("outstanding", outstanding)
 
         <div class="clearfix">
+
+
             @*@foreach (var items in ViewBag.outstanding)
-                {*@
-            @*@if (items == "contrast.staffpac")
-                {*@
+                    {
+                if (items == "contrast.staffpac")
+                    {*@
 
             <div id="new" style="width:100%;text-align:left;height:415px;overflow-y:scroll; overflow-x:scroll; border:0px;padding:0 5px;">
                 <h4>INVOICE NEW</h4>
@@ -229,9 +231,9 @@
                 }*@
 
             @*@foreach (var items in ViewBag.issued)
-                {*@
-            @*@if (items == "contrast.staffga")
-                {*@
+                    {
+                if (items == "contrast.staffga")
+                    {*@
 
             <div id="issued" style="width:100%;text-align:left;height:415px;overflow-y:scroll; overflow-x:scroll; border:0px;padding:0 5px;" hidden>
                 <h4>INVOICE ISSUED</h4>
@@ -391,6 +393,7 @@
 
 
         </div>
+
         <div style="float:left;margin-top:10px;">
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
             <button type="submit" class="btn btn-default" name="all_download" value="outstanding">Download All (NEW)</button>
@@ -436,7 +439,6 @@
                 }
             }
 
-
         </div>
 
         <div style="float:right;margin-top:10px;" id="issuedPaged" hidden>
@@ -465,9 +467,9 @@
                 if (ViewBag.pageIssued + 3 <= ViewBag.issuedPageMax)
                 {
                     <label>...</label> <button style="color:blue" type="submit" class="btn btn-info" name="pageIssued" value=@ViewBag.issuedPageMax>@ViewBag.issuedPageMax</button>
+
                 }
             }
-
 
         </div>
     }

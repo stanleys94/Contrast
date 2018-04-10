@@ -17,7 +17,6 @@
     </ol>
 </div>
 <div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
-
     @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Get))
     {
         @Html.AntiForgeryToken()
@@ -194,12 +193,13 @@
     @if (ViewBag.startdate != null || ViewBag.enddate != null)
     {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                               new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
     }
     else
     {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
     }
 </div>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

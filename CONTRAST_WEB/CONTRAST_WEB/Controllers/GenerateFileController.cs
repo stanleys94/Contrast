@@ -104,16 +104,16 @@ namespace CONTRAST_WEB.Controllers
             int pageSize = 15;
             int pageNumber = (page ?? 1);
             return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList().ToPagedList(pageNumber, pageSize));
-            //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());
-        }
+            //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());     
 
+        }
+        
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Generate(List<GenerateFileHelper> model)
         {
-
             //todo: add some data from your database into that string:
             MemoryStream memoryStream = new MemoryStream();
             TextWriter tw = new StreamWriter(memoryStream);

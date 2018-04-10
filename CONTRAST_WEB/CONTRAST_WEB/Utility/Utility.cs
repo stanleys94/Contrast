@@ -158,24 +158,24 @@ namespace CONTRAST_WEB.Models
             }
         }
 
-        public static async Task SpecCase(tb_m_spec_employee model)
-        {
-            using (var client = new HttpClient())
-            {
-                //Passing service base url  
-                client.BaseAddress = new Uri(Constant.Baseurl);
+        //public static async Task SpecCase(tb_m_spec_employee model)
+        //{
+        //    using (var client = new HttpClient())
+        //    {
+        //        //Passing service base url  
+        //        client.BaseAddress = new Uri(Constant.Baseurl);
 
-                client.DefaultRequestHeaders.Clear();
-                //Define request data format  
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //        client.DefaultRequestHeaders.Clear();
+        //        //Define request data format  
+        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                //HttpResponseMessage response = await client.PostAsJsonAsync("api/SpecialEmployee", model);
+        //        //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+        //        //HttpResponseMessage response = await client.PostAsJsonAsync("api/SpecialEmployee", model);
 
-                HttpResponseMessage response = await client.PostAsync("api/SpecialEmployee", new StringContent(
-                                    new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
-            }
-        }
+        //        HttpResponseMessage response = await client.PostAsync("api/SpecialEmployee", new StringContent(
+        //                            new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+        //    }
+        //}
 
         public static async Task Budget(tb_m_budget model)
         {

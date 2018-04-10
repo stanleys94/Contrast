@@ -46,6 +46,7 @@
                 <strong class="fnt2">DESTINATION :</strong>
                 <div class="form-group input-group">
                     <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
+                    @Html.HiddenFor(m=>m.TravelRequest.id_destination_city)
                 </div>
             </div>
 
@@ -85,6 +86,10 @@
                     <!--<input type="date" style="width:100%" />-->
                     @Html.TextBoxFor(m => m.Start_Extend, new { @class = "form-control", @type = "date", placeholder = "Departure" })
                     @*@Html.HiddenFor(m => m.Start_Extend)*@
+                </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-offset-0" id="ifYa4">
+                    @Html.CheckBoxFor(m => m.halfday_flag)
+                    <label>HALF DAY</label>
                 </div>
             </div>
 
@@ -268,6 +273,25 @@
         }
     </div>
     <hr />
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div style="height:50px" class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align:center;">
+                        <strong>Make sure your data is valid</strong>, click ok to continue
+                    </div>
+
+                    <div style="margin:10px 100px;">
+                        <button type="submit" style="width:150px; margin:0 100px;" class="btn btn-info btn-lg" name="validate" value="Submit">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>

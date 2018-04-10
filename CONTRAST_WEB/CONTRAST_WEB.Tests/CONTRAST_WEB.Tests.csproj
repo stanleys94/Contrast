@@ -119,6 +119,7 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
+
     <Content Include="Content\PagedList.css" />
   </ItemGroup>
   <ItemGroup>

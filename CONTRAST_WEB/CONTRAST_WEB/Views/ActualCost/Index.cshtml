@@ -27,9 +27,8 @@
     </ol>
 </div>
 
-       List<SelectListItem>
-    asd2 = new List<SelectListItem>
-        ();
+
+       List<SelectListItem> asd2 = new List<SelectListItem>();
         <div style="margin-top:90px;" id="products" class="row list-group _3EibU">
             <div style="width:auto" class="clearfix">
                 <div style="padding:0 5px; width:auto;">
@@ -171,20 +170,21 @@
                                 </table>
                             </div>
                         </div>
-
+                        
                         <div style="margin-top:10px; float:right;">
                             <input name="insert" type="submit" id="selected" class="btn btn-danger" value="SUBMIT">
                             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
                         </div>
                     }
-                    <br />
+
+                             <br />
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
                     @Html.PagedListPager(Model, page => Url.Action("Index",
-                                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
                 </div>
             </div>
-
+            
         </div>
 
         <script>

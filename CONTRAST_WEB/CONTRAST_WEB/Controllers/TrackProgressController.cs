@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using PagedList.Mvc;
 using System.Security.Claims;
+
 
 namespace CONTRAST_WEB.Controllers
 {
@@ -28,6 +30,7 @@ namespace CONTRAST_WEB.Controllers
             List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
             int privillage = 0;
             string privillage_desc = "";
+
             tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
             tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
 
@@ -59,10 +62,6 @@ namespace CONTRAST_WEB.Controllers
                     privillage = 3;
                 }
             }
-
-            //if (user.Contains("all")) privillage = 1;
-            //else if (user.Contains("admin")) privillage = 2;
-            //else if (user.Contains("user")) privillage = 3;            
 
             //pagination
             int pageSize = 15;
@@ -113,7 +112,6 @@ namespace CONTRAST_WEB.Controllers
             else
                 ViewBag.enddate = null;
 
-
             //filter
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -147,10 +145,8 @@ namespace CONTRAST_WEB.Controllers
                 /*if (temp.Count() > 0)*/
                 track = temp;
             }
-
             //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
             return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
-
         }
 
         [HttpPost]
@@ -192,32 +188,7 @@ namespace CONTRAST_WEB.Controllers
             else if (Model[0].privilage.Contains("user")) privillage = 3;
 
             if (insert == "Search")
-            {
-                //List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
-                //if (privillage == 1) new_list = await GetData.TrackingList(search, start, end);
-                //else new_list = await GetData.TrackingListDivison(logged_employee.unit_code_code, search, start, end);
-
-                //if (new_list.Count > 0)
-                //{
-                //    foreach (var item in new_list)
-                //    {
-                //        TrackingHelper temp = new TrackingHelper();
-                //        temp.login_id = Model[0].login_id;
-                //        temp.login_name = Model[0].login_name;
-                //        temp.TrackedList = item;
-                //        track.Add(temp);
-                //    }
-                //}
-                //else
-                //{
-                //    TrackingHelper temp = new TrackingHelper();
-                //    temp.login_id = Model[0].login_id;
-                //    temp.login_name = Model[0].login_name;
-                //    track.Add(temp);
-                //    return View("Index", track);
-                //}
-                //ModelState.Clear();
-                //return View("Index", track.OrderBy(m => m.TrackedList.create_date).ToList());
+            {              
                 List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
                 if (privillage == 1) new_list = await GetData.TrackingListAllSearch(search, start, end);
                 else if (privillage == 2) new_list = await GetData.TrackingListDivisonAllSearch(Admin.Divisi, search, start, end);
@@ -349,11 +320,11 @@ namespace CONTRAST_WEB.Controllers
                 //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
                 //return View("Index", track.OrderByDescending(m => m.TrackedList.create_date).ThenBy(m => m.TrackedList.group_code).ToList().ToPagedList(pageNumber, pageSize));
                 return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
+
             }
         }
 
 
-        //wates
         public async Task<ActionResult> Details(TrackingHelper mood)
         {
             TrackingHelper Model = new TrackingHelper();
@@ -875,21 +846,7 @@ namespace CONTRAST_WEB.Controllers
                         new_cost.Approved_Status = "Not Created Yet";
                         new_cost.Pending = "Staff-GA";
                     }
-                    //if (item.path_file != "Error")
-                    //{
-
-                    //    //new_cost.Path = "http://passport.toyota.astra.co.id:5006/";
-                    //    //new_cost.Path = "http://10.85.40.68:91/";
-                    //    new_cost.Path = Constant.Attch;
-
-                    //    string[] newPath = item.path_file.Split('\\');
-                    //    for (int k = newPath.Count() - 2; k < newPath.Count(); k++)
-                    //    {
-
-                    //        if (k < (newPath.Count() - 1)) new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20") + "/";
-                    //        else new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20");
-                    //    }
-                    //}
+                  
                     Detailed.SettlementCost.Add(new_cost);
                 }
                 else if (item.information_actualcost.Contains("BPD"))
@@ -936,5 +893,6 @@ namespace CONTRAST_WEB.Controllers
             }
             return View(Detailed);
         }
+
     }
 }

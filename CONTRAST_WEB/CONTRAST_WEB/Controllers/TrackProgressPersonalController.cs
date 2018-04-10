@@ -40,10 +40,6 @@ namespace CONTRAST_WEB.Controllers
             privillage_desc = " user";
             privillage = 3;
 
-            //if (user.Contains("all")) privillage = 1;
-            //else if (user.Contains("admin")) privillage = 2;
-            //else if (user.Contains("user")) privillage = 3;            
-
             //pagination
             int pageSize = 15;
             int pageNumber = (page ?? 1);
@@ -110,6 +106,7 @@ namespace CONTRAST_WEB.Controllers
                 }
                 /*if (temp.Count() > 0)*/
                 track = temp;
+
             }
 
             //date filter
@@ -127,8 +124,6 @@ namespace CONTRAST_WEB.Controllers
                 }
                 if (temp.Count() > 0) track = temp;
             }
-
-            //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
             return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
         }
 
@@ -186,9 +181,8 @@ namespace CONTRAST_WEB.Controllers
                     return View("Index", track);
                 }
                 ModelState.Clear();
-                return View("Index", track.OrderByDescending(m => m.TrackedList.id_data).ToList());
-                //return View(track.OrderByDescending(m => m.TrackedList.id_data).ToPagedList(pageNumber, pageSize));
 
+                return View("Index", track.OrderByDescending(m => m.TrackedList.id_data).ToList());
             }
             else if (download == "Download")
             {
@@ -348,8 +342,6 @@ namespace CONTRAST_WEB.Controllers
                     else if (TravelCode[0].apprv_flag_lvl2.Contains("0")) status = "Pending";
                 }
                 else status = "Not Yet";
-
-
                 Detailed.HigherUpApprovalStatus.Add(status);
             }
             if (TravelCode[0].apprv_by_lvl3.HasValue)
@@ -367,8 +359,6 @@ namespace CONTRAST_WEB.Controllers
                     else if (TravelCode[0].apprv_flag_lvl3.Contains("0")) status = "Pending";
                 }
                 else status = "Not Yet";
-
-
                 Detailed.HigherUpApprovalStatus.Add(status);
             }
             if (TravelCode[0].apprv_by_lvl4.HasValue)
@@ -797,21 +787,7 @@ namespace CONTRAST_WEB.Controllers
                         new_cost.Approved_Status = "Not Created Yet";
                         new_cost.Pending = "Staff-GA";
                     }
-                    //if (item.path_file != "Error")
-                    //{
 
-                    //    //new_cost.Path = "http://passport.toyota.astra.co.id:5006/";
-                    //    //new_cost.Path = "http://10.85.40.68:91/";
-                    //    new_cost.Path = Constant.Attch;
-
-                    //    string[] newPath = item.path_file.Split('\\');
-                    //    for (int k = newPath.Count() - 2; k < newPath.Count(); k++)
-                    //    {
-
-                    //        if (k < (newPath.Count() - 1)) new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20") + "/";
-                    //        else new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20");
-                    //    }
-                    //}
                     Detailed.SettlementCost.Add(new_cost);
                 }
                 else if (item.information_actualcost.Contains("BPD"))

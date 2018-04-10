@@ -85,6 +85,28 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
                             OUTSTANDING
                         </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:130px;">
+                            WBS NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            COST CENTER
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
+                            TAX
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            VENDOR
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            INVOICE NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            START DATE
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            END DATE
+                        </th>
+
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
                             GENERATED DATE
                         </th>
@@ -126,7 +148,6 @@
                             <tr>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.group_code)
-                                    @*<button type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>*@
                                     @Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })
                                 </td>
                                 <td class="td">
@@ -157,6 +178,7 @@
                                     {
                                         <label>None</label>
                                     }
+
                                     @Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })
                                 </td>
                                 <td class="td">
@@ -172,6 +194,34 @@
                                     @Html.HiddenFor(Model => Model[k].TrackedList.verified_flag, new { Value = @Model[k].TrackedList.verified_flag })
                                 </td>
                                 @*add*@
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.wbs_no)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.wbs_no, new { Value = @Model[k].TrackedList.wbs_no })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.cost_center)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.cost_center, new { Value = @Model[k].TrackedList.cost_center })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.tax)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.tax, new { Value = @Model[k].TrackedList.tax })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.vendor_code)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.vendor_code, new { Value = @Model[k].TrackedList.vendor_code })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.invoice_number, new { Value = @Model[k].TrackedList.invoice_number })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.start_date)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.start_date, new { Value = @Model[k].TrackedList.start_date })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.end_date)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.end_date, new { Value = @Model[k].TrackedList.end_date })
+                                </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.create_date, new { Value = @Model[k].TrackedList.create_date })
@@ -194,12 +244,13 @@
     @if (ViewBag.startdate != null || ViewBag.enddate != null)
     {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+
     }
     else
     {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                      new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
     }
 </div>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

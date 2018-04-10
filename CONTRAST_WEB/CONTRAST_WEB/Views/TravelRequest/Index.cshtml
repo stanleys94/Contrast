@@ -4,8 +4,11 @@
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
     List<SelectListItem> asd = new List<SelectListItem>();
     List<SelectListItem> asd2 = new List<SelectListItem>();
+    List<SelectListItem> division = new List<SelectListItem>();
+
     asd = ViewBag.RL;
     asd2 = ViewBag.RL2;
+    division = ViewBag.division_name2;
 
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
@@ -73,6 +76,7 @@
                     }
                 </div>
             </div>
+        </div>
 
             <div class="col-md-5 col-md-offset-1">
                 <div class="form-group input-group">
@@ -89,8 +93,17 @@
                 </div>
                 <div style="margin-bottom:-10px;" class="form-group input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                    @Html.TextBox("asd", (string)@ViewBag.division_name, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
+                    @if(Model.special_employee_flag==true)
+                    {
+                      @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "-Division-", new { @class = "form-control", placeholder = "Purpose" })
+                    }
+                    else
+                    {
+                      @Html.TextBox("asd", (string)@ViewBag.division_name, new { @class = "form-control", @readonly = "readonly" })
+                      @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })                        
+                      @Html.HiddenFor(m => m.employee_info.unit_code_name)
+                    }
+
                 </div>
             </div>
 

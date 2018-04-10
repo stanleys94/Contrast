@@ -25,7 +25,6 @@ namespace CONTRAST_WEB.Controllers
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
-
             List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
             List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
 
@@ -56,9 +55,7 @@ namespace CONTRAST_WEB.Controllers
                         || ActualCostHelperObject[k].TravelRequest.destination_name.ToLower().Contains(searchString.ToLower())
                         || ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower().Contains(searchString.ToLower())
                         )
-
-                        temp.Add(ActualCostHelperObject[k]);
-
+                     temp.Add(ActualCostHelperObject[k]);
                 }
                 /*if(temp.Count()>0)*/
                 ActualCostHelperObject = temp;
@@ -109,6 +106,7 @@ namespace CONTRAST_WEB.Controllers
             List<tb_r_travel_actualcost> Rejected = new List<tb_r_travel_actualcost>();
 
             List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
+
             ViewBag.RL3 = await GetData.TaxInfo();
 
             //get new request number
@@ -145,6 +143,7 @@ namespace CONTRAST_WEB.Controllers
                 }
                 /*if (temp.Count() > 0)*/
                 ActualCostHelperObject = temp;
+
             }
 
             //get vendor info

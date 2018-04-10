@@ -27,9 +27,8 @@
     </ol>
 </div>
 
-       List<SelectListItem>
-    asd2 = new List<SelectListItem>
-        ();
+
+       List<SelectListItem> asd2 = new List<SelectListItem>();
         <div style="margin-top:90px;" id="products" class="row list-group _3EibU">
             <div style="width:auto" class="clearfix">
                 <div style="padding:0 5px; width:auto;">
@@ -39,7 +38,9 @@
                             <label style="margin:5px">
                                 REJECTED LIST : &nbsp;
                                 @*<input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.New)&nbsp;
-                                    <input type="radio" id="c2" name="s<label style="color:red;">(@ViewBag.Rejected)</label>check" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
+
+                                <input type="radio" id="c2" name="s<label style="color:red;">(@ViewBag.Rejected)</label>check" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
+
                                 @Html.ActionLink("New", "Index")<label style="color:green;">(@ViewBag.New Pending)</label>
                                 @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
 
@@ -105,6 +106,7 @@
                                             COMMENT REJECTION
                                         </th>
                                     </tr>
+
                                     @if (Model.Count > 0)
                                     {
                                         for (int k = 0; k < Model.Count; k++)
@@ -206,6 +208,7 @@
                 </div>
             </div>
 
+
         </div>
 
         <script>
@@ -231,7 +234,6 @@
 
         <script src="~/Scripts/jquery-1.10.2.min.js"></script>
         <script type="text/javascript">
-
             var new_name = document.getElementsByName("renc");
             for (i = 0; i < new_name.length; i++) {
                 document.getElementById(new_name[i].id).onblur = function () {

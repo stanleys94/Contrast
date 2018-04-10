@@ -27,29 +27,30 @@
                     {
                         <table>
                             <tr>
-                                <td>
+                                <td>                                    
                                     Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "width:300px", placeholder = "No BTA, Noreg, Name, Destination, Vendor Code" })
                                 </td>
                                 <td>
-                                    @if (ViewBag.startdate != null)
-                                    {
+                                   @if (ViewBag.startdate != null)
+                                   {
                                         @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
-                                    }
-                                    else
-                                    {
+                                   }   
+                                   else
+                                   {
                                         @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
                                     }
                                 </td>
-
+                                
                                 <td>
-                                    @if (ViewBag.enddate != null)
-                                    {
-                                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
-                                    }
-                                    else
-                                    {
-                                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
-                                    }
+                                  @if (ViewBag.enddate != null)
+                                  {
+                                     @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                                  }
+                                  else
+                                  {
+                                     @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
+                                  }
+
                                 </td>
                                 <td>
                                     <input type="submit" value="Search" class="btn btn-success" />
@@ -219,7 +220,8 @@
             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
             @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
         </div>
         <div id="show" class="alert alert-success" hidden>
             <strong>Success!</strong> Check File Download on Folder.
