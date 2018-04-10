@@ -30,9 +30,18 @@ namespace CONTRAST_WEB.Controllers
             //var diff = (model.End_Extend - model.Start_Extend);
 
             var meal_platform = await GetData.Procedures(rank.@class);
-
-            model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
-
+            if (model.halfday_flag == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance / 2;
+            }
+            else if (model.halfday_flag == true)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance / 2;
+            }
+            else
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
+            }
             //ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
             return (model);
         }

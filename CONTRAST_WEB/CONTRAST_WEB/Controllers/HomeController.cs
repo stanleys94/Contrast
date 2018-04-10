@@ -47,6 +47,7 @@ namespace CONTRAST_WEB.Controllers
             //percobaan
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
             //tb_m_employee model = await GetData.EmployeeInfo("101795");
+            //tb_m_employee model = await GetData.EmployeeInfo("101795");
 
             ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
