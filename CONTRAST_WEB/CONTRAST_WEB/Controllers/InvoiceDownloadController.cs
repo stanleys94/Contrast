@@ -18,8 +18,8 @@ namespace CONTRAST_WEB.Controllers
 {
     public class InvoiceDownloadController : Controller
     {
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         // GET: InvoiceDownload
         public async Task<ActionResult> Index(tb_m_employee model)
         {
