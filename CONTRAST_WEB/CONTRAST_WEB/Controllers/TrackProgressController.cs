@@ -699,29 +699,41 @@ namespace CONTRAST_WEB.Controllers
                     {
                         new_cost.Approved = "AP";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.ap_verified_datetime);
-                        new_cost.Approved_Status = item.ap_verified_status;
-                        new_cost.Pending = "None";
+                        if (item.ap_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.ap_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.ap_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.ap_verified_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "None";
                     }
                     else if (item.dph_verified_status != null)
                     {
                         new_cost.Approved = "DpH-GA";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.dph_verified_datetime);
-                        new_cost.Approved_Status = item.dph_verified_status;
-                        new_cost.Pending = "AP";
+                        if (item.dph_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.dph_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.dph_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.dph_verified_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "AP";
                     }
                     else if (item.ga_status != null)
                     {
                         new_cost.Approved = "Staff-GA";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.ga_insert_datetime);
-                        new_cost.Approved_Status = item.ga_status;
-                        new_cost.Pending = "DpH-GA";
+                        if (item.ga_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.ga_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.ga_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.ga_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "DpH-GA";
                     }
                     else if (item.sh_verified_status != null)
                     {
                         new_cost.Approved = "DpH-PAC";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.sh_verified_datetime);
-                        new_cost.Approved_Status = item.sh_verified_status;
-                        new_cost.Pending = "Staff-PAC";
+                        if (item.sh_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.sh_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.sh_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.sh_verified_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "Staff-GA";
                     }
                     else
                     {
@@ -738,22 +750,31 @@ namespace CONTRAST_WEB.Controllers
                     {
                         new_cost.Approved = "AP";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.ap_verified_datetime);
-                        new_cost.Approved_Status = item.ap_verified_status;
-                        new_cost.Pending = "None";
+                        if (item.ap_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.ap_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.ap_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.ap_verified_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "None";
                     }
                     else if (item.dph_verified_status != null)
                     {
                         new_cost.Approved = "DpH-GA";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.dph_verified_datetime);
-                        new_cost.Approved_Status = item.dph_verified_status;
-                        new_cost.Pending = "AP";
+                        if (item.dph_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.dph_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.dph_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.dph_verified_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "AP";
                     }
                     else if (item.ga_status != null)
                     {
                         new_cost.Approved = "Staff-GA";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.ga_insert_datetime);
-                        new_cost.Approved_Status = item.ga_status;
-                        new_cost.Pending = "DpH-GA";
+                        if (item.ga_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.ga_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.ga_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.ga_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "DpH-GA";
                     }
 
                     else
@@ -766,8 +787,10 @@ namespace CONTRAST_WEB.Controllers
                     if (item.path_file != "Error")
                     {
 
-                        new_cost.Path = "http://passport.toyota.astra.co.id:5006/";
+                        //new_cost.Path = "http://passport.toyota.astra.co.id:5006/";
                         //new_cost.Path = "http://10.85.40.68:91/";
+                        new_cost.Path = Constant.Baseurl;
+                        
                         string[] newPath = item.path_file.Split('\\');
                         for (int k = newPath.Count() - 2; k < newPath.Count(); k++)
                         {
@@ -784,8 +807,11 @@ namespace CONTRAST_WEB.Controllers
                     {
                         new_cost.Approved = "AP";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.ap_verified_datetime);
-                        new_cost.Approved_Status = item.ap_verified_status;
-                        new_cost.Pending = "None";
+                        if (item.ap_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                        else if (item.ap_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                        else if (item.ap_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
+                        if (!item.ap_verified_status.Contains("1")) new_cost.Pending = "None";
+                        else new_cost.Pending = "None";
                     }
 
                     else
@@ -804,9 +830,11 @@ namespace CONTRAST_WEB.Controllers
             {
                 if (Detailed.Executed[i].pic_path != null)
                 {
-                    string[] path = Detailed.Executed[i].pic_path.Split('\\');
-                   // Detailed.Executed[i].pic_path = "http://10.85.40.68:91/";
-                    Detailed.Executed[i].pic_path = "http://passport.toyota.astra.co.id:5006/";
+                    string[] path = Detailed.Executed[i].pic_path.Split('\\');  
+                    //ojo hardcode
+                    //Detailed.Executed[i].pic_path = "http://passport.toyota.astra.co.id:5006/";
+                    //Detailed.Executed[i].pic_path = "http://10.85.40.68:91/";
+                    Detailed.Executed[i].pic_path =Constant.Baseurl;
                     for (int k = 2; k < path.Count(); k++)
                     {
                         if (k < path.Count() - 1) Detailed.Executed[i].pic_path = Detailed.Executed[i].pic_path + path[k].Replace(" ", "%20") + '/';
