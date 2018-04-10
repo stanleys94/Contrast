@@ -122,7 +122,8 @@
                             @Html.HiddenFor(m => m[k].TrackedList.wbs_no, new { @value = Model[k].TrackedList.wbs_no })
                             <tr>
                                 <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.group_code)
+                                    @*@Html.DisplayFor(Model => Model[k].TrackedList.group_code)*@
+                                    <button type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>
                                     @Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })
                                 </td>
                                 <td class="td">

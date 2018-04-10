@@ -285,7 +285,6 @@ namespace CONTRAST_WEB.Controllers
                 InvoiceHelper temp = new InvoiceHelper();
                 temp.loged_employee = loged;
                 invoice.Add(temp);
-                return View(invoice);
             }
 
             return View(invoice);
@@ -716,8 +715,6 @@ namespace CONTRAST_WEB.Controllers
                 InvoiceHelper temp = new InvoiceHelper();
                 temp.loged_employee = model[0].loged_employee;
                 Filter.Add(temp);
-                ModelState.Clear();
-                return View("Index", Filter);
             }
             ModelState.Clear();
             return View("Index", Filter);
@@ -737,7 +734,6 @@ namespace CONTRAST_WEB.Controllers
             if (download.HasValue) down = Convert.ToInt32(download);
             List<InvoiceHelper> newList = new List<InvoiceHelper>();
             tb_m_employee_source_data pos = await GetData.GetDivisionSource(Convert.ToInt32(model[0].loged_employee.code));
-
 
             if (all_download != null)
             {
@@ -1029,10 +1025,8 @@ namespace CONTRAST_WEB.Controllers
             }
             ViewBag.Count = Counter;
             ModelState.Clear();
-            if (newList.Count > 0) return View("Download", newList);
-            else return View("Download", newList);
+            return View("Download", newList);
         }
-
 
         [HttpPost]
         [Authorize]
