@@ -960,6 +960,7 @@ namespace CONTRAST_WEB.Models
                 client.BaseAddress = new Uri(Constant.Baseurl);
 
 
+              
                 client.DefaultRequestHeaders.Clear();
                 //Define request data format  
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -3112,7 +3113,7 @@ namespace CONTRAST_WEB.Models
                 return ListItem;
             }
         }
-
+        
         public static async Task<List<tb_r_invoice_actualcost>> TableInvoiceActualcostAll()
         {
             using (var client = new HttpClient())
@@ -3236,8 +3237,341 @@ namespace CONTRAST_WEB.Models
             }
 
         }
+
+        public static async Task<List<tb_r_travel_actualcost>> ActualCostBTA(string group_code)
+        {
+            List<tb_r_travel_actualcost> Response = new List<tb_r_travel_actualcost>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/ActualCost/GetBTA?gcode=" + group_code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Response = JsonConvert.DeserializeObject<List<tb_r_travel_actualcost>>(EmpResponse);
+                }
+            }
+            return Response;
+        }
+
+        public static async Task<List<tb_r_travel_execution>> TravelExecution(string bta)
+        {
+            using (var client = new HttpClient())
+            {
+                List<tb_r_travel_execution> ListItem = new List<tb_r_travel_execution>();
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TravelExecution/BTA?bta=" + bta);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_travel_execution> ResponseList = new List<tb_r_travel_execution>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_travel_execution>>(str);
+                    foreach (var item in ResponseList)
+                    {
+                        if (item.group_code.Contains(bta.Trim(' '))) ListItem.Add(item);
+                    }
+                }
+                return ListItem;
+            }
+
+
+        }
+
+        public static async Task<List<vw_payment_list>> PaymentListData()
+        {
+            List<vw_payment_list> ResponseList = new List<vw_payment_list>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentList/");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_list>>(str);
+                }
+
+            }
+            return ResponseList;
+        }
+
+        public static async Task<List<vw_payment_list>> PaymentListDataFiltered(string search, DateTime? start, DateTime? end)
+        {
+            List<vw_payment_list> ResponseList = new List<vw_payment_list>();
+            List<vw_payment_list> FilteredList = new List<vw_payment_list>();
+            List<vw_payment_list> ReturnList = new List<vw_payment_list>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentList");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_list>>(str);
+                }
+                foreach (var item in ResponseList)
+                {
+                    if (item.BTR_NO.ToLower().Contains(search) ||
+                        item.EMPLOYEE_NAME.ToLower().Contains(search) ||
+                        item.DESTINATION.ToLower().Contains(search) ||
+                        item.ID_CITY.ToString().Contains(search) ||
+                        item.COST_CENTER_.ToLower().Contains(search) ||
+                        item.WBS_ELEMENT_.ToLower().Contains(search) ||
+                        item.TRAVEL_TYPE.ToLower().Contains(search) ||
+                        item.BUDGET.ToLower().Contains(search)
+                        )
+                    {
+                        FilteredList.Add(item);
+                    }
+                }
+
+                if (start.HasValue && end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start && end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else if (start.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start) ReturnList.Add(item);
+                    }
+
+                }
+                else if (end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else ReturnList = FilteredList;
+            }
+            return ReturnList;
+        }
+
+        public static async Task<List<vw_payment_proposal>> PaymentProposalData()
+        {
+            List<vw_payment_proposal> ResponseList = new List<vw_payment_proposal>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentProposal/");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_proposal>>(str);
+                }
+
+            }
+            return ResponseList;
+        }
+
+        public static async Task<List<vw_payment_proposal>> PaymentProposalDataFiltered(string search, DateTime? start, DateTime? end)
+        {
+            List<vw_payment_proposal> ResponseList = new List<vw_payment_proposal>();
+            List<vw_payment_proposal> FilteredList = new List<vw_payment_proposal>();
+            List<vw_payment_proposal> ReturnList = new List<vw_payment_proposal>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/PaymentProposal");
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_payment_proposal>>(str);
+                }
+                foreach (var item in ResponseList)
+                {
+                    if (//item.id_data.Contains(search) ||
+                        item.vendor_code.ToLower().Contains(search) ||
+                        item.currency.ToLower().Contains(search) ||
+                        item.total_amount.ToString().Contains(search) ||
+                        item.beneficiary_name.ToLower().Contains(search) ||
+                        item.account_number.ToLower().Contains(search) ||
+                        item.employee_name.ToLower().Contains(search) ||
+                        item.refference.ToLower().Contains(search)
+                        )
+                    {
+                        FilteredList.Add(item);
+                    }
+                }
+
+                if (start.HasValue && end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start && end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else if (start.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (start_date >= start) ReturnList.Add(item);
+                    }
+
+                }
+                else if (end.HasValue)
+                {
+                    foreach (var item in FilteredList)
+                    {
+                        DateTime start_date = new DateTime();
+                        DateTime end_date = new DateTime();
+                        start_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        end_date = DateTime.ParseExact(item.vendor_code, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        if (end_date <= end) ReturnList.Add(item);
+                    }
+                }
+                else ReturnList = FilteredList;
+            }
+            return ReturnList;
+        }
+
+
+        public static async Task<vw_tracking_transaction_data_new> TrackingListID(int id)
+        {
+            vw_tracking_transaction_data_new ListItem = new vw_tracking_transaction_data_new();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TrackingTransactionDataNew");
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<vw_tracking_transaction_data_new> ResponseList = new List<vw_tracking_transaction_data_new>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<vw_tracking_transaction_data_new>>(str);
+
+                    int k = 1;
+
+                    foreach (var item in ResponseList)
+                    {
+                        var temp = new vw_tracking_transaction_data_new();
+
+                        if (item.id_data == id)
+                        {
+                            ListItem = item;
+                        }
+                        k++;
+                    }
+                }
+            }
+
+            return ListItem;
+        }
+
     }
 
 
+        public static async Task<List<tb_m_special_employee>> SpecialEmployee(string no_reg)
+        {
+            List<tb_m_special_employee> model = new List<tb_m_special_employee>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
 
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/SpecialEmployee/GetEmployee?id=" + no_reg);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    model = JsonConvert.DeserializeObject<List<tb_m_special_employee>>(EmpResponse);
+                }
+            }
+            return model;
+        }
+    }
+     
+   
+    
 }

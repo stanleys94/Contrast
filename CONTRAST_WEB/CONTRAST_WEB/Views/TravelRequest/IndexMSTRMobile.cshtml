@@ -45,8 +45,9 @@
                     <div style="min-width:300px;max-width:200px;" class="input-group">
                         <!--<a href="/Participant/" class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Participant</a>-->
                         @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
+                        <input type="text" id="code" name="code" value=@Model.employee_info.code hidden>
                         <span class="input-group-btn">
-                           <button style="width:70px;" type="submit" class="btn btn-info btn-xs form-control" name="Add" value="Submit">Add</button>
+                            <button style="width:70px;" type="submit" class="btn btn-info btn-xs form-control" name="Add" value="Submit">Add</button>
                         </span>
                     </div>
                     @if (Model.participants != null)
@@ -423,14 +424,14 @@
             $.ajax({
                 url: '@Url.Action("GetSearchValue", "TravelRequest")',
                 dataType: "json",
-                data: { search: $("#searchInput").val() },
+                data: { search: $("#searchInput").val(), code: $("#code").val() },
                 success: function (data) {
                     response($.map(data, function (item) {
                         return { label: item.name, value: item.code };
                     }));
                 },
                 error: function (xhr, status, error) {
-                    alert("Error boss");
+                    alert("Error has detected");
                 }
             });
         }

@@ -1,0 +1,263 @@
+﻿@model PagedList.IPagedList<CONTRAST_WEB.Models.ActualCostShtHelper>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+
+    List<List<SelectListItem>> asd = new List<List<SelectListItem>>();
+    asd = ViewBag.RL;
+    List<SelectListItem> asd2 = new List<SelectListItem>();
+    asd2 = ViewBag.RL2;
+    List<SelectListItem> asd3 = new List<SelectListItem>();
+    asd3 = ViewBag.RL3;
+
+}
+
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Actual Cost Rejected List</li>
+    </ol>
+</div>
+
+
+       List<SelectListItem> asd2 = new List<SelectListItem>();
+        <div style="margin-top:90px;" id="products" class="row list-group _3EibU">
+            <div style="width:auto" class="clearfix">
+                <div style="padding:0 5px; width:auto;">
+                    @using (Html.BeginForm("Rejected", "ActualCost", FormMethod.Get))
+                    {
+                        <div class="well">
+                            <label style="margin:5px">
+                                REJECTED LIST : &nbsp;
+                                @*<input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.New)&nbsp;
+
+                                <input type="radio" id="c2" name="s<label style="color:red;">(@ViewBag.Rejected)</label>check" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
+
+                                @Html.ActionLink("New", "Index")<label style="color:green;">(@ViewBag.New Pending)</label>
+                                @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
+
+                            </label>
+                            Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Name, BTA, Destination, Type" })
+                            <input type="submit" value="Search" />
+                        </div>
+                    }
+                    @using (Html.BeginForm("Insert", "ActualCost", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div id="reject" style="width:1200px;height:350px;overflow-x:scroll;overflow-y:scroll;">
+                            <div style="width:1800px">
+                                <table class="table table-condensed" style="text-align:center;">
+                                    <tr style="color:white;">
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            NAME
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            CODE
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            DEPARTURE
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;width:200px;">
+                                            RETURN
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            DESTINATION
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            TYPE
+                                        </th>
+                                        <th style="width:120px; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            EXPENSE
+                                        </th>
+                                        <th style="width:120px; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            REJECTED
+                                        </th>
+                                        <th style="width:120px; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            ACTUAL COST
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            VENDOR
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            PROVIDER
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            SUGGESTION
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            TAX
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            NO INVOIVE
+                                        </th>
+                                        <th style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            NO TAX INVOICE
+                                        </th>
+                                        <th id="comment1" name="comment1" class="comment1" style="background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                            COMMENT REJECTION
+                                        </th>
+                                    </tr>
+
+                                    @if (Model.Count > 0)
+                                    {
+                                        for (int k = 0; k < Model.Count; k++)
+                                        {
+                                            <tr class="table-responsive">
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.name)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.name)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.no_reg)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.id_request)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.id_actualcost)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.overseas_flag)
+                                                    @Html.HiddenFor(Model => Model[k].login_id)
+                                                    @Html.HiddenFor(Model => Model[k].ActualCost.final_status)
+                                                    @Html.HiddenFor(Model => Model[k].ActualCost.id_actualcost)
+                                                    @Html.HiddenFor(Model => Model[k].ActualCost.no_reg)
+                                                    @Html.HiddenFor(Model => Model[k].ActualCost.wbs_no)
+                                                    @Html.HiddenFor(Model => Model[k].ActualCost.cost_center)
+
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.group_code)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.group_code)
+                                                </td>
+                                                <td class="td" style="width:200px">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.start_date)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.start_date)
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.end_date)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.end_date)
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.destination_name)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.id_destination_city)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.destination_name)
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.jenis_transaksi)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.jenis_transaksi)
+                                                </td>
+
+                                                <td class="td" style="width:300px;">
+                                                    <span>Rp.</span>
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.expense)
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.expense)
+                                                </td>
+
+                                                <td class="td" style="width:300px;">
+                                                    <span>Rp.</span>
+                                                    @String.Format("{0:n0}", Model[k].TravelRequestRejected.amount_total, new { style = "width:500px" })
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.amount_total)
+
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.TextBoxFor(Model => Model[k].ActualCost.amount, new { @class = "form-control required numeric", id = "CurrentBalance", style = "width:100px", @type = "number", @Value = @Model[k].ActualCost.amount })
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DropDownListFor(Model => Model[k].ActualCost.vendor_code, asd[k], new { @class = "form-control", style = "width:150px", placeholder = "Vendor" })
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.TextBoxFor(Model => Model[k].ActualCost.path_file, new { @class = "form-control", style = "width:150px", placeholder = "Airlines/Hotel" })
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DisplayFor(Model => Model[k].TravelRequestRejected.hotel_flight_name)
+                                                    @Html.HiddenFor(Model => Model[k].TravelRequestRejected.hotel_flight_name)
+                                                </td>
+                                                <td class="td" style="width:200px;">
+                                                    @Html.DropDownListFor(Model => Model[k].ActualCost.tax, asd3, new { @class = "form-control", style = "width:70px", placeholder = "Tax" })
+                                                </td>
+                                                <td class="td">
+                                                    @Html.TextBoxFor(Model => Model[k].ActualCost.invoice_number, new { @class = "form-control", style = "width:200px", @Value = @Model[k].ActualCost.invoice_number })
+                                                </td>
+                                                <td class="td">
+                                                    @Html.TextBoxFor(Model => Model[k].ActualCost.tax_invoice_number, new { @class = "form-control", style = "width:200px", @Value = @Model[k].ActualCost.tax_invoice_number })
+                                                </td>
+                                                <td id="comment2" name="comment2" class="td item_requeststatus comment2">
+                                                    @Html.TextBoxFor(Model => Model[k].TravelRequestRejected.comment, new { @class = "form-control", style = "width:200px", @readonly = "readonly" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px; float:right;">
+                            <input name="insert" type="submit" id="selected" class="btn btn-danger" value="SUBMIT">
+                            <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
+                        </div>
+                    }
+                    <br />
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                    @Html.PagedListPager(Model, page => Url.Action("Rejected",
+                                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                </div>
+            </div>
+
+
+        </div>
+
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="mySmallModalLabel">Small modal</h4>
+                    </div>
+                    <div class="modal-body">
+                        Hai... <strong>USER</strong>. Request Anda Sudah dikirim, tunggu informasi lebih lanjut..
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript">
+            var new_name = document.getElementsByName("renc");
+            for (i = 0; i < new_name.length; i++) {
+                document.getElementById(new_name[i].id).onblur = function () {
+                    this.value = "Rp." + parseFloat(this.value.replace(/,/g, ""))
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    var name = this.getAttribute("name");
+                    console.log(name);
+                    console.log(this.id);
+
+                    var new_value = this.value.replace("Rp.", "");
+                    var new_value2 = new_value.replace(".00", "");
+                    var new_value3 = new_value2.replace(/,/g, "");
+
+                    var new_id = "renc" + this.id;
+                    console.log(new_value2);
+                    console.log(new_value3);
+                    console.log(new_id);
+
+                    document.getElementById(new_id).value = new_value3;
+                    document.getElementById("details").value = new_value3;
+
+
+                }
+            }
+        </script>

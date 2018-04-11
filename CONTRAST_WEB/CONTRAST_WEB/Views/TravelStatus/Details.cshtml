@@ -5,7 +5,6 @@
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL;
 }
-
 @using (Html.BeginForm("Drop", "TravelStatus", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -18,22 +17,16 @@
                 <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-5 col-md-offset-1">
                     <h5 class="h5a">No Reg :</h5>
                     @Html.DisplayFor(m => m.travel_request.no_reg, new { placeholder = "No Reg", @readonly = "readonly" })
-
                     <h5 class="h5a">Request Purpose :</h5>
                     @Html.DisplayFor(m => m.travel_request.travel_purpose, new { placeholder = "Departure", @readonly = "readonly" })
-
                     <h5 class="h5a">Reason of Assignment :</h5>
                     @Html.DisplayFor(m => m.travel_request.reason_of_assigment, new { placeholder = "Reason Assigment", @readonly = "readonly" })
-
                     <h5 class="h5a">Request Type :</h5>
                     @Html.TextBox("adasd", Model.travel_request.request_type.Value == true ? "Planned" : "Unplanned", new { @style = "border:0px;", @readonly = "readonly" })
-
                     <h5 class="h5a">Going Overseas :</h5>
                     @Html.TextBox("adasd", Model.travel_request.overseas_flag.Value == true ? "Yes" : "No", new { @readonly = "readonly", @style = "border:0px;" })
-
                     <h5 class="h5a">New or Renewal Passport :</h5>
                     @Html.TextBox("adasd", Model.travel_request.passport_flag == true ? "Yes" : "No", new { @style = "border:0px;", placeholder = "Reason Assigment", @readonly = "readonly" })
-
                     <h5 class="h5a">Destination :</h5>
                     <label>@Html.DisplayFor(m => m.travel_request.destination_1, new { @readonly = "readonly" })</label>
                     @if (Model.travel_request.destination_2 != null)
@@ -46,16 +39,13 @@
                         <label>-</label>
                         <label>@Html.DisplayFor(m => m.travel_request.destination_3, new { @readonly = "readonly" })</label>
                     }
-
                     <h5 class="h5a">Departure Date :</h5>
                     <p>@Html.DisplayFor(m => m.travel_request.startDate_1, new { @type = "datetime-local", placeholder = "Departure", @readonly = "readonly" })</p>
-
                     @*@if (Model.travel_request.endDate_1 != null)
                         {
                             <h5 class="h5a">Return Date :</h5>
                             <p>@Html.DisplayFor(m => m.travel_request.endDate_1, new { @type = "datetime-local", placeholder = "Return", @readonly = "readonly" })</p>
                         }*@
-
                     @if (Model.travel_request.endDate_3 != null)
                     {
                         <h5 class="h5a">Return Date :</h5>
@@ -71,7 +61,6 @@
                         <h5 class="h5a">Return Date :</h5>
                         <p>@Html.DisplayFor(m => m.travel_request.endDate_1, new { @type = "datetime-local", placeholder = "Return", @readonly = "readonly" })</p>
                     }
-
                 </div>
                 <div class="col-md-5">
                     <div class="wellIn2">
@@ -81,7 +70,7 @@
                         @for (int k = 0; k < ViewBag.Approvalnum; k++)
                         {
                             if (ViewBag.Bossname[k] == null) { break; }
-                            
+
                             <div class="main1">
                                 @if ((k == ViewBag.Approvalnum - 1))
                                 {
@@ -103,7 +92,6 @@
                                 }
                                 <div class="teks">
                                     <div style="color:gray" class="teks1">
-
                                         @if (k >= ViewBag.StatusState.Count)
                                         {
                                             <span>@Html.Label("Waiting For ", new { @style = "color:orange; margin-right:5px;" })</span>
@@ -131,7 +119,6 @@
                                         }
                                     </div>
                                 </div>
-
 
                                 <div class="lab">
                                     <div class="lab1">
@@ -163,7 +150,6 @@
                     <br />
                     <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
                     <button style="width:145px;position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-lg">Download</button>
-
                     @if (Model.travel_request.status_request == null)
                     {
                         <button type="button" style="width:145px; position:relative;left:10px" class="btn btn-danger btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
@@ -178,13 +164,10 @@
                                             <strong>Are you sure you want to drop this request ?? </strong>
                                             <br />click Yes to drop
                                         </div>
-
                                         <div style="margin:10px 100px; text-align:center; ">
                                             <br />
                                             <span> <button type="submit" style="width:75px; position:center;" class="btn btn-danger btn-lg" name="drop" value="submit">Yes</button></span>
-
                                             <span> <button type="button" style="width:75px; position:center;" class="btn btn-info btn-lg" name="close" data-dismiss="modal">No</button></span>
-
                                         </div>
                                     </div>
                                 </div>

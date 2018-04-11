@@ -402,7 +402,7 @@
     }
     <div class="item col-xs-12 col-lg-3">
         <div class="thumbnail border">
-            @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
+            @using (Html.BeginForm("Index", "TrackProgressPersonal", FormMethod.Post))
             {
                 @Html.HiddenFor(m => m.code)
                 @Html.HiddenFor(m => m.name)
@@ -418,6 +418,50 @@
                 <div style="padding:10px 5px;">
                     <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="user" id="user" /></a>
                     <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL TRACKING</div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "PaymentList", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.HiddenFor(m => m.@class)
+                @Html.HiddenFor(m => m.entry_date)
+                @Html.HiddenFor(m => m.position)
+                @Html.HiddenFor(m => m.bank_account)
+                @Html.HiddenFor(m => m.unit_code_code)
+                @Html.HiddenFor(m => m.unit_code_id)
+                @Html.HiddenFor(m => m.unit_code_name)
+                @Html.Hidden("user", "user")
+                @Html.AntiForgeryToken()
+                <div style="padding:10px 5px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="user" id="user" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PAYMENT LIST</div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "PaymentProposal", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.HiddenFor(m => m.@class)
+                @Html.HiddenFor(m => m.entry_date)
+                @Html.HiddenFor(m => m.position)
+                @Html.HiddenFor(m => m.bank_account)
+                @Html.HiddenFor(m => m.unit_code_code)
+                @Html.HiddenFor(m => m.unit_code_id)
+                @Html.HiddenFor(m => m.unit_code_name)
+                @Html.Hidden("user", "user")
+                @Html.AntiForgeryToken()
+                <div style="padding:10px 5px;">
+                    <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="user" id="user" /></a>
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PAYMENT PROPOSAL</div>
                 </div>
             }
         </div>

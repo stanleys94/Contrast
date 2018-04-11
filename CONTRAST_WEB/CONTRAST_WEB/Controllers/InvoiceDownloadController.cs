@@ -12,6 +12,7 @@ using System.IO;
 using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using PdfSharp;
+using System.Security.Claims;
 
 namespace CONTRAST_WEB.Controllers
 {
@@ -19,11 +20,19 @@ namespace CONTRAST_WEB.Controllers
     {
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        //GET: InvoiceDownload
+        // GET: InvoiceDownload
         public async Task<ActionResult> Index(tb_m_employee model)
         {
+            //var identity = (ClaimsIdentity)User.Identity;
+            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            //ViewBag.Privillege = claims;
+            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+
             List<vw_invoice_actualcost_new> result = await GetData.InvoiceActualCostNew();
             List<tb_r_invoice_actualcost> issued = await GetData.TableInvoiceActualcostAll();
+
+            if (result.Count > 0) result = result.OrderBy(m => m.group_code).ToList();
+            if (issued.Count > 0) issued = issued.OrderBy(m => m.group_code).ToList();
 
             List<InvoiceHelper> invoice = new List<InvoiceHelper>();
             List<InvoiceHelper> ga_issued = new List<InvoiceHelper>();
@@ -36,6 +45,7 @@ namespace CONTRAST_WEB.Controllers
 
             if (!division.Departemen.Contains("GENERAL"))
             {
+                ViewBag.division = "staffpac";
                 foreach (var item in result)
                 {
                     InvoiceHelper temp = new InvoiceHelper();
@@ -83,6 +93,7 @@ namespace CONTRAST_WEB.Controllers
                     invoice.Add(temp);
                 }
             }
+            else ViewBag.division = "staffga";
             foreach (var item in issued)
             {
                 InvoiceHelper temp = new InvoiceHelper();
@@ -98,7 +109,7 @@ namespace CONTRAST_WEB.Controllers
 
                 if (item.bank_account != null) temp.invoice.bank_account = item.bank_account;
                 if (item.cost_center != null) temp.invoice.cost_center = item.cost_center;
-                if (item.create_date != null) temp.invoice.create_date = item.create_date;
+                if (item.create_date != null) temp.invoice.create_date = item.PO_issued_date;
 
                 if (item.destination_1 != null) temp.invoice.destination_1 = item.destination_1;
                 if (item.destination_2 != null) temp.invoice.destination_2 = item.destination_2;
@@ -123,6 +134,7 @@ namespace CONTRAST_WEB.Controllers
                 if (item.endDate_5 != null) temp.invoice.endDate_5 = item.endDate_5;
                 if (item.endDate_6 != null) temp.invoice.endDate_6 = item.endDate_6;
 
+
                 if (item.group_code != null) temp.invoice.group_code = item.group_code;
 
                 if (item.hotel_flight_name_1 != null) temp.invoice.hotel_flight_name_1 = item.hotel_flight_name_1;
@@ -137,6 +149,7 @@ namespace CONTRAST_WEB.Controllers
                 if (item.jenis_transaksi != null) temp.invoice.jenis_transaksi = item.jenis_transaksi;
                 if (item.name != null) temp.invoice.name = item.name;
                 if (item.no_reg != null) temp.invoice.no_reg = Convert.ToInt32(item.no_reg);
+                if (item.qty != null) temp.invoice.qty = item.qty;
 
                 if (item.startDate_1 != null) temp.invoice.startDate_1 = item.startDate_1;
                 if (item.startDate_2 != null) temp.invoice.startDate_2 = item.startDate_2;
@@ -274,13 +287,17 @@ namespace CONTRAST_WEB.Controllers
             {
                 ViewBag.outstanding = issued.Count - ga_issued.Count;
                 ViewBag.issued = ga_issued.Count;
+                ViewBag.outstandingTotal = ViewBag.outstanding;
+                ViewBag.issuedTotal = ViewBag.issued;
             }
             else
             {
                 ViewBag.outstanding = result.Count;
                 ViewBag.issued = issued.Count;
+                ViewBag.outstandingTotal = ViewBag.outstanding;
+                ViewBag.issuedTotal = ViewBag.issued;
             }
-            if (result.Count == 0)
+            if (invoice.Count == 0)
             {
                 InvoiceHelper temp = new InvoiceHelper();
                 temp.loged_employee = loged;
@@ -288,18 +305,73 @@ namespace CONTRAST_WEB.Controllers
                 return View(invoice);
             }
 
-            return View(invoice);
+            List<InvoiceHelper> PagedList = new List<InvoiceHelper>();
+            int MaxPageNew = ((invoice.Count() - issued.Count()) / 5) + 1;
+            int MaxPageIssued = ((invoice.Count() - ViewBag.outstandingTotal) / 5) + 1;
+
+            ViewBag.newPageMax = MaxPageNew;
+            ViewBag.pageNew = 1;
+
+            ViewBag.issuedPageMax = MaxPageIssued;
+            ViewBag.pageIssued = 1;
+
+            if (ViewBag.outstanding < 6)
+            {
+                for (int k = 0; k < ViewBag.outstanding; k++)
+                {
+                    PagedList.Add(invoice[k]);
+                }
+            }
+            else
+            {
+                for (int k = 0; k < 5; k++)
+                {
+                    PagedList.Add(invoice[k]);
+                }
+                ViewBag.outstanding = 5;
+            }
+
+            if (ViewBag.issued < 6)
+            {
+                for (int k = ViewBag.outstandingTotal; k < ViewBag.outstandingTotal + ViewBag.issued; k++)
+                {
+                    PagedList.Add(invoice[k]);
+                }
+            }
+            else
+            {
+                for (int k = ViewBag.outstandingTotal; k < ViewBag.outstandingTotal + 5; k++)
+                {
+                    PagedList.Add(invoice[k]);
+                }
+                ViewBag.issued = 5;
+            }
+
+            return View(PagedList);
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Search(List<InvoiceHelper> model, string search, DateTime? start, DateTime? end)
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        public async Task<ActionResult> Search(List<InvoiceHelper> model, DateTime? start, DateTime? end, int? pageNew, int? pageIssued, string search = "")
         {
+            //search kosng
+            //if (model.Count == 0 || search == "" || search == null)
+            //{
+            //    return RedirectToAction("Index");
+            //}
+
+            ViewBag.search = search;
+            if (start.HasValue) ViewBag.start = Convert.ToDateTime(start).ToString("yyyy-MM-dd");
+            if (end.HasValue) ViewBag.end = Convert.ToDateTime(end).ToString("yyyy-MM-dd");
 
             string lower = search.ToLower();
             List<vw_invoice_actualcost_new> result = await GetData.InvoiceActualCostNew();
             List<tb_r_invoice_actualcost> issued = await GetData.TableInvoiceActualcostAll();
+
+            if (result.Count > 0) result = result.OrderBy(m => m.group_code).ToList();
+            if (issued.Count > 0) issued = issued.OrderBy(m => m.group_code).ToList();
+
             List<tb_r_invoice_actualcost> issued_filter = new List<tb_r_invoice_actualcost>();
 
             List<InvoiceHelper> invoice = new List<InvoiceHelper>();
@@ -314,7 +386,13 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(loged.code));
 
             bool GA = false;
-            if (division.Departemen.Contains("GENERAL")) GA = true;
+            if (division.Departemen.Contains("GENERAL"))
+            {
+                GA = true;
+                ViewBag.division = "staffga";
+            }
+            else ViewBag.division = "staffpac";
+
             if (!GA)
             {
                 foreach (var item in result)
@@ -378,6 +456,9 @@ namespace CONTRAST_WEB.Controllers
                             if (item.create_date >= start && item.create_date <= end)
                             {
                                 temp.invoice = item;
+                                temp.loged_employee = loged;
+                                invoice.Add(temp);
+                                Filter.Add(temp);
                             }
                         }
                         else if (start.HasValue)
@@ -385,6 +466,9 @@ namespace CONTRAST_WEB.Controllers
                             if (item.create_date >= start)
                             {
                                 temp.invoice = item;
+                                temp.loged_employee = loged;
+                                invoice.Add(temp);
+                                Filter.Add(temp);
                             }
                         }
                         else if (end.HasValue)
@@ -392,13 +476,19 @@ namespace CONTRAST_WEB.Controllers
                             if (item.create_date <= end)
                             {
                                 temp.invoice = item;
+                                temp.loged_employee = loged;
+                                invoice.Add(temp);
+                                Filter.Add(temp);
                             }
                         }
-                        else temp.invoice = item;
+                        else
+                        {
+                            temp.invoice = item;
+                            temp.loged_employee = loged;
+                            invoice.Add(temp);
+                            Filter.Add(temp);
+                        }
 
-                        temp.loged_employee = loged;
-                        invoice.Add(temp);
-                        Filter.Add(temp);
                     }
                     ViewBag.outstanding = invoice.Count();
                 }
@@ -456,100 +546,99 @@ namespace CONTRAST_WEB.Controllers
                     {
                         if (start.HasValue && end.HasValue)
                         {
-                            if (item.create_date >= start && item.create_date <= end) issued_filter.Add(item);
+                            if (item.PO_issued_date >= start && item.PO_issued_date <= end) issued_filter.Add(item);
                         }
                         else if (start.HasValue)
                         {
-                            if (item.create_date >= start) issued_filter.Add(item);
+                            if (item.PO_issued_date >= start) issued_filter.Add(item);
                         }
                         else if (end.HasValue)
                         {
-                            if (item.create_date <= end) issued_filter.Add(item);
+                            if (item.PO_issued_date <= end) issued_filter.Add(item);
                         }
                         else issued_filter.Add(item);
                     }
-
-                    foreach (var item2 in issued_filter)
-                    {
-                        InvoiceHelper temp = new InvoiceHelper();
-                        if (loged != null) temp.loged_employee = loged;
-                        temp.invoice = new vw_invoice_actualcost_new();
-                        if (item2.amount_1 != null) temp.invoice.amount_1 = item2.amount_1;
-                        if (item2.amount_2 != null) temp.invoice.amount_2 = item2.amount_2;
-                        if (item2.amount_3 != null) temp.invoice.amount_3 = item2.amount_3;
-                        if (item2.amount_4 != null) temp.invoice.amount_4 = item2.amount_4;
-                        if (item2.amount_5 != null) temp.invoice.amount_5 = item2.amount_5;
-                        if (item2.amount_6 != null) temp.invoice.amount_6 = item2.amount_6;
-                        if (item2.amount_total != null) temp.invoice.amount_total = item2.amount_total;
-
-                        if (item2.bank_account != null) temp.invoice.bank_account = item2.bank_account;
-                        if (item2.cost_center != null) temp.invoice.cost_center = item2.cost_center;
-                        if (item2.create_date != null) temp.invoice.create_date = item2.create_date;
-
-                        if (item2.destination_1 != null) temp.invoice.destination_1 = item2.destination_1;
-                        if (item2.destination_2 != null) temp.invoice.destination_2 = item2.destination_2;
-                        if (item2.destination_3 != null) temp.invoice.destination_3 = item2.destination_3;
-                        if (item2.destination_4 != null) temp.invoice.destination_4 = item2.destination_4;
-                        if (item2.destination_5 != null) temp.invoice.destination_5 = item2.destination_5;
-                        if (item2.destination_6 != null) temp.invoice.destination_6 = item2.destination_6;
-
-                        if (item2.Duration_1 != null) temp.invoice.Duration_1 = item2.Duration_1;
-                        if (item2.Duration_2 != null) temp.invoice.Duration_2 = item2.Duration_2;
-                        if (item2.Duration_3 != null) temp.invoice.Duration_3 = item2.Duration_3;
-                        if (item2.Duration_4 != null) temp.invoice.Duration_4 = item2.Duration_4;
-                        if (item2.Duration_5 != null) temp.invoice.Duration_5 = item2.Duration_5;
-                        if (item2.Duration_6 != null) temp.invoice.Duration_6 = item2.Duration_6;
-
-                        if (item2.employee_input != null) temp.invoice.employee_input = item2.employee_input;
-
-                        if (item2.endDate_1 != null) temp.invoice.endDate_1 = item2.endDate_1;
-                        if (item2.endDate_2 != null) temp.invoice.endDate_2 = item2.endDate_2;
-                        if (item2.endDate_3 != null) temp.invoice.endDate_3 = item2.endDate_3;
-                        if (item2.endDate_4 != null) temp.invoice.endDate_4 = item2.endDate_4;
-                        if (item2.endDate_5 != null) temp.invoice.endDate_5 = item2.endDate_5;
-                        if (item2.endDate_6 != null) temp.invoice.endDate_6 = item2.endDate_6;
-
-                        if (item2.group_code != null) temp.invoice.group_code = item2.group_code;
-
-                        if (item2.hotel_flight_name_1 != null) temp.invoice.hotel_flight_name_1 = item2.hotel_flight_name_1;
-                        if (item2.hotel_flight_name_2 != null) temp.invoice.hotel_flight_name_2 = item2.hotel_flight_name_2;
-                        if (item2.hotel_flight_name_3 != null) temp.invoice.hotel_flight_name_3 = item2.hotel_flight_name_3;
-                        if (item2.hotel_flight_name_4 != null) temp.invoice.hotel_flight_name_4 = item2.hotel_flight_name_4;
-                        if (item2.hotel_flight_name_5 != null) temp.invoice.hotel_flight_name_5 = item2.hotel_flight_name_5;
-                        if (item2.hotel_flight_name_6 != null) temp.invoice.hotel_flight_name_6 = item2.hotel_flight_name_6;
-
-                        if (item2.id_data != null) temp.invoice.id_data = item2.id_data;
-                        if (item2.invoice_number != null) temp.invoice.invoice_number = item2.invoice_number;
-                        if (item2.jenis_transaksi != null) temp.invoice.jenis_transaksi = item2.jenis_transaksi;
-                        if (item2.name != null) temp.invoice.name = item2.name;
-                        if (item2.no_reg != null) temp.invoice.no_reg = Convert.ToInt32(item2.no_reg);
-
-                        if (item2.startDate_1 != null) temp.invoice.startDate_1 = item2.startDate_1;
-                        if (item2.startDate_2 != null) temp.invoice.startDate_2 = item2.startDate_2;
-                        if (item2.startDate_3 != null) temp.invoice.startDate_3 = item2.startDate_3;
-                        if (item2.startDate_4 != null) temp.invoice.startDate_4 = item2.startDate_4;
-                        if (item2.startDate_5 != null) temp.invoice.startDate_5 = item2.startDate_5;
-                        if (item2.startDate_6 != null) temp.invoice.startDate_6 = item2.startDate_6;
-
-                        if (item2.tax_invoice_number != null) temp.invoice.tax_invoice_number = item2.tax_invoice_number;
-                        if (item2.vendor_code != null) temp.invoice.vendor_code = item2.vendor_code.ToString();
-                        if (item2.vendor_name != null) temp.invoice.vendor_name = item2.vendor_name;
-                        if (item2.wbs_no != null) temp.invoice.wbs_no = item2.wbs_no;
-
-
-                        if (division.Departemen.Contains("GENERAL") && item2.GR_issued_by != null)
-                        {
-                            ga_issued.Add(temp);
-                        }
-                        else Filter.Add(temp);
-                    }
-                    foreach (var item3 in ga_issued)
-                    {
-                        Filter.Add(item3);
-                    }
-
                 }
+                foreach (var item2 in issued_filter)
+                {
+                    InvoiceHelper temp = new InvoiceHelper();
+                    if (loged != null) temp.loged_employee = loged;
+                    temp.invoice = new vw_invoice_actualcost_new();
+                    if (item2.amount_1 != null) temp.invoice.amount_1 = item2.amount_1;
+                    if (item2.amount_2 != null) temp.invoice.amount_2 = item2.amount_2;
+                    if (item2.amount_3 != null) temp.invoice.amount_3 = item2.amount_3;
+                    if (item2.amount_4 != null) temp.invoice.amount_4 = item2.amount_4;
+                    if (item2.amount_5 != null) temp.invoice.amount_5 = item2.amount_5;
+                    if (item2.amount_6 != null) temp.invoice.amount_6 = item2.amount_6;
+                    if (item2.amount_total != null) temp.invoice.amount_total = item2.amount_total;
 
+                    if (item2.bank_account != null) temp.invoice.bank_account = item2.bank_account;
+                    if (item2.cost_center != null) temp.invoice.cost_center = item2.cost_center;
+                    if (item2.create_date != null) temp.invoice.create_date = item2.PO_issued_date;
+
+                    if (item2.destination_1 != null) temp.invoice.destination_1 = item2.destination_1;
+                    if (item2.destination_2 != null) temp.invoice.destination_2 = item2.destination_2;
+                    if (item2.destination_3 != null) temp.invoice.destination_3 = item2.destination_3;
+                    if (item2.destination_4 != null) temp.invoice.destination_4 = item2.destination_4;
+                    if (item2.destination_5 != null) temp.invoice.destination_5 = item2.destination_5;
+                    if (item2.destination_6 != null) temp.invoice.destination_6 = item2.destination_6;
+
+                    if (item2.Duration_1 != null) temp.invoice.Duration_1 = item2.Duration_1;
+                    if (item2.Duration_2 != null) temp.invoice.Duration_2 = item2.Duration_2;
+                    if (item2.Duration_3 != null) temp.invoice.Duration_3 = item2.Duration_3;
+                    if (item2.Duration_4 != null) temp.invoice.Duration_4 = item2.Duration_4;
+                    if (item2.Duration_5 != null) temp.invoice.Duration_5 = item2.Duration_5;
+                    if (item2.Duration_6 != null) temp.invoice.Duration_6 = item2.Duration_6;
+
+                    if (item2.employee_input != null) temp.invoice.employee_input = item2.employee_input;
+
+                    if (item2.endDate_1 != null) temp.invoice.endDate_1 = item2.endDate_1;
+                    if (item2.endDate_2 != null) temp.invoice.endDate_2 = item2.endDate_2;
+                    if (item2.endDate_3 != null) temp.invoice.endDate_3 = item2.endDate_3;
+                    if (item2.endDate_4 != null) temp.invoice.endDate_4 = item2.endDate_4;
+                    if (item2.endDate_5 != null) temp.invoice.endDate_5 = item2.endDate_5;
+                    if (item2.endDate_6 != null) temp.invoice.endDate_6 = item2.endDate_6;
+
+                    if (item2.group_code != null) temp.invoice.group_code = item2.group_code;
+
+                    if (item2.hotel_flight_name_1 != null) temp.invoice.hotel_flight_name_1 = item2.hotel_flight_name_1;
+                    if (item2.hotel_flight_name_2 != null) temp.invoice.hotel_flight_name_2 = item2.hotel_flight_name_2;
+                    if (item2.hotel_flight_name_3 != null) temp.invoice.hotel_flight_name_3 = item2.hotel_flight_name_3;
+                    if (item2.hotel_flight_name_4 != null) temp.invoice.hotel_flight_name_4 = item2.hotel_flight_name_4;
+                    if (item2.hotel_flight_name_5 != null) temp.invoice.hotel_flight_name_5 = item2.hotel_flight_name_5;
+                    if (item2.hotel_flight_name_6 != null) temp.invoice.hotel_flight_name_6 = item2.hotel_flight_name_6;
+
+                    if (item2.id_data != null) temp.invoice.id_data = item2.id_data;
+                    if (item2.invoice_number != null) temp.invoice.invoice_number = item2.invoice_number;
+                    if (item2.jenis_transaksi != null) temp.invoice.jenis_transaksi = item2.jenis_transaksi;
+                    if (item2.name != null) temp.invoice.name = item2.name;
+                    if (item2.no_reg != null) temp.invoice.no_reg = Convert.ToInt32(item2.no_reg);
+                    if (item2.qty != null) temp.invoice.qty = item2.qty;
+
+                    if (item2.startDate_1 != null) temp.invoice.startDate_1 = item2.startDate_1;
+                    if (item2.startDate_2 != null) temp.invoice.startDate_2 = item2.startDate_2;
+                    if (item2.startDate_3 != null) temp.invoice.startDate_3 = item2.startDate_3;
+                    if (item2.startDate_4 != null) temp.invoice.startDate_4 = item2.startDate_4;
+                    if (item2.startDate_5 != null) temp.invoice.startDate_5 = item2.startDate_5;
+                    if (item2.startDate_6 != null) temp.invoice.startDate_6 = item2.startDate_6;
+
+                    if (item2.tax_invoice_number != null) temp.invoice.tax_invoice_number = item2.tax_invoice_number;
+                    if (item2.vendor_code != null) temp.invoice.vendor_code = item2.vendor_code.ToString();
+                    if (item2.vendor_name != null) temp.invoice.vendor_name = item2.vendor_name;
+                    if (item2.wbs_no != null) temp.invoice.wbs_no = item2.wbs_no;
+
+
+
+                    if (division.Departemen.Contains("GENERAL") && item2.GR_issued_by != null)
+                    {
+                        ga_issued.Add(temp);
+                    }
+                    else Filter.Add(temp);
+                }
+                foreach (var item3 in ga_issued)
+                {
+                    Filter.Add(item3);
+                }
             }
             else
             {
@@ -605,17 +694,20 @@ namespace CONTRAST_WEB.Controllers
                         item.no_reg.ToString().Contains(lower)
                         )
                     {
+                        DateTime searchdate = new DateTime();
+                        if (item.GR_issued_by != null) searchdate = Convert.ToDateTime(item.GR_issued_date);
+                        else searchdate = Convert.ToDateTime(item.PO_issued_date);
                         if (start.HasValue && end.HasValue)
                         {
-                            if (item.create_date >= start && item.create_date <= end) issued_filter.Add(item);
+                            if (searchdate >= start && searchdate <= end) issued_filter.Add(item);
                         }
                         else if (start.HasValue)
                         {
-                            if (item.create_date >= start) issued_filter.Add(item);
+                            if (searchdate >= start) issued_filter.Add(item);
                         }
                         else if (end.HasValue)
                         {
-                            if (item.create_date <= end) issued_filter.Add(item);
+                            if (searchdate <= end) issued_filter.Add(item);
                         }
                         else issued_filter.Add(item);
                     }
@@ -636,7 +728,8 @@ namespace CONTRAST_WEB.Controllers
 
                     if (item.bank_account != null) temp.invoice.bank_account = item.bank_account;
                     if (item.cost_center != null) temp.invoice.cost_center = item.cost_center;
-                    if (item.create_date != null) temp.invoice.create_date = item.create_date;
+                    if (item.GR_issued_by != null) temp.invoice.create_date = (DateTime)item.GR_issued_date;
+                    else temp.invoice.create_date = (DateTime)item.PO_issued_date;
 
                     if (item.destination_1 != null) temp.invoice.destination_1 = item.destination_1;
                     if (item.destination_2 != null) temp.invoice.destination_2 = item.destination_2;
@@ -695,6 +788,7 @@ namespace CONTRAST_WEB.Controllers
                     }
                     else Filter.Add(temp);
                 }
+
                 foreach (var item in ga_issued)
                 {
                     Filter.Add(item);
@@ -705,28 +799,79 @@ namespace CONTRAST_WEB.Controllers
             {
                 ViewBag.outstanding = issued_filter.Count - ga_issued.Count;
                 ViewBag.issued = ga_issued.Count;
+                ViewBag.outstandingTotal = ViewBag.outstanding;
+                ViewBag.issuedTotal = ViewBag.issued;
             }
             else
             {
                 ViewBag.outstanding = invoice.Count();
                 ViewBag.issued = issued_filter.Count();
+                ViewBag.outstandingTotal = ViewBag.outstanding;
+                ViewBag.issuedTotal = ViewBag.issued;
             }
-            if (Filter.Count == 0)
+
+            ViewBag.newPageMax = (ViewBag.outstandingTotal / 5) + 1;
+            ViewBag.issuedPageMax = (ViewBag.issuedTotal / 5) + 1;
+
+            if (pageNew.HasValue) ViewBag.pageNew = pageNew;
+            else ViewBag.pageNew = 1;
+            if (pageIssued.HasValue) ViewBag.pageIssued = pageIssued;
+            else ViewBag.pageIssued = 1;
+
+            List<InvoiceHelper> PagedFilter = new List<InvoiceHelper>();
+            int pageCalledNew = 1;
+            int pageCalledIssued = 1;
+
+            if (pageNew.HasValue) pageCalledNew = (int)pageNew;
+            if (pageIssued.HasValue) pageCalledIssued = (int)pageIssued;
+
+            if (ViewBag.outstanding > (pageCalledNew - 1) * 5)
+            {
+                int k = 0;
+                for (int i = (pageCalledNew - 1) * 5; i < ((pageCalledNew - 1) * 5) + 5; i++)
+                {
+                    if (i < ViewBag.outstanding)
+                    {
+                        PagedFilter.Add(Filter[i]);
+                        k++;
+                    }
+
+                }
+                ViewBag.outstanding = k;
+            }
+            else { ViewBag.outstanding = 0; }
+
+            if (ViewBag.issued > (pageCalledIssued - 1) * 5)
+            {
+                int k = 0;
+                for (int i = (pageCalledIssued - 1) * 5 + ViewBag.outstandingTotal; i < ((pageCalledIssued - 1) * 5) + ViewBag.outstandingTotal + 5; i++)
+                {
+                    if (i < Filter.Count())
+                    {
+                        PagedFilter.Add(Filter[i]);
+                        k++;
+                    }
+
+                }
+                ViewBag.issued = k;
+            }
+            else { ViewBag.issued = 0; }
+
+            if (PagedFilter.Count == 0)
             {
                 InvoiceHelper temp = new InvoiceHelper();
                 temp.loged_employee = model[0].loged_employee;
-                Filter.Add(temp);
+                PagedFilter.Add(temp);
                 ModelState.Clear();
-                return View("Index", Filter);
+                return View("Index", PagedFilter);
             }
             ModelState.Clear();
-            return View("Index", Filter);
+            return View("Index", PagedFilter);
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Download(List<InvoiceHelper> model, Nullable<int> download, int outstanding, string all_download = "")
         {
             int down = 0;
@@ -737,7 +882,6 @@ namespace CONTRAST_WEB.Controllers
             if (download.HasValue) down = Convert.ToInt32(download);
             List<InvoiceHelper> newList = new List<InvoiceHelper>();
             tb_m_employee_source_data pos = await GetData.GetDivisionSource(Convert.ToInt32(model[0].loged_employee.code));
-
 
             if (all_download != null)
             {
@@ -1033,13 +1177,11 @@ namespace CONTRAST_WEB.Controllers
             else return View("Download", newList);
         }
 
-
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         public async Task<ActionResult> Print(List<InvoiceHelper> model)
         {
-
             string receipt = "";
             tb_m_employee_source_data pos = new tb_m_employee_source_data();
             pos = await GetData.GetDivisionSource(Convert.ToInt32(model[0].loged_employee.code));
@@ -1048,7 +1190,6 @@ namespace CONTRAST_WEB.Controllers
             document.Info.Title = "Purchase Receipt";
 
             for (int loop = 0; loop < model.Count; loop++)
-
             {
                 tb_r_invoice_actualcost saved = new tb_r_invoice_actualcost();
                 tb_r_invoice_actualcost updated = new tb_r_invoice_actualcost();
@@ -1148,57 +1289,15 @@ namespace CONTRAST_WEB.Controllers
 
                         if (list[index].amount_total == model[loop].invoice.amount_total)
                         {
-                            if (list[index].amount_1 != null && model[loop].invoice.amount_1 != null)
-                            {
-                                if (list[index].amount_1 == model[loop].invoice.amount_1) check++;
-                            }
-                            else if (list[index].amount_1 == null && model[loop].invoice.amount_1 == null) check++;
 
-                            if (list[index].amount_2 != null && model[loop].invoice.amount_2 != null)
+                            if (pos.Departemen.Contains("GENERAL"))
                             {
-                                if (list[index].amount_2 == model[loop].invoice.amount_2) check++;
+                                if (list[index].GR_issued_flag == null) copy = false;
                             }
-                            else if (list[index].amount_2 == null && model[loop].invoice.amount_2 == null) check++;
+                            else copy = true;
+                            saved = list[index];
+                            update = false;
 
-                            if (list[index].amount_3 != null && model[loop].invoice.amount_3 != null)
-                            {
-                                if (list[index].amount_3 == model[loop].invoice.amount_3) check++;
-                            }
-                            else if (list[index].amount_3 == null && model[loop].invoice.amount_3 == null) check++;
-
-                            if (list[index].amount_4 != null && model[loop].invoice.amount_4 != null)
-                            {
-                                if (list[index].amount_4 == model[loop].invoice.amount_4) check++;
-                            }
-                            else if (list[index].amount_4 == null && model[loop].invoice.amount_4 == null) check++;
-
-                            if (list[index].amount_5 != null && model[loop].invoice.amount_5 != null)
-                            {
-                                if (list[index].amount_5 == model[loop].invoice.amount_5) check++;
-                            }
-                            else if (list[index].amount_5 == null && model[loop].invoice.amount_5 == null) check++;
-
-                            if (list[index].amount_6 != null && model[loop].invoice.amount_6 != null)
-                            {
-                                if (list[index].amount_6 == model[loop].invoice.amount_6) check++;
-                            }
-                            else if (list[index].amount_6 == null && model[loop].invoice.amount_6 == null) check++;
-
-                            if (check == 6)
-                            {
-                                if (pos.Departemen.Contains("GENERAL"))
-                                {
-                                    if (list[index].GR_issued_flag == null) copy = false;
-                                }
-                                else copy = true;
-                                saved = list[index];
-                                update = false;
-                            }
-                            else
-                            {
-                                update = true;
-                                updated = list[index];
-                            }
                         }
                         else
                         {
@@ -1276,10 +1375,8 @@ namespace CONTRAST_WEB.Controllers
                     {
                         if (saved.GR_issued_flag == 1)
                         {
-
                             copy = true;
                             copyGA = true;
-
                         }
                         else
                         {
@@ -1312,7 +1409,6 @@ namespace CONTRAST_WEB.Controllers
                     // Create a dimmed red brush
                     XBrush brush = new XSolidBrush(XColor.FromArgb(150, 200, 200, 200));
 
-
                     // Draw the string
                     gfx.RotateTransform(-45);
                     gfx.DrawString("COPY", watermark_font, brush, new XPoint(-350, 400), format);
@@ -1328,7 +1424,6 @@ namespace CONTRAST_WEB.Controllers
                 XFont subtitle = new XFont("Lucida Grande", 10, XFontStyle.Bold);
                 XFont credit = new XFont("Lucida Sans", 9, XFontStyle.Regular);
                 XFont valid = new XFont("Lucida Sans", 8, XFontStyle.Regular);
-
 
                 XPen header_line = new XPen(XColors.Black, 2);
                 XPen body_line = new XPen(XColors.DimGray, 0.5);
@@ -1582,7 +1677,7 @@ namespace CONTRAST_WEB.Controllers
 
                 if (!copy && !pos.Departemen.Contains("GENERAL"))
                 {
-                    await InsertData.InvoiceWrite(saved);
+                    //  await InsertData.InvoiceWrite(saved);
                 }
 
                 if (!copyGA && pos.Departemen.Contains("GENERAL"))

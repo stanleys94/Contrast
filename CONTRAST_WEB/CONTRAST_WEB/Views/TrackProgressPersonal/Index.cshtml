@@ -1,0 +1,258 @@
+﻿@model PagedList.IPagedList<CONTRAST_WEB.Models.TrackingHelper>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Transaction Tracking";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Transaction Tracking</li>
+    </ol>
+</div>
+<div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
+
+    @using (Html.BeginForm("Index", "TrackProgressPersonal", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div>
+                <div>
+                    <span>
+                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
+                        @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
+                    </span>
+                    <span style=" margin-left : 100px">
+                        Start Date Range :
+                        @if (ViewBag.startdate != null)
+                        {
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                        }
+                        else
+                        {
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                        }
+                    </span>
+
+                    @if (ViewBag.enddate != null)
+                    {
+                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                    }
+                    else
+                    {
+                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
+                    }
+                    <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                </div>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("Search", "TrackProgressPersonal", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
+            <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
+                <table style="width:1450px;margin-bottom:0px;" class="table table-condensed table-striped">
+                    <tr style="background-color:deepskyblue; text-align:center;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:50px;">
+                            BTA NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            NAME
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
+                            NOREG
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
+                            TRANSACTION
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                            AMOUNT
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            DESTINATION
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            STATUS
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            OUTSTANDING
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:130px;">
+                            WBS NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            COST CENTER
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
+                            TAX
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            VENDOR
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                            INVOICE NO
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            START DATE
+                        </th>
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            END DATE
+                        </th>
+
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                            GENERATED DATE
+                        </th>
+                    </tr>
+                    @if (Model[0].TrackedList == null)
+                    {
+                        @Html.HiddenFor(m => m[0].login_name)
+                        @Html.HiddenFor(m => m[0].login_id)
+                        @Html.HiddenFor(m => m[0].privilage)
+                    }
+                    else if (Model[0].TrackedList != null)
+                    {
+                        for (int k = 0; k < Model.Count(); k++)
+                        {
+                            @Html.HiddenFor(m => m[k].login_name)
+                            @Html.HiddenFor(m => m[k].login_id)
+                            @Html.HiddenFor(m => m[k].privilage)
+                            @Html.HiddenFor(m => m[k].TrackedList.id_data)
+                            @Html.HiddenFor(m => m[k].TrackedList.amount, new { @value = Model[k].TrackedList.amount })
+                            @Html.HiddenFor(m => m[k].TrackedList.amount_total, new { @value = Model[k].TrackedList.amount_total })
+                            @Html.HiddenFor(m => m[k].TrackedList.cost_center, new { @value = Model[k].TrackedList.cost_center })
+                            @Html.HiddenFor(m => m[k].TrackedList.create_date, new { @value = Model[k].TrackedList.create_date })
+                            @Html.HiddenFor(m => m[k].TrackedList.destination_name, new { @value = Model[k].TrackedList.destination_name })
+                            @Html.HiddenFor(m => m[k].TrackedList.end_date, new { @value = Model[k].TrackedList.end_date })
+                            @Html.HiddenFor(m => m[k].TrackedList.group_code, new { @value = Model[k].TrackedList.group_code })
+                            @Html.HiddenFor(m => m[k].TrackedList.id_actualcost, new { @value = Model[k].TrackedList.id_actualcost })
+                            @Html.HiddenFor(m => m[k].TrackedList.id_destination_city, new { @value = Model[k].TrackedList.id_destination_city })
+                            @Html.HiddenFor(m => m[k].TrackedList.id_request, new { @value = Model[k].TrackedList.id_request })
+                            @Html.HiddenFor(m => m[k].TrackedList.invoice_number, new { @value = Model[k].TrackedList.invoice_number })
+                            @Html.HiddenFor(m => m[k].TrackedList.jenis_transaksi, new { @value = Model[k].TrackedList.jenis_transaksi })
+                            @Html.HiddenFor(m => m[k].TrackedList.name, new { @value = Model[k].TrackedList.name })
+                            @Html.HiddenFor(m => m[k].TrackedList.no_reg, new { @value = Model[k].TrackedList.no_reg })
+                            @Html.HiddenFor(m => m[k].TrackedList.start_date, new { @value = Model[k].TrackedList.start_date })
+                            @Html.HiddenFor(m => m[k].TrackedList.tax, new { @value = Model[k].TrackedList.tax })
+                            @Html.HiddenFor(m => m[k].TrackedList.TYPES_OF_TRANSACTIONS, new { @value = Model[k].TrackedList.TYPES_OF_TRANSACTIONS })
+                            @Html.HiddenFor(m => m[k].TrackedList.vendor_code, new { @value = Model[k].TrackedList.vendor_code })
+                            @Html.HiddenFor(m => m[k].TrackedList.verified_flag, new { @value = Model[k].TrackedList.verified_flag })
+                            @Html.HiddenFor(m => m[k].TrackedList.wbs_no, new { @value = Model[k].TrackedList.wbs_no })
+                            <tr>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.group_code)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.name)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.name, new { Value = @Model[k].TrackedList.name })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.no_reg)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.no_reg, new { Value = @Model[k].TrackedList.no_reg })
+                                </td>
+                                <td class="td">
+                                    @if (Model[k].TrackedList.jenis_transaksi != null)
+                                    {
+                                        @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
+                                    }
+                                    else
+                                    {
+                                        <label>None</label>
+                                    }
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi, new { Value = @Model[k].TrackedList.jenis_transaksi })
+                                </td>
+                                <td class="td">
+                                    @if (Model[k].TrackedList.amount != null)
+                                    {
+                                        @*@Html.DisplayFor(Model => Model[k].TrackedList.amount)*@
+                                        <p>Rp. @String.Format("{0:n0}", Model[k].TrackedList.amount, new { style = "width:500px" })</p>}
+                                    else
+                                    {
+                                        <label>None</label>
+                                    }
+
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.destination_name, new { Value = @Model[k].TrackedList.destination_name })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS, new { Value = @Model[k].TrackedList.TYPES_OF_TRANSACTIONS })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.verified_flag, new { Value = @Model[k].TrackedList.verified_flag })
+                                </td>
+                                @*add*@
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.wbs_no)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.wbs_no, new { Value = @Model[k].TrackedList.wbs_no })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.cost_center)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.cost_center, new { Value = @Model[k].TrackedList.cost_center })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.tax)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.tax, new { Value = @Model[k].TrackedList.tax })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.vendor_code)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.vendor_code, new { Value = @Model[k].TrackedList.vendor_code })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.invoice_number)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.invoice_number, new { Value = @Model[k].TrackedList.invoice_number })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.start_date)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.start_date, new { Value = @Model[k].TrackedList.start_date })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.end_date)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.end_date, new { Value = @Model[k].TrackedList.end_date })
+                                </td>
+                                <td class="td">
+                                    @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
+                                    @Html.HiddenFor(Model => Model[k].TrackedList.create_date, new { Value = @Model[k].TrackedList.create_date })
+                                </td>
+                            </tr>
+
+
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-10">
+            <button type="submit" class="btn btn-info" value="Download" name="download">Download</button>
+            <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
+        </div>
+    }
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @if (ViewBag.startdate != null || ViewBag.enddate != null)
+    {
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+
+    }
+    else
+    {
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    }
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/verify.js"></script>

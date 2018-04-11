@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using CONTRAST_WEB.Models;
 using System.Security.Claims;
-
+using PagedList;
 namespace CONTRAST_WEB.Controllers
 {
     public class ActualCostController : Controller
@@ -17,11 +17,85 @@ namespace CONTRAST_WEB.Controllers
         private CONTRASTEntities db = new CONTRASTEntities();
 
         // GET: ActualCost
-        //[HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
+            List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
+
+            //get rejected list number
+            List<vw_rejected_actualcost_verification> RejectedObject = new List<vw_rejected_actualcost_verification>();
+            RejectedObject = await GetData.ActualCostRejected();
+
+            //get new request number
+            List<vw_actualcost_preparation> PreparationObject = new List<vw_actualcost_preparation>();
+            PreparationObject = await GetData.ActualcostPreparation();
+
+            for (int k = 0; k < PreparationObject.Count(); k++)
+            {
+                ActualCostHelperObject.Add(new ActualCostShtHelper());
+                ActualCostHelperObject[k].TravelRequest = new vw_actualcost_preparation();
+                ActualCostHelperObject[k].ActualCost = new tb_r_travel_actualcost();
+                ActualCostHelperObject[k].TravelRequest = PreparationObject[k];
+            }
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                List<ActualCostShtHelper> temp = new List<ActualCostShtHelper>();
+                for (int k = 0; k < ActualCostHelperObject.Count; k++)
+                {
+                    if (ActualCostHelperObject[k].TravelRequest.name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequest.group_code.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequest.destination_name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower().Contains(searchString.ToLower())
+                        )
+                     temp.Add(ActualCostHelperObject[k]);
+                }
+                /*if(temp.Count()>0)*/
+                ActualCostHelperObject = temp;
+            }
+
+            //get vendor info
+            for (int k = 0; k < ActualCostHelperObject.Count(); k++)
+            {
+                if (ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower() == "ticket")
+                    vendorInfo.Add((await GetData.VendorTicketInfo()));
+                else
+                if (ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower() == "hotel")
+                    vendorInfo.Add((await GetData.VendorHotelInfo()));
+            }
+
+            ViewBag.New = PreparationObject.Count();
+            ViewBag.Rejected = RejectedObject.Count();
+            ViewBag.RL = vendorInfo;
+            ViewBag.RL3 = await GetData.TaxInfo();
+
+            ViewBag.CurrentSort = sortOrder;
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+            return View(ActualCostHelperObject.ToPagedList(pageNumber, pageSize));
+        }
+
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        public async Task<ActionResult> Rejected(string sortOrder, string currentFilter, string searchString, int? page)
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
@@ -29,52 +103,78 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
             List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
-            List<vw_actualcost_preparation> PreparationObject = new List<vw_actualcost_preparation>();
-
             List<tb_r_travel_actualcost> Rejected = new List<tb_r_travel_actualcost>();
-
-            PreparationObject = await GetData.ActualcostPreparation();
 
             List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
 
-            for (int k = 0; k < PreparationObject.Count(); k++)
-            {
-                ActualCostHelperObject.Add(new ActualCostShtHelper());
-                ActualCostHelperObject[k].TravelRequest = new vw_actualcost_preparation();
-                //ActualCostHelperObject[k].TravelRequestRejected = new vw_rejected_actualcost_verification();
-                ActualCostHelperObject[k].ActualCost = new tb_r_travel_actualcost();
-                ActualCostHelperObject[k].TravelRequest = PreparationObject[k];
-                if (PreparationObject[k].jenis_transaksi.ToLower() == "ticket") vendorInfo.Add((await GetData.VendorTicketInfo()));
-                else
-                if (PreparationObject[k].jenis_transaksi.ToLower() == "hotel") vendorInfo.Add((await GetData.VendorHotelInfo()));
-            }
-
-            //ViewBag.RL = await GetData.VendorTicketInfo();
-            //ViewBag.RL2 = await GetData.VendorHotelInfo();
-
             ViewBag.RL3 = await GetData.TaxInfo();
 
+            //get new request number
+            List<vw_actualcost_preparation> PreparationObject = new List<vw_actualcost_preparation>();
+            PreparationObject = await GetData.ActualcostPreparation();
 
+            //get rejected list number
             List<vw_rejected_actualcost_verification> RejectedObject = new List<vw_rejected_actualcost_verification>();
             RejectedObject = await GetData.ActualCostRejected();
-            for (int k = PreparationObject.Count(); k < PreparationObject.Count() + RejectedObject.Count(); k++)
+
+            for (int k = 0; k < RejectedObject.Count(); k++)
             {
                 ActualCostHelperObject.Add(new ActualCostShtHelper());
                 ActualCostHelperObject[k].ActualCost = new tb_r_travel_actualcost();
-                //ActualCostHelperObject[k].TravelRequest = new vw_actualcost_preparation();
                 ActualCostHelperObject[k].TravelRequestRejected = new vw_rejected_actualcost_verification();
-                ActualCostHelperObject[k].TravelRequestRejected = RejectedObject[k - PreparationObject.Count()];
-                if (ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower() == "ticket") vendorInfo.Add((await GetData.VendorTicketInfo()));
-                else
-                if (ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower() == "hotel") vendorInfo.Add((await GetData.VendorHotelInfo()));
+                ActualCostHelperObject[k].TravelRequestRejected = RejectedObject[k];
             }
 
-            ViewBag.New = PreparationObject.Count();
-            ViewBag.Rejected = RejectedObject.Count();
-            ViewBag.Total = RejectedObject.Count() + PreparationObject.Count();
-            ViewBag.RL = vendorInfo;
+            //filter
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                List<ActualCostShtHelper> temp = new List<ActualCostShtHelper>();
+                for (int k = 0; k < ActualCostHelperObject.Count; k++)
+                {
+                    if (
+                        ActualCostHelperObject[k].TravelRequestRejected.name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequestRejected.group_code.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequestRejected.destination_name.ToLower().Contains(searchString.ToLower())
+                        || ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower().Contains(searchString.ToLower())
+                        )
 
-            return View(ActualCostHelperObject);
+                        temp.Add(ActualCostHelperObject[k]);
+
+                }
+                /*if (temp.Count() > 0)*/
+                ActualCostHelperObject = temp;
+
+            }
+
+            //get vendor info
+            for (int k = 0; k < ActualCostHelperObject.Count(); k++)
+            {
+                if (ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower() == "ticket")
+                    vendorInfo.Add((await GetData.VendorTicketInfo()));
+                else
+                if (ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower() == "hotel")
+                    vendorInfo.Add((await GetData.VendorHotelInfo()));
+            }
+
+            ViewBag.Rejected = RejectedObject.Count();
+            ViewBag.RL = vendorInfo;
+            ViewBag.New = PreparationObject.Count();
+
+            ViewBag.CurrentSort = sortOrder;
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+            return View(ActualCostHelperObject.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]

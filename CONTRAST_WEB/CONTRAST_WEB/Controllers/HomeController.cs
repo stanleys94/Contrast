@@ -12,19 +12,27 @@ using CONTRAST_WEB.CustomValidator;
 
 namespace CONTRAST_WEB.Controllers
 {
-     
+
     public class HomeController : Controller
     {
 
         private CONTRASTEntities db = new CONTRASTEntities();
 
-        [Authorize(Roles = "contrast.user")]       
+        [Authorize(Roles = "contrast.user")]
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
             var identity = (ClaimsIdentity)User.Identity;
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
+
+            //List<string> claims = new List<string>();
+            //claims.Add("contrast.administd");
+            //claims.Add("contrast.staffga");
+            //claims.Add("contrast.user");
+            //claims.Add("contrast.staffpac");
+            //claims.Add("contrast.ap");
+            //ViewBag.Privillege = claims;
 
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
@@ -33,36 +41,37 @@ namespace CONTRAST_WEB.Controllers
             //AP
             //tb_m_employee model = await GetData.EmployeeInfo("101419");
             //staff ga
-            //tb_m_employee model = await GetData.EmployeeInfo("101495");
+            // tb_m_employee model = await GetData.EmployeeInfo("101495");
             // dph ga 100354  
             //tb_m_employee model = await GetData.EmployeeInfo("100354");
             //percobaan
             //tb_m_employee model = await GetData.EmployeeInfo("100626");
             //tb_m_employee model = await GetData.EmployeeInfo("101795");
+            //tb_m_employee model = await GetData.EmployeeInfo("101795");
 
-            ViewBag.photo = await GetData.PhotoEmployeeInfo(identity.Name);
+            ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
-        
+
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "contrast.user")]     
+        [Authorize(Roles = "contrast.user")]
         public async System.Threading.Tasks.Task<ActionResult> Back(tb_m_employee model)
         {
             ViewBag.Username = model.name;
-            return View("Index",model);
+            return View("Index", model);
         }
-        
-       
+
+
         [HttpPost]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async System.Threading.Tasks.Task<ActionResult> Submitted(TravelRequestHelper[] ListModel)
         {
             for (int k = 0; k < ListModel.Count(); k++)
-            {              
+            {
 
                 await InsertData.TravelRequest(ListModel[k]);
                 if (ListModel[k].travel_request.participants_flag == true)
@@ -78,6 +87,6 @@ namespace CONTRAST_WEB.Controllers
             //return View("Index", ListModel[0].employee_info);
             return RedirectToAction("Index");
         }
-         
+
     }
 }

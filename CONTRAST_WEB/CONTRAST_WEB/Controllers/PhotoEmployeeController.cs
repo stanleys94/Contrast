@@ -12,7 +12,7 @@ namespace CONTRAST_WEB.Controllers
     {
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        [CustomValidator.NoCache] 
+        [CustomValidator.NoCache]
         // GET: PhotoEmployee
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
@@ -46,13 +46,13 @@ namespace CONTRAST_WEB.Controllers
                 HttpPostedFileBase file = Request.Files["file"];
                 if (file.ContentType != "image/jpeg")
                 {
-                     
+
                     ViewBag.error_list = "Upload jpeg image ONLY";
                     return View("Edit");
                 }
                 //string path_file = Utility.UploadPhoto(file, identity.Name);
                 string path_file = Utility.UploadPhoto(file, identity.Name);
-                path_file = Constant.PhotoFolder+path_file;
+                path_file = Constant.PhotoFolder + path_file;
                 tb_m_photo_employee photo_info = new tb_m_photo_employee();
                 photo_info = await GetData.PhotoEmployee(identity.Name);
 
@@ -67,7 +67,7 @@ namespace CONTRAST_WEB.Controllers
                 ModelState.Clear();
 
             }
-            return RedirectToAction ("Index");
+            return RedirectToAction("Index");
         }
 
     }
