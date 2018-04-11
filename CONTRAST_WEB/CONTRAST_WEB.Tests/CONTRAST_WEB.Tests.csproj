@@ -116,7 +116,10 @@
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.config" />
+    <Content Include="App.config">
+      <SubType>Designer</SubType>
+    </Content>
+
     <Content Include="Content\PagedList.css" />
   </ItemGroup>
   <ItemGroup>

@@ -38,8 +38,6 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].EmployeeInfo = model;
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
             }
-            
-            
             //if search / page empty
             if (searchString != null)
                 page = 1;
@@ -90,7 +88,10 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(ResultObject2[k]);
                 }
-                if (temp.Count() > 0) ResultObject2 = temp;
+
+                /*if (temp.Count() > 0)*/
+                ResultObject2 = temp;
+
             }
 
             int pageSize = 15;
@@ -103,7 +104,8 @@ namespace CONTRAST_WEB.Controllers
                 return View("Index", ResultObject2.ToPagedList(pageNumber, pageSize));
             }
             else
-            return View(ResultObject2.OrderBy(m => m.FixedCost_Verified.create_date).ToPagedList(pageNumber, pageSize));
+                return View(ResultObject2.OrderBy(m => m.FixedCost_Verified.create_date).ToPagedList(pageNumber, pageSize));
+
         }
 
         [HttpPost]
@@ -116,7 +118,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.search = search;
             ViewBag.start = start;
             ViewBag.end = end;
-            
+
             if (insert.ToLower() == "submit")
             {
                 for (int k = 0; k < model.Count(); k++)

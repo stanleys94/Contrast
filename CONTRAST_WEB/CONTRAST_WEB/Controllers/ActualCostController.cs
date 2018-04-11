@@ -25,8 +25,7 @@ namespace CONTRAST_WEB.Controllers
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
-
-            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();           
+            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
             List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
 
             //get rejected list number
@@ -42,7 +41,7 @@ namespace CONTRAST_WEB.Controllers
                 ActualCostHelperObject.Add(new ActualCostShtHelper());
                 ActualCostHelperObject[k].TravelRequest = new vw_actualcost_preparation();
                 ActualCostHelperObject[k].ActualCost = new tb_r_travel_actualcost();
-                ActualCostHelperObject[k].TravelRequest = PreparationObject[k];               
+                ActualCostHelperObject[k].TravelRequest = PreparationObject[k];
             }
 
             //filter
@@ -56,11 +55,10 @@ namespace CONTRAST_WEB.Controllers
                         || ActualCostHelperObject[k].TravelRequest.destination_name.ToLower().Contains(searchString.ToLower())
                         || ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower().Contains(searchString.ToLower())
                         )
-                        
-                        temp.Add(ActualCostHelperObject[k]);                       
-                    
+                     temp.Add(ActualCostHelperObject[k]);
                 }
-                /*if(temp.Count()>0)*/ActualCostHelperObject = temp;    
+                /*if(temp.Count()>0)*/
+                ActualCostHelperObject = temp;
             }
 
             //get vendor info
@@ -89,7 +87,7 @@ namespace CONTRAST_WEB.Controllers
             }
 
             ViewBag.CurrentFilter = searchString;
-             
+
             int pageSize = 15;
             int pageNumber = (page ?? 1);
             return View(ActualCostHelperObject.ToPagedList(pageNumber, pageSize));
@@ -104,10 +102,11 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Privillege = claims;
             tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
-            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();          
-            List<tb_r_travel_actualcost> Rejected = new List<tb_r_travel_actualcost>();            
+            List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
+            List<tb_r_travel_actualcost> Rejected = new List<tb_r_travel_actualcost>();
 
-            List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();            
+            List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
+
             ViewBag.RL3 = await GetData.TaxInfo();
 
             //get new request number
@@ -118,10 +117,10 @@ namespace CONTRAST_WEB.Controllers
             List<vw_rejected_actualcost_verification> RejectedObject = new List<vw_rejected_actualcost_verification>();
             RejectedObject = await GetData.ActualCostRejected();
 
-            for (int k = 0; k <  RejectedObject.Count(); k++)
+            for (int k = 0; k < RejectedObject.Count(); k++)
             {
                 ActualCostHelperObject.Add(new ActualCostShtHelper());
-                ActualCostHelperObject[k].ActualCost = new tb_r_travel_actualcost();              
+                ActualCostHelperObject[k].ActualCost = new tb_r_travel_actualcost();
                 ActualCostHelperObject[k].TravelRequestRejected = new vw_rejected_actualcost_verification();
                 ActualCostHelperObject[k].TravelRequestRejected = RejectedObject[k];
             }
@@ -142,7 +141,9 @@ namespace CONTRAST_WEB.Controllers
                         temp.Add(ActualCostHelperObject[k]);
 
                 }
-                /*if (temp.Count() > 0)*/ ActualCostHelperObject = temp;
+                /*if (temp.Count() > 0)*/
+                ActualCostHelperObject = temp;
+
             }
 
             //get vendor info

@@ -20,7 +20,7 @@ namespace CONTRAST_WEB.Controllers
         // GET: GenerateFile
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page,DateTime? startdate, DateTime? enddate)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
@@ -74,7 +74,8 @@ namespace CONTRAST_WEB.Controllers
                         Generate[k].Entity.COST_CENTER.ToLower().Contains(searchString.ToLower()) ||
                         Generate[k].Entity.WBS_ELEMENT.ToLower().Contains(searchString.ToLower()) ||
                         Generate[k].Entity.TRAVEL_TYPE.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.BUDGET.ToLower().Contains(searchString.ToLower()))
+                        Generate[k].Entity.BUDGET.ToLower().Contains(searchString.ToLower()) ||
+                        Generate[k].Entity.VENDOR_NAME.ToLower().Contains(searchString.ToLower()))
                     {
                         temp.Add(Generate[k]);
                     }
@@ -92,7 +93,7 @@ namespace CONTRAST_WEB.Controllers
                 {
                     //by group code
                     if (
-                        DateTime.ParseExact(Generate[k].Entity.PV_DATE,"dd.MM.yyyy", CultureInfo.CurrentCulture) >= startdate
+                        DateTime.ParseExact(Generate[k].Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.CurrentCulture) >= startdate
                         && DateTime.ParseExact(Generate[k].Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.CurrentCulture) <= enddate
                        )
                         temp.Add(Generate[k]);
@@ -103,7 +104,8 @@ namespace CONTRAST_WEB.Controllers
             int pageSize = 15;
             int pageNumber = (page ?? 1);
             return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList().ToPagedList(pageNumber, pageSize));
-            //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());
+            //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());     
+
         }
         
         [HttpPost]
@@ -112,7 +114,6 @@ namespace CONTRAST_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Generate(List<GenerateFileHelper> model)
         {
-
             //todo: add some data from your database into that string:
             MemoryStream memoryStream = new MemoryStream();
             TextWriter tw = new StreamWriter(memoryStream);
@@ -191,7 +192,7 @@ namespace CONTRAST_WEB.Controllers
                 SAP_DOC_NO = (item.Entity.SAP_DOC_NO == null) ? "" : item.Entity.SAP_DOC_NO.ToString();
                 SAP_DOC_YEAR = (item.Entity.SAP_DOC_YEAR == null) ? "" : item.Entity.SAP_DOC_YEAR.ToString();
 
-                string textwrite = "\r\n"+(MANDT + "\t" +
+                string textwrite = "\r\n" + (MANDT + "\t" +
                     PV_NO + "\t" +
                     PV_YEAR + "\t" +
                     ITEM_NO + "\t" +
@@ -226,7 +227,7 @@ namespace CONTRAST_WEB.Controllers
             }
             tw.Flush();
             tw.Close();
-            string download_name = "AP_to_vendor_" +DateTime.Now.ToString()+".txt";
+            string download_name = "AP_to_vendor_" + DateTime.Now.ToString() + ".txt";
             return File(memoryStream.GetBuffer(), "text/plain", download_name);
             //return File(memoryStream.GetBuffer(), "text/plain", "AP.txt");
         }

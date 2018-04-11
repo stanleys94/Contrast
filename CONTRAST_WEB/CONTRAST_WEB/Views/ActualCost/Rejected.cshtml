@@ -27,6 +27,7 @@
     </ol>
 </div>
 
+
        List<SelectListItem> asd2 = new List<SelectListItem>();
         <div style="margin-top:90px;" id="products" class="row list-group _3EibU">
             <div style="width:auto" class="clearfix">
@@ -37,18 +38,21 @@
                             <label style="margin:5px">
                                 REJECTED LIST : &nbsp;
                                 @*<input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.New)&nbsp;
-                                  <input type="radio" id="c2" name="s<label style="color:red;">(@ViewBag.Rejected)</label>check" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
+
+                                <input type="radio" id="c2" name="s<label style="color:red;">(@ViewBag.Rejected)</label>check" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
+
                                 @Html.ActionLink("New", "Index")<label style="color:green;">(@ViewBag.New Pending)</label>
                                 @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
 
                             </label>
-                            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                            Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Name, BTA, Destination, Type" })
                             <input type="submit" value="Search" />
                         </div>
                     }
-                    @using (Html.BeginForm("Insert", "ActualCost", FormMethod.Post)) {
+                    @using (Html.BeginForm("Insert", "ActualCost", FormMethod.Post))
+                    {
                         @Html.AntiForgeryToken()
-                        
+
                         <div id="reject" style="width:1200px;height:350px;overflow-x:scroll;overflow-y:scroll;">
                             <div style="width:1800px">
                                 <table class="table table-condensed" style="text-align:center;">
@@ -102,7 +106,8 @@
                                             COMMENT REJECTION
                                         </th>
                                     </tr>
-                                    @if (Model.Count> 0)
+
+                                    @if (Model.Count > 0)
                                     {
                                         for (int k = 0; k < Model.Count; k++)
                                         {
@@ -195,14 +200,15 @@
                             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
                         </div>
                     }
-                             <br />
+                    <br />
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
                     @Html.PagedListPager(Model, page => Url.Action("Rejected",
-                             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
                 </div>
             </div>
-            
+
+
         </div>
 
         <script>
@@ -228,7 +234,6 @@
 
         <script src="~/Scripts/jquery-1.10.2.min.js"></script>
         <script type="text/javascript">
-            
             var new_name = document.getElementsByName("renc");
             for (i = 0; i < new_name.length; i++) {
                 document.getElementById(new_name[i].id).onblur = function () {

@@ -777,6 +777,9 @@
     <Content Include="Views\ActualCost\Rejected.cshtml" />
     <Content Include="Views\TrackProgressPersonal\Index.cshtml" />
     <Content Include="Views\TrackProgress\Details.cshtml" />
+    <Content Include="Views\ActualCost\Rejected.cshtml" />
+    <Content Include="Views\TrackProgressPersonal\Index.cshtml" />
+    <Content Include="Views\TrackProgressPersonal\Details.cshtml" />
     <Content Include="Views\PaymentList\Index.cshtml" />
 
   </ItemGroup>

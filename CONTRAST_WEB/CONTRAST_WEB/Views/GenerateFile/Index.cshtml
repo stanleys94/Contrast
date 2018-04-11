@@ -50,6 +50,7 @@
                                   {
                                      @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
                                   }
+
                                 </td>
                                 <td>
                                     <input type="submit" value="Search" class="btn btn-success" />
@@ -67,43 +68,46 @@
                 @Html.AntiForgeryToken()
                 <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
                     <div style="padding:0 5px">
-                        <table style="width:1700px;" class="table table-condensed table-striped">
+                        <table style="width:1800px;" class="table table-condensed table-striped">
                             <tr style="background-color:deepskyblue; text-align:center;">
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    BTR_NO
+                                    BTA NUMBER
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    EMPLOYEE_NAME
+                                    EMPLOYEE NAME
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     DESTINATION
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    VENDOR
+                                    VENDOR NAME
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     BUDGET
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    TOTAL_AMOUNT
+                                    TOTAL AMOUNT
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    COST_CENTER
+                                    COST CENTER
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    WBS_ELEMENT
+                                    WBS ELEMENT
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    TRAVEL_TYPE
+                                    TRAVEL TYPE
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    BTR_DATE
+                                    APPROVE DATE
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    PLAN_PAYMENT_DATE
+                                    BTR DATE
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    PAYMENT_METHOD
+                                    PLAN PAYMENT DATE
+                                </th>
+                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                    PAYMENT METHOD
                                 </th>
                             </tr>
 
@@ -182,6 +186,9 @@
                                         @Html.DisplayFor(Model => Model[k].Entity.TRAVEL_TYPE)
                                     </td>
                                     <td style="width:auto;" class="td">
+                                        @Html.DisplayFor(Model => Model[k].Entity.PV_DATE)
+                                    </td>
+                                    <td style="width:auto;" class="td">
                                         @Html.DisplayFor(Model => Model[k].Entity.BTR_DATE)
                                     </td>
                                     <td style="width:auto;" class="td">
@@ -213,7 +220,8 @@
             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
             @Html.PagedListPager(Model, page => Url.Action("Index",
-                                              new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
         </div>
         <div id="show" class="alert alert-success" hidden>
             <strong>Success!</strong> Check File Download on Folder.

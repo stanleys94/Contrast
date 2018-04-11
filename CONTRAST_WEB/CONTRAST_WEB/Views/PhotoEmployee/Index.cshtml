@@ -1,5 +1,4 @@
 ﻿@model CONTRAST_WEB.Models.tb_m_photo_employee
-
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
@@ -13,28 +12,25 @@
             }
         </li>
         <li class="breadcrumb-item active">Profile</li>
-	<label style="margin-left:100px">
-		@using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-question-sign"></span> DOWNLOAD FAQ</button>
-                    }
-		</label>
-		<label style="margin-left:10px">
-		@using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-info-sign"></span> DOWNLOAD SOP</button>
-                    }
-		</label>
+        <label style="margin-left:100px">
+            @using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-question-sign"></span> DOWNLOAD FAQ</button>
+            }
+        </label>
+        <label style="margin-left:10px">
+            @using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-info-sign"></span> DOWNLOAD SOP</button>
+            }
+        </label>
     </ol>
 </div>
-
 <div class="container">
     <div style="margin-top:100px;" id="products" class="row list-group _3EibU">
-
         <h2>Profile Picture</h2>
-
         <div style="margin:0px 100px;" class="row">
             <span>
                 <img style="padding:0px 0px; margin:0px 10px; height:400px; width:400px;  border-radius: 50%;" src="@Url.Content(Model.photo_emp)" />
@@ -43,10 +39,9 @@
                 @Html.ActionLink("Edit", "Edit", new { model = Model })
             </label>
         </div>
-
         <div>
             <hr />
-            
+
         </div>
     </div>
 </div>

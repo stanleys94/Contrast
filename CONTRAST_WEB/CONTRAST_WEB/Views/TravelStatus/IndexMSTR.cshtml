@@ -2,14 +2,12 @@
 @{
     ViewBag.Title = "Travel Status List";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
-   
+
 
 }
 <div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
-   
+
 </div>
-
-
 
 <div class="container">
     <div style="margin-top:120px; padding:0 100px;" id="products" class="row list-group _3EibU">
@@ -29,7 +27,6 @@
                                     <input type="image" img style="margin:5px 0px; width:auto; height:70px" src="~/img/Travel-Status-icon-b.png" />
                                 }
                             </div>
-
                             <div style="width:200px;" class="column menu">
                                 <div>
                                     <strong>@Html.DisplayFor(m => item.group_code)</strong>
@@ -37,15 +34,12 @@
                                 @*<div>
                                         <span class="fnt3">Noreg @Html.DisplayFor(m => item.no_reg)</span>
                                     </div>*@
-
                                 <div>
                                     <span class="fnt3">
                                         <strong>To</strong>
                                         @Html.DisplayFor(m => item.destination_1)@Html.TextBox("a", Model[i].multiple_destination_flag == true ? "Multiple Trip" : "Single Trip", new { @style = "border:0px;   color:grey;", @readonly = "readonly" })
-
                                     </span>
                                     <span>
-
                                     </span>
                                 </div>
                                 <div>
@@ -176,10 +170,8 @@
                                                 <span>@Html.Label("Rejected by", new { @style = "color:red; margin-right:5px;" })</span>
                                                 @ViewBag.Bossname
                                             }*@
-
                                     </span>
                                 </div>
-
                             </div>
                             <div style="width:300px;" class="column menu">
                                 <div>
@@ -192,7 +184,6 @@
                                     <span class="fnt3"><strong>Return</strong> @ViewBag.ReturnDate[i]</span>
                                 </div>
                             </div>
-
                             <div style="width:120px;" class="column content2">
                                 <span><strong style="color:darkgray">BUDGET</strong> </span><br />
                                 <h5>
@@ -213,7 +204,6 @@
         }
     </div>
 </div>
-
 
 <script>
     function goBack() {

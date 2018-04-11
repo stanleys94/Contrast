@@ -1,5 +1,4 @@
 ﻿@model IList<CONTRAST_WEB.Models.vw_travel_for_settlement>
-
 @{
     ViewBag.Title = "SETTLEMENT LIST";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
@@ -15,7 +14,6 @@
         <li class="breadcrumb-item active">Settlement List</li>
     </ol>
 </div>
-
 <div class="container">
     <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
         @for (var i = 0; i < Model.Count; i++)
@@ -47,7 +45,6 @@
                             <div class="column content">
                                 <span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
                             </div>
-
                             <div style="padding:20px 1px; width:270px;" class="column menu">
                                 <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span>
                                 <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
@@ -60,7 +57,6 @@
                                     <strong style="color:darkcyan">Pending</strong>
                                 }
                             </div>
-
                             <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
                         </div>
                     </div>
@@ -69,7 +65,6 @@
         }
     </div>
 </div>
-
 <script>
     function goBack() {
         window.history.back();

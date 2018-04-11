@@ -17,49 +17,49 @@
     </ol>
 </div>
 <div style="margin-top:100px;width:1200px;" id="products" class="row list-group _3EibU">
-   
-     @using (Html.BeginForm("Index", "TrackProgressPersonal", FormMethod.Get))
-     { 
-            @Html.AntiForgeryToken()
-              <div class="navbar-form navbar-left" style="padding-left:10px">
+
+    @using (Html.BeginForm("Index", "TrackProgressPersonal", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div>
                 <div>
-                    <div>
-                        <span>
-                            <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
-                            @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
-                        </span>
-                        <span style=" margin-left : 100px">
-                            Start Date Range :
-                            @if (ViewBag.startdate != null)
-                            {
-                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
-                            }
-                            else
-                            {
-                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
-                            }
-                        </span>
+                    <span>
+                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
+                        @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
+                    </span>
+                    <span style=" margin-left : 100px">
+                        Start Date Range :
+                        @if (ViewBag.startdate != null)
+                        {
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                        }
+                        else
+                        {
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                        }
+                    </span>
 
-                         @if (ViewBag.enddate != null)
-                         {
-                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
-                         }
-                         else
-                         {
-                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
-                         }
-                         <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
-                    </div>
-               </div>
-              </div>
-     }
+                    @if (ViewBag.enddate != null)
+                    {
+                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                    }
+                    else
+                    {
+                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
+                    }
+                    <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                </div>
+            </div>
+        </div>
+    }
 
-     @using (Html.BeginForm("Search", "TrackProgressPersonal", FormMethod.Post))
-     {
+    @using (Html.BeginForm("Search", "TrackProgressPersonal", FormMethod.Post))
+    {
         @Html.AntiForgeryToken()
         <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
             <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
-                <table style="width:2450px;margin-bottom:0px;" class="table table-condensed table-striped">
+                <table style="width:1450px;margin-bottom:0px;" class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:50px;">
                             BTA NO
@@ -106,6 +106,7 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
                             END DATE
                         </th>
+
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
                             GENERATED DATE
                         </th>
@@ -158,12 +159,26 @@
                                     @Html.HiddenFor(Model => Model[k].TrackedList.no_reg, new { Value = @Model[k].TrackedList.no_reg })
                                 </td>
                                 <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
+                                    @if (Model[k].TrackedList.jenis_transaksi != null)
+                                    {
+                                        @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
+                                    }
+                                    else
+                                    {
+                                        <label>None</label>
+                                    }
                                     @Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi, new { Value = @Model[k].TrackedList.jenis_transaksi })
                                 </td>
                                 <td class="td">
-                                    @*@Html.DisplayFor(Model => Model[k].TrackedList.amount)*@
-                                    Rp. @String.Format("{0:n0}", Model[k].TrackedList.amount, new { style = "width:500px" })
+                                    @if (Model[k].TrackedList.amount != null)
+                                    {
+                                        @*@Html.DisplayFor(Model => Model[k].TrackedList.amount)*@
+                                        <p>Rp. @String.Format("{0:n0}", Model[k].TrackedList.amount, new { style = "width:500px" })</p>}
+                                    else
+                                    {
+                                        <label>None</label>
+                                    }
+
                                     @Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })
                                 </td>
                                 <td class="td">
@@ -229,12 +244,13 @@
     @if (ViewBag.startdate != null || ViewBag.enddate != null)
     {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+
     }
     else
     {
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                                            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
     }
 </div>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

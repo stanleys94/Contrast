@@ -12,7 +12,7 @@ using CONTRAST_WEB.CustomValidator;
 
 namespace CONTRAST_WEB.Controllers
 {
-     
+
     public class HomeController : Controller
     {
 
@@ -41,7 +41,7 @@ namespace CONTRAST_WEB.Controllers
             //AP
             //tb_m_employee model = await GetData.EmployeeInfo("101419");
             //staff ga
-           // tb_m_employee model = await GetData.EmployeeInfo("101495");
+            // tb_m_employee model = await GetData.EmployeeInfo("101495");
             // dph ga 100354  
             //tb_m_employee model = await GetData.EmployeeInfo("100354");
             //percobaan
@@ -51,27 +51,27 @@ namespace CONTRAST_WEB.Controllers
 
             ViewBag.photo = await GetData.PhotoEmployeeInfo(model.code);
             ViewBag.Username = model.name;
-        
+
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "contrast.user")]     
+        [Authorize(Roles = "contrast.user")]
         public async System.Threading.Tasks.Task<ActionResult> Back(tb_m_employee model)
         {
             ViewBag.Username = model.name;
-            return View("Index",model);
+            return View("Index", model);
         }
-        
-       
+
+
         [HttpPost]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async System.Threading.Tasks.Task<ActionResult> Submitted(TravelRequestHelper[] ListModel)
         {
             for (int k = 0; k < ListModel.Count(); k++)
-            {              
+            {
 
                 await InsertData.TravelRequest(ListModel[k]);
                 if (ListModel[k].travel_request.participants_flag == true)
@@ -87,6 +87,6 @@ namespace CONTRAST_WEB.Controllers
             //return View("Index", ListModel[0].employee_info);
             return RedirectToAction("Index");
         }
-         
+
     }
 }
