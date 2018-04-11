@@ -38,13 +38,20 @@ namespace CONTRAST_WEB.Controllers
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string applied = "")
         {
             var identity = (ClaimsIdentity)User.Identity;
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            tb_m_employee model = new tb_m_employee();
+
+            if (applied == "") model = await GetData.EmployeeInfo(identity.Name);
+            else model = await GetData.EmployeeInfo(applied);
+
+            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
+            ViewBag.loged_id = created.code.Trim(' ');
+            ViewBag.loged_name = created.name.Trim(' ');
 
             //tb_m_employee model = await GetData.EmployeeInfo("101495");
 
@@ -162,8 +169,17 @@ namespace CONTRAST_WEB.Controllers
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "")
+        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "")
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            Utility.Logger(identity.Name);
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+
+            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
+            ViewBag.loged_id = created.code.Trim(' ');
+            ViewBag.loged_name = created.name.Trim(' ');
+
             if (validate != null && model.travel_request != null)
             {
                 if (ModelState.IsValid)
@@ -289,7 +305,7 @@ namespace CONTRAST_WEB.Controllers
                             ListModel[c].travel_request.destination_code = await GetData.RegionInfo(ListModel[c].travel_request.id_destination_city);
 
                             //ListModel[c].travel_request.overseas_flag = model.toverseas_flag[c];
-                            ListModel[c].travel_request.user_created = Convert.ToInt32(model.employee_info.code);
+                            ListModel[c].travel_request.user_created = Convert.ToInt32(created.code);
                             ListModel[c].travel_request.reason_of_assigment = model.treason;
                             ListModel[c].travel_request.travel_purpose = model.tpurpose;
                             ListModel[c].travel_request.id_activity = model.tactivity;
