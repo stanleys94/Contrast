@@ -80,8 +80,9 @@ namespace CONTRAST_WEB.Models
                     UpdatedData[k].ap_verified_by = model.EmployeeInfo.code;
                     UpdatedData[k].ap_verified_datetime = DateTime.Now;
                     UpdatedData[k].ap_verified_status = model.flag;
-                    UpdatedData[k].final_status = "1";
+                    //UpdatedData[k].final_status = "1";
                     //if (model.flag == "2") UpdatedData[k].final_status = "2";
+                    if (model.flag == "1" && UpdatedData[k].final_status == null) UpdatedData[k].final_status = "1";
                 }
             }
             else
@@ -139,7 +140,7 @@ namespace CONTRAST_WEB.Models
                     UpdatedData[k].ap_verified_by = model.EmployeeInfo.code;
                     UpdatedData[k].ap_verified_datetime = DateTime.Now;
                     UpdatedData[k].ap_verified_status = model.flag;
-                    UpdatedData[k].final_status = "1";
+                    //UpdatedData[k].final_status = "1";
                     if (model.flag == "2"&&UpdatedData[k].final_status==null) UpdatedData[k].final_status = "2";
                 }
             }
