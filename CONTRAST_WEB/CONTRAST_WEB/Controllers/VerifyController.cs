@@ -60,7 +60,7 @@ namespace CONTRAST_WEB.Controllers
 
 
             //filter
-            if (!String.IsNullOrEmpty(searchString) || (startdate != null && enddate != null))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 List<ActualCostVerifiedHelper> temp = new List<ActualCostVerifiedHelper>();
                 for (int k = 0; k < ResultObject2.Count; k++)

@@ -27,9 +27,9 @@ namespace CONTRAST_WEB.Models
         //public static string PhotoFolder = "https://passport.toyota.astra.co.id:5006/PhotoFolder/";
 
         //Dev
-        //public static string DocumentFolder = "http://10.85.40.68:91/TravelDocuments/";
+        public static string DocumentFolder = "http://10.85.40.68:91/TravelDocuments/";
         //local
-        public static string DocumentFolder = "http://10.86.110.96:88/TravelDocuments/";
+        //public static string DocumentFolder = "http://10.86.110.96:88/TravelDocuments/";
 
         //Production
         //public static string DocumentFolder = "https://passport.toyota.astra.co.id:5006/TravelDocuments/";
