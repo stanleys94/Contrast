@@ -9,9 +9,9 @@ namespace CONTRAST_WEB.Models
     public static class Constant
     {
         //dev	       
-        //public static string Baseurl = "http://10.85.40.68:90/";	
+        public static string Baseurl = "http://10.85.40.68:90/";
         //local	
-        public static string Baseurl = "http://10.86.110.14:89/";	
+        //public static string Baseurl = "http://10.86.110.14:89/";	
         //QA	
         //public static string Baseurl = "http://10.85.26.25/";	
         //Production	

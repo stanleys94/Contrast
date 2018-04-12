@@ -15,19 +15,22 @@ using System.IO;
 using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using PdfSharp;
+using System.Security.Claims;
 
 namespace CONTRAST_WEB.Controllers
 {
     public class TravelStatusController : Controller
     {
-
-        [HttpPost]
         [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "contrast.user")]        
         // GET: TravelStatus
-        public async Task<ActionResult> Index(tb_m_employee model)
+        public async Task<ActionResult> Index()
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+
             List<vw_request_summary> ResponseList = new List<vw_request_summary>();
             ResponseList = await GetData.RequestSummaryListInfo(model.code);
 
@@ -128,7 +131,7 @@ namespace CONTRAST_WEB.Controllers
             return View(ResponseList);
         }
 
-        [HttpPost]
+        
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
@@ -798,16 +801,15 @@ namespace CONTRAST_WEB.Controllers
             return View("Details", model);
         }
 
-        [HttpPost]
+        
         [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "contrast.user")] 
         // GET: TravelStatus
-        public async Task<ActionResult> Comment(vw_request_summary model)
+        public async Task<ActionResult> Comment(string group_code)
         {
             List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
-            comment = await GetData.Comment(model.group_code);
-            ViewBag.group_code = model.group_code;
+            comment = await GetData.Comment(group_code);
+            ViewBag.group_code = group_code;
             return View(comment);
         }
 
@@ -817,12 +819,16 @@ namespace CONTRAST_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddComment(string commentbox, string groupcode)
         {
-            await InsertData.TravelStatuscomment(commentbox, groupcode, "0", 0);
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);               
 
-            List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
-            comment = await GetData.Comment(groupcode);
+            if(!String.IsNullOrEmpty(commentbox))
+                await InsertData.TravelStatuscomment(commentbox, groupcode, groupcode, Convert.ToInt32(identity.Name));            
 
-            return View("Comment", comment);
+            //return View("Comment", comment);
+            return RedirectToAction("Comment", new { @group_code = groupcode });
         }
 
 

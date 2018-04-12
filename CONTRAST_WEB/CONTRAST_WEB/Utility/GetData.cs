@@ -3540,9 +3540,6 @@ namespace CONTRAST_WEB.Models
             return ListItem;
         }
 
-    }
-
-
         public static async Task<List<tb_m_special_employee>> SpecialEmployee(string no_reg)
         {
             List<tb_m_special_employee> model = new List<tb_m_special_employee>();
@@ -3570,8 +3567,7 @@ namespace CONTRAST_WEB.Models
             }
             return model;
         }
-    }
+
+    }        
+ }
      
-   
-    
-}
