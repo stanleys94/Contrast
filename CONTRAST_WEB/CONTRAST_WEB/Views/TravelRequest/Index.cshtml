@@ -32,6 +32,27 @@
         <div class="col-md-11 col-md-offset-1">
             <h5 style="text-align:left; margin-top:0px; padding:0 10px;">"Surat Perintah Perjalanan Dinas"</h5>
         </div>
+
+        @using (Html.BeginForm("Index", "TravelRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            foreach (var item in ViewBag.Privillege)
+            {
+                if (item == "contrast.travelcoordinator")
+                {
+                <div class="col-md-11 col-md-offset-1">
+                    <div>
+                        <strong style="color:deepskyblue">ADD EMPLOYEE :</strong>
+                        <div style="width:450px;" class="input-group">
+                            @Html.TextBox("applied", Model.employee_info.code, new { @class = "form-control", placeholder = "Type Employee Name..", id = "searchInput2" })              
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-lg form-control" name="Add" value="Submit">Add</button>
+                            </span>
+                        </div>         
+                    </div>
+                </div>
+                }
+            }
+        }
         <div class="col-md-5 col-md-offset-1">
             <div style="height:50px; padding-top:20px;">
                 <strong style="color:deepskyblue">EMPLOYEE INFO</strong>
@@ -485,6 +506,23 @@
                 url: '@Url.Action("GetSearchValue", "TravelRequest")',
                 dataType: "json",
 	        data: { search: $("#searchInput").val(), code: $("#code").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.code };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error Has detected");
+                }
+            });
+        }
+    });
+    $("#searchInput2").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue", "TravelRequest")',
+                dataType: "json",
+                data: { search: $("#searchInput2").val(), code: $("#code").val() },
                 success: function (data) {
                     response($.map(data, function (item) {
                         return { label: item.name, value: item.code };
