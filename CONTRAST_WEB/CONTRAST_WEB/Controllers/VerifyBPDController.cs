@@ -56,7 +56,7 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.enddate = null;
 
             //filter
-            if (!String.IsNullOrEmpty(searchString) || (startdate != null && enddate != null))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 List<FixedCostVerifierHelper> temp = new List<FixedCostVerifierHelper>();
                 for (int k = 0; k < ResultObject2.Count; k++)
@@ -65,10 +65,7 @@ namespace CONTRAST_WEB.Controllers
                     if (ResultObject2[k].FixedCost_Verified.group_code.ToLower().Contains(searchString.ToLower())
                         || ResultObject2[k].FixedCost_Verified.name.ToLower().Contains(searchString.ToLower())
                         || ResultObject2[k].FixedCost_Verified.destination_name.ToLower().Contains(searchString.ToLower())
-                        || (
-                               ResultObject2[k].FixedCost_Verified.start_date >= startdate
-                               && ResultObject2[k].FixedCost_Verified.end_date <= enddate
-                           )
+                        
                        )
                         temp.Add(ResultObject2[k]);
                 }

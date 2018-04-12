@@ -217,10 +217,22 @@
             }
         </div>
         <div style="float:left;margin-top:10px;" class="col-lg-4">
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
             @Html.PagedListPager(Model, page => Url.Action("Index",
-                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @if (ViewBag.startdate != null || ViewBag.enddate != null)
+            {
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+                                               new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate,enddate = ViewBag.enddate }))
+            }
+            else
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                               new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+            }
 
         </div>
         <div id="show" class="alert alert-success" hidden>
