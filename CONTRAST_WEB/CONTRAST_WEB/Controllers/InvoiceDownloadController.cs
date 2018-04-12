@@ -306,8 +306,10 @@ namespace CONTRAST_WEB.Controllers
             }
 
             List<InvoiceHelper> PagedList = new List<InvoiceHelper>();
-            int MaxPageNew = ((invoice.Count() - issued.Count()) / 5) + 1;
-            int MaxPageIssued = ((invoice.Count() - ViewBag.outstandingTotal) / 5) + 1;
+
+            int MaxPageNew = (ViewBag.outstandingTotal / 5) + 1;
+            int MaxPageIssued = (ViewBag.issuedTotal / 5) + 1;
+
 
             ViewBag.newPageMax = MaxPageNew;
             ViewBag.pageNew = 1;
