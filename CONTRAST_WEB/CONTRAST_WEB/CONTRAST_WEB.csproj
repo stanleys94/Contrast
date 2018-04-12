@@ -781,7 +781,7 @@
     <Content Include="Views\TrackProgressPersonal\Index.cshtml" />
     <Content Include="Views\TrackProgressPersonal\Details.cshtml" />
     <Content Include="Views\PaymentList\Index.cshtml" />
-
+    <Content Include="Views\PaymentProposal\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -790,7 +790,6 @@
     <Folder Include="Log\" />
     <Folder Include="PhotoFolder\" />
     <Folder Include="SettlementFolder\" />
-    <Folder Include="Views\PaymentProposal\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

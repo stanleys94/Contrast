@@ -203,9 +203,10 @@ namespace CONTRAST_WEB.Models
             var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
             model.create_date = DateTime.Now.ToUniversalTime();
             model.create_date = model.create_date + offset;
-            model.group_code = group_code;
-            model.name = name;
+            model.group_code = group_code;          
             model.no_reg_comment = no_reg;
+
+            model.name = await GetData.EmployeeNameInfo(no_reg);
             model.read_flag = false;
             using (var client = new HttpClient())
             {
