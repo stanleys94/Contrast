@@ -214,7 +214,18 @@
                                 <div>
                                     <span class="fnt3"><strong>Return</strong> @ViewBag.ReturnDate[i]</span>
                                 </div>
+                                <div style="padding-top:15px">
+                                    <a href='@Url.Action("Comment", "TravelStatus",new { group_code = Model[i].group_code })'>
+                                        <img src='@Url.Content("~/img/Travel-Status-Comment.png")' />
+                                    </a>
+                                    @if (ViewBag.newmsg[i] == 0) {<strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>}
+                                    else {<strong style="color:red">@ViewBag.newmsg[i] Comment unread</strong>}
+                                     
+                                </div>
                             </div>
+
+                             
+
                             <div style="width:120px;" class="column content2">
                                 <span><strong style="color:darkgray">BUDGET</strong> </span><br />
                                 <h5>
@@ -226,6 +237,7 @@
                                     </strong>
                                 </h5>
                             </div>
+
                                 }
                         </div>
                     </div>

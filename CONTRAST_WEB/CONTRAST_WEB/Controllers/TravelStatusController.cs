@@ -128,6 +128,23 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Bossname = apprv_name;
             ViewBag.Duration = travel_duration;
 
+            //count new messages
+
+            List<int> msgcount = new List<int>();
+            for (int k = 0; k < ResponseList.Count(); k++)
+            {
+                List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
+                comment = await GetData.Comment(ResponseList[k].group_code);
+                if (comment.Count > 0)
+                {
+                    var newmsg = comment.Where(x => x.read_flag == false && x.no_reg_comment != ResponseList[k].no_reg);
+                    msgcount.Add(newmsg.Count());
+                }
+                else
+                    msgcount.Add(0);
+            }
+            ViewBag.newmsg=msgcount;
+
             return View(ResponseList);
         }
 
@@ -302,6 +319,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.StatusState = apprv_status;
             ViewBag.Approvalnum = apprv_status.Count;
 
+            
             return View(model2);
         }
 
@@ -801,14 +819,27 @@ namespace CONTRAST_WEB.Controllers
             return View("Details", model);
         }
 
-        
+
         [Authorize]
-        [Authorize(Roles = "contrast.user")] 
+        [Authorize(Roles = "contrast.user")]
         // GET: TravelStatus
         public async Task<ActionResult> Comment(string group_code)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+
             List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
             comment = await GetData.Comment(group_code);
+
+            int newmsg_count = 0;
+            if (comment.Count > 0)
+            {
+                var newmsg = comment.Where(x => x.read_flag == false&&x.no_reg_comment!=Convert.ToInt32(identity.Name));
+                newmsg_count = newmsg.Count();
+            }
+
+            if (newmsg_count>0)
+                await UpdateData.TravelRequestCommentRead(group_code);
+
             ViewBag.group_code = group_code;
             return View(comment);
         }
