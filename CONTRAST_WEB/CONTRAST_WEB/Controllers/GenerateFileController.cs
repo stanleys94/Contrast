@@ -20,7 +20,8 @@ namespace CONTRAST_WEB.Controllers
         // GET: GenerateFile
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string currentFilter2, string searchString, string searchString2, int? page, DateTime? startdate, DateTime? enddate)
+
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
@@ -49,9 +50,12 @@ namespace CONTRAST_WEB.Controllers
             else
             {
                 searchString = currentFilter;
+                searchString2 = currentFilter2;
             }
 
             ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentFilter2 = searchString2;
+
             if (startdate != null)
                 ViewBag.startdate = startdate;
             else
@@ -69,13 +73,27 @@ namespace CONTRAST_WEB.Controllers
                 for (int k = 0; k < Generate.Count; k++)
                 {
                     if (Generate[k].Entity.EMPLOYEE_NAME.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.BTR_NO.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.DESTINATION.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.COST_CENTER.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.WBS_ELEMENT.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.TRAVEL_TYPE.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.BUDGET.ToLower().Contains(searchString.ToLower()) ||
-                        Generate[k].Entity.VENDOR_NAME.ToLower().Contains(searchString.ToLower()))
+                        Generate[k].Entity.BTR_NO.ToLower().Contains(searchString.ToLower()))
+                    {
+                        temp.Add(Generate[k]);
+                    }
+                }
+                if (temp.Count() > 0) Generate = temp;
+                else Generate = temp;
+            }
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString2))
+            {
+                List<GenerateFileHelper> temp = new List<GenerateFileHelper>();
+                for (int k = 0; k < Generate.Count; k++)
+                {
+                    if (Generate[k].Entity.DESTINATION.ToLower().Contains(searchString2.ToLower()) ||
+                        Generate[k].Entity.COST_CENTER.ToLower().Contains(searchString2.ToLower()) ||
+                        Generate[k].Entity.WBS_ELEMENT.ToLower().Contains(searchString2.ToLower()) ||
+                        Generate[k].Entity.TRAVEL_TYPE.ToLower().Contains(searchString2.ToLower()) ||
+                        Generate[k].Entity.BUDGET.ToLower().Contains(searchString2.ToLower()) ||
+                        Generate[k].Entity.VENDOR_NAME.ToLower().Contains(searchString2.ToLower()))
                     {
                         temp.Add(Generate[k]);
                     }
@@ -104,6 +122,7 @@ namespace CONTRAST_WEB.Controllers
             int pageSize = 15;
             int pageNumber = (page ?? 1);
             return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList().ToPagedList(pageNumber, pageSize));
+            //return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList().ToPagedList(pageNumber, pageSize));
             //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());     
 
         }
