@@ -18,228 +18,222 @@
     </ol>
 </div>
 <div class="container">
-    <div style="margin-top:115px;" id="products" class="row list-group _3EibU">
-        <label style="width:100%" class="h5sl">Generate File</label>
-        <div class="col-sm-12 col-md-10">
-            <div>
-                <div class="collapse navbar-collapse">
-                    @using (Html.BeginForm("Index", "GenerateFile", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
+        <div style="margin-top:110px;" id="products" class="row list-group _3EibU">
+            <label style="width:100%;" class="h5sl">Generate File</label>
+            <div class="h5a" style="margin:0px;">
+            @using (Html.BeginForm("Index", "GenerateFile", FormMethod.Get, new { @class = "navbar-form navbar-left", style = "width:1100px;margin-top:0px;" }))
+            {
+                <div class="col-lg-2">
+                    <h5 class="h5a" style="margin-bottom:5px;">Find by : </h5>
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "width:200px", placeholder = "BTA, NAME" })
+                </div>
+                <div class="col-lg-2 col-lg-offset-1">
+                    <h5 class="h5a" style="margin-bottom:5px;">Find by : </h5>
+                    @Html.TextBox("SearchString2", ViewBag.CurrentFilter2 as string, new { @class = "form-control", style = "width:300px", placeholder = "Destination, Vendor, Budget, Travel Type" })
+                </div>
+                <div class="col-lg-4 col-lg-offset-2">
+                    <h5 class="h5a" style="margin-bottom:5px;">Approve Date Range :</h5>
+        
+                    @if (ViewBag.startdate != null)
                     {
-                        <table>
-                            <tr>
-                                <td>                                    
-                                    Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "width:300px", placeholder = "No BTA, Noreg, Name, Destination, Vendor Code" })
-                                </td>
-                                <td>
-                                   @if (ViewBag.startdate != null)
-                                   {
-                                        @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
-                                   }   
-                                   else
-                                   {
-                                        @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
-                                    }
-                                </td>
-                                
-                                <td>
-                                  @if (ViewBag.enddate != null)
-                                  {
-                                     @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
-                                  }
-                                  else
-                                  {
-                                     @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
-                                  }
-
-                                </td>
-                                <td>
-                                    <input type="submit" value="Search" class="btn btn-success" />
-                                </td>
-                            </tr>
-                        </table>
-
+                        <span>@Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @class = "form-control", style = "width:160px", @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })</span>
+                    }
+                    else
+                    {
+                        <span>@Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @class = "form-control", style = "width:160px", @id = "startdate", @type = "date" })</span>
+                    }
+                    @if (ViewBag.enddate != null)
+                    {
+                        <span>@Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @class = "form-control", style = "width:160px", @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })</span>
+                    }
+                    else
+                    {
+                        <span>@Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @class = "form-control", style = "width:160px", @id = "enddate", @type = "date" })</span>
                     }
                 </div>
-            </div>
-        </div>
-        <div class="well">
-            @using (Html.BeginForm("Generate", "GenerateFile", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-                <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
-                    <div style="padding:0 5px">
-                        <table style="width:1800px;" class="table table-condensed table-striped">
-                            <tr style="background-color:deepskyblue; text-align:center;">
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    BTA NUMBER
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    EMPLOYEE NAME
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    DESTINATION
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    VENDOR NAME
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    BUDGET
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    TOTAL AMOUNT
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    COST CENTER
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    WBS ELEMENT
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    TRAVEL TYPE
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    APPROVE DATE
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    BTR DATE
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    PLAN PAYMENT DATE
-                                </th>
-                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
-                                    PAYMENT METHOD
-                                </th>
-                            </tr>
-
-                            @for (int k = 0; k < Model.Count(); k++)
-                            {
-
-                                @Html.HiddenFor(Model => Model[k].No_Reg)
-                                @Html.HiddenFor(Model => Model[k].Name)
-                                @Html.HiddenFor(Model => Model[k].Entity.MANDT)
-                                @Html.HiddenFor(Model => Model[k].Entity.PV_NO)
-                                @Html.HiddenFor(Model => Model[k].Entity.PV_YEAR)
-                                @Html.HiddenFor(Model => Model[k].Entity.ITEM_NO)
-                                @Html.HiddenFor(Model => Model[k].Entity.PV_DATE)
-                                @Html.HiddenFor(Model => Model[k].Entity.PV_TYPE)
-                                @Html.HiddenFor(Model => Model[k].Entity.TRANS_TYPE)
-                                @Html.HiddenFor(Model => Model[k].Entity.VENDOR)
-                                @Html.HiddenFor(Model => Model[k].Entity.VENDOR_GRP)
-                                @Html.HiddenFor(Model => Model[k].Entity.INVOICE_NO)
-                                @Html.HiddenFor(Model => Model[k].Entity.TAX_NO)
-                                @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_TERM)
-                                @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD)
-                                @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DT)
-                                @Html.HiddenFor(Model => Model[k].Entity.POSTING_DT)
-                                @Html.HiddenFor(Model => Model[k].Entity.TOTAL_AMOUNT)
-                                @Html.HiddenFor(Model => Model[k].Entity.DPP_AMOUNT)
-                                @Html.HiddenFor(Model => Model[k].Entity.CURRENCY)
-                                @Html.HiddenFor(Model => Model[k].Entity.TAX_CODE)
-                                @Html.HiddenFor(Model => Model[k].Entity.HEADER_TEXT)
-                                @Html.HiddenFor(Model => Model[k].Entity.BANK_TYPE)
-                                @Html.HiddenFor(Model => Model[k].Entity.gl_account)
-                                @Html.HiddenFor(Model => Model[k].Entity.AMOUNT)
-                                @Html.HiddenFor(Model => Model[k].Entity.COST_CENTER)
-                                @Html.HiddenFor(Model => Model[k].Entity.WBS_ELEMENT)
-                                @Html.HiddenFor(Model => Model[k].Entity.ITEM_TEXT)
-                                @Html.HiddenFor(Model => Model[k].Entity.STATUS)
-                                @Html.HiddenFor(Model => Model[k].Entity.SAP_DOC_NO)
-                                @Html.HiddenFor(Model => Model[k].Entity.SAP_DOC_YEAR)
-                                @Html.HiddenFor(Model => Model[k].Entity.BTR_NO)
-                                @Html.HiddenFor(Model => Model[k].Entity.EMPLOYEE_NAME)
-                                @Html.HiddenFor(Model => Model[k].Entity.DESTINATION)
-                                @Html.HiddenFor(Model => Model[k].Entity.ID_CITY)
-                                @Html.HiddenFor(Model => Model[k].Entity.BUDGET)
-                                @Html.HiddenFor(Model => Model[k].Entity.TOTAL_AMOUNT_)
-                                @Html.HiddenFor(Model => Model[k].Entity.COST_CENTER_)
-                                @Html.HiddenFor(Model => Model[k].Entity.WBS_ELEMENT_)
-                                @Html.HiddenFor(Model => Model[k].Entity.TRAVEL_TYPE)
-                                @Html.HiddenFor(Model => Model[k].Entity.BTR_DATE)
-                                @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
-                                @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD_)
-                                <tr class="table-responsive">
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.BTR_NO)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.EMPLOYEE_NAME)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.DESTINATION)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.VENDOR_NAME)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.BUDGET)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.TOTAL_AMOUNT_)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.COST_CENTER_)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.WBS_ELEMENT_)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.TRAVEL_TYPE)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.PV_DATE)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.BTR_DATE)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
-                                    </td>
-                                    <td style="width:auto;" class="td">
-                                        @Html.DisplayFor(Model => Model[k].Entity.PAYMENT_METHOD_)
-                                    </td>
+                <div class="col-lg-1"><input style="margin-top:30px;width:110px;" type="submit" value="Search" class="btn btn-success btn-lg" /></div>
+            }
+                </div>
+            <div class="well">
+                @using (Html.BeginForm("Generate", "GenerateFile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
+                        <div style="padding:0 5px">
+                            <table style="width:1800px;" class="table table-condensed table-striped">
+                                <tr style="background-color:deepskyblue; text-align:center;">
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        BTA NUMBER
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        EMPLOYEE NAME
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        DESTINATION
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        VENDOR NAME
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        BUDGET
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        TOTAL AMOUNT
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        COST CENTER
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        WBS ELEMENT
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        TRAVEL TYPE
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        APPROVE DATE
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        BTR DATE
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        PLAN PAYMENT DATE
+                                    </th>
+                                    <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                        PAYMENT METHOD
+                                    </th>
                                 </tr>
 
-                            }
-                        </table>
+                                @for (int k = 0; k < Model.Count(); k++)
+                                {
+
+                                    @Html.HiddenFor(Model => Model[k].No_Reg)
+                                    @Html.HiddenFor(Model => Model[k].Name)
+                                    @Html.HiddenFor(Model => Model[k].Entity.MANDT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PV_NO)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PV_YEAR)
+                                    @Html.HiddenFor(Model => Model[k].Entity.ITEM_NO)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PV_DATE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PV_TYPE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.TRANS_TYPE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.VENDOR)
+                                    @Html.HiddenFor(Model => Model[k].Entity.VENDOR_GRP)
+                                    @Html.HiddenFor(Model => Model[k].Entity.INVOICE_NO)
+                                    @Html.HiddenFor(Model => Model[k].Entity.TAX_NO)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_TERM)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.POSTING_DT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.TOTAL_AMOUNT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.DPP_AMOUNT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.CURRENCY)
+                                    @Html.HiddenFor(Model => Model[k].Entity.TAX_CODE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.HEADER_TEXT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.BANK_TYPE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.gl_account)
+                                    @Html.HiddenFor(Model => Model[k].Entity.AMOUNT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.COST_CENTER)
+                                    @Html.HiddenFor(Model => Model[k].Entity.WBS_ELEMENT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.ITEM_TEXT)
+                                    @Html.HiddenFor(Model => Model[k].Entity.STATUS)
+                                    @Html.HiddenFor(Model => Model[k].Entity.SAP_DOC_NO)
+                                    @Html.HiddenFor(Model => Model[k].Entity.SAP_DOC_YEAR)
+                                    @Html.HiddenFor(Model => Model[k].Entity.BTR_NO)
+                                    @Html.HiddenFor(Model => Model[k].Entity.EMPLOYEE_NAME)
+                                    @Html.HiddenFor(Model => Model[k].Entity.DESTINATION)
+                                    @Html.HiddenFor(Model => Model[k].Entity.ID_CITY)
+                                    @Html.HiddenFor(Model => Model[k].Entity.BUDGET)
+                                    @Html.HiddenFor(Model => Model[k].Entity.TOTAL_AMOUNT_)
+                                    @Html.HiddenFor(Model => Model[k].Entity.COST_CENTER_)
+                                    @Html.HiddenFor(Model => Model[k].Entity.WBS_ELEMENT_)
+                                    @Html.HiddenFor(Model => Model[k].Entity.TRAVEL_TYPE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.BTR_DATE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
+                                    @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD_)
+                                    <tr class="table-responsive">
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.BTR_NO)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.EMPLOYEE_NAME)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.DESTINATION)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.VENDOR_NAME)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.BUDGET)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.TOTAL_AMOUNT_)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.COST_CENTER_)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.WBS_ELEMENT_)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.TRAVEL_TYPE)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.PV_DATE)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.BTR_DATE)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
+                                        </td>
+                                        <td style="width:auto;" class="td">
+                                            @Html.DisplayFor(Model => Model[k].Entity.PAYMENT_METHOD_)
+                                        </td>
+                                    </tr>
+
+                                }
+                            </table>
+                        </div>
+
                     </div>
+                    //@Html.Partial("_BreadCrum");
+
+                    //@Html.ActionLink("Download Text File", "CreateFile", "GenerateFile")
+                    <div id="show" style="margin:0px;padding:0px;" class="alert alert-success col-lg-12" hidden>
+                        <strong>Success!</strong> Check File Download on Folder.
+                    </div>
+                    <div style="float:right;margin-top:10px;margin-left:100px;" class="col-lg-2">
+                        <button id="button" class="btn btn-info btn-lg" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button>
+                    </div>
+                }
+                <div style="float:left;" class="col-lg-5">
+                
+                @if (ViewBag.startdate != null || ViewBag.enddate != null)
+                {
+                    <div class="h5a">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                </div>
+                    <div style="height:5px;">
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, currentFilter2 = ViewBag.CurrentFilter2, startdate = ViewBag.startdate, enddate = ViewBag.enddate}))
+                    </div>
+                }
+                else
+                {
+                    <div class="h5a">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                </div>
+                    <div style="height:5px;">
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                                             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, currentFilter2 = ViewBag.CurrentFilter2}))
+                    </div>
+                }
 
                 </div>
-                //@Html.Partial("_BreadCrum");
-
-                //@Html.ActionLink("Download Text File", "CreateFile", "GenerateFile")
-                <table>
-                    <tr>
-                        <td>
-                            <button id="button" class="btn btn-info btn-lg" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button>
-                        </td>
-                    </tr>
-                </table>
-            }
-        </div>
-        <div style="float:left;margin-top:10px;" class="col-lg-4">
-            @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
-
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-            @if (ViewBag.startdate != null || ViewBag.enddate != null)
-            {
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-                                               new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate,enddate = ViewBag.enddate }))
-            }
-            else
-            {
-                @Html.PagedListPager(Model, page => Url.Action("Index",
-                                               new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
-            }
-
-        </div>
-        <div id="show" class="alert alert-success" hidden>
-            <strong>Success!</strong> Check File Download on Folder.
+            </div>
+            
         </div>
     </div>
-</div>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script>
     $(document).ready(function () {
