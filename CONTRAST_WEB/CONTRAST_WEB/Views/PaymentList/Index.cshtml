@@ -1,4 +1,6 @@
-﻿@model IList<CONTRAST_WEB.Models.PaymentListHelper>
+﻿@*@model IList<CONTRAST_WEB.Models.PaymentListHelper> *@
+@model PagedList.IPagedList<CONTRAST_WEB.Models.PaymentListHelper>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "PARTICIPANT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
@@ -15,58 +17,57 @@
         <li class="breadcrumb-item active">Payment List</li>
     </ol>
 </div>
- <div class="container">
+<div class="container">
     <div style="margin-top:115px;" id="products" class="row list-group _3EibU">
         <label style="width:100%" class="h5sl">Payment List</label>
         <div class="col-sm-12 col-md-10">
             <div>
                 <div class="collapse navbar-collapse">
-
-                    @using (Html.BeginForm("Filter", "PaymentList", FormMethod.Post, new { @class = "navbar-form navbar-left" }))
+                    @using (Html.BeginForm("Index", "PaymentList", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
                     {
-                        @Html.AntiForgeryToken()
-                        if (Model.Count() > 0)
-                        {
-                            @Html.HiddenFor(m => m[0].Name, new { @value = Model[0].Name })
-                            @Html.HiddenFor(m => m[0].No_Reg, new { @value = Model[0].Name })
+                        <table>
+                            <tr>
+                                <td>
+                                    Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "width:300px", placeholder = "No BTA, Name, Destination, Budget" })
+                                </td>
+                                <td>
+                                    @if (ViewBag.startdate != null)
+                                    {
+                                        @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                                    }
+                                </td>
 
-                            <table>
-                                <tr>
-                                    <td>
-                                        <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="search" />
-                                    </td>
-                                    <td>
-                                        <input type="date" name="startdate" value=@Model[0].StartDate.ToString("yyyy-mm-dd") class="form-control" placeholder="search" />
-                                        @* <input type="date" name="startdate" value=@Model[0].StartDate.ToString("yyyy-MM-dd") class="form-control" placeholder="search" />*@
-                                    </td>
-                                    <td>
-                                        <input type="date" name="enddate" value=@Model[0].EndDate.ToString("yyyy-mm-dd") class="form-control" placeholder="search" />
-                                        @*<input type="date" name="enddate" value=@Model[0].EndDate.ToString("yyyy-MM-dd") class="form-control" placeholder="search" />*@
-                                    </td>
-                                    <td>
-                                        <button type="submit" value="Search" class="btn btn-success">Search</button>
-
-                                    </td>
-                                </tr>
-
-                            </table>
-                        }
-
+                                <td>
+                                    @if (ViewBag.enddate != null)
+                                    {
+                                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
+                                    }
+                                </td>
+                                <td>
+                                    <input type="submit" value="Search" class="btn btn-success" />
+                                </td>
+                            </tr>
+                        </table>
                     }
                 </div>
             </div>
         </div>
-
         <div class="well">
             @using (Html.BeginForm("Generate", "PaymentList", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
-
                     <div style="padding:0 5px">
                         <table style="width:1450px;" class="table table-condensed table-striped">
                             <tr style="background-color:deepskyblue; text-align:center;">
-
                                 @*<th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                         MANDT
                                     </th>
@@ -182,6 +183,9 @@
                                     TRAVEL_TYPE
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
+                                    PV_DATE
+                                </th>
+                                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     BTR_DATE
                                 </th>
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
@@ -190,9 +194,7 @@
                                 <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;">
                                     PAYMENT_METHOD
                                 </th>
-
                             </tr>
-
 
                             @for (int k = 0; k < Model.Count(); k++)
                             {
@@ -364,6 +366,9 @@
                                         @Html.DisplayFor(Model => Model[k].Entity.BTR_DATE)
                                     </td>
                                     <td style="width:auto;" class="td">
+                                        @Html.DisplayFor(Model => Model[k].Entity.PV_DATE)
+                                    </td>
+                                    <td style="width:auto;" class="td">
                                         @Html.DisplayFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
                                     </td>
                                     <td style="width:auto;" class="td">
@@ -372,32 +377,39 @@
                                 </tr>
                             }
                         </table>
-
                     </div>
-
 
                 </div>
                 //@Html.Partial("_BreadCrum");
 
                 //@Html.ActionLink("Download Text File", "CreateFile", "Payment List")
-          <table> 
-
-<tr>
-
-    <td>
-
-        <button id="button" class="btn btn-info btn-lg" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button>
-    </td>
-</tr>
+                <table>
+                    <tr>
+                        <td>
+                            <button id="button" class="btn btn-info btn-lg" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button>
+                        </td>
+                    </tr>
                 </table>
             }
         </div>
-<div id="show" class="alert alert-success" hidden>
-    <strong>Success!</strong> Check File Download on Folder.
-</div>
+        <div style="float:left;margin-top:10px;" class="col-lg-4">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @if (ViewBag.startdate != null || ViewBag.enddate != null)
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+            }
+            else
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            }
+        </div>
+        <div id="show" class="alert alert-success" hidden>
+            <strong>Success!</strong> Check File Download on Folder.
+        </div>
     </div>
 </div>
-
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script>
     $(document).ready(function () {
