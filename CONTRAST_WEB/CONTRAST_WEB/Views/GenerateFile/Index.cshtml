@@ -104,51 +104,7 @@
                                 </tr>
 
                                 @for (int k = 0; k < Model.Count(); k++)
-                                {
-
-                                    @Html.HiddenFor(Model => Model[k].No_Reg)
-                                    @Html.HiddenFor(Model => Model[k].Name)
-                                    @Html.HiddenFor(Model => Model[k].Entity.MANDT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PV_NO)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PV_YEAR)
-                                    @Html.HiddenFor(Model => Model[k].Entity.ITEM_NO)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PV_DATE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PV_TYPE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.TRANS_TYPE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.VENDOR)
-                                    @Html.HiddenFor(Model => Model[k].Entity.VENDOR_GRP)
-                                    @Html.HiddenFor(Model => Model[k].Entity.INVOICE_NO)
-                                    @Html.HiddenFor(Model => Model[k].Entity.TAX_NO)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_TERM)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.POSTING_DT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.TOTAL_AMOUNT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.DPP_AMOUNT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.CURRENCY)
-                                    @Html.HiddenFor(Model => Model[k].Entity.TAX_CODE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.HEADER_TEXT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.BANK_TYPE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.gl_account)
-                                    @Html.HiddenFor(Model => Model[k].Entity.AMOUNT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.COST_CENTER)
-                                    @Html.HiddenFor(Model => Model[k].Entity.WBS_ELEMENT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.ITEM_TEXT)
-                                    @Html.HiddenFor(Model => Model[k].Entity.STATUS)
-                                    @Html.HiddenFor(Model => Model[k].Entity.SAP_DOC_NO)
-                                    @Html.HiddenFor(Model => Model[k].Entity.SAP_DOC_YEAR)
-                                    @Html.HiddenFor(Model => Model[k].Entity.BTR_NO)
-                                    @Html.HiddenFor(Model => Model[k].Entity.EMPLOYEE_NAME)
-                                    @Html.HiddenFor(Model => Model[k].Entity.DESTINATION)
-                                    @Html.HiddenFor(Model => Model[k].Entity.ID_CITY)
-                                    @Html.HiddenFor(Model => Model[k].Entity.BUDGET)
-                                    @Html.HiddenFor(Model => Model[k].Entity.TOTAL_AMOUNT_)
-                                    @Html.HiddenFor(Model => Model[k].Entity.COST_CENTER_)
-                                    @Html.HiddenFor(Model => Model[k].Entity.WBS_ELEMENT_)
-                                    @Html.HiddenFor(Model => Model[k].Entity.TRAVEL_TYPE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.BTR_DATE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PLAN_PAYMENT_DATE)
-                                    @Html.HiddenFor(Model => Model[k].Entity.PAYMENT_METHOD_)
+                                {                                    
                                     <tr class="table-responsive">
                                         <td style="width:auto;" class="td">
                                             @Html.DisplayFor(Model => Model[k].Entity.BTR_NO)
@@ -194,11 +150,12 @@
                                 }
                             </table>
                         </div>
-
+                    @foreach (int item in ViewBag.id_data)
+                    {
+                        @Html.Hidden("id_data", item)
+                    }
                     </div>
-                    //@Html.Partial("_BreadCrum");
-
-                    //@Html.ActionLink("Download Text File", "CreateFile", "GenerateFile")
+                   
                     <div id="show" style="margin:0px;padding:0px;" class="alert alert-success col-lg-12" hidden>
                         <strong>Success!</strong> Check File Download on Folder.
                     </div>
