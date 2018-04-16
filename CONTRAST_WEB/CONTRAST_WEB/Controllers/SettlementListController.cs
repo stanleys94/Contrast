@@ -49,6 +49,39 @@ namespace CONTRAST_WEB.Controllers
             return (model);
         }
 
+        public async Task<JsonResult> GetSearchValue(string search, string code)
+        {
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public async Task<JsonResult> GetSearchValue2(string search, string code)
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            tb_m_employee_source_data div = await GetData.GetDivisionSource(Convert.ToInt32(identity.Name));
+            if (div.Divisi.Contains("and1"))
+            {
+                div.Divisi = div.Divisi.Replace("and1", "&");
+            }
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchNameDiv(search, div.Divisi);
+            //list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         // GET: SettlementList
         [HttpPost]
         [Authorize]
