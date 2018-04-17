@@ -272,10 +272,10 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
                     //cek update data
-                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    else
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    //else
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 

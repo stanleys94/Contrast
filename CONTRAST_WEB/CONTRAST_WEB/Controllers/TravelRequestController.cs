@@ -123,8 +123,7 @@ namespace CONTRAST_WEB.Controllers
 
             //Set activity id default to 3 (Regular)
             model2.travel_request.id_activity = 3;
-
-
+            
             List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
             bankName = await GetData.VendorEmployee(Convert.ToInt32(model.code));
             if (bankName.Count != 0)
@@ -162,14 +161,7 @@ namespace CONTRAST_WEB.Controllers
                 model2.special_employee_flag = false;
             }
 
-            ViewBag.Username = model2.employee_info.name;
-            //var headers = Request.Headers.GetValues("User-Agent");
-            //string userAgent = string.Join(" ", headers);
-
-            //if (userAgent.ToLower().Contains("phone"))
-            //    return View("IndexMobile", model2);
-            //else
-            //    return View("Index", model2);
+            ViewBag.Username = model2.employee_info.name;            
             return View(model2);
         }
 
