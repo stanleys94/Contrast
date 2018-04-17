@@ -327,7 +327,7 @@ namespace CONTRAST_WEB.Controllers
                     item.active_flag = true;
                     item.status_request = "99";
 
-                    //await UpdateData.TravelRequestPersonal(item);
+                    await UpdateData.TravelRequestPersonal(item);
                 }
                 request = await GetData.RequestSummaryListInfo(model2[0].no_reg.ToString());
 
