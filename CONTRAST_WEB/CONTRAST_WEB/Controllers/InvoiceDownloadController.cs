@@ -879,7 +879,7 @@ namespace CONTRAST_WEB.Controllers
             int down = 0;
             int looping = 1, start = 0;
             List<int> Counter = new List<int>();
-            vw_invoice_actualcost_new newModel = new vw_invoice_actualcost_new();
+           
             List<tb_r_travel_request> BTA = new List<tb_r_travel_request>();
             if (download.HasValue) down = Convert.ToInt32(download);
             List<InvoiceHelper> newList = new List<InvoiceHelper>();
@@ -900,6 +900,7 @@ namespace CONTRAST_WEB.Controllers
             }
             for (int i = start; i < looping; i++)
             {
+                vw_invoice_actualcost_new newModel = new vw_invoice_actualcost_new();
                 bool issued = false;
                 InvoiceHelper temp = new InvoiceHelper();
                 if (download.HasValue) down = Convert.ToInt32(download);

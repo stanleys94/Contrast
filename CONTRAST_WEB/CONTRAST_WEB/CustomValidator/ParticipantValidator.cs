@@ -16,9 +16,9 @@ namespace CONTRAST_WEB.CustomValidator
 
             List<tb_m_vendor_employee> bankNamePart = new List<tb_m_vendor_employee>();
 
-            if (value != null && value is int)
+            bankNamePart = GetData.VendorEmployeeValidate(Convert.ToInt32(model.tparticipant));
+            if (value != null)
             {
-                bankNamePart = GetData.VendorEmployeeValidate(Convert.ToInt32(model.tparticipant));
                 if (bankNamePart.Count() == 0)
                 {
 

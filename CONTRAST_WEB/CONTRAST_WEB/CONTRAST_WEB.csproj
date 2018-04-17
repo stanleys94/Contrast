@@ -236,9 +236,6 @@
     <Compile Include="Controllers\VerifyBPDController.cs" />
     <Compile Include="Controllers\VerifyController.cs" />
     <Compile Include="Controllers\VerifySettlementController.cs" />
-    <Compile Include="CustomValidator\AttchValidator.cs" />
-    <Compile Include="CustomValidator\AttchValidator2.cs" />
-    <Compile Include="CustomValidator\AttchValidator3.cs" />
     <Compile Include="CustomValidator\LocationValidator.cs" />
     <Compile Include="CustomValidator\DateValidator.cs" />
     <Compile Include="CustomValidator\DateValidator2.cs" />
@@ -607,6 +604,8 @@
     <Content Include="img\menu-upload-dit.png" />
     <Content Include="img\menu-upload-master.png" />
     <Content Include="img\newbanner.jpg" />
+    <Content Include="img\paymentList.png" />
+    <Content Include="img\paymentProposal.png" />
     <Content Include="img\question-sign.png" />
     <Content Include="img\receipt-paid4.png" />
     <Content Include="img\Settlement-icon-b.png" />
@@ -624,6 +623,7 @@
     <Content Include="img\Travel-Execution-with-text-icon.png" />
     <Content Include="img\Travel-Request-icon.png" />
     <Content Include="img\Travel-Request-with-texticon.png" />
+    <Content Include="img\travel-status-comment.png" />
     <Content Include="img\Travel-Status-icon-b.png" />
     <Content Include="img\Travel-Status-icon.png" />
     <Content Include="img\Travel-Status-with-text-icon.png" />
@@ -785,8 +785,6 @@
     <Content Include="Views\TrackProgressPersonal\Details.cshtml" />
     <Content Include="Views\PaymentList\Index.cshtml" />
     <Content Include="Views\PaymentProposal\Index.cshtml" />
-    <Content Include="Views\SettlementList\Insert.cshtml" />
-    <Content Include="Views\TravelRequest\ValidateMSTRMobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

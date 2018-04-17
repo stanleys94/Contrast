@@ -157,7 +157,7 @@
                                     @*@Html.ActionLink("Link", Model[k].path)*@
                                     @if (Model[k].path != null)
                                     {
-                                        <a href="@Model[k].path">Link</a>
+                                        <a href="@Model[k].path" target="_blank">Link</a>
                                     }
                                 </td>
                                 <td style="width:110px;" class="td" id="item_checkbox">
@@ -195,7 +195,7 @@
             <div style="float:right;margin-top:10px;" class="col-lg-3 col-lg-offset-9">
                 @if (position.ToLower().Contains("dph") || position.ToLower().Contains("ap"))
                 {
-                    <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">APPROVE</button>
+                    <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">SUBMIT</button>
                 }
                 else
                 {

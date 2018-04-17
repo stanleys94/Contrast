@@ -449,5 +449,28 @@ namespace CONTRAST_WEB.Models
             }
         }
 
+        public static async Task TravelRequestCommentRead(string group_code)
+        {
+            List<tb_r_travel_request_comment> updated = new List<tb_r_travel_request_comment>();
+            updated = await GetData.Comment(group_code);
+            for (int k = 0; k < updated.Count(); k++)
+            {
+                updated[k].read_flag = true;
+                using (var client = new HttpClient())
+                {
+                    //Passing service base url  
+                    client.BaseAddress = new Uri(Constant.Baseurl);
+
+                    client.DefaultRequestHeaders.Clear();
+                    //Define request data format  
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                    //HttpResponseMessage response = await client.PutAsJsonAsync("api/ActualCost/" + UpdatedData.id_actualcost, UpdatedData);
+                    HttpResponseMessage response = await client.PutAsync("api/TravelRequestComment/" + updated[k].id_comment, new StringContent(
+                                   new JavaScriptSerializer().Serialize(updated[k]), Encoding.UTF8, "application/json"));
+                }
+            }
+        }
     }
 }
