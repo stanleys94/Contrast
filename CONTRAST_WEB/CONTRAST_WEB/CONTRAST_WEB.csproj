@@ -604,6 +604,8 @@
     <Content Include="img\menu-upload-dit.png" />
     <Content Include="img\menu-upload-master.png" />
     <Content Include="img\newbanner.jpg" />
+    <Content Include="img\paymentList.png" />
+    <Content Include="img\paymentProposal.png" />
     <Content Include="img\question-sign.png" />
     <Content Include="img\receipt-paid4.png" />
     <Content Include="img\Settlement-icon-b.png" />
@@ -621,6 +623,7 @@
     <Content Include="img\Travel-Execution-with-text-icon.png" />
     <Content Include="img\Travel-Request-icon.png" />
     <Content Include="img\Travel-Request-with-texticon.png" />
+    <Content Include="img\travel-status-comment.png" />
     <Content Include="img\Travel-Status-icon-b.png" />
     <Content Include="img\Travel-Status-icon.png" />
     <Content Include="img\Travel-Status-with-text-icon.png" />

@@ -12,6 +12,8 @@ using System.Data;
 using System.Data.OleDb;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Security.Claims;
+using PagedList;
 
 
 namespace CONTRAST_WEB.Controllers
@@ -19,12 +21,15 @@ namespace CONTRAST_WEB.Controllers
     public class PaymentListController : Controller
     {
         // GET: PaymentList
-        //[HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(tb_m_employee model)
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+
             List<PaymentListHelper> Generate = new List<PaymentListHelper>();
             List<vw_payment_list> data = new List<vw_payment_list>();
             data = await GetData.PaymentListData();
@@ -37,172 +42,75 @@ namespace CONTRAST_WEB.Controllers
                 temp.No_Reg = Convert.ToInt32(model.code);
                 Generate.Add(temp);
             }
-            return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList());
-        }
 
-        //[HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Filter(List<PaymentListHelper> model, DateTime? startdate, DateTime? enddate, string search = "")
-        {
-            string lower = search.ToLower();
-            List<PaymentListHelper> Generate = new List<PaymentListHelper>();
-            List<vw_payment_list> data = new List<vw_payment_list>();
-            if (search == "" && !startdate.HasValue && !enddate.HasValue) data = await GetData.PaymentListData();
-            else
-                data = await GetData.PaymentListDataFiltered(lower, startdate, enddate);
 
-            if (data.Count > 0)
+            ViewBag.CurrentSort = sortOrder;
+            if (searchString != null)
             {
-                foreach (var item in data)
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            if (startdate != null)
+                ViewBag.startdate = startdate;
+            else
+                ViewBag.startdate = null;
+
+            if (enddate != null)
+                ViewBag.enddate = enddate;
+            else
+                ViewBag.enddate = null;
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                List<PaymentListHelper> temp = new List<PaymentListHelper>();
+                for (int k = 0; k < Generate.Count; k++)
                 {
-                    PaymentListHelper temp = new PaymentListHelper();
-                    temp.Entity = item;
-                    temp.Name = model[0].Name;
-                    temp.No_Reg = model[0].No_Reg;
-                    if (startdate.HasValue) temp.StartDate = Convert.ToDateTime(startdate);
-                    if (enddate.HasValue) temp.EndDate = Convert.ToDateTime(enddate);
-                    Generate.Add(temp);
+                    if ((Generate[k].Entity.EMPLOYEE_NAME != null ? Generate[k].Entity.EMPLOYEE_NAME : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.BTR_NO != null ? Generate[k].Entity.BTR_NO : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.DESTINATION != null ? Generate[k].Entity.DESTINATION : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.COST_CENTER != null ? Generate[k].Entity.COST_CENTER : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.WBS_ELEMENT != null ? Generate[k].Entity.WBS_ELEMENT : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.TRAVEL_TYPE != null ? Generate[k].Entity.TRAVEL_TYPE : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.BUDGET != null ? Generate[k].Entity.BUDGET : "").ToLower().Contains(searchString.ToLower()) ||
+                        (Generate[k].Entity.TRAVEL_TYPE != null ? Generate[k].Entity.TRAVEL_TYPE : "").ToLower().Contains(searchString.ToLower()))
+                    {
+                        temp.Add(Generate[k]);
+                    }
                 }
+                if (temp.Count() > 0) Generate = temp;
+                else Generate = temp;
             }
-            else
+
+
+            //date filter
+            if (startdate != null && enddate != null)
             {
-                PaymentListHelper temp = new PaymentListHelper();
-                temp.Name = model[0].Name;
-                temp.No_Reg = model[0].No_Reg;
-                if (startdate.HasValue) temp.StartDate = Convert.ToDateTime(startdate);
-                if (enddate.HasValue) temp.EndDate = Convert.ToDateTime(enddate);
-                Generate.Add(temp);
+                List<PaymentListHelper> temp = new List<PaymentListHelper>();
+                for (int k = 0; k < Generate.Count; k++)
+                {
+                    //by group code
+                    if (
+                        DateTime.ParseExact(Generate[k].Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.CurrentCulture) >= startdate
+                        && DateTime.ParseExact(Generate[k].Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.CurrentCulture) <= enddate
+                       )
+                        temp.Add(Generate[k]);
+                }
+                if (temp.Count() > 0) Generate = temp;
             }
-            ModelState.Clear();
-            return View("Index", Generate);
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+            return View("Index", Generate.OrderBy(b => b.Entity.PV_DATE).ToList().ToPagedList(pageNumber, pageSize));
+            //return View("Index", Generate.OrderBy(b=>b.Entity.PV_DATE).ToList());     
+
         }
-
-        [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
-
-
-        /*public async Task<ActionResult> Generate(List<PaymentListHelper> model)
-        {
-            //todo: add some data from your database into that string:
-            MemoryStream memoryStream = new MemoryStream();
-            TextWriter tw = new StreamWriter(memoryStream);
-            string MANDT, PV_NO, PV_YEAR, ITEM_NO, PV_DATE, PV_TYPE, TRANS_TYPE, VENDOR, VENDOR_GRP, INVOICE_NO, TAX_NO, PAYMENT_TERM, PAYMENT_METHOD, PLAN_PAYMENT_DT, POSTING_DT, TOTAL_AMOUNT, DPP_AMOUNT, CURRENCY, TAX_CODE, HEADER_TEXT, BANK_TYPE, gl_account, AMOUNT, COST_CENTER, WBS_ELEMENT, ITEM_TEXT, STATUS, SAP_DOC_NO, SAP_DOC_YEAR;
-            tw.Write("MANDT\t" +
-                "PV_NO\t" +
-                "PV_YEAR\t" +
-                "ITEM_NO\t" +
-                "PV_DATE\t" +
-                "PV_TYPE\t" +
-                "TRANS_TYPE\t" +
-                "VENDOR\t" +
-                "VENDOR_GRP\t" +
-                "INVOICE_NO\t" +
-                "TAX_NO\t" +
-                "PAYMENT_TERM\t" +
-                "PAYMENT_METHOD\t" +
-                "PLAN_PAYMENT_DT\t" +
-                "POSTING_DT\t" +
-                "TOTAL_AMOUNT\t" +
-                "DPP_AMOUNT\t" +
-                "CURRENCY\t" +
-                "TAX_CODE\t" +
-                "HEADER TEXT\t" +
-                "BANK_TYPE\t" +
-                "gl_account\t" +
-                "AMOUNT\t" +
-                "COST_CENTER\t" +
-                "WBS_ELEMENT\t" +
-                "ITEM_TEXT\t" +
-                "STATUS\t" +
-                "SAP_DOC_NO\t" +
-                "SAP_DOC_YEAR");
-
-            foreach (var item in model)
-            {
-                tb_r_record_payment_list record = new tb_r_record_payment_list();
-                record.generate_by = item.No_Reg.ToString();
-                record.group_code = item.Entity.PV_NO;
-                record.pv_date = DateTime.ParseExact(item.Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-                record.trans_type = item.Entity.TRANS_TYPE;
-                record.vendor_code = item.Entity.VENDOR;
-                record.item_no = item.Entity.ITEM_NO.ToString();
-                record.generate_date = DateTime.Now;
-
-                //await InsertData.RecordGenerateFile(record);
-
-                MANDT = (item.Entity.MANDT == null) ? "" : item.Entity.MANDT.ToString();
-                PV_NO = (item.Entity.PV_NO == null) ? "" : item.Entity.PV_NO;
-                PV_YEAR = (item.Entity.PV_YEAR == null) ? "" : item.Entity.PV_YEAR.ToString();
-                ITEM_NO = item.Entity.ITEM_NO.ToString();
-                PV_DATE = (item.Entity.PV_DATE == null) ? "" : item.Entity.PV_DATE;
-                PV_TYPE = item.Entity.PV_TYPE.ToString();
-                TRANS_TYPE = (item.Entity.TRANS_TYPE == null) ? "" : item.Entity.TRANS_TYPE.ToString();
-                VENDOR = (item.Entity.VENDOR == null) ? "" : item.Entity.VENDOR.ToString();
-                VENDOR_GRP = item.Entity.VENDOR_GRP.ToString();
-                INVOICE_NO = (item.Entity.INVOICE_NO == null) ? "" : item.Entity.INVOICE_NO;
-                TAX_NO = (item.Entity.TAX_NO == null) ? "" : item.Entity.TAX_NO;
-                PAYMENT_TERM = (item.Entity.PAYMENT_TERM == null) ? "" : item.Entity.PAYMENT_TERM;
-                PAYMENT_METHOD = (item.Entity.PAYMENT_METHOD == null) ? "" : item.Entity.PAYMENT_METHOD;
-                PLAN_PAYMENT_DT = (item.Entity.PLAN_PAYMENT_DT == null) ? "" : item.Entity.PLAN_PAYMENT_DT;
-                POSTING_DT = (item.Entity.POSTING_DT == null) ? "" : item.Entity.POSTING_DT.ToString();
-                TOTAL_AMOUNT = (item.Entity.TOTAL_AMOUNT == null) ? "" : item.Entity.TOTAL_AMOUNT.ToString();
-                DPP_AMOUNT = item.Entity.DPP_AMOUNT.ToString();
-                CURRENCY = (item.Entity.CURRENCY == null) ? "" : item.Entity.CURRENCY;
-                TAX_CODE = (item.Entity.TAX_CODE == null) ? "" : item.Entity.TAX_CODE;
-                HEADER_TEXT = (item.Entity.HEADER_TEXT == null) ? "" : item.Entity.HEADER_TEXT;
-                BANK_TYPE = (item.Entity.BANK_TYPE == null) ? "" : item.Entity.BANK_TYPE;
-                gl_account = (item.Entity.gl_account == null) ? "" : item.Entity.gl_account.ToString();
-                AMOUNT = (item.Entity.AMOUNT == null) ? "" : item.Entity.AMOUNT.ToString();
-                COST_CENTER = (item.Entity.COST_CENTER == null) ? "" : item.Entity.COST_CENTER.ToString();
-
-                WBS_ELEMENT = (item.Entity.WBS_ELEMENT == null) ? "" : item.Entity.WBS_ELEMENT;
-                ITEM_TEXT = (item.Entity.ITEM_TEXT == null) ? "" : item.Entity.ITEM_TEXT;
-                STATUS = (item.Entity.STATUS == null) ? "" : item.Entity.STATUS.ToString();
-                SAP_DOC_NO = (item.Entity.SAP_DOC_NO == null) ? "" : item.Entity.SAP_DOC_NO.ToString();
-                SAP_DOC_YEAR = (item.Entity.SAP_DOC_YEAR == null) ? "" : item.Entity.SAP_DOC_YEAR.ToString();
-
-                string textwrite = "\r\n" + (MANDT + "\t" +
-                    PV_NO + "\t" +
-                    PV_YEAR + "\t" +
-                    ITEM_NO + "\t" +
-                    PV_DATE + "\t" +
-                    PV_TYPE + "\t" +
-                    TRANS_TYPE + "\t" +
-                    VENDOR + "\t" +
-                    VENDOR_GRP + "\t" +
-                    INVOICE_NO + "\t" +
-                    TAX_NO + "\t" +
-                    PAYMENT_TERM + "\t" +
-                    PAYMENT_METHOD + "\t" +
-                    PLAN_PAYMENT_DT + "\t" +
-                    POSTING_DT + "\t" +
-                    TOTAL_AMOUNT + "\t" +
-                    DPP_AMOUNT + "\t" +
-                    CURRENCY + "\t" +
-                    TAX_CODE + "\t" +
-                    HEADER_TEXT + "\t" +
-                    BANK_TYPE + "\t" +
-                    gl_account + "\t" +
-                    AMOUNT + "\t" +
-                    COST_CENTER + "\t" +
-                    WBS_ELEMENT + "\t" +
-                    ITEM_TEXT + "\t" +
-                    STATUS + "\t" +
-                    SAP_DOC_NO + "\t" +
-                    SAP_DOC_YEAR);
-
-
-                tw.Write(textwrite);
-            }
-            tw.Flush();
-            tw.Close();
-            return View("Index");
-        }*/
-
+        
         //[HttpPost]
         //[Authorize]
         //[Authorize(Roles = "contrast.user")]
@@ -215,7 +123,7 @@ namespace CONTRAST_WEB.Controllers
             {
                 XLWorkbook CreateExcell = new XLWorkbook();
                 var ExcelData = CreateExcell.Worksheets.Add("Payment List");
-                List<vw_payment_list> dbObject1 = await GetData.PaymentListData();
+                //List<vw_payment_list> dbObject1 = await GetData.PaymentListData();
 
                 ExcelData.Cell(1, 1).Value = "MANDT";
                 ExcelData.Cell(1, 2).Value = "PV_NO";
@@ -260,66 +168,66 @@ namespace CONTRAST_WEB.Controllers
                 ExcelData.Cell(1, 41).Value = "PAYMENT_METHOD";
 
                 int gap = 0;
-                for (int i = 0; i < dbObject1.Count(); i++)
+                for (int i = 0; i < model.Count(); i++)
                 {
-                    ExcelData.Cell(i + 2, 1).Value = dbObject1[i].MANDT;
-                    ExcelData.Cell(i + 2, 2).Value = dbObject1[i].PV_NO;
-                    ExcelData.Cell(i + 2, 3).Value = dbObject1[i].PV_YEAR;
-                    ExcelData.Cell(i + 2, 4).Value = dbObject1[i].ITEM_NO;
-                    ExcelData.Cell(i + 2, 5).Value = dbObject1[i].PV_DATE;
-                    ExcelData.Cell(i + 2, 6).Value = dbObject1[i].PV_TYPE;
-                    ExcelData.Cell(i + 2, 7).Value = dbObject1[i].TRANS_TYPE;
-                    ExcelData.Cell(i + 2, 8).Value = dbObject1[i].VENDOR;
-                    ExcelData.Cell(i + 2, 9).Value = dbObject1[i].VENDOR_GRP;
-                    ExcelData.Cell(i + 2, 10).Value = dbObject1[i].INVOICE_NO;
-                    ExcelData.Cell(i + 2, 11).Value = dbObject1[i].TAX_NO;
-                    ExcelData.Cell(i + 2, 12).Value = dbObject1[i].PAYMENT_TERM;
-                    ExcelData.Cell(i + 2, 13).Value = dbObject1[i].PAYMENT_METHOD;
-                    ExcelData.Cell(i + 2, 14).Value = dbObject1[i].PLAN_PAYMENT_DT;
-                    ExcelData.Cell(i + 2, 15).Value = dbObject1[i].POSTING_DT;
-                    ExcelData.Cell(i + 2, 16).Value = dbObject1[i].TOTAL_AMOUNT;
-                    ExcelData.Cell(i + 2, 17).Value = dbObject1[i].DPP_AMOUNT;
-                    ExcelData.Cell(i + 2, 18).Value = dbObject1[i].CURRENCY;
-                    ExcelData.Cell(i + 2, 19).Value = dbObject1[i].TAX_CODE;
-                    ExcelData.Cell(i + 2, 20).Value = dbObject1[i].HEADER_TEXT;
-                    ExcelData.Cell(i + 2, 21).Value = dbObject1[i].BANK_TYPE;
-                    ExcelData.Cell(i + 2, 22).Value = dbObject1[i].gl_account;
-                    ExcelData.Cell(i + 2, 23).Value = dbObject1[i].AMOUNT;
-                    ExcelData.Cell(i + 2, 24).Value = dbObject1[i].COST_CENTER;
-                    ExcelData.Cell(i + 2, 25).Value = dbObject1[i].WBS_ELEMENT;
-                    ExcelData.Cell(i + 2, 26).Value = dbObject1[i].ITEM_TEXT;
-                    ExcelData.Cell(i + 2, 27).Value = dbObject1[i].STATUS;
-                    ExcelData.Cell(i + 2, 28).Value = dbObject1[i].SAP_DOC_NO;
-                    ExcelData.Cell(i + 2, 29).Value = dbObject1[i].SAP_DOC_YEAR;
-                    ExcelData.Cell(i + 2, 30).Value = dbObject1[i].BTR_NO;
-                    ExcelData.Cell(i + 2, 31).Value = dbObject1[i].EMPLOYEE_NAME;
-                    ExcelData.Cell(i + 2, 32).Value = dbObject1[i].DESTINATION;
-                    ExcelData.Cell(i + 2, 33).Value = dbObject1[i].ID_CITY;
-                    ExcelData.Cell(i + 2, 34).Value = dbObject1[i].BUDGET;
-                    ExcelData.Cell(i + 2, 35).Value = dbObject1[i].TOTAL_AMOUNT_;
-                    ExcelData.Cell(i + 2, 36).Value = dbObject1[i].COST_CENTER_;
-                    ExcelData.Cell(i + 2, 37).Value = dbObject1[i].WBS_ELEMENT_;
-                    ExcelData.Cell(i + 2, 38).Value = dbObject1[i].TRAVEL_TYPE;
-                    ExcelData.Cell(i + 2, 39).Value = dbObject1[i].BTR_DATE;
-                    ExcelData.Cell(i + 2, 40).Value = dbObject1[i].PLAN_PAYMENT_DATE;
-                    ExcelData.Cell(i + 2, 41).Value = dbObject1[i].PAYMENT_METHOD_;
+                    ExcelData.Cell(i + 2, 1).Value = model[i].Entity.MANDT;
+                    ExcelData.Cell(i + 2, 2).Value = model[i].Entity.PV_NO;
+                    ExcelData.Cell(i + 2, 3).Value = model[i].Entity.PV_YEAR;
+                    ExcelData.Cell(i + 2, 4).Value = model[i].Entity.ITEM_NO;
+                    ExcelData.Cell(i + 2, 5).Value = model[i].Entity.PV_DATE;
+                    ExcelData.Cell(i + 2, 6).Value = model[i].Entity.PV_TYPE;
+                    ExcelData.Cell(i + 2, 7).Value = model[i].Entity.TRANS_TYPE;
+                    ExcelData.Cell(i + 2, 8).Value = model[i].Entity.VENDOR;
+                    ExcelData.Cell(i + 2, 9).Value = model[i].Entity.VENDOR_GRP;
+                    ExcelData.Cell(i + 2, 10).Value = model[i].Entity.INVOICE_NO;
+                    ExcelData.Cell(i + 2, 11).Value = model[i].Entity.TAX_NO;
+                    ExcelData.Cell(i + 2, 12).Value = model[i].Entity.PAYMENT_TERM;
+                    ExcelData.Cell(i + 2, 13).Value = model[i].Entity.PAYMENT_METHOD;
+                    ExcelData.Cell(i + 2, 14).Value = model[i].Entity.PLAN_PAYMENT_DT;
+                    ExcelData.Cell(i + 2, 15).Value = model[i].Entity.POSTING_DT;
+                    ExcelData.Cell(i + 2, 16).Value = model[i].Entity.TOTAL_AMOUNT;
+                    ExcelData.Cell(i + 2, 17).Value = model[i].Entity.DPP_AMOUNT;
+                    ExcelData.Cell(i + 2, 18).Value = model[i].Entity.CURRENCY;
+                    ExcelData.Cell(i + 2, 19).Value = model[i].Entity.TAX_CODE;
+                    ExcelData.Cell(i + 2, 20).Value = model[i].Entity.HEADER_TEXT;
+                    ExcelData.Cell(i + 2, 21).Value = model[i].Entity.BANK_TYPE;
+                    ExcelData.Cell(i + 2, 22).Value = model[i].Entity.gl_account;
+                    ExcelData.Cell(i + 2, 23).Value = model[i].Entity.AMOUNT;
+                    ExcelData.Cell(i + 2, 24).Value = model[i].Entity.COST_CENTER;
+                    ExcelData.Cell(i + 2, 25).Value = model[i].Entity.WBS_ELEMENT;
+                    ExcelData.Cell(i + 2, 26).Value = model[i].Entity.ITEM_TEXT;
+                    ExcelData.Cell(i + 2, 27).Value = model[i].Entity.STATUS;
+                    ExcelData.Cell(i + 2, 28).Value = model[i].Entity.SAP_DOC_NO;
+                    ExcelData.Cell(i + 2, 29).Value = model[i].Entity.SAP_DOC_YEAR;
+                    ExcelData.Cell(i + 2, 30).Value = model[i].Entity.BTR_NO;
+                    ExcelData.Cell(i + 2, 31).Value = model[i].Entity.EMPLOYEE_NAME;
+                    ExcelData.Cell(i + 2, 32).Value = model[i].Entity.DESTINATION;
+                    ExcelData.Cell(i + 2, 33).Value = model[i].Entity.ID_CITY;
+                    ExcelData.Cell(i + 2, 34).Value = model[i].Entity.BUDGET;
+                    ExcelData.Cell(i + 2, 35).Value = model[i].Entity.TOTAL_AMOUNT_;
+                    ExcelData.Cell(i + 2, 36).Value = model[i].Entity.COST_CENTER_;
+                    ExcelData.Cell(i + 2, 37).Value = model[i].Entity.WBS_ELEMENT_;
+                    ExcelData.Cell(i + 2, 38).Value = model[i].Entity.TRAVEL_TYPE;
+                    ExcelData.Cell(i + 2, 39).Value = model[i].Entity.BTR_DATE;
+                    ExcelData.Cell(i + 2, 40).Value = model[i].Entity.PLAN_PAYMENT_DATE;
+                    ExcelData.Cell(i + 2, 41).Value = model[i].Entity.PAYMENT_METHOD_;
 
                     //gap = i;
 
                 }
 
-                foreach (var ExcellData in dbObject1)
+                foreach (var item in model)
                 {
                     tb_r_record_payment_list record = new tb_r_record_payment_list();
-                    record.group_code = ExcellData.PV_NO;
-                    record.item_no = ExcellData.ITEM_NO.ToString();
-                    record.trans_type = ExcellData.TRANS_TYPE;
-                    record.vendor_code = ExcellData.VENDOR;
-                    record.pv_date = DateTime.ParseExact(ExcellData.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    record.group_code = item.Entity.PV_NO;
+                    record.item_no = item.Entity.ITEM_NO.ToString();
+                    record.trans_type = item.Entity.TRANS_TYPE;
+                    record.vendor_code = item.Entity.VENDOR;
+                    record.pv_date = DateTime.ParseExact(item.Entity.PV_DATE, "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     record.generate_by = model[0].No_Reg.ToString();
                     record.generate_date = DateTime.Now;
 
-                    await InsertData.RecordPaymentList(record);
+                    //await InsertData.RecordPaymentList(record);
                 }
 
                 /* ExcelData.Cell(gap + 5, 5).Value = "Approved";

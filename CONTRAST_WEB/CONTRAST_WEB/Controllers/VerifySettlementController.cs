@@ -102,7 +102,7 @@ namespace CONTRAST_WEB.Controllers
                 if (temp != null)
                 {
                     temp = temp.Split('\\').Last();
-                    temp = Constant.Baseurl + "SettlementFolder/" + temp;
+                    temp = Constant.Attch + "SettlementFolder/" + temp;
                     ResultObject2[k].path = temp;
                     //AttachmentPath.Add(temp);
                 }
