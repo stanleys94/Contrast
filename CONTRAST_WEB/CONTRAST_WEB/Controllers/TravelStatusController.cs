@@ -128,11 +128,14 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Bossname = apprv_name;
             ViewBag.Duration = travel_duration;
 
-            //count new messages
-
+            //save comment count
             List<int> msgcount = new List<int>();
+            //save revised count
+            List<bool> revise_flag = new List<bool>();
+
             for (int k = 0; k < ResponseList.Count(); k++)
             {
+                //count new messages
                 List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
                 comment = await GetData.Comment(ResponseList[k].group_code);
                 if (comment.Count > 0)
@@ -142,9 +145,24 @@ namespace CONTRAST_WEB.Controllers
                 }
                 else
                     msgcount.Add(0);
+
+                //check revised btr or not
+                var request=await GetData.TravelRequestGCList(ResponseList[k].group_code);
+                for (int i = 0; i < request.Count(); i++)
+                {
+                    if (request[i].additional1 == "1")
+                    {
+                        revise_flag.Add(true);
+                        break;
+                    }
+                    else
+                        revise_flag.Add(false);
+                }
+
             }
             ViewBag.newmsg = msgcount;
-
+            ViewBag.reviseflag = revise_flag;
+            
             return View(ResponseList);
         }
 
