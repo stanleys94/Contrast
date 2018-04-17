@@ -45,6 +45,11 @@ namespace CONTRAST_WEB.CustomValidator
                     return new ValidationResult("Invalid date : Start date must be earlier than end date");
                 }
 
+                if (model.ReceiptFileTransportation != null && model.TransportationSettlement != 0 )
+                {
+                    return new ValidationResult("Please upload attachment if you reimbursment");
+                }
+
 
                 //for (int i = 0; i < request.Count(); i++)
                 //{
@@ -57,6 +62,9 @@ namespace CONTRAST_WEB.CustomValidator
                 //}
 
             }
+
+
+
             return ValidationResult.Success;
         }
     }

@@ -9,29 +9,24 @@
 @using (Html.BeginForm("Drop", "TravelStatus", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.travel_request.group_code)
     <div class="container">
         <div style="margin-top:70px" class="row">
             <div class="col-xs-12"><h4 style="text-align:left;">DETAIL TRAVEL STATUS @Html.HiddenFor(m => m.travel_request.id_request)</h4></div>
-            
-                <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-5 col-md-offset-1">
+            <form action="" id="loginForm">
+                <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-xs-12">
                     <h5 class="h5a">No Reg :</h5>
                     @Html.DisplayFor(m => m.travel_request.no_reg, new { placeholder = "No Reg", @readonly = "readonly" })
-
                     <h5 class="h5a">Request Purpose :</h5>
                     @Html.DisplayFor(m => m.travel_request.travel_purpose, new { placeholder = "Departure", @readonly = "readonly" })
-
                     <h5 class="h5a">Reason of Assignment :</h5>
-                    @Html.TextAreaFor(m => m.travel_request.reason_of_assigment, new { @class = "form-control",@style="max-width:400px;min-width:400px;" })  
-
+                    @Html.DisplayFor(m => m.travel_request.reason_of_assigment, new { placeholder = "Reason Assigment", @readonly = "readonly" })
                     <h5 class="h5a">Request Type :</h5>
                     @Html.TextBox("adasd", Model.travel_request.request_type.Value == true ? "Planned" : "Unplanned", new { @style = "border:0px;", @readonly = "readonly" })
-
                     <h5 class="h5a">Going Overseas :</h5>
                     @Html.TextBox("adasd", Model.travel_request.overseas_flag.Value == true ? "Yes" : "No", new { @readonly = "readonly", @style = "border:0px;" })
-
                     <h5 class="h5a">New or Renewal Passport :</h5>
                     @Html.TextBox("adasd", Model.travel_request.passport_flag == true ? "Yes" : "No", new { @style = "border:0px;", placeholder = "Reason Assigment", @readonly = "readonly" })
-
                     <h5 class="h5a">Destination :</h5>
                     <label>@Html.DisplayFor(m => m.travel_request.destination_1, new { @readonly = "readonly" })</label>
                     @if (Model.travel_request.destination_2 != null)
@@ -44,16 +39,13 @@
                         <label>-</label>
                         <label>@Html.DisplayFor(m => m.travel_request.destination_3, new { @readonly = "readonly" })</label>
                     }
-
                     <h5 class="h5a">Departure Date :</h5>
                     <p>@Html.DisplayFor(m => m.travel_request.startDate_1, new { @type = "datetime-local", placeholder = "Departure", @readonly = "readonly" })</p>
-
                     @*@if (Model.travel_request.endDate_1 != null)
                         {
                             <h5 class="h5a">Return Date :</h5>
                             <p>@Html.DisplayFor(m => m.travel_request.endDate_1, new { @type = "datetime-local", placeholder = "Return", @readonly = "readonly" })</p>
                         }*@
-
                     @if (Model.travel_request.endDate_3 != null)
                     {
                         <h5 class="h5a">Return Date :</h5>
@@ -69,22 +61,17 @@
                         <h5 class="h5a">Return Date :</h5>
                         <p>@Html.DisplayFor(m => m.travel_request.endDate_1, new { @type = "datetime-local", placeholder = "Return", @readonly = "readonly" })</p>
                     }
-
-                </div>
-                <div class="col-md-5">
+                
                     <div class="wellIn2">
                         <span><strong>CURRENT STATUS :</strong></span>
                     </div>
                     <div style="margin-bottom:0px; padding-bottom:0px;" class="clearfix main">
-                        @for (int k = 0; k < ViewBag.StatusState.Count; k++)
+                        @for (int k = 0; k < ViewBag.Approvalnum; k++)
                         {
-                            if (ViewBag.StatusState[k] == null) { break; }
-                            //if (ViewBag.StatusState[k] == null)
-                            //{
-                            //    continue;
-                            //}
+                            if (ViewBag.Bossname[k] == null) { break; }
+
                             <div class="main1">
-                                @if ((k == ViewBag.StatusState.Count - 1))
+                                @if ((k == ViewBag.Approvalnum - 1))
                                 {
                                     <div class="buled">
                                         <div class="bulet1" style="background: rgb(246, 246, 246);">
@@ -92,67 +79,45 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="teks">
-                                        <div style="color:gray" class="teks1">
-
-                                            @if (ViewBag.StatusState[k] == "0" || ViewBag.StatusState[k] == null)
-                                            {
-                                                <span>@Html.Label("Waiting For ", new { @style = "color:orange;" })</span>
-												<br>
-                                                <span>@ViewBag.Bossname[k]</span>
-                                            }
-                                            else
-                                         if (ViewBag.StatusState[k] == "1")
-                                            {
-                                                <span>@Html.Label("Approved By ", new { @style = "color:blue;" })</span>
-												<br>
-                                                <span>@ViewBag.Bossname[k]</span>
-                                            }
-                                            else
-                                         if (ViewBag.StatusState[k] == "2" || ViewBag.StatusState[k] == "3")
-                                            {
-                                                <span>@Html.Label("Rejected By ", new { @style = "color:red;" })</span>
-												<br>
-                                                <span>@ViewBag.Bossname[k]</span>
-                                            }
-                                        </div>
-                                    </div>
                                 }
                                 else
                                 {
-
                                     <div class="bulet">
                                         <div class="bulet1" style="background: rgb(246, 246, 246);">
                                             <div class="buled2" style="background: rgb(128, 128, 128);">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="teks">
-                                        <div style="color:gray" class="teks1">
-                                            @if (ViewBag.StatusState[k] == "0")
-                                            {
-                                                <span>@Html.Label("Waiting For ")</span>
-												<br>
-                                                <span>@ViewBag.Bossname[k]</span>
-                                            }
-                                            else
-                                         if (ViewBag.StatusState[k] == "1")
-                                            {
-                                                <span>@Html.Label("Approved By ")</span>
-												<br>
-                                                <span>@ViewBag.Bossname[k]</span>
-                                            }
-                                            else
-                                         if (ViewBag.StatusState[k] == "2" || ViewBag.StatusState[k] == "3")
-                                            {
-                                                <span>@Html.Label("Rejected By ")</span>
-												<br>
-                                                <span>@ViewBag.Bossname[k]</span>
-                                            }
-                                        </div>
-                                    </div>
                                 }
-
+                                <div class="teks" style="max-width:250px;min-width:250px;">
+                                    <div style="color:gray" class="teks1">
+                                        @if (k >= ViewBag.StatusState.Count)
+                                        {
+                                            <span>@Html.Label("Waiting For ", new { @style = "color:orange; margin-right:5px;" })</span>
+                                            <span>@ViewBag.Bossname[k]</span>
+                                        }
+                                        else
+                                        {
+                                            if (ViewBag.StatusState[k] == "1")
+                                            {
+                                                <span>@Html.Label("Approved By ", new { @style = "color:blue; margin-right:5px;" })</span>
+                                                <span>@ViewBag.Bossname[k]</span>
+                                            }
+                                            else
+                                            if (ViewBag.StatusState[k] == "2" || ViewBag.StatusState[k] == "3")
+                                            {
+                                                <span>@Html.Label("Rejected By ", new { @style = "color:red; margin-right:5px;" })</span>
+                                                <span>@ViewBag.Bossname[k]</span>
+                                                k = ViewBag.Approvalnum - 1;
+                                            }
+                                            else
+                                            {
+                                                <span>@Html.Label("Waiting For ", new { @style = "color:orange; margin-right:5px;" })</span>
+                                                <span>@ViewBag.Bossname[k]</span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
 
                                 <div class="lab">
                                     <div class="lab1">
@@ -169,7 +134,7 @@
                     <div class="wellIn2">
                         <span><strong>LIST PARTICIPANTS :</strong></span>
                     </div>
-                    <div style="text-align:left;min-width:300px;max-width:350px;height:150px; overflow-y:scroll; border:0px;">
+                    <div style="text-align:left;width:444px;height:200px; overflow-y:scroll; border:0px;">
                         <ol style="margin-top:20px;margin-left:-20px;">
                             @for (int i = 0; i < Model.participants.Count; i++)
                             {
@@ -182,42 +147,58 @@
                         </ol>
                     </div>
                     <br />
-					
-					<div style="margin-top:10px;" class="col-xs-12">
-					<button style="min-width:115px;max-width:145px;" type="button" class="btn btn-default btn-sm" onclick="goBack()">Back</button>
-					<!--wates-->
-	
-					@if (Model.travel_request.status_request == null)
+                    <button type="button" class="btn btn-default btn-xs" onclick="goBack()">Back</button>
+                    <button style="position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-xs">Download</button>
+                    @if (Model.travel_request.status_request == null)
                     {
-                        <button type="button" style="min-width:115px;max-width:145px;" class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
+                        @*<button type="button" style="position:relative;left:10px" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".bs-example-modal-xs" value="Submit">Drop Request</button>*@
+                        <button  style="position:relative;left:10px" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
+                        @*<div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xs">
+                                <div class="modal-content">
+                                    <div style="height:50px" class="modal-header">
+                                        <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="text-align:center;">
+                                            <strong>Are you sure you want to drop this request ?? </strong>
+                                            <br />click Yes to drop
+                                        </div>
+                                        <div style="margin:5px 50px; text-align:center; ">
+                                            <br />
+                                            <span> <button type="submit" position:center;" class="btn btn-danger btn-xs" name="drop" value="submit">Yes</button></span>
+                                            <span> <button type="button" position:center;" class="btn btn-info btn-xs" name="close" data-dismiss="modal">No</button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
 
                         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-sm">
-							<div class="modal-content">
-								<div style="height:50px" class="modal-header">
-									<h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
-								</div>
-								<div class="modal-body">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div style="height:50px" class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
+                                        <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                                    </div>
+                                    <div class="modal-body">
                                         <div style="text-align:center;">
                                             <strong>Are you sure you want to drop this request ?? </strong>
                                             <br />click Yes to drop
                                         </div>
 
-                                        <div style="margin:10px 100px; text-align:center; ">
-                                            <br />
-                                            <span> <button type="submit" style="width:75px; position:center;" class="btn btn-danger btn-sm" name="drop" value="submit">Yes</button></span>
-
-                                            <span> <button type="button" style="width:75px; position:center;" class="btn btn-info btn-sm" name="close" data-dismiss="modal">No</button></span>
-
+                                        <div style="margin:10px 50px;text-align:center;">
+                                            <span> <button type="submit" position:center;" class="btn btn-danger btn-xs" name="drop" value="submit">Yes</button></span>
+                                            <span> <button type="button" position:center;" class="btn btn-info btn-xs" name="close" data-dismiss="modal">No</button></span>
                                         </div>
                                     </div>
-							</div>
-						</div>
-					</div>
+                                </div>
+                            </div>
+                        </div>
                     }
-					</div>
-					
+                    <br />
                 </div>
+            </form>
         </div>
         <hr />
     </div>

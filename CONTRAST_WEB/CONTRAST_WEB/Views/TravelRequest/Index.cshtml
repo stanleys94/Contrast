@@ -39,13 +39,16 @@
             {
                 if (item == "contrast.travelcoordinator")
                 {
-                <div class="col-md-11 col-md-offset-1">
-                    <div>
-                        <strong style="color:deepskyblue">ADD EMPLOYEE :</strong>
-                        <div style="width:450px;" class="input-group">
-                            @Html.TextBox("applied", Model.employee_info.code, new { @class = "form-control", placeholder = "Type Employee Name..", id = "searchInput2" })              
+                <div style="width:950px;" class="col-md-11 col-md-offset-1 wellNo">
+                    <div style="margin:5px;">
+                        <strong style="color:deepskyblue">TRAVEL COORDINATOR</strong>
+                        <div style="width:500px;margin:10px;" class="input-group">
+                            <span>Type name Employee : </span>
+                            <span>
+                                @Html.TextBox("applied", Model.employee_info.code, new { @class = "form-control", placeholder = "Type Employee Name..", id = "searchInput2", style = "max-width:280px;max-width:280px;" })
+                            </span>
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-info btn-lg form-control" name="Add" value="Submit">Add</button>
+                                <button type="submit" class="btn btn-info btn-lg" name="Add" value="Submit">Add</button>
                             </span>
                         </div>         
                     </div>
