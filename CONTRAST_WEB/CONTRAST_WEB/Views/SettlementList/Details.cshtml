@@ -88,8 +88,8 @@
                     @*@Html.HiddenFor(m => m.Start_Extend)*@
                 </div>
                 <div style="margin-bottom:0px;display:block;float:left;" class="col-md-offset-0" id="ifYa4">
-                    @Html.CheckBoxFor(m => m.halfday_flag)
-                    <label>HALF DAY</label>
+                    @Html.CheckBoxFor(m => m.halfday_flag1)
+                    <label>HALF DAY DEPARTURE</label>
                 </div>
             </div>
 
@@ -101,6 +101,10 @@
                     <!--<input type="date" style="width:100%" />-->
                     @Html.TextBoxFor(m => m.End_Extend, new { @class = "form-control", @type = "date", placeholder = "Arrival" })
                     @*@Html.HiddenFor(m => m.End_Extend)*@
+                </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="ifYa5">
+                    @Html.CheckBoxFor(m => m.halfday_flag2)
+                    <label>HALF DAY ARRIVAL</label>
                 </div>
             </div>
 

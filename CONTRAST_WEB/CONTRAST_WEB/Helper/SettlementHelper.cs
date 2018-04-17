@@ -40,7 +40,8 @@ namespace CONTRAST_WEB.Models
         public HttpPostedFileBase ReceiptFileTransportation { get; set; }
 
         public bool extend_flag { get; set; }
-        public bool halfday_flag { get; set; }
+        public bool halfday_flag1 { get; set; }
+        public bool halfday_flag2 { get; set; }
 
         [SettlementDateValidator]
         public DateTime? Start_Extend { get; set; }

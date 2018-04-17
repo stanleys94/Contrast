@@ -22,7 +22,7 @@ namespace CONTRAST_WEB.Controllers
     public class TravelStatusController : Controller
     {
         [Authorize]
-        [Authorize(Roles = "contrast.user")]        
+        [Authorize(Roles = "contrast.user")]
         // GET: TravelStatus
         public async Task<ActionResult> Index()
         {
@@ -128,11 +128,14 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Bossname = apprv_name;
             ViewBag.Duration = travel_duration;
 
-            //count new messages
-
+            //save comment count
             List<int> msgcount = new List<int>();
+            //save revised count
+            List<bool> revise_flag = new List<bool>();
+
             for (int k = 0; k < ResponseList.Count(); k++)
             {
+                //count new messages
                 List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
                 comment = await GetData.Comment(ResponseList[k].group_code);
                 if (comment.Count > 0)
@@ -142,13 +145,28 @@ namespace CONTRAST_WEB.Controllers
                 }
                 else
                     msgcount.Add(0);
-            }
-            ViewBag.newmsg=msgcount;
 
+                //check revised btr or not
+                var request=await GetData.TravelRequestGCList(ResponseList[k].group_code);
+                for (int i = 0; i < request.Count(); i++)
+                {
+                    if (request[i].additional1 == "1")
+                    {
+                        revise_flag.Add(true);
+                        break;
+                    }
+                    else
+                        revise_flag.Add(false);
+                }
+
+            }
+            ViewBag.newmsg = msgcount;
+            ViewBag.reviseflag = revise_flag;
+            
             return View(ResponseList);
         }
 
-        
+
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
@@ -319,7 +337,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.StatusState = apprv_status;
             ViewBag.Approvalnum = apprv_status.Count;
 
-            
+
             return View(model2);
         }
 
@@ -852,11 +870,11 @@ namespace CONTRAST_WEB.Controllers
             int newmsg_count = 0;
             if (comment.Count > 0)
             {
-                var newmsg = comment.Where(x => x.read_flag == false&&x.no_reg_comment!=Convert.ToInt32(identity.Name));
+                var newmsg = comment.Where(x => x.read_flag == false && x.no_reg_comment != Convert.ToInt32(identity.Name));
                 newmsg_count = newmsg.Count();
             }
 
-            if (newmsg_count>0)
+            if (newmsg_count > 0)
                 await UpdateData.TravelRequestCommentRead(group_code);
 
             ViewBag.group_code = group_code;
@@ -872,10 +890,10 @@ namespace CONTRAST_WEB.Controllers
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);               
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
-            if(!String.IsNullOrEmpty(commentbox))
-                await InsertData.TravelStatuscomment(commentbox, groupcode, groupcode, Convert.ToInt32(identity.Name));            
+            if (!String.IsNullOrEmpty(commentbox))
+                await InsertData.TravelStatuscomment(commentbox, groupcode, groupcode, Convert.ToInt32(identity.Name));
 
             //return View("Comment", comment);
             return RedirectToAction("Comment", new { @group_code = groupcode });
