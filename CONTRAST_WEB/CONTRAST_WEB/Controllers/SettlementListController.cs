@@ -271,10 +271,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    //else
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    else
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -294,88 +294,8 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary.total_hotel = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_hotel) - SummarySettlementObject.HotelSettlement);
                     SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
 
-                  /*  tb_r_record_settlement_receipt SettlementRecord = await GetData.TravelSettlementReceipt(SummarySettlementObject.Summary.group_code);
-                    if (SettlementRecord.user_created != null)
-                    {
-                        await UpdateData.SettlementReceipt(SettlementRecord);
-                        SettlementRecord = new tb_r_record_settlement_receipt();
-                    }
-                    var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
-
-                    SettlementRecord.user_created = Convert.ToInt32(identity.Name);
-                    SettlementRecord.active_flag = true;
-                    SettlementRecord.group_code = SummarySettlementObject.Summary.group_code;
-                    SettlementRecord.no_reg = SummarySettlementObject.Summary.no_reg;
-                    SettlementRecord.created_date = DateTime.UtcNow.AddHours(offset.TotalHours);
-                    SettlementRecord.actual_ticket = SummarySettlementObject.Summary.total_ticket;
-                    SettlementRecord.actual_hotel = SummarySettlementObject.Summary.total_hotel;
-                    SettlementRecord.actual_laundry = 0;
-                    SettlementRecord.actual_misc = 0;
-                    SettlementRecord.actual_transport = 0;
-                    SettlementRecord.actual_meal = SummarySettlementObject.Summary.total_meal;
-
-                    SettlementRecord.suspense_laundry = SummarySettlementObject.Summary.total_laundry;
-                    SettlementRecord.suspense_hotel = Convert.ToInt32(SummarySettlementObject.HotelSettlement);
-                    SettlementRecord.suspense_meal = Convert.ToInt32(SummarySettlementObject.MealSettlement);
-                    SettlementRecord.suspense_ticket = Convert.ToInt32(SummarySettlementObject.TicketSettlement);
-                    SettlementRecord.suspense_transport = SummarySettlementObject.Summary.total_transportation;
-                    SettlementRecord.suspense_misc = SummarySettlementObject.Summary.total_miscellaneous;
-
-                    SettlementRecord.grand_total = SettlementRecord.actual_hotel + SettlementRecord.actual_laundry + SettlementRecord.actual_meal + SettlementRecord.actual_misc + SettlementRecord.actual_ticket + SettlementRecord.actual_transport +
-                                                   SettlementRecord.suspense_hotel + SettlementRecord.suspense_laundry + SettlementRecord.suspense_meal + SettlementRecord.suspense_misc + SettlementRecord.suspense_ticket + SettlementRecord.suspense_transport;
-
-                    if (SummarySettlementObject.Summary.destination_1 != null)
-                    {
-                        SettlementRecord.destination1 = SummarySettlementObject.Summary.destination_1;
-                        SettlementRecord.startDate1 = Convert.ToDateTime(SummarySettlementObject.Summary.startDate_1).ToUniversalTime().AddHours(offset.TotalHours);
-                        SettlementRecord.endDate1 = Convert.ToDateTime(SummarySettlementObject.Summary.endDate_1).ToUniversalTime().AddHours(offset.TotalHours);
-                    }
-
-                    if (SummarySettlementObject.Summary.destination_2 != null)
-                    {
-                        SettlementRecord.destination2 = SummarySettlementObject.Summary.destination_2;
-                        SettlementRecord.startDate2 = Convert.ToDateTime(SummarySettlementObject.Summary.startDate_2).ToUniversalTime().AddHours(offset.TotalHours);
-                        SettlementRecord.endDate2 = Convert.ToDateTime(SummarySettlementObject.Summary.endDate_2).ToUniversalTime().AddHours(offset.TotalHours);
-                    }
-
-                    if (SummarySettlementObject.Summary.destination_3 != null)
-                    {
-                        SettlementRecord.destination3 = SummarySettlementObject.Summary.destination_3;
-                        SettlementRecord.startDate3 = Convert.ToDateTime(SummarySettlementObject.Summary.startDate_3).ToUniversalTime().AddHours(offset.TotalHours);
-                        SettlementRecord.endDate3 = Convert.ToDateTime(SummarySettlementObject.Summary.endDate_3).ToUniversalTime().AddHours(offset.TotalHours);
-                    }
-
-                    if (SummarySettlementObject.Summary.destination_4 != null)
-                    {
-                        SettlementRecord.destination4 = SummarySettlementObject.Summary.destination_4;
-                        SettlementRecord.startDate4 = Convert.ToDateTime(SummarySettlementObject.Summary.startDate_4).ToUniversalTime().AddHours(offset.TotalHours);
-                        SettlementRecord.endDate4 = Convert.ToDateTime(SummarySettlementObject.Summary.endDate_4).ToUniversalTime().AddHours(offset.TotalHours);
-                    }
-
-                    if (SummarySettlementObject.Summary.destination_5 != null)
-                    {
-                        SettlementRecord.destination5 = SummarySettlementObject.Summary.destination_5;
-                        SettlementRecord.startDate5 = Convert.ToDateTime(SummarySettlementObject.Summary.startDate_5).ToUniversalTime().AddHours(offset.TotalHours);
-                        SettlementRecord.endDate5 = Convert.ToDateTime(SummarySettlementObject.Summary.endDate_5).ToUniversalTime().AddHours(offset.TotalHours);
-                    }
-
-                    if (SummarySettlementObject.Summary.destination_6 != null)
-                    {
-                        SettlementRecord.destination6 = SummarySettlementObject.Summary.destination_6;
-                        SettlementRecord.startDate6 = SummarySettlementObject.Summary.startDate_6;
-                        SettlementRecord.endDate6 = SummarySettlementObject.Summary.endDate_6;
-                    }
-
-                    await InsertData.RecordSettlementReceipt(SettlementRecord);
-                    */
-
                     //if (!model.extend_flag)
-                    return View("SummaryPaid", SummarySettlementObject);
-                    //else
-                    //    return View("SummaryAdditional", SummarySettlementObject);
-                    //*/
-                    //return View("SummaryPaid", model);
-
+                    return View("SummaryPaid", SummarySettlementObject);                    
                 }
                 else
                 if (sum != null)
