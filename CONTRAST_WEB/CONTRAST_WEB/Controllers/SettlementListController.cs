@@ -33,11 +33,20 @@ namespace CONTRAST_WEB.Controllers
             //var diff = (model.End_Extend - model.Start_Extend);
 
             var meal_platform = await GetData.Procedures(rank.@class);
-            if (model.halfday_flag == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            if (model.halfday_flag1 & model.halfday_flag2 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance;
+            }
+            else if (model.halfday_flag1 | model.halfday_flag2 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance / 2;
+
             }
-            else if (model.halfday_flag == true)
+            else if (model.halfday_flag1 & model.halfday_flag2 == true)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance;
+            }
+            else if (model.halfday_flag1 | model.halfday_flag2 == true)
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance / 2;
             }
@@ -160,7 +169,11 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.information_actualcost = "Settlement";
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
-                    ActualCostObject.user_created = identity.Name;
+
+                    ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
+                    ActualCostObject.additional1 = model.halfday_flag1.ToString();
+                    ActualCostObject.additional2 = model.halfday_flag2.ToString();
+
 
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
 
