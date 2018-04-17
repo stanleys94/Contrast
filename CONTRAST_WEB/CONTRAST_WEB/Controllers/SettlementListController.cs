@@ -258,7 +258,6 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //check update data
                     //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
                     //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
                     //else
@@ -370,8 +369,7 @@ namespace CONTRAST_WEB.Controllers
                 {
                     SettlementHelper return_model = await Sum(model);
                     ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
-                    return View("Insert", return_model);
-                    //return View("Details", return_model);
+                    return View("Details", return_model);
                 }
                 else
                     return View("Details", model);

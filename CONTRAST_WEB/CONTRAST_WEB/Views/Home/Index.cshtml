@@ -4,61 +4,57 @@
 }
 <div id="products" class="_3EibU">
     <div class="item col-xs-12 col-lg-3">
-       @using (Html.BeginForm("Index", "TravelRequest", FormMethod.Post))
-       {
-       <button type="submit" class="thumbnail border">
-               @Html.HiddenFor(m => m.code)
-               @Html.HiddenFor(m => m.name)
-               @Html.HiddenFor(m => m.@class)
-               @Html.HiddenFor(m => m.entry_date)
-               @Html.HiddenFor(m => m.position)
-               @Html.HiddenFor(m => m.bank_account)
-               @Html.HiddenFor(m => m.unit_code_code)
-               @Html.HiddenFor(m => m.unit_code_id)
-               @Html.HiddenFor(m => m.unit_code_name)
-               @Html.AntiForgeryToken()
-               <div style="padding:10px 5px;">
-                   <input type="image" height="50" width="50" style="margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Request-icon.png" alt="" />
-                   <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL ASSIGNMENT</div>
-               </div>
-       </button>
-       }
+        <div class="thumbnail border">
+            @using (Html.BeginForm("Index", "TravelRequest", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.HiddenFor(m => m.@class)
+                @Html.HiddenFor(m => m.entry_date)
+                @Html.HiddenFor(m => m.position)
+                @Html.HiddenFor(m => m.bank_account)
+                @Html.HiddenFor(m => m.unit_code_code)
+                @Html.HiddenFor(m => m.unit_code_id)
+                @Html.HiddenFor(m => m.unit_code_name)
+                @Html.AntiForgeryToken()
+                <div style="padding:10px 5px;">
+                    <input type="image" height="50" width="50" style="margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Request-icon.png" alt="" />
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL ASSIGNMENT</div>
+                </div>
+            }
+        </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TravelStatus", FormMethod.Post))
             {
-            <button type="submit" class="thumbnail border">
-                    @Html.HiddenFor(m => m.code)
-                    @Html.HiddenFor(m => m.name)
-                    @Html.AntiForgeryToken()
-                    <div style="padding:10px 5px;">
-                        <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Status-icon.png" alt="" />
-                        <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL STATUS</div>
-                    </div>
-            </button>
-            }
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.AntiForgeryToken()
+                <div style="padding:10px 5px;">
+                    <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Status-icon.png" alt="" />
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL STATUS</div>
+                </div>}
+        </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TravelExecution", FormMethod.Post))
             {
-            <button type="submit" class="thumbnail border">
-                    @Html.HiddenFor(m => m.code)
-                    @Html.HiddenFor(m => m.name)
-                    @Html.AntiForgeryToken()
-                    <div style="padding:10px 5px;">
-                        <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Execution-icon.png" alt="" />
-                        <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL EXECUTION</div>
-                    </div>
-            </button>
+                @Html.HiddenFor(m => m.code)
+                @Html.HiddenFor(m => m.name)
+                @Html.AntiForgeryToken()
+                <div style="padding:10px 5px;">
+                    <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Travel-Execution-icon.png" alt="" />
+                    <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL EXECUTION</div>
+                </div>
             }
+        </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
             @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post))
             {
-        <button type="submit" class="thumbnail border">
                 @Html.HiddenFor(m => m.code)
                 @Html.HiddenFor(m => m.name)
                 @Html.AntiForgeryToken()
@@ -66,14 +62,13 @@
                     <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Settlement-icon.png" alt="" />
                     <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL SETTLEMENT</div>
                 </div>
-        </button>
             }
+        </div>
     </div>
-
     <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TravelConfirmation", FormMethod.Post))
             {
-        <button type="submit" class="thumbnail border">
                 @Html.HiddenFor(m => m.code)
                 @Html.HiddenFor(m => m.name)
                 @Html.HiddenFor(m => m.@class)
@@ -88,18 +83,17 @@
                     <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/travel-confirmation-menu.png" alt="" />
                     <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">CONFIRM TRAVEL PLAN</div>
                 </div>
-        </button>
             }
+        </div>
     </div>
-
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.staffpac")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "ActualCost", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -114,8 +108,8 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/menu-actual-cost.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">HOTEL & TICKET</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             break;
         }
@@ -125,9 +119,9 @@
         if (items == "contrast.ap" || items == "contrast.dphga" || items == "contrast.staffga" || items == "contrast.dphpac")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "Verify", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -142,8 +136,8 @@
                             <input type="image" style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Actual-Cost-verification-menu.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">VERIFY HOTEL & TICKET</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             break;
         }
@@ -153,9 +147,9 @@
         if (items == "contrast.ap" || items == "contrast.dphga" || items == "contrast.staffga")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "VerifySettlement", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -170,8 +164,8 @@
                             <input type="image" style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/verification.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">VERIFY SETTLEMENT</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             break;
         }
@@ -181,9 +175,9 @@
         if (items == "contrast.ap")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "VerifyBPD", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -198,9 +192,8 @@
                             <input type="image" style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/Fixed-Cost-verification-menu.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">VERIFY ALLOWANCE</div>
                         </div>
-                </button>
-                
                     }
+                </div>
             </div>
             break;
         }
@@ -210,9 +203,9 @@
         if (items == "contrast.administd")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "TravelDit", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -227,8 +220,8 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/menu-upload-dit.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">UPLOAD PLAN TRAVEL</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             break;
         }
@@ -238,9 +231,9 @@
         if (items == "contrast.adminga")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "UploadMaster", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -255,8 +248,8 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/menu-upload-master.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">UPLOAD MASTER</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             break;
         }
@@ -266,9 +259,9 @@
         if (items == "contrast.ap")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "GenerateFile", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -283,8 +276,8 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/menu-generate-file.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">GENERATE FILE</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             // break;
         }
@@ -295,9 +288,9 @@
         if (items == "contrast.ap" || items == "contrast.staffga" || items == "contrast.staffpac")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -313,8 +306,8 @@
                             <a name="user" value="all"><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="all" /></a>
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRANSACTION TRACKING</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             // break;
         }
@@ -325,9 +318,9 @@
         if (items == "contrast.administd")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -343,8 +336,8 @@
                             <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="division" id="user" /></a>
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">DIVISON TRACKING</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             // break;
         }
@@ -355,9 +348,9 @@
         if (items == "contrast.staffpac")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -372,8 +365,8 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/download-invoice.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PURCHASE ORDER</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
 
         }
@@ -384,9 +377,9 @@
         {
 
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "InvoiceDownload", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -401,16 +394,16 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/download-invoice.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">GOOD RECEIPT</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
 
         }
     }
     <div class="item col-xs-12 col-lg-3">
+        <div class="thumbnail border">
             @using (Html.BeginForm("Index", "TrackProgressPersonal", FormMethod.Post))
             {
-        <button type="submit" class="thumbnail border">
                 @Html.HiddenFor(m => m.code)
                 @Html.HiddenFor(m => m.name)
                 @Html.HiddenFor(m => m.@class)
@@ -426,17 +419,17 @@
                     <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/tracking-data.png" alt="" name="user" value="user" id="user" /></a>
                     <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">TRAVEL TRACKING</div>
                 </div>
-        </button>
             }
+        </div>
     </div>
     @foreach (var items in ViewBag.Privillege)
     {
         if (items == "contrast.ap")
         {
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "PaymentList", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -452,13 +445,13 @@
                             <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/paymentList.png" alt="" name="user" value="user" id="user" /></a>
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PAYMENT LIST</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "PaymentProposal", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -474,15 +467,15 @@
                             <a><input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;" src="~/img/paymentProposal.png" alt="" name="user" value="user" id="user" /></a>
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">PAYMENT PROPOSAL</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
         }
     }
             <div class="item col-xs-12 col-lg-3">
+                <div class="thumbnail border">
                     @using (Html.BeginForm("Index", "Profile", FormMethod.Post))
                     {
-                <button type="submit" class="thumbnail border">
                         @Html.HiddenFor(m => m.code)
                         @Html.HiddenFor(m => m.name)
                         @Html.HiddenFor(m => m.@class)
@@ -497,8 +490,8 @@
                             <input type="image" img style="height:50px; width:50px; margin:0px 0px; padding:0 0;cursor:pointer;" src="~/img/question-sign.png" alt="" />
                             <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" class="_2hTgM" data-reactid="47">HELP</div>
                         </div>
-                </button>
                     }
+                </div>
             </div>
         </div>
 
