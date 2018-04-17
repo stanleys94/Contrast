@@ -73,7 +73,13 @@ namespace CONTRAST_WEB.Controllers
 
             //Get user direct superior info
             var assignedby = await GetData.AssignedBy(model2.employee_info.unit_code_code);
-            var procedures = await GetData.Procedures(model2.employee_info.@class);
+            tb_m_travel_procedures procedures= new tb_m_travel_procedures();
+            if (model2.employee_info.position.Trim() == "SECO"|| model2.employee_info.position.Trim() == "SEA"|| model2.employee_info.position.Trim() == "SMEC"|| model2.employee_info.position.Trim() == "AADV"|| model2.employee_info.position.Trim() == "GM")
+            {
+                procedures = await GetData.Procedures(model2.employee_info.position);
+            }
+            else
+                procedures = await GetData.Procedures(model2.employee_info.@class);
 
             if (assignedby.pd == Convert.ToInt32(model2.employee_info.code)) model2.travel_request.assign_by = Convert.ToInt32(model2.employee_info.code);
             else

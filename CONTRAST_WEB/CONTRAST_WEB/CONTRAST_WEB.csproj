@@ -311,11 +311,11 @@
     <Compile Include="Models\tb_r_travel_request.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helper\TrackingHelper.cs" />
+    <Compile Include="Helper\TravelStatusCommentHelper.cs" />
     <Compile Include="Models\tb_r_travel_request_comment.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Helper\TrackingHelper.cs" />
-    <Compile Include="Helper\TravelStatusCommentHelper.cs" />
     <Compile Include="Models\vw_actualcost_generate_file.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -785,6 +785,7 @@
     <Content Include="Views\TrackProgressPersonal\Details.cshtml" />
     <Content Include="Views\PaymentList\Index.cshtml" />
     <Content Include="Views\PaymentProposal\Index.cshtml" />
+    <Content Include="Views\TravelRequest\ValidateMSTRMobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
