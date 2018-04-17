@@ -313,26 +313,43 @@ namespace CONTRAST_WEB.Controllers
         {
             if (drop == "submit")
             {
-                tb_r_travel_request model2 = new tb_r_travel_request();
+                List<tb_r_travel_request> model2 = new List<tb_r_travel_request>();
                 List<vw_request_summary> request = new List<vw_request_summary>();
                 List<vw_request_summary> ResponseList = new List<vw_request_summary>();
 
-                model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
-                model2.active_flag = true;
-                model2.status_request = "99";
+                //model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
+                //model2.active_flag = true;
+                //model2.status_request = "99";
 
-                double budget = Convert.ToDouble(model2.allowance_meal_idr + model2.allowance_preparation + model2.allowance_winter);
+                model2 = await GetData.TravelRequestGCList(model.travel_request.group_code);
+                foreach (var item in model2)
+                {
+                    item.active_flag = true;
+                    item.status_request = "99";
 
-                await UpdateData.TravelRequestPersonal(model2);
-
-                request = await GetData.RequestSummaryListInfo(model2.no_reg.ToString());
+                    //await UpdateData.TravelRequestPersonal(item);
+                }
+                request = await GetData.RequestSummaryListInfo(model2[0].no_reg.ToString());
 
                 foreach (var item in request)
                 {
                     if (item.status_request != "99") ResponseList.Add(item);
                 }
 
-                string name = await GetData.EmployeeNameInfo(model2.no_reg);
+                string name = await GetData.EmployeeNameInfo(model2[0].no_reg);
+
+                ////double budget = Convert.ToDouble(model2.allowance_meal_idr + model2.allowance_preparation + model2.allowance_winter);
+
+                ////await UpdateData.TravelRequestPersonal(model2);
+
+                //request = await GetData.RequestSummaryListInfo(model2[0].no_reg.ToString());
+
+                //foreach (var item in request)
+                //{
+                //    if (item.status_request != "99") ResponseList.Add(item);
+                //}
+
+                //string name = await GetData.EmployeeNameInfo(model2[0].no_reg);
 
 
                 List<DateTime> return_date = new List<DateTime>();
@@ -376,10 +393,12 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.Duration = travel_duration;
 
                 ModelState.Clear();
-                if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
+                if (ResponseList.Count > 0) return RedirectToAction("Index", ResponseList.OrderBy(r => r.status_request).ToList());
+                //if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
                 else
                 {
-                    return View("Index", ResponseList);
+                    return RedirectToAction("Index", ResponseList);
+                    //return View("Index", ResponseList);
                 }
             }
             else if (download == "download")
@@ -1139,10 +1158,12 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.Duration = travel_duration;
 
                 ModelState.Clear();
-                if (ResponseList.Count > 0) return View("IndexMSTR", ResponseList.OrderBy(r => r.status_request).ToList());
+                if (ResponseList.Count > 0) return RedirectToAction("IndexMSTR", ResponseList.OrderBy(r => r.status_request).ToList());
+                //if (ResponseList.Count > 0) return View("IndexMSTR", ResponseList.OrderBy(r => r.status_request).ToList());
                 else
                 {
-                    return View("IndexMSTR", ResponseList);
+                    return RedirectToAction("IndexMSTR", ResponseList);
+                    //return View("IndexMSTR", ResponseList);
                 }
             }
             else if (download == "download")
