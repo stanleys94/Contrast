@@ -396,10 +396,23 @@
 
         <div style="float:left;margin-top:10px;">
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
+            @*<button type="submit" class="btn btn-default" name="all_download" value="outstanding">Download All (NEW)</button>
+            <button type="submit" class="btn btn-default" name="all_download" value="issued">Download All (ISSUED)</button>*@
+        </div>
+    }
+
+    @using (Html.BeginForm("DownloadAll", "InvoiceDownload", FormMethod.Post))
+    {
+        @Html.Hidden("search")
+        @Html.Hidden("start")
+        @Html.Hidden("end")
+        @Html.Hidden("outstanding", (object)ViewBag.outstandingTotal)
+        <div style="float:left;margin-top:10px;">
             <button type="submit" class="btn btn-default" name="all_download" value="outstanding">Download All (NEW)</button>
             <button type="submit" class="btn btn-default" name="all_download" value="issued">Download All (ISSUED)</button>
         </div>
     }
+
     @using (Html.BeginForm("Search", "InvoiceDownload", FormMethod.Post))
     {
         @Html.HiddenFor(m => m[0].loged_employee.code)
