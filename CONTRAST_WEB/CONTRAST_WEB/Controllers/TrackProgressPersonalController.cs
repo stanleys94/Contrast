@@ -67,8 +67,8 @@ namespace CONTRAST_WEB.Controllers
                 temp.login_name = model.name;
                 temp.privilage = privillage_desc;
                 track.Add(temp);
-                //return View(track);
-                return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
+                return View(track.ToPagedList(1, 1));
+                //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
             }
             //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
 
