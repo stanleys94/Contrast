@@ -70,17 +70,7 @@ namespace CONTRAST_WEB.Controllers
                      temp.Add(ActualCostHelperObject[k]);
                 }
                 ActualCostHelperObject = temp;
-            }
-
-            //get vendor info
-            for (int k = 0; k < ActualCostHelperObject.Count(); k++)
-            {
-                if (ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower() == "ticket")
-                    vendorInfo.Add((await GetData.VendorTicketInfo()));
-                else
-                if (ActualCostHelperObject[k].TravelRequest.jenis_transaksi.ToLower() == "hotel")
-                    vendorInfo.Add((await GetData.VendorHotelInfo()));
-            }
+            }            
 
             ViewBag.New = ActualCostHelperObject.Count();
             ViewBag.Rejected = RejectedObject.Count();
@@ -89,6 +79,16 @@ namespace CONTRAST_WEB.Controllers
                         
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+
+            //get vendor info
+            for (int k = 0; k < ActualCostHelperObject.ToPagedList(pageNumber, pageSize).ToList().Count(); k++)
+            {
+                if (ActualCostHelperObject.ToPagedList(pageNumber, pageSize)[k].TravelRequest.jenis_transaksi.ToLower() == "ticket")
+                    vendorInfo.Add((await GetData.VendorTicketInfo()));
+                else
+                if (ActualCostHelperObject.ToPagedList(pageNumber, pageSize)[k].TravelRequest.jenis_transaksi.ToLower() == "hotel")
+                    vendorInfo.Add((await GetData.VendorHotelInfo()));
+            }
             return View(ActualCostHelperObject.ToPagedList(pageNumber, pageSize));
         }
 
@@ -148,7 +148,6 @@ namespace CONTRAST_WEB.Controllers
                         || ActualCostHelperObject[k].TravelRequestRejected.destination_name.ToLower().Contains(searchString.ToLower())
                         || ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower().Contains(searchString.ToLower())
                         )
-
                         temp.Add(ActualCostHelperObject[k]);
 
                 }
@@ -157,22 +156,26 @@ namespace CONTRAST_WEB.Controllers
 
             }
 
-            //get vendor info
-            for (int k = 0; k < ActualCostHelperObject.Count(); k++)
-            {
-                if (ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower() == "ticket")
-                    vendorInfo.Add((await GetData.VendorTicketInfo()));
-                else
-                if (ActualCostHelperObject[k].TravelRequestRejected.jenis_transaksi.ToLower() == "hotel")
-                    vendorInfo.Add((await GetData.VendorHotelInfo()));
-            }
+            
 
             ViewBag.Rejected = ActualCostHelperObject.Count();
             ViewBag.RL = vendorInfo;
             ViewBag.New = PreparationObject.Count();
 
+
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+
+            //get vendor info
+            for (int k = 0; k < ActualCostHelperObject.Count(); k++)
+            {
+                if (ActualCostHelperObject.ToPagedList(pageNumber, pageSize)[k].TravelRequestRejected.jenis_transaksi.ToLower() == "ticket")
+                    vendorInfo.Add((await GetData.VendorTicketInfo()));
+                else
+                if (ActualCostHelperObject.ToPagedList(pageNumber, pageSize)[k].TravelRequestRejected.jenis_transaksi.ToLower() == "hotel")
+                    vendorInfo.Add((await GetData.VendorHotelInfo()));
+            }
+
             return View(ActualCostHelperObject.ToPagedList(pageNumber, pageSize));
         }
 

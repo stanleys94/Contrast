@@ -162,7 +162,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.newmsg = msgcount;
             ViewBag.reviseflag = revise_flag;
             
-            return View(ResponseList);
+            return View(ResponseList.OrderByDescending(x=>x.group_code).ToList());
         }
 
 
