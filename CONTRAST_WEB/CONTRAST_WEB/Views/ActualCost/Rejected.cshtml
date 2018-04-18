@@ -45,8 +45,12 @@
                                 @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
 
                             </label>
-                            Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Name, BTA, Destination, Type" })
-                            <input type="submit" value="Search" />
+                            <span style="float:right;">
+                            <input type="submit" value="Search" class="btn btn-info" />
+                        </span>
+                        <span style="float:right;padding-left:10px;padding-right:10px">
+                            <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px;" />
+                        </span>
                         </div>
                     }
                     @using (Html.BeginForm("Insert", "ActualCost", FormMethod.Post))
