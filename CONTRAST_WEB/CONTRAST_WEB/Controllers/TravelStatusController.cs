@@ -33,7 +33,8 @@ namespace CONTRAST_WEB.Controllers
 
             List<vw_request_summary> ResponseList = new List<vw_request_summary>();
             ResponseList = await GetData.RequestSummaryListInfo(model.code);
-
+            //check if there are travel status entry
+            if (ResponseList.Count>0)ResponseList = ResponseList.OrderBy(x => x.group_code).ToList();
             List<string> apprv_name = new List<string>();
             List<DateTime> return_date = new List<DateTime>();
 
@@ -132,7 +133,7 @@ namespace CONTRAST_WEB.Controllers
             List<int> msgcount = new List<int>();
             //save revised count
             List<bool> revise_flag = new List<bool>();
-
+            
             for (int k = 0; k < ResponseList.Count(); k++)
             {
                 //count new messages
@@ -162,7 +163,7 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.newmsg = msgcount;
             ViewBag.reviseflag = revise_flag;
             
-            return View(ResponseList.OrderByDescending(x=>x.group_code).ToList());
+            return View(ResponseList);
         }
 
 
