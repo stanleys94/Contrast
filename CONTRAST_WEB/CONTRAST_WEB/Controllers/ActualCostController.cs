@@ -44,6 +44,18 @@ namespace CONTRAST_WEB.Controllers
                 ActualCostHelperObject[k].TravelRequest = PreparationObject[k];
             }
 
+            ViewBag.CurrentSort = sortOrder;
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            
             //filter
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -57,7 +69,6 @@ namespace CONTRAST_WEB.Controllers
                         )
                      temp.Add(ActualCostHelperObject[k]);
                 }
-                /*if(temp.Count()>0)*/
                 ActualCostHelperObject = temp;
             }
 
@@ -71,23 +82,11 @@ namespace CONTRAST_WEB.Controllers
                     vendorInfo.Add((await GetData.VendorHotelInfo()));
             }
 
-            ViewBag.New = PreparationObject.Count();
+            ViewBag.New = ActualCostHelperObject.Count();
             ViewBag.Rejected = RejectedObject.Count();
             ViewBag.RL = vendorInfo;
             ViewBag.RL3 = await GetData.TaxInfo();
-
-            ViewBag.CurrentSort = sortOrder;
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewBag.CurrentFilter = searchString;
-
+                        
             int pageSize = 15;
             int pageNumber = (page ?? 1);
             return View(ActualCostHelperObject.ToPagedList(pageNumber, pageSize));
@@ -104,7 +103,6 @@ namespace CONTRAST_WEB.Controllers
 
             List<ActualCostShtHelper> ActualCostHelperObject = new List<ActualCostShtHelper>();
             List<tb_r_travel_actualcost> Rejected = new List<tb_r_travel_actualcost>();
-
             List<List<SelectListItem>> vendorInfo = new List<List<SelectListItem>>();
 
             ViewBag.RL3 = await GetData.TaxInfo();
@@ -124,6 +122,19 @@ namespace CONTRAST_WEB.Controllers
                 ActualCostHelperObject[k].TravelRequestRejected = new vw_rejected_actualcost_verification();
                 ActualCostHelperObject[k].TravelRequestRejected = RejectedObject[k];
             }
+            
+            ViewBag.CurrentSort = sortOrder;
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
 
             //filter
             if (!String.IsNullOrEmpty(searchString))
@@ -156,21 +167,9 @@ namespace CONTRAST_WEB.Controllers
                     vendorInfo.Add((await GetData.VendorHotelInfo()));
             }
 
-            ViewBag.Rejected = RejectedObject.Count();
+            ViewBag.Rejected = ActualCostHelperObject.Count();
             ViewBag.RL = vendorInfo;
             ViewBag.New = PreparationObject.Count();
-
-            ViewBag.CurrentSort = sortOrder;
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewBag.CurrentFilter = searchString;
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);

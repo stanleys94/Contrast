@@ -148,17 +148,16 @@ namespace CONTRAST_WEB.Controllers
 
                 //check revised btr or not
                 var request=await GetData.TravelRequestGCList(ResponseList[k].group_code);
+                bool revise=false;
                 for (int i = 0; i < request.Count(); i++)
                 {
                     if (request[i].additional1 == "1")
                     {
-                        revise_flag.Add(true);
-                        break;
+                        revise = true;
                     }
-                    else
-                        revise_flag.Add(false);
+                    
                 }
-
+                revise_flag.Add(revise);
             }
             ViewBag.newmsg = msgcount;
             ViewBag.reviseflag = revise_flag;

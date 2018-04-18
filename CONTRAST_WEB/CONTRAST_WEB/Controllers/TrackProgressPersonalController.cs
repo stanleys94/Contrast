@@ -60,16 +60,16 @@ namespace CONTRAST_WEB.Controllers
                     track.Add(temp);
                 }
             }
-            else
-            {
-                TrackingHelper temp = new TrackingHelper();
-                temp.login_id = model.code;
-                temp.login_name = model.name;
-                temp.privilage = privillage_desc;
-                track.Add(temp);
-                //return View(track);
-                return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
-            }
+            //else
+            //{
+            //    TrackingHelper temp = new TrackingHelper();
+            //    temp.login_id = model.code;
+            //    temp.login_name = model.name;
+            //    temp.privilage = privillage_desc;
+            //    track.Add(temp);
+            //    //return View(track);
+            //    //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
+            //}
             //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
 
             //if search / page empty
