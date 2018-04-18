@@ -27,12 +27,12 @@ namespace CONTRAST_WEB.Models
         //public static string PhotoFolder = "https://passport.toyota.astra.co.id:5006/PhotoFolder/";
 
         //Dev
-        public static string DocumentFolder = "http://10.85.40.68:91/TravelDocuments/";
+        public static string DocumentFolder = "http://10.85.40.68:91/DocumentsFolder/";
         //local
-        //public static string DocumentFolder = "http://10.86.110.96:88/TravelDocuments/";
+        //public static string DocumentFolder = "http://10.86.110.96:88/DocumentsFolder/";
 
         //Production
-        //public static string DocumentFolder = "https://passport.toyota.astra.co.id:5006/TravelDocuments/";
+        //public static string DocumentFolder = "https://passport.toyota.astra.co.id:5006/DocumentsFolder/";
 
         //Dev
         public static string Attch = "http://10.85.40.68:91/";
@@ -46,7 +46,7 @@ namespace CONTRAST_WEB.Models
         public static string TravelSettlementReceiptFolder = "~/SettlementFolder";
         public static string TPhotoEmployeeFolder = "~/PhotoFolder";
         public static string LogFolder = "~/Log";
-        public static string TravelDocumentsFolder = "~/TravelDocuments";
+        public static string TravelDocumentsFolder = "~/DocumentsFolder";
 
 
         public static CultureInfo culture = new CultureInfo("id-ID");

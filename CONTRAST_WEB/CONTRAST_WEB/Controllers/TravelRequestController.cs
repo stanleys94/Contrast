@@ -157,7 +157,6 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.ebankaccount = "No bank name registered,contact finance division";
             }
 
-
             //special employee
             //List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(identity.Name);
             List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(model.code);
