@@ -82,6 +82,10 @@
                 <div>
                     <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
                     @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
+                    @if (ViewBag.Exist != "" && ViewBag.Exist != null)
+                    {
+                        <label style="font-size:11px" class="text-danger">@ViewBag.Exist Already in Participant List</label>
+                    }
                     <div style="width:450px;" class="input-group">
                         @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
                         <input type="text" id="code" name="code" value=@Model.employee_info.code hidden>

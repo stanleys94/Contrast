@@ -552,19 +552,29 @@ namespace CONTRAST_WEB.Controllers
                 //List<tb_m_vendor_employee> valid = await GetData.VendorEmployee(Convert.ToInt32(model.tparticipant));
                 //if (ModelState.IsValid || valid.Count > 0)
                 //{
+                string exist = "";
                 List<string> ModelList = new List<string>();
                 int noreg;
                 if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
                 {
                     if (model.participants == null)
                         model.participants = new List<tb_r_travel_request_participant>();
-                    model.participants.Add(new tb_r_travel_request_participant());
-                    model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
-                    model.participants[model.participants.Count() - 1].active_flag = true;
-                    model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
+                    foreach (var item in model.participants)
+                    {
+                        if (item.no_reg == noreg) exist = await GetData.EmployeeNameInfo(noreg);
+                    }
+                    if (exist == "")
+                    {
+                        model.participants.Add(new tb_r_travel_request_participant());
+                        model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
+                        model.participants[model.participants.Count() - 1].active_flag = true;
+                        model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
 
-                    model.travel_request.participants_flag = true;
+                        model.travel_request.participants_flag = true;
+                    }
                 }
+
+                ViewBag.Exist = exist;
 
                 if (model.participants != null)
                 {

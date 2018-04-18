@@ -412,7 +412,7 @@ namespace CONTRAST_WEB.Models
                     {
                         var listItem = new Class1();
                         listItem = item;
-
+                        listItem.name = "(" + item.code.Trim() + ") " + item.name;
                         ListItem2.Add(listItem);
 
                     }

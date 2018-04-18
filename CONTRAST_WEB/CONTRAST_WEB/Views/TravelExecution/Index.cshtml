@@ -17,7 +17,7 @@
 
 <div class="container">
     <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
-         @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             foreach (var item in ViewBag.Privillege)
@@ -40,39 +40,39 @@
                 }
             }
         }
-            @for(int i = 0; i < Model.Count(); i++)
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var item = Model[i];
+            using (Html.BeginForm("Details", "TravelExecution", Model[i]))
             {
-                var item = Model[i];
-                using (Html.BeginForm("Details", "TravelExecution",Model[i]))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="item col-xs-6 col-lg-6">
-                        <div class="thumbnail">
-                            <div class="clearfix">
-                                <div class="column content">
-                                    <span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Travel-Execution-icon-b.png" /></span>
-                                </div>
-
-                                <div style="padding:20px 1px; width:270px;" class="column menu">
-                                    <span class="templatetext">TR @Html.DisplayFor(modelItem => item.id_request)</span>
-                                    <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_1) )</span>
-
-                                </div>
-
-                                <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
+                @Html.AntiForgeryToken()
+                <div class="item col-xs-6 col-lg-6">
+                    <div class="thumbnail">
+                        <div class="clearfix">
+                            <div class="column content">
+                                <span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Travel-Execution-icon-b.png" /></span>
                             </div>
+
+                            <div style="padding:20px 1px; width:270px;" class="column menu">
+                                <span class="templatetext">TR @Html.DisplayFor(modelItem => item.id_request)</span>
+                                <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_1) )</span>
+
+                            </div>
+
+                            <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
                         </div>
                     </div>
-                }
+                </div>
             }
-        
+        }
+
     </div>
 </div>
 
 <script>
-        function goBack() {
-            window.history.back();
-        }
+    function goBack() {
+        window.history.back();
+    }
 </script>
 
 
@@ -89,3 +89,33 @@
         </div>
     </div>
 </div>
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+     $("#searchInput2").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue2", "TravelExecution")',
+                //url: '@Url.Action("GetSearchValue2", "TravelExecution")',
+                dataType: "json",
+	        data: { search: $("#searchInput2").val(), code: $("#code").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.code };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error Has detected");
+                }
+            });
+        }
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+</script>
