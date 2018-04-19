@@ -64,12 +64,17 @@ namespace CONTRAST_WEB.Controllers
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
             tb_m_employee model = new tb_m_employee();
+            tb_m_employee logged = await GetData.EmployeeInfo(identity.Name);
 
             if (applied != null) model = await GetData.EmployeeInfo(applied);
             else model = await GetData.EmployeeInfo(identity.Name);
 
             ViewBag.Employee = model;
-            ViewBag.applied = model.code;
+            ViewBag.applied = model.code.Trim();
+            ViewBag.applied_name = model.name.Trim();
+
+            ViewBag.logged_id = logged.code.Trim();
+            ViewBag.logged_name = logged.name.Trim();
 
             List<vw_travel_execution_list> RequestSummary = new List<vw_travel_execution_list>();
             RequestSummary = await GetData.ExecutionList(model.code);
