@@ -23,32 +23,32 @@
         @using (Html.BeginForm("Index", "VerifySettlement", FormMethod.Get))
         { 
             @Html.AntiForgeryToken()
-              <div class="navbar-form navbar-left" style="padding-left:10px">
+              <div class="navbar-form navbar-left" style="padding:10px 0px;">
                 <div>
                     <div>
                         <span>
                             <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
                             @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
                         </span>
-                        <span style=" margin-left : 100px">
+                        <span style="margin-left:270px">
                             Start Date Range :
                             @if (ViewBag.startdate != null)
                             {
-                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
                             }
                             else
                             {
-                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @class = "form-control", style = "width:170px" })
                             }
                         </span>
 
                          @if (ViewBag.enddate != null)
                          {
-                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
                          }
                          else
                          {
-                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date"})
+                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
                          }
                          <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
                     </div>
@@ -59,7 +59,7 @@
          @using (Html.BeginForm("Insert", "VerifySettlement", FormMethod.Post))
          {
             @Html.AntiForgeryToken()
-              <input type="hidden" name="SearchString" value="@ViewBag.CurrentFilter" />
+             <input type="hidden" name="SearchString" value="@ViewBag.CurrentFilter" />
              <div style="width:100%;text-align:left;height:80px;border:0px;" class="clearfix">
                 <table class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
@@ -107,7 +107,7 @@
                     </tr>
                 </table>
             </div>
-            <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;" class="clearfix">
+            <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;margin-top:20px;" class="clearfix">
                 <table class="table table-condensed table-striped">
                     @if (Model[0].Settlement_Verified == null)
                     {
@@ -192,7 +192,7 @@
             </div>
 
 
-            <div style="float:right;margin-top:10px;" class="col-lg-3 col-lg-offset-9">
+            <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-6">
                 @if (position.ToLower().Contains("dph") || position.ToLower().Contains("ap"))
                 {
                     <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">SUBMIT</button>
@@ -204,7 +204,7 @@
                 @Html.ActionLink("Cancel", "Index", "Home")
             </div>
          }
-        <br />
+        <div style="float:left;margin-top:10px;" class="col-lg-3">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         @if (ViewBag.startdate != null || ViewBag.enddate != null)
         {
@@ -216,6 +216,7 @@
             @Html.PagedListPager(Model, page => Url.Action("Index",
                                            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
         }
+        </div>
     </div>
 </div>
 

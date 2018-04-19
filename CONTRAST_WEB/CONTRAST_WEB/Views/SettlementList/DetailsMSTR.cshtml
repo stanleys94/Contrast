@@ -1,13 +1,16 @@
 ﻿@model CONTRAST_WEB.Models.SettlementHelper
 @{
+    /**/
+
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
 <div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
-
+   
 </div>
 <div class="container">
     <div style="margin-top:110px" class="row">
+        
         @using (Html.BeginForm("InsertMSTR", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
 
         {
@@ -35,6 +38,7 @@
                 <strong class="fnt2">DESTINATION :</strong>
                 <div class="form-group input-group">
                     <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
+                    @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
                 </div>
             </div>
 
@@ -51,9 +55,10 @@
                     @Html.DisplayFor(m => m.TravelRequest.end_date)
                 </div>
             </div>
-            <br>
+
+            <br />
             <div class="col-md-12">
-                <span><h5 style="margin:50px 0px 10px 0px;width:auto;color:darkslateblue;" class="h5c">EXTEND TRAVEL ?</h5></span>
+                <span><h5 style="width:940px;color:darkslateblue;" class="h5c">EXTEND TRAVEL ?</h5></span>
                 <div style="width:125px;" class="radio">
                     <label>
                         @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:Check();", name = "yes", id = "yesCheck" })<span>YES</span>
@@ -63,10 +68,9 @@
                     </label>
                 </div>
             </div>
+            <div style="margin-bottom:0px;display:none;float:left;" class="col-md-12" id="ifYa1"><h5 style="width:940px;margin-bottom:0px;padding-bottom:0px;" class="h5z2">DURATION Of EXTEND :</h5></div>
 
-            <div style="margin:10px 0px 0px 0px;display:block;float:left;" class="col-lg-12" id="ifYa1"><label>DURATION Of EXTEND :</label></div>
-
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5" id="ifYa2">
+            <div style="margin-bottom:0px;display:none;float:left;" class="col-md-5" id="ifYa2">
                 @Html.ValidationMessageFor(m => m.Start_Extend, "", new { @class = "text-danger" })<br />
                 <label>Start</label>
                 <div class="form-group input-group">
@@ -75,9 +79,13 @@
                     @Html.TextBoxFor(m => m.Start_Extend, new { @class = "form-control", @type = "date", placeholder = "Departure" })
                     @*@Html.HiddenFor(m => m.Start_Extend)*@
                 </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-offset-0" id="ifYa4">
+                    @Html.CheckBoxFor(m => m.halfday_flag1)
+                    <label>HALF DAY DEPARTURE</label>
+                </div>
             </div>
 
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5" id="ifYa3">
+            <div style="margin-bottom:0px;display:none;float:left;" class="col-md-5" id="ifYa3">
                 @Html.ValidationMessageFor(m => m.End_Extend, "", new { @class = "text-danger" })<br />
                 <label>End</label>
                 <div class="form-group input-group">
@@ -85,6 +93,10 @@
                     <!--<input type="date" style="width:100%" />-->
                     @Html.TextBoxFor(m => m.End_Extend, new { @class = "form-control", @type = "date", placeholder = "Arrival" })
                     @*@Html.HiddenFor(m => m.End_Extend)*@
+                </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="ifYa5">
+                    @Html.CheckBoxFor(m => m.halfday_flag2)
+                    <label>HALF DAY ARRIVAL</label>
                 </div>
             </div>
 
@@ -107,14 +119,16 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
+            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:none;float:left;" id="ifYes">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
-                    @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", Value = String.Format("{0:n0}", Model.MealSettlement) })
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @Value = String.Format("{0:n0}", Model.MealSettlement) })*@
+                    @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.HiddenFor(m => m.MealSettlement)
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5" style="margin-bottom:0px;display:block;float:left;" id="ifYesm1">
+            <div class="col-md-5" style="margin-bottom:0px;display:none;float:left;" id="ifYesm1">
                 <H6 class="h6s">Please Count Your Meal :</H6>
                 <div class="form-group input-group">
                     <button type="submit" class="btn btn-default" name="sum" value="Submit">Calculate Meal/day</button>
@@ -140,7 +154,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes2">
+            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:none;float:left;" id="ifYes2">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
                     @Html.TextBoxFor(m => m.HotelSettlement, new { @class = "form-control" })
@@ -170,7 +184,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
-            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes3">
+            <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:none;float:left;" id="ifYes3">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
                     @Html.TextBoxFor(m => m.TicketSettlement, new { @class = "form-control" })
@@ -190,6 +204,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
                 <div style="position:relative;">
+                    @Html.ValidationMessageFor(m => m.ReceiptFileTransportation, "", new { @class = "text-danger" })<br />
                     <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                         Choose File...
                         <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info5").html($(this).val());'>-->
@@ -212,6 +227,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
                 <div style="position:relative;">
+                    @Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />
                     <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                         Choose File...
                         <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info6").html($(this).val());'>-->
@@ -233,6 +249,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
                 <div style="position:relative;">
+                    @Html.ValidationMessageFor(m => m.ReceiptFileOther, "", new { @class = "text-danger" })<br />
                     <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                         Choose File...
                         <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val());'>
