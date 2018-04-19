@@ -106,8 +106,15 @@ namespace CONTRAST_WEB.Controllers
             if (applied != null) model = await GetData.EmployeeInfo(applied);
             else model = await GetData.EmployeeInfo(identity.Name);
 
+            tb_m_employee logged = await GetData.EmployeeInfo(identity.Name);
+
+            ViewBag.loged_id = logged.code.Trim();
+            ViewBag.loged_name = logged.name.Trim(' ');
+
+            ViewBag.applied_name = model.name.Trim();
+
             ViewBag.Employee = model;
-            ViewBag.applied = model.code;
+            ViewBag.applied = model.code.Trim();
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
             ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.code));

@@ -37,25 +37,29 @@
         {
             foreach (var item in ViewBag.Privillege)
             {
-                if (item == "contrast.travelcoordinator")
-                {
-                <div style="width:950px;" class="col-md-11 col-md-offset-1 wellNo">
-                    <div style="margin:5px;">
-                        <strong style="color:deepskyblue">TRAVEL COORDINATOR</strong>
-                        <div style="width:500px;margin:10px;" class="input-group">
-                            <span>Type name Employee : </span>
-                            <span>
-                                @Html.TextBox("applied", Model.employee_info.code, new { @class = "form-control", placeholder = "Type Employee Name..", id = "searchInput2", style = "max-width:280px;max-width:280px;" })
-                            </span>
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-info btn-lg" name="Add" value="Submit">Add</button>
-                            </span>
-                        </div>
+                 if (item == "contrast.travelcoordinator")
+            {
+                <div style="width:950px;" class="col-md-11 col-md-offset-1">
+                    <hr>
+                </div>
+                <div style="width:475px; padding-top:5px" class="col-md-5 col-md-offset-1">
+                    <div style="margin:5px;" class="form-group form-inline">
+                        <strong style="color:deepskyblue;">TRAVEL COORDINATOR :</strong> @ViewBag.loged_name (@ViewBag.loged_id)
+                    </div>
+                </div> 
+                <div style="width:475px;" class="col-md-5">
+                    <div style="margin:5px;" class="form-group form-inline">
+                        Type name Employee :
+                        <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@Model.employee_info.code />
+                        <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
                     </div>
                 </div>
-                }
+            }
             }
         }
+                <div style="width:950px;" class="col-md-11 col-md-offset-1">
+                    <hr>
+                </div>
         <div class="col-md-5 col-md-offset-1">
             <div style="height:50px; padding-top:20px;">
                 <strong style="color:deepskyblue">EMPLOYEE INFO</strong>
@@ -84,7 +88,7 @@
                     @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
                     @if (ViewBag.Exist != "" && ViewBag.Exist != null)
                     {
-                        <label style="font-size:11px" class="text-danger">@ViewBag.Exist Already in Participant List</label>
+                        <label style="font-size:12px;" class="text-danger">@ViewBag.Exist Already in Participant List</label>
                     }
                     <div style="width:450px;" class="input-group">
                         @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
@@ -527,7 +531,7 @@
     $("#searchInput2").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '@Url.Action("GetSearchValue2", "TravelRequest")',
+                url: '@Url.Action("GetSearchValue", "TravelRequest")',
                 dataType: "json",
                 data: { search: $("#searchInput2").val(), code: $("#code").val() },
                 success: function (data) {

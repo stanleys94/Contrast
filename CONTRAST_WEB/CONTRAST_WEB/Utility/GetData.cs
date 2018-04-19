@@ -412,7 +412,7 @@ namespace CONTRAST_WEB.Models
                     {
                         var listItem = new Class1();
                         listItem = item;
-                        listItem.name = "(" + item.code.Trim() + ") " + item.name;
+                        listItem.name = "(" + listItem.code.Trim() + ") " + listItem.name;
                         ListItem2.Add(listItem);
 
                     }
@@ -421,7 +421,6 @@ namespace CONTRAST_WEB.Models
 
             return ListItem2;
         }
-
         public static async Task<List<Class1>> SearchNameDiv(string search, string div)
         {
             List<Class1> ListItem2 = new List<Class1>();
