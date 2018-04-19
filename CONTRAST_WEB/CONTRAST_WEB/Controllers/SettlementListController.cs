@@ -366,14 +366,9 @@ namespace CONTRAST_WEB.Controllers
 
         // GET: SettlementList
 
-        public async Task<ActionResult> IndexMSTR(string noreg, string applied)
+        public async Task<ActionResult> IndexMSTR(string noreg)
         {
             tb_m_employee model = await GetData.EmployeeInfo(noreg);
-            ViewBag.Employee = model;
-
-            if (applied != null) model = await GetData.EmployeeInfo(applied);
-            else model = await GetData.EmployeeInfo(model.name);
-
             ViewBag.Employee = model;
             ViewBag.applied = model.code;
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();

@@ -17,7 +17,7 @@
 
 <div class="container">
     <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
-        @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("Index", "TravelExecution", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             foreach (var item in ViewBag.Privillege)

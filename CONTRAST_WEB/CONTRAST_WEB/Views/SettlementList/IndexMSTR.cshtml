@@ -3,9 +3,7 @@
     ViewBag.Title = "SETTLEMENT LIST";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
-<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
 
-</div>
 <div class="container">
     <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
         @for (var i = 0; i < Model.Count; i++)
@@ -38,17 +36,16 @@
                                 <span><input type="image" img style="margin:15px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
                             </div>
                             <div style="padding:10px 1px; width:170px;" class="column menu">
-                                <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span><br>
-                                <span class="designationstyle">(to @Html.DisplayFor(modelItem => item.destination_name))</span><br>
+                                <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span>
+                                <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
                                 @if (item.final_status == "2")
                                 {
-                                    <span><strong style="color:red">Rejected</strong></span>
+                                    <span><strong style="color:red">Rejected</strong></span> 
                                 }
                                 else if (item.final_status == "0")
                                 {
-                                    <span><strong style="color:darkcyan">Pending</strong></span>
+                                    <span><strong style="color:darkcyan">Pending</strong></span> 
                                 }
-
                             </div>
                             <span style="float:right;padding:30px 10px;" class="glyphicon glyphicon-chevron-right"></span>
                         </div>
