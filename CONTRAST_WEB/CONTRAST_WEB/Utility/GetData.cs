@@ -3665,6 +3665,34 @@ namespace CONTRAST_WEB.Models
             }
             return Response;
         }
+
+        public static async Task<vw_actualcost_generate_file> GenerateFile(int id)
+        {
+            vw_actualcost_generate_file Response = new vw_actualcost_generate_file();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/ActualcostGenerateFile/" + id);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Response = JsonConvert.DeserializeObject<vw_actualcost_generate_file>(EmpResponse);
+                }
+            }
+            return Response;
+        }
     }        
  }
     
