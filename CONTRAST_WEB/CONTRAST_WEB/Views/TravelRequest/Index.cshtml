@@ -32,32 +32,31 @@
         <div class="col-md-11 col-md-offset-1">
             <h5 style="text-align:left; margin-top:0px; padding:0 10px;">"Surat Perintah Perjalanan Dinas"</h5>
         </div>
-
         @using (Html.BeginForm("Index", "TravelRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             foreach (var item in ViewBag.Privillege)
             {
                 if (item == "contrast.travelcoordinator")
                 {
-                <div style="width:950px;" class="col-md-11 col-md-offset-1">
-                    <hr>
-                </div>
-                <div style="width:475px; padding-top:5px" class="col-md-5 col-md-offset-1">
-                    <div style="margin:5px;" class="form-group form-inline">
-                        <strong style="color:deepskyblue;">TRAVEL COORDINATOR :</strong> @ViewBag.loged_name (@ViewBag.loged_id)
+                    <div style="width:950px;" class="col-md-11 col-md-offset-1">
+                        <hr>
                     </div>
-                </div> 
-                <div style="width:475px;" class="col-md-5">
-                    <div style="margin:5px;" class="form-group form-inline">
-                        Type name Employee :
-                        <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@Model.employee_info.code />
-                        <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
-
+                    <div style="width:475px; padding-top:5px" class="col-md-5 col-md-offset-1">
+                        <div style="margin:5px;" class="form-group form-inline">
+                            <strong style="color:deepskyblue;">TRAVEL COORDINATOR :</strong> @ViewBag.loged_name (@ViewBag.loged_id)
+                        </div>
+                    </div>
+                    <div style="width:475px;" class="col-md-5">
+                        <div style="margin:5px;" class="form-group form-inline">
+                            Type name Employee :
+                            <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@Model.employee_info.code />
+                            <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
+                        </div>
                     </div>
                 }
 
             }
-        }    
+        }
         <div style="width:950px;" class="col-md-11 col-md-offset-1">
             <hr>
         </div>
@@ -104,385 +103,433 @@
 
                         for (int i = 0; i < Model.participants.Count(); i++)
                         {
-                            <li>
-                                @Html.TextBox("aaaa", ModelList[i], new { @readonly = "readonly", @style = "border:0px;color:grey;" })
-                                <button style="width:80px" type="submit" class="btn btn-danger btn-xs" name="delete" value=@i>Delete</button>
-                            </li>
-                            <hr style="margin:10px 5px;" />
                             @Html.HiddenFor(m => m.participants[i].no_reg, new { @value = Model.participants[i].no_reg })
                             @Html.HiddenFor(m => m.participants[i].no_reg_parent, new { @value = Model.participants[i].no_reg_parent })
 
-                         }
-                         }
-                    </ol>
+                        }
+                    }
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-5 col-md-offset-1">
-            <hr />
-            <div class="form-group input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
-                @Html.HiddenFor(m => m.travel_request.assign_by, new { @class = "form-control", placeholder = "Assigned By" })
-                @Html.TextBox("text", (string)ViewBag.Bossname, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-            <div>
-                @Html.ValidationMessageFor(m => m.tpurpose, "", new { @class = "text-danger" })
+            <div class="col-md-5 col-md-offset-1">
                 <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                    @Html.DropDownListFor(m => m.tpurpose, asd2.OrderBy(m => m.Text).ToList(), "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose" })
-                </div>
-            </div>
-            <hr />
-            <div>
-                <strong class="fnt2">Select Destination :</strong>
-                <div style="width:150px;" class="radio">
-                    <label style="float:left;" id="sgl">
-                        @Html.RadioButtonFor(m => m.travel_request.multiple_destination_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck", @checked = true }) Single
-                    </label>
-                    <label style="float:right;" id="mlt">
-                        @Html.RadioButtonFor(m => m.travel_request.multiple_destination_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck" }) Multiple
-                    </label>
-                </div>
-            </div>
-            <div style="padding:5px;margin-bottom:0px;" id="des1">
-                <div style="margin-bottom:5px">
-                    <strong style="color:deepskyblue;">DESTINATION 1</strong>
-                </div>
-                <div>
-                    <p class="fnt2">Derparture Date :</p>
-                    @Html.ValidationMessageFor(m => m.tstart_date0, "", new { @class = "text-danger" })
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tstart_date0D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
-                        </span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tstart_date0T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    <p class="fnt2">Return Date :</p>
-                    @Html.ValidationMessageFor(m => m.tend_date0, "", new { @class = "text-danger" })
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tend_date0D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
-                        </span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tend_date0T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
-                        </span>
-                    </div>
-                </div>
-                <div style="margin-bottom:0px;display:none;float:left;" class="form-group input-group" id="ifYes">
-                    <a class="btn btn-warning" id="b1show">ADD DESTINATION</a>
-                </div>
-            </div>
-            <div style="padding:5px;margin-bottom:0px;" id="des2" hidden>
-                <div style="margin-bottom:5px">
-                    <strong style="color:deepskyblue">DESTINATION 2</strong>
-                </div>
-                <div>
-                    <p class="fnt2">Derparture Date :</p>
-                    @Html.ValidationMessageFor(m => m.tstart_date1, "", new { @class = "text-danger" })
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tstart_date1D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
-                        </span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tstart_date1T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    <p class="fnt2">Return Date :</p>
-                    @Html.ValidationMessageFor(m => m.tend_date1, "", new { @class = "text-danger" })
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tend_date1D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
-                        </span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tend_date1T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
-                        </span>
-                    </div>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                    @Html.TextBoxFor(m => m.employee_info.code, new { @class = "form-control", placeholder = "No Reg", @readonly = "readonly" })
                 </div>
                 <div class="form-group input-group">
-                    <a class="btn btn-warning" id="b2show">ADD DESTINATION</a>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    @Html.TextBoxFor(m => m.employee_info.name, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-stats"></i></span>
+                    @Html.TextBoxFor(m => m.employee_info.@class, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div style="margin-bottom:-10px;" class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+                    @if (Model.special_employee_flag == true)
+                    {
+                        @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "-Division-", new { @class = "form-control", placeholder = "Purpose" })
+                    }
+                    else
+                    {
+                        @Html.TextBox("asd", (string)@ViewBag.division_name, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.HiddenFor(m => m.employee_info.unit_code_name)
+                    }
                 </div>
             </div>
-            <div style="padding:5px;margin-bottom:0px;" id="des3" hidden>
-                <div style="margin-bottom:5px">
-                    <strong style="color:deepskyblue">DESTINATION 3</strong>
-                </div>
-                <div>
-                    <p class="fnt2">Derparture Date :</p>
-                    @Html.ValidationMessageFor(m => m.tstart_date2, "", new { @class = "text-danger" })
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tstart_date2D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
-                        </span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tstart_date2T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    <p class="fnt2">Return Date :</p>
-                    @Html.ValidationMessageFor(m => m.tend_date2, "", new { @class = "text-danger" })
-                    <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tend_date2D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
-                        </span>
-                        <span class="input-group-addon">
-                            @Html.TextBoxFor(m => m.tend_date2T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group input-group" hidden>
-                    <a class="btn btn-warning" id="b3show">ADD DESTINATION</a>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-5">
-            <hr />
-            <div class="form-group input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
-                @Html.TextBox("asd", Model.travel_request.request_type == true ? "Planned Travel" : "Unplanned Travel", new { @class = "form-control", @readonly = "readonly" })
-                @Html.HiddenFor(m => m.travel_request.request_type)
-            </div>
-            <div>
-                @Html.ValidationMessageFor(m => m.treason, "", new { @class = "text-danger" })
-                <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
-                    @Html.TextBoxFor(m => m.treason, new { @class = "form-control", placeholder = "Reason Assigment...." })
+            <div class="col-md-5">
+                <div style="margin-bottom:5px; padding:5px 5px;">
+                    <span class="fnt2"><strong>LIST PARTICIPANTS :</strong></span>
+                </div>
+                <div style="border-radius: 4px;width:450px;height: 145px;overflow-y: scroll;" class="wellNo">
+                    <div style="text-align:left;margin-top:10px;" class="input-group">
+                        <ol class="custom-bullet">
+                            @if (Model.participants != null)
+                            {
+                                for (int i = 0; i < Model.participants.Count(); i++)
+                                {
+                                    <li>
+                                        @Html.TextBox("aaaa", ModelList[i], new { @readonly = "readonly", @style = "border:0px;color:grey;" })
+                                        <button style="width:80px" type="submit" class="btn btn-danger btn-xs" name="delete" value=@i>Delete</button>
+                                    </li>
+                                    <hr style="margin:10px 5px;" />
+                                    @Html.HiddenFor(m => m.participants[i].no_reg, new { @value = Model.participants[i].no_reg })
+                                    @Html.HiddenFor(m => m.participants[i].no_reg_parent, new { @value = Model.participants[i].no_reg_parent })
+
+                                }
+                            }
+                        </ol>
+                    </div>
                 </div>
             </div>
-            <hr />
-            <div>
-                <strong class="fnt2">Select Activity :</strong>
+
+            <div class="col-md-5 col-md-offset-1">
+                <hr />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                    @Html.HiddenFor(m => m.travel_request.assign_by, new { @class = "form-control", placeholder = "Assigned By" })
+                    @Html.TextBox("text", (string)ViewBag.Bossname, new { @class = "form-control", @readonly = "readonly" })
+                </div>
                 <div>
-                    @Html.ValidationMessageFor(m => m.tactivity, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.tpurpose, "", new { @class = "text-danger" })
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                        @Html.DropDownListFor(m => m.tactivity, new SelectList(
-                               new[]
-                               {
-                                  new { Value = "1", Text = "Regular" },
-                                  new { Value = "3", Text = "Kyohan" ,},
-                                  new { Value = "2", Text = "Tango" },
-                               },
-                               "Value",
-                               "Text",
-                               Model
-                            ), new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.tpurpose, asd2.OrderBy(m => m.Text).ToList(), "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose" })
                     </div>
                 </div>
-            </div>
-            <div style="padding:5px;margin-bottom:50px;" id="des1">
+                <hr />
                 <div>
-                    <strong class="fnt2">Transportation :</strong>
-                    <div style="width:125px;" class="radio">
-                        <label style="float:left;">
-                            @Html.RadioButtonFor(m => m.tair_ticket_flag[0], true, new { @checked = true }) Flight
+                    <strong class="fnt2">Select Destination :</strong>
+                    <div style="width:150px;" class="radio">
+                        <label style="float:left;" id="sgl">
+                            @Html.RadioButtonFor(m => m.travel_request.multiple_destination_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck", @checked = true }) Single
                         </label>
-                        <label style="float:right;">
-                            @Html.RadioButtonFor(m => m.tair_ticket_flag[0], false) Land
+                        <label style="float:right;" id="mlt">
+                            @Html.RadioButtonFor(m => m.travel_request.multiple_destination_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck" }) Multiple
                         </label>
                     </div>
                 </div>
-                <div>
-                    <strong class="fnt2">New or Renewal Passport :</strong>
-                    <div style="width:125px;" class="radio">
-                        <label>
-                            @Html.RadioButtonFor(m => m.travel_request.passport_flag, true) Yes
-                        </label>
-                        <label style="float:right;">
-                            @Html.RadioButtonFor(m => m.travel_request.passport_flag, false, new { @checked = true }) No
-                        </label>
+                <div style="padding:5px;margin-bottom:0px;" id="des1">
+                    <div style="margin-bottom:5px">
+                        <strong style="color:deepskyblue;">DESTINATION 1</strong>
                     </div>
-                </div>
-                <div>
-                    <strong class="fnt2">Destination :</strong>
                     <div>
-                        @Html.DropDownListFor(m => m.tid_destination_city[0], asd, new { @class = "form-control" })
+                        <p class="fnt2">Derparture Date :</p>
+                        @Html.ValidationMessageFor(m => m.tstart_date0, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tstart_date0D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tstart_date0T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div style="padding:5px;margin-bottom:10px;padding-top:20px;" id="des22" hidden>
-                <div>
-                    <strong class="fnt2">Transportation :</strong>
-                    <div style="width:125px;" class="radio">
-                        <label style="float:left;">
-                            @Html.RadioButtonFor(m => m.tair_ticket_flag[1], true, new { @checked = true }) Flight
-                        </label>
-                        <label style="float:right;">
-                            @Html.RadioButtonFor(m => m.tair_ticket_flag[1], false) Land
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <strong class="fnt2">Destination :</strong>
-                    <div style="margin-bottom:75px">
-                        @Html.DropDownListFor(m => m.tid_destination_city[1], asd, new { @class = "form-control", placeholder = "Destination" })
-                    </div>
-                </div>
-            </div>
-            <div style="padding:5px;margin-bottom:90px;" id="des33" hidden>
-                <div>
-                    <strong class="fnt2">Transportation :</strong>
-                    <div style="width:125px;" class="radio">
-                        <label style="float:left;">
-                            @Html.RadioButtonFor(m => m.tair_ticket_flag[2], true, new { @checked = true }) Flight
-
-                        </label>
-                        <label style="float:right;">
-                            @Html.RadioButtonFor(m => m.tair_ticket_flag[2], false) Land
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <strong class="fnt2">Destination :</strong>
                     <div>
-                        @Html.DropDownListFor(m => m.tid_destination_city[2], asd, new { @class = "form-control", placeholder = "Destination" })
+                        <p class="fnt2">Return Date :</p>
+                        @Html.ValidationMessageFor(m => m.tend_date0, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tend_date0D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tend_date0T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
+                            </span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:0px;display:none;float:left;" class="form-group input-group" id="ifYes">
+                        <a class="btn btn-warning" id="b1show">ADD DESTINATION</a>
+                    </div>
+                </div>
+                <div style="padding:5px;margin-bottom:0px;" id="des2" hidden>
+                    <div style="margin-bottom:5px">
+                        <strong style="color:deepskyblue">DESTINATION 2</strong>
+                    </div>
+                    <div>
+                        <p class="fnt2">Derparture Date :</p>
+                        @Html.ValidationMessageFor(m => m.tstart_date1, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tstart_date1D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tstart_date1T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="fnt2">Return Date :</p>
+                        @Html.ValidationMessageFor(m => m.tend_date1, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tend_date1D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tend_date1T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group input-group">
+                        <a class="btn btn-warning" id="b2show">ADD DESTINATION</a>
+                    </div>
+                </div>
+                <div style="padding:5px;margin-bottom:0px;" id="des3" hidden>
+                    <div style="margin-bottom:5px">
+                        <strong style="color:deepskyblue">DESTINATION 3</strong>
+                    </div>
+                    <div>
+                        <p class="fnt2">Derparture Date :</p>
+                        @Html.ValidationMessageFor(m => m.tstart_date2, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tstart_date2D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tstart_date2T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="fnt2">Return Date :</p>
+                        @Html.ValidationMessageFor(m => m.tend_date2, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tend_date2D, new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m => m.tend_date2T, new { @class = "form-control ui-datepicker-current", @type = "time", placeholder = "Departure" })
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group input-group" hidden>
+                        <a class="btn btn-warning" id="b3show">ADD DESTINATION</a>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <div class="col-lg-11 col-lg-offset-1">
-            <strong style="color:deepskyblue">TRAVEL DOCUMENT</strong>
-        </div>
 
-        @*<div class="col-lg-5 col-lg-offset-1">
-            <div style="position:relative;">
-                <span class="fnt2">General Documents :</span><br />
+            <div class="col-md-5">
+                <hr />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                    @Html.TextBox("asd", Model.travel_request.request_type == true ? "Planned Travel" : "Unplanned Travel", new { @class = "form-control", @readonly = "readonly" })
+                    @Html.HiddenFor(m => m.travel_request.request_type)
+                </div>
                 <div>
-                    <input type="file" id="generaldoc" name="generaldoc" class="btn" style="border:0;width:450px;" />
+                    @Html.ValidationMessageFor(m => m.treason, "", new { @class = "text-danger" })
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
+                        @Html.TextBoxFor(m => m.treason, new { @class = "form-control", placeholder = "Reason Assigment...." })
+                    </div>
+                </div>
+                <hr />
+                <div>
+                    <strong class="fnt2">Select Activity :</strong>
+                    <div>
+                        @Html.ValidationMessageFor(m => m.tactivity, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                            @Html.DropDownListFor(m => m.tactivity, new SelectList(
+                                        new[]
+                                        {
+                                              new { Value = "1", Text = "Regular" },
+                                              new { Value = "3", Text = "Kyohan" ,},
+                                              new { Value = "2", Text = "Tango" },
+                                        },
+                                        "Value",
+                                        "Text",
+                                        Model
+                                     ), new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:5px;margin-bottom:50px;" id="des1">
+                    <div>
+                        <strong class="fnt2">Transportation :</strong>
+                        <div style="width:125px;" class="radio">
+                            <label style="float:left;">
+                                @Html.RadioButtonFor(m => m.tair_ticket_flag[0], true, new { @checked = true }) Flight
+                            </label>
+                            <label style="float:right;">
+                                @Html.RadioButtonFor(m => m.tair_ticket_flag[0], false) Land
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">New or Renewal Passport :</strong>
+                        <div style="width:125px;" class="radio">
+                            <label>
+                                @Html.RadioButtonFor(m => m.travel_request.passport_flag, true) Yes
+                            </label>
+                            <label style="float:right;">
+                                @Html.RadioButtonFor(m => m.travel_request.passport_flag, false, new { @checked = true }) No
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination :</strong>
+                        <div>
+                            @Html.DropDownListFor(m => m.tid_destination_city[0], asd, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:5px;margin-bottom:10px;padding-top:20px;" id="des22" hidden>
+                    <div>
+                        <strong class="fnt2">Transportation :</strong>
+                        <div style="width:125px;" class="radio">
+                            <label style="float:left;">
+                                @Html.RadioButtonFor(m => m.tair_ticket_flag[1], true, new { @checked = true }) Flight
+                            </label>
+                            <label style="float:right;">
+                                @Html.RadioButtonFor(m => m.tair_ticket_flag[1], false) Land
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination :</strong>
+                        <div style="margin-bottom:75px">
+                            @Html.DropDownListFor(m => m.tid_destination_city[1], asd, new { @class = "form-control", placeholder = "Destination" })
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:5px;margin-bottom:90px;" id="des33" hidden>
+                    <div>
+                        <strong class="fnt2">Transportation :</strong>
+                        <div style="width:125px;" class="radio">
+                            <label style="float:left;">
+                                @Html.RadioButtonFor(m => m.tair_ticket_flag[2], true, new { @checked = true }) Flight
+
+                            </label>
+                            <label style="float:right;">
+                                @Html.RadioButtonFor(m => m.tair_ticket_flag[2], false) Land
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination :</strong>
+                        <div>
+                            @Html.DropDownListFor(m => m.tid_destination_city[2], asd, new { @class = "form-control", placeholder = "Destination" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-11 col-lg-offset-1">
+                <strong style="color:deepskyblue">TRAVEL DOCUMENT</strong>
+            </div>
+
+            @*<div class="col-lg-5 col-lg-offset-1">
+                    <div style="position:relative;">
+                        <span class="fnt2">General Documents :</span><br />
+                        <div>
+                            <input type="file" id="generaldoc" name="generaldoc" class="btn" style="border:0;width:450px;" />
+                            <span class='label label-info' id="upload-file-info6"></span>
+                            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p><br>
+                        </div>
+                    </div>
+                </div>*@
+
+            <div class="col-lg-5 col-lg-offset-1">
+                <span class="fnt2">General Documents :</span>
+                <div style="position:relative;">
+                    <a style="font-size:13px" class='btn btn-primary'>
+                        <input type="file" id="generaldoc" name="generaldoc" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+                        <i class="glyphicon glyphicon-search"></i>&nbsp;Browse
+                    </a>
                     <span class='label label-info' id="upload-file-info6"></span>
-                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p><br>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
                 </div>
             </div>
-        </div>*@
 
-        <div class="col-lg-5 col-lg-offset-1">
-            <span class="fnt2">General Documents :</span>
-            <div style="position:relative;">
-                <a style="font-size:13px" class='btn btn-primary'>
-                    <input type="file" id="generaldoc" name="generaldoc" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
-                    <i class="glyphicon glyphicon-search"></i>&nbsp;Browse
-                </a>
-                <span class='label label-info' id="upload-file-info6"></span>
-                <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+            <div class="col-lg-5 col-lg-offset-1" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2">Itinerary Documents :</span>
+                    <a style="font-size:12px" class='btn btn-primary'>
+                        Upload
+                        <input type="file" id="itinerarydoc" name="itinerarydoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info7").html("Itinerary file is ready!");'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info7"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
             </div>
-        </div>
 
-        <div class="col-lg-5 col-lg-offset-1" hidden>
-            <div style="position:relative;">
-                <span class="fnt2">Itinerary Documents :</span>
-                <a style="font-size:12px" class='btn btn-primary'>
-                    Upload
-                    <input type="file" id="itinerarydoc" name="itinerarydoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info7").html("Itinerary file is ready!");'>
-                </a>
-                <span class='label label-info' id="upload-file-info7"></span>
-                <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+            <div class="col-lg-4 col-lg-offset-1" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2">Invitation Documents :</span>
+                    <a style="font-size:12px" class='btn btn-primary'>
+                        Upload
+                        <input type="file" id="invitationdoc" name="invitationdoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info8").html("Invitation file is ready!");'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info8"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
             </div>
-        </div>
 
-        <div class="col-lg-4 col-lg-offset-1" hidden>
-            <div style="position:relative;">
-                <span class="fnt2">Invitation Documents :</span>
-                <a style="font-size:12px" class='btn btn-primary'>
-                    Upload
-                    <input type="file" id="invitationdoc" name="invitationdoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info8").html("Invitation file is ready!");'>
-                </a>
-                <span class='label label-info' id="upload-file-info8"></span>
-                <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+            <div class="col-lg-5 col-lg-offset-1" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2">Proposal Documents :</span>
+                    <a style="font-size:12px" class='btn btn-primary'>
+                        Upload
+                        <input type="file" id="proposaldoc" name="proposaldoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info9").html("Proposal file is ready!");'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info9"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
             </div>
-        </div>
 
-        <div class="col-lg-5 col-lg-offset-1" hidden>
-            <div style="position:relative;">
-                <span class="fnt2">Proposal Documents :</span>
-                <a style="font-size:12px" class='btn btn-primary'>
-                    Upload
-                    <input type="file" id="proposaldoc" name="proposaldoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info9").html("Proposal file is ready!");'>
-                </a>
-                <span class='label label-info' id="upload-file-info9"></span>
-                <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+            <div class="col-lg-5" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2"></span><br />
+                    <div>
+                        @*<button onclick = "javascript:clear();" name = "clear" id = "clear" style="font-size:12px" class="btn btn-danger">Delete</button>*@
+                        <button type="submit" onclick="javascript:clear();" name="clear" id="clear" style="font-size:12px" class="btn btn-danger">Clear Document</button>
+                    </div>
+                    <div hidden>
+                        <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple />
+                        <label for="file"><strong>Choose a file</strong></label>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="col-lg-5" hidden>
-            <div style="position:relative;">
-                <span class="fnt2"></span><br />
+            <div class="col-lg-11 col-lg-offset-1">
+                <strong style="color:deepskyblue">BANK INFO</strong>
+            </div>
+            <div class="col-lg-5 col-lg-offset-1">
+                @Html.ValidationMessageFor(m => m.tbankname, "", new { @class = "text-danger" })
+                <div class=" text-danger">@ViewBag.ebankname</div>
                 <div>
-                    @*<button onclick = "javascript:clear();" name = "clear" id = "clear" style="font-size:12px" class="btn btn-danger">Delete</button>*@
-                    <button type="submit" onclick="javascript:clear();" name="clear" id="clear" style="font-size:12px" class="btn btn-danger">Clear Document</button>
-                </div>
-                <div hidden>
-                    <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple />
-                    <label for="file"><strong>Choose a file</strong></label>
+                    <span class="fnt2">Bank Name :</span>
+                    @Html.TextBoxFor(m => m.tbankname, new { @class = "form-control", @readonly = "readonly" })
+                    <br />
                 </div>
             </div>
-        </div>
 
-        <div class="col-lg-11 col-lg-offset-1">
-            <strong style="color:deepskyblue">BANK INFO</strong>
-        </div>
-        <div class="col-lg-5 col-lg-offset-1">
-            @Html.ValidationMessageFor(m => m.tbankname, "", new { @class = "text-danger" })
-            <div class=" text-danger">@ViewBag.ebankname</div>
-            <div>
-                <span class="fnt2">Bank Name :</span>
-                @Html.TextBoxFor(m => m.tbankname, new { @class = "form-control", @readonly = "readonly" })
-                <br />
-            </div>
-        </div>
-
-        <div class="col-lg-5">
-            <strong class="fnt2">@null</strong>
-            @Html.ValidationMessageFor(m => m.tbankaccount, "", new { @class = "text-danger" })
-            <div class=" text-danger">@ViewBag.ebankname</div>
-            <div>
-                <span class="fnt2">Account Number :</span>
-                @Html.TextBoxFor(m => m.tbankaccount, new { @class = "form-control", @readonly = "readonly" })
-                <br />
-            </div>
-            <button type="button" style="width:145px" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Estimate Budget</button>
-            &nbsp;
-            @Html.ActionLink("Cancel", "Index", "Home")
-            <!--wates-->
-            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div style="height:50px" class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div style="text-align:center;">
-                                <strong>Make sure your data is valid</strong>, click ok to continue
+            <div class="col-lg-5">
+                <strong class="fnt2">@null</strong>
+                @Html.ValidationMessageFor(m => m.tbankaccount, "", new { @class = "text-danger" })
+                <div class=" text-danger">@ViewBag.ebankname</div>
+                <div>
+                    <span class="fnt2">Account Number :</span>
+                    @Html.TextBoxFor(m => m.tbankaccount, new { @class = "form-control", @readonly = "readonly" })
+                    <br />
+                </div>
+                <button type="button" style="width:145px" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Estimate Budget</button>
+                &nbsp;
+                @Html.ActionLink("Cancel", "Index", "Home")
+                <!--wates-->
+                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div style="height:50px" class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
                             </div>
-                            <div style="margin:10px 100px;">
-                                <button type="submit" style="width:150px; margin:0 100px;" class="btn btn-info btn-lg" name="validate" value="Submit">OK</button>
+                            <div class="modal-body">
+                                <div style="text-align:center;">
+                                    <strong>Make sure your data is valid</strong>, click ok to continue
+                                </div>
+                                <div style="margin:10px 100px;">
+                                    <button type="submit" style="width:150px; margin:0 100px;" class="btn btn-info btn-lg" name="validate" value="Submit">OK</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-}
+        }
     </div>
     <hr />
 </div>
-
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
