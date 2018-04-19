@@ -358,11 +358,16 @@ namespace CONTRAST_WEB.Controllers
 
         // GET: SettlementList
 
-        public async Task<ActionResult> IndexMSTR(string noreg)
+        public async Task<ActionResult> IndexMSTR(string noreg, string applied)
         {
             tb_m_employee model = await GetData.EmployeeInfo(noreg);
             ViewBag.Employee = model;
 
+            if (applied != null) model = await GetData.EmployeeInfo(applied);
+            else model = await GetData.EmployeeInfo(model.name);
+
+            ViewBag.Employee = model;
+            ViewBag.applied = model.code;
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
             ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.code));
@@ -403,7 +408,6 @@ namespace CONTRAST_WEB.Controllers
                 temp.total_winter = item.total_winter;
                 ResponseList.Add(temp);
             }
-            //return View(ResponseList);
 
             var headers = Request.Headers.GetValues("User-Agent");
             string userAgent = string.Join(" ", headers);
@@ -413,6 +417,15 @@ namespace CONTRAST_WEB.Controllers
             else
                 return View("IndexMSTRMobile", ResponseList);
 
+        }
+
+        public async Task<ActionResult> DetailsMSTR(vw_travel_for_settlement model)
+        {
+            SettlementHelper Settlement = new SettlementHelper();
+            Settlement.TravelRequest = model;
+            Settlement.extend_flag = true;
+            Response.Cache.SetNoStore();
+            return View(Settlement);
         }
 
         public async Task<ActionResult> InsertMSTR(SettlementHelper model, string sum, string insert)
@@ -443,7 +456,11 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.information_actualcost = "Settlement";
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
+
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
+                    ActualCostObject.additional1 = model.halfday_flag1.ToString();
+                    ActualCostObject.additional2 = model.halfday_flag2.ToString();
+
 
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
 
@@ -476,7 +493,6 @@ namespace CONTRAST_WEB.Controllers
                     //temporary time container
                     DateTime? temp_start = ActualCostObject.start_date_extend;
                     DateTime? temp_end = ActualCostObject.end_date_extend;
-
 
                     if (model.MealSettlement > 0)
                     {
@@ -542,6 +558,7 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
+                    //cek update data
                     if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
                         await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
                     else
@@ -566,19 +583,16 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
 
                     //if (!model.extend_flag)
-                    return View("SummaryPaidMSTR", SummarySettlementObject);
-                    //else
-                    //    return View("SummaryAdditional", SummarySettlementObject);
-                    //*/
-                    //return View("SummaryPaid", model);
-
+                    return View("SummaryPaid", SummarySettlementObject);
                 }
                 else
                 if (sum != null)
                 {
                     SettlementHelper return_model = await Sum(model);
                     ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
-                    return View("DetailsMSTR", return_model);
+                    return View("InsertMSTR", return_model);
+                    //return View("Insert", return_model);
+                    //return View("Details", return_model);
                 }
                 else
                     return View("DetailsMSTR", model);
@@ -587,14 +601,6 @@ namespace CONTRAST_WEB.Controllers
                 return View("DetailsMSTR", model);
         }
 
-        public async Task<ActionResult> DetailsMSTR(vw_travel_for_settlement model)
-        {
-            SettlementHelper Settlement = new SettlementHelper();
-            Settlement.TravelRequest = model;
-            Settlement.extend_flag = true;
-            Response.Cache.SetNoStore();
-            return View("DetailsMSTR", Settlement);
-        }
 
         [HttpPost]
         [Authorize]

@@ -24,33 +24,36 @@
         @using (Html.BeginForm("Index", "Verify", FormMethod.Get))
         {
             @Html.AntiForgeryToken()
-            <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div class="navbar-form navbar-left" style="padding-left:10px;padding:10px 0px;">
                 <div>
-                    <div>
+                    <div style="float:left;margin-left:20px">
                         <span>
                             <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
                             @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
                         </span>
-                        <span style=" margin-left : 100px">
+                    </div>
+                    <div style="float:right;">
+                         <span style=" margin-left : 250px">
                             Start Date Range :
                             @if (ViewBag.startdate != null)
                             {
-                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd"), @class="form-control", style = "width:170px" })
                             }
                             else
                             {
-                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                                @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @class = "form-control", style= "width:170px" })
+                            }
+                            @if (ViewBag.enddate != null)
+                            {
+                                @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
                             }
                         </span>
 
-                        @if (ViewBag.enddate != null)
-                        {
-                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
-                        }
-                        else
-                        {
-                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
-                        }
+                        
                         <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
                     </div>
                 </div>
@@ -197,7 +200,7 @@
             </div>
 
 
-            <div style="float:right;margin-top:10px;" class="col-lg-3 col-lg-offset-9">
+            <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-3">
                 @if (position.ToLower().Contains("dph") || position.ToLower().Contains("ap"))
                 {
                     <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">APPROVE</button>
@@ -209,7 +212,7 @@
                 @Html.ActionLink("Cancel", "Index", "Home")
             </div>
         }
-        <br />
+        <div style="float:left;margin-top:10px;" class="col-lg-7">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         @if (ViewBag.startdate != null || ViewBag.enddate != null)
         {
@@ -221,6 +224,7 @@
             @Html.PagedListPager(Model, page => Url.Action("Index",
                                                           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
         }
+        </div>
     </div>
 </div>
 

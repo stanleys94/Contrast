@@ -1,0 +1,52 @@
+﻿@model List<CONTRAST_WEB.Models.tb_r_travel_request_comment>
+@{
+    ViewBag.Title = "DETAIL TRAVEL STATUS";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+
+}
+
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">@Html.ActionLink("Travel Status","Index")</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:100px" class="row">
+        <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left;">Comment for @ViewBag.group_code </h4></div>
+         
+
+        <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-10 col-md-offset-1">
+            @for (int k = 0; k < Model.Count(); k++)
+            {
+                <h5 class="h5b" style="color:black; font-size:15px">
+                    <b>@Html.DisplayFor(m => m[k].name)</b> 
+                    <font color="grey" size="2px">wrote at @Html.DisplayFor(m => m[k].create_date)</font>
+                </h5>        
+                
+                @Html.DisplayFor(m => m[k].comment, new { @readonly = "readonly" })
+
+            }
+        </div>
+        
+        @using (Html.BeginForm("AddComment", "TravelStatus", FormMethod.Post))
+        {
+            <div class="col-md-8 col-md-offset-1" style="padding-top:20px;">              
+                  @Html.AntiForgeryToken()
+                  @Html.TextBox("commentbox", null, new { @class = "form-control", placeholder = "input comment here" })
+                  @Html.Hidden("groupcode", (object)ViewBag.group_code)
+                  @Html.Hidden("no_reg_to", (object)ViewBag.no_reg_to)
+                
+            </div>
+            <div class="col-md-2 "style="padding-top:20px;">
+                <input type="submit" class="btn btn-info btn-lg form-control" value="Submit" />                
+            </div>
+        }
+     
+</div>
