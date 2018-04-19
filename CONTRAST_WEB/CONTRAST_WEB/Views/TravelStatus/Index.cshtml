@@ -37,10 +37,10 @@
                             </div>
                             <div style="width:200px;" class="column menu">
                                 <div>                                    
-                                        @Html.ActionLink(Model[i].group_code, "Comment", new { group_code = Model[i].group_code }) 
+                                        @Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code }) 
                                         @if (ViewBag.reviseflag[i] == true)
                                         {
-                                           <span></span> <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">Revised</span>
+                                           <span></span> <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
                                         }
                                         
                                 </div>
@@ -57,7 +57,7 @@
                                 </div>
                                 <div>
                                     <span class="fnt3">
-                                        <strong>For</strong>
+                                        <strong>For</strong> 
                                         @ViewBag.Duration[i]
                                         days
                                     </span>

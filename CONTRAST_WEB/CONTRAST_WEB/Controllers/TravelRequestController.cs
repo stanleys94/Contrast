@@ -72,9 +72,7 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
-
-            //tb_m_employee model = await GetData.EmployeeInfo("101495");
-
+            
             //Get user name
             ViewBag.Username = model.name;
 

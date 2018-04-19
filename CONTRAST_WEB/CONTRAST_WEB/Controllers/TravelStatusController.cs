@@ -170,7 +170,6 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        // Details: TravelStatustb_m_photo_employee
         public async Task<ActionResult> Details(vw_request_summary model)
         {
             TravelStatusHelper model2 = new TravelStatusHelper();
@@ -899,7 +898,34 @@ namespace CONTRAST_WEB.Controllers
             return RedirectToAction("Comment", new { @group_code = groupcode });
         }
 
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        public async Task<ActionResult> Revise(string group_code)
+        {
+            //identity
+            var identity = (ClaimsIdentity)User.Identity;
+            Utility.Logger(identity.Name);
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = new tb_m_employee();
+             
+            //Get user name
+            ViewBag.Username = model.name;
 
+            //Get destination list info for dropdown list
+            ViewBag.RL = await GetData.DestinationInfo();
+
+            //Get purpose list info for travel purpose list
+            ViewBag.RL2 = await GetData.PurposeInfo();
+
+            //Prepare travel request information object to be used at view
+            TravelRequestHelper model2 = new TravelRequestHelper();
+
+            List<tb_r_travel_request> model3 = new List<tb_r_travel_request>();
+            model3=await GetData.TravelRequestGCList(group_code);            
+
+            return View(model3);
+        }
 
         //[HttpPost]         
         // GET: TravelStatus

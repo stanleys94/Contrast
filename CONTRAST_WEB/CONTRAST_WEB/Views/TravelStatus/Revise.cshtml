@@ -1,0 +1,342 @@
+﻿@model List<CONTRAST_WEB.Models.tb_r_travel_request>
+@{
+    ViewBag.Title = "TRAVEL REQUEST";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    List<SelectListItem> asd = new List<SelectListItem>();
+    List<SelectListItem> asd2 = new List<SelectListItem>();
+    List<SelectListItem> division = new List<SelectListItem>();
+
+    asd = ViewBag.RL;
+    asd2 = ViewBag.RL2;
+    division = ViewBag.division_name2;
+
+    List<string> ModelList = new List<string>();
+    ModelList = ViewBag.RL3;
+}
+
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Travel Assignment</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:100px" class="row">
+        <div class="col-md-11 col-md-offset-1">
+            <h4 style="text-align:left; padding:1px; margin-bottom:1px;">TRAVEL ASSIGNMENT REVISION FORM</h4>
+        </div>
+        <div class="col-md-11 col-md-offset-1">
+            <h5 style="text-align:left;  margin-bottom:30px;  ">Form Revisi Surat Perintah Perjalanan Dinas</h5>
+        </div>        
+        
+
+        @using (Html.BeginForm("Validate", "TravelRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            for (int k = 0; k < Model.Count(); k++)
+            {                    
+                <div class="col-md-5 col-md-offset-1">
+                    <div style="   padding-top:10px; padding-bottom:10px; vertical-align:middle; text-align:center">
+                        <strong>Source Data</strong>
+                    </div>
+                    <strong class="fnt2">Noreg</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                        @Html.TextBoxFor(m => m[k].no_reg, new { @class = "form-control", placeholder = "No Reg", @readonly = "readonly" })
+                    </div>
+                    <strong class="fnt2">Assigned By</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                        @Html.TextBoxFor(m => m[k].assign_by, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <strong class="fnt2">Travel Purpose</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        @Html.TextBoxFor(m => m[k].travel_purpose, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <strong class="fnt2">Reason of Assignment</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        @Html.TextBoxFor(m => m[k].reason_of_assigment, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <hr style="border-color:lightgrey" />
+
+                    <div style="padding:0px;margin-bottom:0px;" id="des1">
+                        <div style="margin-bottom:5px">
+                            <strong style="color:deepskyblue;">TRAVEL DETAILS</strong>
+                        </div>
+                    </div>
+
+                    <strong class="fnt2">Multiple Destination ?</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        @Html.TextBox("asdczx",Model[k].multiple_destination_flag==true?"Yes":"No", new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div>
+                        <div>
+                            <strong class="fnt2">Departure Date :</strong>
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                @Html.TextBoxFor(m => m[k ].start_date, "{0:d}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m[k].start_date, "{0:t}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure", @readonly = "readonly" })
+
+                            </div>
+                        </div>
+                        <div>
+                            <strong class="fnt2">Return Date:</strong>
+                            @*@Html.ValidationMessageFor(m => m.tend_date0, "", new { @class = "text-danger" })*@
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                @Html.TextBoxFor(m => m[k].end_date, "{0:d}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m[k].end_date, "{0:t}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination City :</strong>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            @Html.TextBoxFor(m => m[k].id_destination_city, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <strong class="fnt2">Travel Type :</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                        @Html.TextBox("asd", Model[k].request_type == true ? "Planned Travel" : "Unplanned Travel", new { @class = "form-control", @readonly = "readonly" })
+                        @*@Html.TextBoxFor(m => m[k].request_type)*@
+                    </div>
+
+                    <hr style="border-color:lightgrey" />
+                    <div>
+                        <strong style="color:deepskyblue">ADDITIONAL INFO</strong>
+                    </div>
+                    <div>
+
+                        <div>
+                            <strong class="fnt2">Select Activity :</strong>
+                            <div>
+                                @*@Html.ValidationMessageFor(m => m.tactivity, "", new { @class = "text-danger" })*@
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].id_activity, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <strong class="fnt2">Transportation :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].air_ticket_flag, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <strong class="fnt2">New or Renewal Passport :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].passport_flag, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <strong class="fnt2">Attachment Documents :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].path_general, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="col-md-5 col-md-offset-1">
+                    <div style="   padding-top:10px; padding-bottom:10px; vertical-align:middle; text-align:center">
+                        <strong>Revised Data</strong>
+                    </div>
+
+                    <strong class="fnt2">Noreg</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                        @Html.TextBoxFor(m => m[k].no_reg, new { @class = "form-control", placeholder = "No Reg", @readonly = "readonly" })
+                    </div>
+                    <strong class="fnt2">Assigned By</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                        @Html.TextBoxFor(m => m[k].assign_by, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <strong class="fnt2">Travel Purpose</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        @*@Html.TextBoxFor(m => m[k].travel_purpose, new { @class = "form-control" })*@
+                        @Html.DropDownListFor(m => m[k].travel_purpose, asd2.OrderBy(m => m.Text).ToList(), Model[k].travel_purpose, new { @class = "form-control", placeholder = "Purpose" })
+                    </div>
+                    <strong class="fnt2">Reason of Assignment</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        @Html.TextBoxFor(m => m[k].reason_of_assigment, new { @class = "form-control" })
+                    </div>
+                    <hr />
+
+                    <div style="padding:0px;margin-bottom:0px;" id="des1">
+                        <div style="margin-bottom:5px">
+                            <strong style="color:deepskyblue;">TRAVEL DETAILS</strong>
+                        </div>
+                    </div>
+                    <strong class="fnt2">Destination Type:</strong>
+                    <div style="width:150px;padding-bottom:40px;" class="radio">
+                        <label style="float:left;" id="sgl">
+                            @Html.RadioButtonFor(m => m[k].multiple_destination_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck", @checked = true }) Single
+                        </label>
+                        <label style="float:right;" id="mlt">
+                            @Html.RadioButtonFor(m => m[k].multiple_destination_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck" }) Multiple
+                        </label>
+                    </div>
+                    <div>
+                        <div>
+                            <strong class="fnt2">Destination Date:</strong>
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                @*@Html.TextBoxFor(m => m[k].start_date, "{0:d}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure" })*@
+                                @Html.TextBoxFor(m => m[k].start_date,"{0:dd/MM/yyyy}" ,new { @class = "form-control ui-datepicker-current", @type = "date", placeholder = "Departure" })
+                                @Html.TextBoxFor(m => m[k].start_date, "{0:t}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure" })
+
+                            </div>
+                        </div>
+                        <div>
+                            <strong class="fnt2">Return Date:</strong>
+                            @*@Html.ValidationMessageFor(m => m.tend_date0, "", new { @class = "text-danger" })*@
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                @Html.TextBoxFor(m => m[k].end_date, "{0:d}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure" })
+                                @Html.TextBoxFor(m => m[k].end_date, "{0:t}", new { @class = "form-control ui-datepicker-current", placeholder = "Departure" })
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination City :</strong>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            @Html.TextBoxFor(m => m[k].id_destination_city, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <strong class="fnt2">Travel Type :</strong>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                        @Html.TextBox("asd", Model[k].request_type == true ? "Planned Travel" : "Unplanned Travel", new { @class = "form-control", @readonly = "readonly" })
+                        @*@Html.TextBoxFor(m => m[k].request_type)*@
+                    </div>
+                    <hr style="border-color:red" />
+                    <div>
+                        <strong style="color:deepskyblue">ADDITIONAL INFO</strong>
+                    </div>
+                    <div>
+                        <div>
+                            <strong class="fnt2">Select Activity :</strong>
+                            <div>
+                                @*@Html.ValidationMessageFor(m => m.tactivity, "", new { @class = "text-danger" })*@
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].id_activity, new { @class = "form-control" })
+                                </div>
+                                <strong class="fnt2">Transportation :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].air_ticket_flag, new { @class = "form-control" })
+                                </div>
+                                <strong class="fnt2">New or Renewal Passport :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].passport_flag, new { @class = "form-control" })
+                                </div>
+                                <strong class="fnt2">Attachment Documents :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    @Html.TextBoxFor(m => m[k].path_general, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $("#searchInput").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue", "TravelRequest")',
+                dataType: "json",
+	        data: { search: $("#searchInput").val(), code: $("#code").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.code };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error Has detected");
+                }
+            });
+        }
+    });
+    $("#searchInput2").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue2", "TravelRequest")',
+                dataType: "json",
+                data: { search: $("#searchInput2").val(), code: $("#code").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.code };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error Has detected");
+                }
+            });
+        }
+    });
+    $(document).ready(function () {
+        $("#b1hide").click(function () {
+            $("#des2").fadeOut(500);
+        });
+        $("#b1show").click(function () {
+            $("#des2").fadeIn(500);
+            $("#des22").fadeIn(500);
+            $("#b1show").hide();
+        });
+        $("#b2hide").click(function () {
+            $("#des2").fadeOut(500);
+        });
+        $("#b2show").click(function () {
+            $("#des3").fadeIn(500);
+            $("#des33").fadeIn(500);
+            $("#b2show").hide();
+        });
+        $("#b3hide").click(function () {
+            $("#des3").fadeOut(500);
+        });
+        //$("#part").click(function () {
+        //    $("#parts").fadeIn(500);
+        //});
+        //$("#mtl").click(function () {
+        //    $("#b1show").fadeIn(500);
+        //});
+    });
+
+    function yesnoCheck() {
+        if (document.getElementById('yesCheck').checked) {
+            //document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('des2').style.display = 'block';
+            document.getElementById('des22').style.display = 'block';
+            document.getElementById('b2show').style.display = 'block';
+            //document.getElementById('des33').style.display = 'block';
+        }
+        else if (document.getElementById('noCheck').checked) {
+            document.getElementById('ifYes').style.display = 'none';
+            document.getElementById('des2').style.display = 'none';
+            document.getElementById('des22').style.display = 'none';
+            document.getElementById('des3').style.display = 'none';
+            document.getElementById('des33').style.display = 'none';
+        }
+    }
+</script>

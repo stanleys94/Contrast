@@ -790,6 +790,7 @@
     <Content Include="Views\PaymentProposal\Index.cshtml" />
     <Content Include="Views\TravelRequest\ValidateMSTRMobile.cshtml" />
     <Content Include="Views\SettlementList\Insert.cshtml" />
+    <Content Include="Views\TravelStatus\Revise.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
