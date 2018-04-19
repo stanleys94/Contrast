@@ -32,12 +32,16 @@ namespace CONTRAST_WEB.Models
         public double? DifferenceSettlement { get; set; }
         public double? AllTotal { get; set; }
 
+        //[AttchValidator2]
         public HttpPostedFileBase ReceiptFileLaundry { get; set; }
+        //[AttchValidator3]
         public HttpPostedFileBase ReceiptFileOther { get; set; }
+        //[AttchValidator]
         public HttpPostedFileBase ReceiptFileTransportation { get; set; }
 
         public bool extend_flag { get; set; }
-        public bool halfday_flag { get; set; }
+        public bool halfday_flag1 { get; set; }
+        public bool halfday_flag2 { get; set; }
 
         [SettlementDateValidator]
         public DateTime? Start_Extend { get; set; }

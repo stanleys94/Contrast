@@ -15,10 +15,9 @@ namespace CONTRAST_WEB.CustomValidator
             var model = (Models.TravelRequestHelper)validationContext.ObjectInstance;
 
             List<tb_m_vendor_employee> bankNamePart = new List<tb_m_vendor_employee>();
-
-            bankNamePart = GetData.VendorEmployeeValidate(Convert.ToInt32(model.tparticipant));
-            if (value != null)
+            if (value != null && value is int)
             {
+                bankNamePart = GetData.VendorEmployeeValidate(Convert.ToInt32(model.tparticipant));
                 if (bankNamePart.Count() == 0)
                 {
 

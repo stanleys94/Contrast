@@ -33,11 +33,20 @@ namespace CONTRAST_WEB.Controllers
             //var diff = (model.End_Extend - model.Start_Extend);
 
             var meal_platform = await GetData.Procedures(rank.@class);
-            if (model.halfday_flag == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            if (model.halfday_flag1 & model.halfday_flag2 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance;
+            }
+            else if (model.halfday_flag1 | model.halfday_flag2 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance / 2;
+
             }
-            else if (model.halfday_flag == true)
+            else if (model.halfday_flag1 & model.halfday_flag2 == true)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance;
+            }
+            else if (model.halfday_flag1 | model.halfday_flag2 == true)
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance / 2;
             }
@@ -49,20 +58,56 @@ namespace CONTRAST_WEB.Controllers
             return (model);
         }
 
+        public async Task<JsonResult> GetSearchValue(string search, string code)
+        {
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public async Task<JsonResult> GetSearchValue2(string search, string code)
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            tb_m_employee_source_data div = await GetData.GetDivisionSource(Convert.ToInt32(identity.Name));
+            if (div.Divisi.Contains("and1"))
+            {
+                div.Divisi = div.Divisi.Replace("and1", "&");
+            }
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchNameDiv(search, div.Divisi);
+            //list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         // GET: SettlementList
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string applied)
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            tb_m_employee model = new tb_m_employee();
+
+            if (applied != null) model = await GetData.EmployeeInfo(applied);
+            else model = await GetData.EmployeeInfo(identity.Name);
 
             ViewBag.Employee = model;
-
+            ViewBag.applied = model.code;
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
             ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.code));
@@ -127,6 +172,10 @@ namespace CONTRAST_WEB.Controllers
         [NoCache]
         public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+
             if (ModelState.IsValid)
             {
                 if (insert != null)
@@ -153,7 +202,11 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.information_actualcost = "Settlement";
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
+
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
+                    ActualCostObject.additional1 = model.halfday_flag1.ToString();
+                    ActualCostObject.additional2 = model.halfday_flag2.ToString();
+
 
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
 
@@ -251,10 +304,11 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    //else
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    //cek update data
+                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    else
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -275,19 +329,15 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
 
                     //if (!model.extend_flag)
-                    return View("SummaryPaid", SummarySettlementObject);
-                    //else
-                    //    return View("SummaryAdditional", SummarySettlementObject);
-                    //*/
-                    //return View("SummaryPaid", model);
-
+                    return View("SummaryPaid", SummarySettlementObject);                    
                 }
                 else
                 if (sum != null)
                 {
                     SettlementHelper return_model = await Sum(model);
                     ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
-                    return View("Details", return_model);
+                    return View("Insert", return_model);
+                    //return View("Details", return_model);
                 }
                 else
                     return View("Details", model);

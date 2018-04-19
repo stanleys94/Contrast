@@ -195,15 +195,16 @@ namespace CONTRAST_WEB.Models
                                new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
             }
         }
-                //Execute API call to post to Travel Status comment
-        public static async Task TravelStatuscomment(string comment,string group_code,string name,int no_reg)
+
+        //Execute API call to post to Travel Status comment
+        public static async Task TravelStatuscomment(string comment, string group_code, string name, int no_reg)
         {
             tb_r_travel_request_comment model = new tb_r_travel_request_comment();
             model.comment = comment;
             var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
             model.create_date = DateTime.Now.ToUniversalTime();
             model.create_date = model.create_date + offset;
-            model.group_code = group_code;          
+            model.group_code = group_code;
             model.no_reg_comment = no_reg;
 
             model.name = await GetData.EmployeeNameInfo(no_reg);

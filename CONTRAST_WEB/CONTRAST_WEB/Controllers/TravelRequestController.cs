@@ -22,6 +22,26 @@ namespace CONTRAST_WEB.Controllers
     /// <seealso cref="System.Web.Mvc.Controller" />
     public class TravelRequestController : Controller
     {
+        public async Task<JsonResult> GetSearchValue2(string search, string code)
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            tb_m_employee_source_data div = await GetData.GetDivisionSource(Convert.ToInt32(identity.Name));
+            if (div.Divisi.Contains("and1"))
+            {
+                div.Divisi = div.Divisi.Replace("and1", "&");
+            }
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchNameDiv(search, div.Divisi);
+            //list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
         public async Task<JsonResult> GetSearchValue(string search, string code)
         {
@@ -73,7 +93,13 @@ namespace CONTRAST_WEB.Controllers
 
             //Get user direct superior info
             var assignedby = await GetData.AssignedBy(model2.employee_info.unit_code_code);
-            var procedures = await GetData.Procedures(model2.employee_info.@class);
+            tb_m_travel_procedures procedures= new tb_m_travel_procedures();
+            if (model2.employee_info.position.Trim() == "SECO"|| model2.employee_info.position.Trim() == "SEA"|| model2.employee_info.position.Trim() == "SMEC"|| model2.employee_info.position.Trim() == "AADV"|| model2.employee_info.position.Trim() == "GM")
+            {
+                procedures = await GetData.Procedures(model2.employee_info.position);
+            }
+            else
+                procedures = await GetData.Procedures(model2.employee_info.@class);
 
             if (assignedby.pd == Convert.ToInt32(model2.employee_info.code)) model2.travel_request.assign_by = Convert.ToInt32(model2.employee_info.code);
             else
@@ -117,8 +143,7 @@ namespace CONTRAST_WEB.Controllers
 
             //Set activity id default to 3 (Regular)
             model2.travel_request.id_activity = 3;
-
-
+            
             List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
             bankName = await GetData.VendorEmployee(Convert.ToInt32(model.code));
             if (bankName.Count != 0)
@@ -131,7 +156,6 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.ebankname = "No bank account registered,contact finance division";
                 ViewBag.ebankaccount = "No bank name registered,contact finance division";
             }
-
 
             //special employee
             //List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(identity.Name);
@@ -156,14 +180,7 @@ namespace CONTRAST_WEB.Controllers
                 model2.special_employee_flag = false;
             }
 
-            ViewBag.Username = model2.employee_info.name;
-            //var headers = Request.Headers.GetValues("User-Agent");
-            //string userAgent = string.Join(" ", headers);
-
-            //if (userAgent.ToLower().Contains("phone"))
-            //    return View("IndexMobile", model2);
-            //else
-            //    return View("Index", model2);
+            ViewBag.Username = model2.employee_info.name;            
             return View(model2);
         }
 

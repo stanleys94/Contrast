@@ -111,13 +111,7 @@
                             GENERATED DATE
                         </th>
                     </tr>
-                    @if (Model[0].TrackedList == null)
-                    {
-                        @Html.HiddenFor(m => m[0].login_name)
-                        @Html.HiddenFor(m => m[0].login_id)
-                        @Html.HiddenFor(m => m[0].privilage)
-                    }
-                    else if (Model[0].TrackedList != null)
+                    @if (Model.Count>0)
                     {
                         for (int k = 0; k < Model.Count(); k++)
                         {

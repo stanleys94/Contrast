@@ -422,6 +422,44 @@ namespace CONTRAST_WEB.Models
             return ListItem2;
         }
 
+        public static async Task<List<Class1>> SearchNameDiv(string search, string div)
+        {
+            List<Class1> ListItem2 = new List<Class1>();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/EmployeeSourceData/Search?name=" + search + "&div=" + div);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<Class1> ResponseList = new List<Class1>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<Class1>>(str);
+
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new Class1();
+                        listItem = item;
+
+                        ListItem2.Add(listItem);
+
+                    }
+                }
+            }
+
+            return ListItem2;
+        }
         public static async Task<tb_m_employee> EmployeeInfo(string noreg)
         {
             tb_m_employee model = new tb_m_employee();
@@ -606,6 +644,8 @@ namespace CONTRAST_WEB.Models
             }
             return ReturnList;
         }
+
+
 
         public static async Task<tb_m_verifier_employee> ActualCostPosition(int model)
         {
@@ -3581,6 +3621,7 @@ namespace CONTRAST_WEB.Models
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+
                 HttpResponseMessage Res = await client.GetAsync("api/PaymentList/" + id);
 
                 //Checking the response is successful or not which is sent using HttpClient  
@@ -3619,6 +3660,7 @@ namespace CONTRAST_WEB.Models
 
                     //Deserializing the response recieved from web api and storing into the Employee list  
                     Response = JsonConvert.DeserializeObject<vw_payment_proposal>(EmpResponse);
+
                 }
             }
             return Response;
