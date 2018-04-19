@@ -3567,6 +3567,62 @@ namespace CONTRAST_WEB.Models
             }
             return model;
         }
+
+        public static async Task<vw_payment_list> PaymentList(int id)
+        {
+            vw_payment_list Response = new vw_payment_list();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/PaymentList/" + id);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Response = JsonConvert.DeserializeObject<vw_payment_list>(EmpResponse);
+                }
+            }
+            return Response;
+        }
+
+        public static async Task<vw_payment_proposal> PaymentProposal(int id)
+        {
+            vw_payment_proposal Response = new vw_payment_proposal();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/PaymentProposal/" + id);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Response = JsonConvert.DeserializeObject<vw_payment_proposal>(EmpResponse);
+                }
+            }
+            return Response;
+        }
     }        
  }
     
