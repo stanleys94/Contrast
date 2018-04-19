@@ -98,6 +98,21 @@ namespace CONTRAST_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Upload(TravelExecutionHelper model)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model2 = new tb_m_employee();
+            tb_m_employee logged = await GetData.EmployeeInfo(identity.Name);
+
+            model2 = await GetData.EmployeeInfo(identity.Name);
+
+            ViewBag.Employee = model;
+            ViewBag.applied = model2.code.Trim();
+            ViewBag.applied_name = model2.name.Trim();
+
+            ViewBag.logged_id = logged.code.Trim();
+            ViewBag.logged_name = logged.name.Trim();
+
             string path=null;
             model.TravelExecution = new tb_r_travel_execution();
             model.TravelExecution.group_code = model.TravelRequest.group_code.Trim();
