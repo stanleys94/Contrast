@@ -367,7 +367,7 @@ namespace CONTRAST_WEB.Models
             //tb_r_travel_actualcost UpdatedData = model;
             tb_r_travel_request updated = await GetData.TravelRequest(id_travelrequest);
             updated.active_flag = true;
-            updated.status_request = "99";
+            updated.status_request = "98";
 
             using (var client = new HttpClient())
             {

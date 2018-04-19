@@ -33,7 +33,8 @@ namespace CONTRAST_WEB.Controllers
 
             List<vw_request_summary> ResponseList = new List<vw_request_summary>();
             ResponseList = await GetData.RequestSummaryListInfo(model.code);
-
+            //check if there are travel status entry
+            if (ResponseList.Count>0)ResponseList = ResponseList.OrderBy(x => x.group_code).ToList();
             List<string> apprv_name = new List<string>();
             List<DateTime> return_date = new List<DateTime>();
 
@@ -132,7 +133,7 @@ namespace CONTRAST_WEB.Controllers
             List<int> msgcount = new List<int>();
             //save revised count
             List<bool> revise_flag = new List<bool>();
-
+            
             for (int k = 0; k < ResponseList.Count(); k++)
             {
                 //count new messages
@@ -148,17 +149,16 @@ namespace CONTRAST_WEB.Controllers
 
                 //check revised btr or not
                 var request=await GetData.TravelRequestGCList(ResponseList[k].group_code);
+                bool revise=false;
                 for (int i = 0; i < request.Count(); i++)
                 {
                     if (request[i].additional1 == "1")
                     {
-                        revise_flag.Add(true);
-                        break;
+                        revise = true;
                     }
-                    else
-                        revise_flag.Add(false);
+                    
                 }
-
+                revise_flag.Add(revise);
             }
             ViewBag.newmsg = msgcount;
             ViewBag.reviseflag = revise_flag;
@@ -910,7 +910,8 @@ namespace CONTRAST_WEB.Controllers
 
             List<vw_request_summary> ResponseList = new List<vw_request_summary>();
             ResponseList = await GetData.RequestSummaryListInfo(model.code);
-
+            //check if there are travel status entry
+            if (ResponseList.Count > 0) ResponseList = ResponseList.OrderBy(x => x.group_code).ToList();
             List<string> apprv_name = new List<string>();
             List<DateTime> return_date = new List<DateTime>();
 
@@ -918,6 +919,60 @@ namespace CONTRAST_WEB.Controllers
 
             for (int k = 0; k < ResponseList.Count(); k++)
             {
+                if (ResponseList[k].apprv_flag_lvl20 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl20));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl19 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl19));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl18 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl18));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl17 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl17));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl16 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl16));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl15 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl15));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl14 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl14));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl13 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl13));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl12 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl12));
+                else
+
+                if (ResponseList[k].apprv_flag_lvl11 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl11));
+                else
+                if (ResponseList[k].apprv_flag_lvl10 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl10));
+                else
+                if (ResponseList[k].apprv_flag_lvl9 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl9));
+                else
+                if (ResponseList[k].apprv_flag_lvl8 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl8));
+                else
+                if (ResponseList[k].apprv_flag_lvl7 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl7));
+                else
+                if (ResponseList[k].apprv_flag_lvl6 != null)
+                    apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl6));
+                else
                 if (ResponseList[k].apprv_flag_lvl5 != null)
                     apprv_name.Add(await GetData.EmployeeNameInfo(ResponseList[k].apprv_by_lvl5));
                 else
@@ -950,6 +1005,40 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Username = model.name;
             ViewBag.Bossname = apprv_name;
             ViewBag.Duration = travel_duration;
+
+            //save comment count
+            List<int> msgcount = new List<int>();
+            //save revised count
+            List<bool> revise_flag = new List<bool>();
+
+            for (int k = 0; k < ResponseList.Count(); k++)
+            {
+                //count new messages
+                List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
+                comment = await GetData.Comment(ResponseList[k].group_code);
+                if (comment.Count > 0)
+                {
+                    var newmsg = comment.Where(x => x.read_flag == false && x.no_reg_comment != ResponseList[k].no_reg);
+                    msgcount.Add(newmsg.Count());
+                }
+                else
+                    msgcount.Add(0);
+
+                //check revised btr or not
+                var request = await GetData.TravelRequestGCList(ResponseList[k].group_code);
+                bool revise = false;
+                for (int i = 0; i < request.Count(); i++)
+                {
+                    if (request[i].additional1 == "1")
+                    {
+                        revise = true;
+                    }
+
+                }
+                revise_flag.Add(revise);
+            }
+            ViewBag.newmsg = msgcount;
+            ViewBag.reviseflag = revise_flag;
 
             //return View("IndexMSTR",ResponseList);
             var headers = Request.Headers.GetValues("User-Agent");
@@ -1128,10 +1217,6 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.StatusState = apprv_status;
             ViewBag.Approvalnum = apprv_status.Count;
 
-            //return View(model2);
-
-            //return View(model2);
-
             var headers = Request.Headers.GetValues("User-Agent");
             string userAgent = string.Join(" ", headers);
 
@@ -1145,26 +1230,43 @@ namespace CONTRAST_WEB.Controllers
         {
             if (drop == "submit")
             {
-                tb_r_travel_request model2 = new tb_r_travel_request();
+                List<tb_r_travel_request> model2 = new List<tb_r_travel_request>();
                 List<vw_request_summary> request = new List<vw_request_summary>();
                 List<vw_request_summary> ResponseList = new List<vw_request_summary>();
 
-                model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
-                model2.active_flag = true;
-                model2.status_request = "99";
+                //model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
+                //model2.active_flag = true;
+                //model2.status_request = "99";
 
-                double budget = Convert.ToDouble(model2.allowance_meal_idr + model2.allowance_preparation + model2.allowance_winter);
+                model2 = await GetData.TravelRequestGCList(model.travel_request.group_code);
+                foreach (var item in model2)
+                {
+                    item.active_flag = true;
+                    item.status_request = "99";
 
-                await UpdateData.TravelRequestPersonal(model2);
-
-                request = await GetData.RequestSummaryListInfo(model2.no_reg.ToString());
+                    await UpdateData.TravelRequestPersonal(item);
+                }
+                request = await GetData.RequestSummaryListInfo(model2[0].no_reg.ToString());
 
                 foreach (var item in request)
                 {
                     if (item.status_request != "99") ResponseList.Add(item);
                 }
 
-                string name = await GetData.EmployeeNameInfo(model2.no_reg);
+                string name = await GetData.EmployeeNameInfo(model2[0].no_reg);
+
+                //double budget = Convert.ToDouble(model2.allowance_meal_idr + model2.allowance_preparation + model2.allowance_winter);
+
+                //await UpdateData.TravelRequestPersonal(model2);
+
+                //request = await GetData.RequestSummaryListInfo(model2.no_reg.ToString());
+
+                //foreach (var item in request)
+                //{
+                //    if (item.status_request != "99") ResponseList.Add(item);
+                //}
+
+                //string name = await GetData.EmployeeNameInfo(model2.no_reg);
 
 
                 List<DateTime> return_date = new List<DateTime>();
@@ -1209,9 +1311,11 @@ namespace CONTRAST_WEB.Controllers
 
                 ModelState.Clear();
                 if (ResponseList.Count > 0) return RedirectToAction("IndexMSTR", ResponseList.OrderBy(r => r.status_request).ToList());
+                //if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
                 else
                 {
                     return RedirectToAction("IndexMSTR", ResponseList);
+                    //return View("Index", ResponseList);
                 }
             }
             else if (download == "download")
@@ -1344,7 +1448,46 @@ namespace CONTRAST_WEB.Controllers
                 List<string> destination = new List<string>();
                 List<string> overseas = new List<string>();
                 List<int?> amount = new List<int?>();
+                List<string> reason = new List<string>();
+                int lenght = 0;
+                int length_count = 0;
+                string temp = "";
+                List<int> index = new List<int>();
+                List<int> range = new List<int>();
+                int index_now = 0;
+                int count_now = 1;
 
+                if (model2.travel_request.reason_of_assigment.Length > 45)
+                {
+                    length_count = model2.travel_request.reason_of_assigment.Length / 45;
+                    temp = model2.travel_request.reason_of_assigment;
+
+                    for (int t = temp.IndexOf(" "); t > -1; t = temp.IndexOf(" ", t + 1))
+                    {
+                        index.Add(t);
+                    }
+
+                    for (int k = 0; k < index.Count; k++)
+                    {
+                        if (index[k] > count_now * 45)
+                        {
+                            range.Add(index[k]);
+                            count_now++;
+                        }
+                    }
+                    for (int i = 0; i <= range.Count(); i++)
+                    {
+                        int lo = 0;
+                        if (i < range.Count())
+                        {
+                            lo = range[i] - index_now;
+                        }
+                        else lo = temp.Length - index_now;
+
+                        reason.Add(temp.Substring(index_now, lo));
+                        if (i < range.Count) index_now = range[i] + 1;
+                    }
+                }
                 start_date.Add(Convert.ToDateTime(model2.travel_request.startDate_1).ToString("dd MMM yyyy"));
                 start_time.Add(Convert.ToDateTime(model2.travel_request.startDate_1).ToString("hh:mm tt"));
 
@@ -1444,10 +1587,10 @@ namespace CONTRAST_WEB.Controllers
                 gfx.DrawImage(contrast, x_pad + 50, 735);
 
                 gfx.DrawString(PT_TAM, head, XBrushes.Black, 95 + x_pad, 60, XStringFormats.TopLeft);
-                gfx.DrawRectangle(XBrushes.GhostWhite, 377, 55, 168, 28);
+                gfx.DrawRectangle(XBrushes.GreenYellow, 377, 55, 168, 28);
                 gfx.DrawLine(POLine, 377, 55, 377, 83);
 
-                gfx.DrawString(receipt, head, XBrushes.Gray, 385, 60, XStringFormats.TopLeft);
+                gfx.DrawString(receipt, head, XBrushes.Black, 385, 60, XStringFormats.TopLeft);
 
 
                 gfx.DrawLine(header_line, 50, 95, 545, 95);
@@ -1508,18 +1651,35 @@ namespace CONTRAST_WEB.Controllers
 
                 gfx.DrawString("Assignment Purpose", subtitle, XBrushes.DarkBlue, 95, 320 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString("Assignment Reason", subtitle, XBrushes.DarkBlue, 95, 335 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(":", subtitle, XBrushes.Black, 250, 320 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(":", subtitle, XBrushes.Black, 250, 335 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(model2.travel_request.travel_purpose, subtitle, XBrushes.Black, 260, 320 + gap_now, XStringFormats.TopLeft);
+
+                if (reason.Count() > 0)
+                {
+                    for (int i = 0; i < reason.Count(); i++)
+                    {
+                        gfx.DrawString(reason[i], subtitle, XBrushes.Black, 260, 335 + gap_now, XStringFormats.TopLeft);
+                        gap_now = gap_now + 15;
+                    }
+                }
+                else
+                {
+                    gfx.DrawString(model2.travel_request.reason_of_assigment, subtitle, XBrushes.Black, 260, 335 + gap_now, XStringFormats.TopLeft);
+                    gap_now = gap_now + 15;
+                }
+                gap_now = gap_now - 15;
                 gfx.DrawString("Assignment Type", subtitle, XBrushes.DarkBlue, 95, 350 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString("Renewal Passport", subtitle, XBrushes.DarkBlue, 95, 365 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString("Participant", subtitle, XBrushes.DarkBlue, 95, 380 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(":", subtitle, XBrushes.Black, 250, 320 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(":", subtitle, XBrushes.Black, 250, 335 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(":", subtitle, XBrushes.Black, 250, 350 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(":", subtitle, XBrushes.Black, 250, 365 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(":", subtitle, XBrushes.Black, 250, 380 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(model2.travel_request.travel_purpose, subtitle, XBrushes.Black, 260, 320 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(model2.travel_request.reason_of_assigment, subtitle, XBrushes.Black, 260, 335 + gap_now, XStringFormats.TopLeft);
+
                 if (model2.travel_request.request_type == false) planned = "Unplanned";
                 else planned = "Planned";
                 gfx.DrawString(planned, subtitle, XBrushes.Black, 260, 350 + gap_now, XStringFormats.TopLeft);

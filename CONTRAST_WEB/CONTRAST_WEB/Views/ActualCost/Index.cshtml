@@ -29,22 +29,27 @@
 
 
        List<SelectListItem> asd2 = new List<SelectListItem>();
-        <div style="margin-top:90px;" id="products" class="row list-group _3EibU">
+        <div style="margin-top:80px;" id="products" class="row list-group _3EibU">
             <div style="width:auto" class="clearfix">
                 <div style="padding:0 5px; width:auto;">
                     @using (Html.BeginForm("Index", "ActualCost", FormMethod.Get))
                     {
-                        <div class="well">
-                            <label style="margin:5px">
-                                NEW LIST : &nbsp;
-                                @*<input type="radio" id="c1" value="request" onClick="toggle(this)" name="scheck" checked>New (@ViewBag.New)&nbsp;
-                                    <input type="radio" id="c2" name="scheck" value="request">Rejected <label style="color:red;">(@ViewBag.Rejected)</label>*@
-                                @Html.ActionLink("New", "Index")<label style="color:green;">(@ViewBag.New Pending)</label>
-                                @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">(@ViewBag.Rejected Pending)</label>
-                            </label>
-                            Find by : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Name, BTA, Destination, Type" })
-                            <input type="submit" value="Search" />
-                        </div>
+                    <div class="well">
+                        <label style="margin:5px">
+                            NEW LIST : &nbsp;
+                            @Html.ActionLink("New", "Index", new { @class="btn" })<label style="color:dimgray;">&nbsp;(@ViewBag.New Pending)</label>
+                            |
+                            @Html.ActionLink("Rejected", "Rejected")<label style="color:red;">&nbsp;(@ViewBag.Rejected Pending)</label>
+                        </label>
+                        <span style="float:right;">
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </span>
+                        <span style="float:right;padding-left:10px;padding-right:10px">
+                            <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search BTA/Name/Type/Destination" style="width:310px;" />
+                        </span>
+
+
+                    </div> 
                     }
                     @using (Html.BeginForm("Insert", "ActualCost", FormMethod.Post))
                     {
@@ -142,7 +147,7 @@
                                                 </td>
 
                                                 <td class="td" style="width:200px;">
-                                                    @Html.TextAreaFor(Model => Model[k].TravelRequest.hotel_flight_name, new { @class = "form-control", @style = "max-width:250px;min-width:250px;max-height:34px;min-height:34px;" })
+                                                    @Html.TextAreaFor(Model => Model[k].TravelRequest.hotel_flight_name, new { @class = "form-control", @style = "max-width:250px;min-width:250px;max-height:34px;min-height:34px;", @readonly="true" })
                                                     @Html.HiddenFor(Model => Model[k].TravelRequest.hotel_flight_name)
                                                 </td>
 
@@ -177,12 +182,11 @@
                         </div>
                     }
 
-                             <br />
+                    <br />
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
                     @Html.PagedListPager(Model, page => Url.Action("Index",
-                             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-                </div>
+                                                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+                    
             </div>
             
         </div>
