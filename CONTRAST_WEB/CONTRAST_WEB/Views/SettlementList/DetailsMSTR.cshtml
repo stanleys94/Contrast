@@ -5,9 +5,7 @@
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
-<div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
-   
-</div>
+
 <div class="container">
     <div style="margin-top:110px" class="row">
         
@@ -26,6 +24,8 @@
             @Html.HiddenFor(m => m.TravelRequest.start_date)
             @Html.HiddenFor(m => m.TravelRequest.end_date)
 
+            @Html.HiddenFor(m => m.TravelRequest.emp_name)
+
             if (Model.TravelRequest.final_status == "2")
             {
                 <strong><h2>Rejected settlement</h2></strong>
@@ -35,7 +35,21 @@
 
             <div class="col-md-12"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div><br />
             <div class="col-md-12">
-                <strong class="fnt2">DESTINATION :</strong>
+                <strong class="fnt2">NAME</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.emp_name)
+                </div>
+            </div>
+
+            <div class="col-md-5 col-md-offset-1">
+                <strong class="fnt2">BTA NUMBER</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.group_code)
+                </div>
+            </div>
+
+            <div class="col-md-11 col-md-offset-1">
+                <strong class="fnt2">DESTINATION</strong>
                 <div class="form-group input-group">
                     <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
                     @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
@@ -43,7 +57,7 @@
             </div>
 
             <div class="col-md-6">
-                <strong class="fnt2">DEPARTURE DATE :</strong>
+                <strong class="fnt2">DEPARTURE DATE</strong>
                 <div class="form-group input-group">
                     @Html.DisplayFor(m => m.TravelRequest.start_date)
                 </div>
@@ -58,7 +72,7 @@
 
             <br />
             <div class="col-md-12">
-                <span><h5 style="width:940px;color:darkslateblue;" class="h5c">EXTEND TRAVEL ?</h5></span>
+                <p style="width:940px;color:darkslategray;float:left;background-color:lightgray;padding:5px;">EXTEND TRAVEL ?</p>
                 <div style="width:125px;" class="radio">
                     <label>
                         @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:Check();", name = "yes", id = "yesCheck" })<span>YES</span>
@@ -96,7 +110,7 @@
                 </div>
                 <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="ifYa5">
                     @Html.CheckBoxFor(m => m.halfday_flag2)
-                    <label>HALF DAY ARRIVAL</label>
+                    <label>HALF DAY RETURN</label>
                 </div>
             </div>
 
