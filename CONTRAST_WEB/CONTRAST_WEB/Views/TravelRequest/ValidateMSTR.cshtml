@@ -38,7 +38,7 @@
                     @Html.DisplayFor(m => m[0].employee_info.unit_code_name, new { @class = "form-control", @readonly = "readonly" })
                     @for (int k = 0; k < Model.Count; k++)
                     {@Html.HiddenFor(m => m[k].employee_info.unit_code_name);
-                        @Html.HiddenFor(m => m[k].employee_info.unit_code_code
+                        @Html.HiddenFor(m => m[k].employee_info.unit_code_code);
                 }
                 </div>
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Travel Purpose</label>

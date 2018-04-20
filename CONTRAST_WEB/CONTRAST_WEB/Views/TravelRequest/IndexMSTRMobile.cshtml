@@ -468,10 +468,11 @@
                     @Html.TextBoxFor(m => m.tbankaccount, new { @class = "form-control", @readonly = "readonly" })
                     <br />
                 </div>
-                <button type="button" style="width:145px" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Estimate Budget</button>
+                @*<button type="button" style="width:145px" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Estimate Budget</button>*@
+                <button type="submit" style="width:145px;" class="btn btn-info btn-sm" name="validate" value="Submit">Estimate Budget</button>
 
                 <!--wates-->
-                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                @*<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div style="height:50px" class="modal-header">
@@ -488,7 +489,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
+
             </div>
         }
     </div>
