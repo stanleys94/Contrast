@@ -731,7 +731,7 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee model = new tb_m_employee();
             model = await GetData.EmployeeInfo(noreg);
 
-            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
+            tb_m_employee created = await GetData.EmployeeInfo(model.code);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
 
@@ -1380,33 +1380,33 @@ namespace CONTRAST_WEB.Controllers
                     return View("IndexMSTRMobile", temp);
 
             }
-            else
-            if (clear == "")
-            {
-                TravelRequestHelper temp = model;
-                temp = model;
-                List<string> ModelList = new List<string>();
+            //else
+            //if (clear == "")
+            //{
+            //    TravelRequestHelper temp = model;
+            //    temp = model;
+            //    List<string> ModelList = new List<string>();
 
-                List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
-                bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
-                if (bankName.Count != 0)
-                {
-                    temp.tbankname = bankName[0].Bank_Name;
-                    temp.tbankaccount = bankName[0].account_number;
-                }
+            //    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+            //    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+            //    if (bankName.Count != 0)
+            //    {
+            //        temp.tbankname = bankName[0].Bank_Name;
+            //        temp.tbankaccount = bankName[0].account_number;
+            //    }
 
-                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
-                ViewBag.division_name = division.Divisi;
-                division.Divisi = division.Divisi.Replace("and1", "&");
+            //    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+            //    ViewBag.division_name = division.Divisi;
+            //    division.Divisi = division.Divisi.Replace("and1", "&");
 
-                ViewBag.RL3 = ModelList;
+            //    ViewBag.RL3 = ModelList;
 
-                ViewBag.RL = await GetData.DestinationInfo();
-                ViewBag.RL2 = await GetData.PurposeInfo();
-                ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
-                return View("Index", temp);
+            //    ViewBag.RL = await GetData.DestinationInfo();
+            //    ViewBag.RL2 = await GetData.PurposeInfo();
+            //    ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+            //    return View("Index", temp);
 
-            }
+            //}
             else
                 return RedirectToAction("IndexMSTR");
 
