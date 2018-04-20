@@ -35,6 +35,7 @@ namespace CONTRAST_WEB.Models
 
                 return tstart_date0D.Value.Date + tstart_date0T.Value.TimeOfDay;
             }
+             
         }
 
         //[DateValidator2]

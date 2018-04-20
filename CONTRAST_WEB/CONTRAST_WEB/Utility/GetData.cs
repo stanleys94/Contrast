@@ -1677,6 +1677,46 @@ namespace CONTRAST_WEB.Models
             return ListItem;
         }
 
+        //overload
+        public static async Task<List<tb_r_travel_request_participant>> TravelRequestParticipant(string no_reg,string group_code)
+        {
+
+            List<tb_r_travel_request_participant> ListItem = new List<tb_r_travel_request_participant>();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TravelRequestActiveParticipant?reg=" + no_reg + "&gcode=" + group_code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_travel_request_participant> ResponseList = new List<tb_r_travel_request_participant>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_travel_request_participant>>(str);
+
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new tb_r_travel_request_participant();
+                        listItem = item;
+
+                        ListItem.Add(listItem);
+                        k++;
+                    }
+                }
+            }
+
+            return ListItem;
+        }
 
         public static async Task<tb_m_rate_flight> RateFlightInfo(TravelRequestHelper model)
         {
