@@ -20,7 +20,7 @@
 <div class="container">
     <div style="margin-top:110px" class="row">
         @* if travel execution false , please upload file foto/boarding pass travel yesterday then muncul details settlements for submit final *@
-        @using (Html.BeginForm("Insert", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("InsertMSTR", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
 
     {
         @Html.AntiForgeryToken()

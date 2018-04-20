@@ -24,29 +24,29 @@
             <div>
                 <div>
                     <span>
-                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
+                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Status/Destination" style="width:310px" />
                         @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
                     </span>
-                    <span style=" margin-left : 100px">
+                    <span style=" margin-left : 250px">
                         Start Date Range :
                         @if (ViewBag.startdate != null)
                         {
-                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
                         }
                         else
                         {
-                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @class = "form-control", style = "width:170px" })
+                        }
+                        @if (ViewBag.enddate != null)
+                        {
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
+                        }
+                        else
+                        {
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
                         }
                     </span>
 
-                    @if (ViewBag.enddate != null)
-                    {
-                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
-                    }
-                    else
-                    {
-                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
-                    }
                     <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
                 </div>
             </div>
@@ -56,12 +56,12 @@
     @using (Html.BeginForm("Search", "TrackProgress", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
+        <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;" class="clearfix">
             <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
-                <table style="width:1450px;margin-bottom:0px;" class="table table-condensed table-striped">
+                <table style="width:1250px;margin-bottom:0px;" class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:50px;">
-                            BTA NO
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:30px;">
+                            NUMBER
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
                             NAME
@@ -119,7 +119,7 @@
                             <tr>
                                 <td class="td">
                                     @*@Html.DisplayFor(Model => Model[k].TrackedList.group_code)*@
-                                    <button type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>
+                                    <button class="btn btn-toolbar" type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>
                                     @Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })
                                 </td>
                                 <td class="td">
@@ -177,12 +177,12 @@
                 </table>
             </div>
         </div>
-        <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-10">
+        <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-3">
             <button type="submit" class="btn btn-info" value="Download" name="download">Download</button>
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
         </div>
     }
-    <br />
+    <div style="float:left;margin-top:10px;" class="col-lg-7">
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     @if (ViewBag.startdate != null || ViewBag.enddate != null)
     {
@@ -195,6 +195,7 @@
             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
     }
+    </div>
 </div>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>

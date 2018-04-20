@@ -798,6 +798,9 @@
     <Content Include="Views\SettlementList\SummaryPaidMSTRMobile.cshtml" />
     <Content Include="Views\SettlementList\InsertMSTR.cshtml" />
     <Content Include="Views\SettlementList\InsertMSTRMobile.cshtml" />
+    <Content Include="Views\Shared\_LayoutM.Mobile.cshtml" />
+    <Content Include="Views\TravelConfirmation\ConfirmationMSTRMobile.cshtml" />
+    <Content Include="Views\TravelConfirmation\Validate.Mobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
