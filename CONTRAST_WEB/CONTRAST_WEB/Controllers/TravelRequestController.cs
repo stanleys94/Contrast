@@ -731,7 +731,7 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee model = new tb_m_employee();
             model = await GetData.EmployeeInfo(noreg);
 
-            tb_m_employee created = await GetData.EmployeeInfo(noreg);
+            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
 
@@ -796,7 +796,7 @@ namespace CONTRAST_WEB.Controllers
 
             //Get user direct superior name
             string boss = await GetData.EmployeeNameInfo(model2.travel_request.assign_by);
-            if (boss == null) boss = "-No Data-";
+            if (boss == null) boss = "-No Data";
             ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model2.travel_request.assign_by.ToString().Trim() + ")";
             ViewBag.Bossname2 = boss != null ? boss.Trim() : "No supperior registered";
 
@@ -857,7 +857,7 @@ namespace CONTRAST_WEB.Controllers
         [HttpPost]
         public async Task<ActionResult> ValidateMSTR(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "")
         {
-            tb_m_employee created = await GetData.EmployeeInfo(model.employee_info.name);
+            tb_m_employee created = await GetData.EmployeeInfo(model.employee_info.code);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
 
@@ -1205,6 +1205,7 @@ namespace CONTRAST_WEB.Controllers
 
 
                     ViewBag.Username = model.employee_info.name;
+                    //return View("Index", model);
                     var headers = Request.Headers.GetValues("User-Agent");
                     string userAgent = string.Join(" ", headers);
 
@@ -1223,18 +1224,28 @@ namespace CONTRAST_WEB.Controllers
                 //{
                 List<string> ModelList = new List<string>();
                 int noreg;
+                string exist = "";
+
                 if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
                 {
                     if (model.participants == null)
                         model.participants = new List<tb_r_travel_request_participant>();
-                    model.participants.Add(new tb_r_travel_request_participant());
-                    model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
-                    model.participants[model.participants.Count() - 1].active_flag = true;
-                    model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
+                    foreach (var item in model.participants)
+                    {
+                        if (item.no_reg == noreg) exist = await GetData.EmployeeNameInfo(noreg);
+                    }
+                    if (exist == "")
+                    {
+                        model.participants.Add(new tb_r_travel_request_participant());
+                        model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
+                        model.participants[model.participants.Count() - 1].active_flag = true;
+                        model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
 
-                    model.travel_request.participants_flag = true;
+                        model.travel_request.participants_flag = true;
+                    }
+
                 }
-
+                ViewBag.Exist = exist;
                 if (model.participants != null)
                 {
                     for (int k = 0; k < model.participants.Count(); k++)
@@ -1264,10 +1275,53 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
                 if (ViewBag.Bossname == null) ViewBag.Bossname = "-No data";
+                //return View("Index", model);
+                //}
+                //else
+                //{
+                //    ViewBag.RL = await GetData.DestinationInfo();
+                //    ViewBag.RL2 = await GetData.PurposeInfo();
+                //    //list participant in string
+
+                //    List<string> ModelList = new List<string>();
+                //    if (model.participants != null)
+                //    {
+                //        for (int k = 0; k < model.participants.Count(); k++)
+                //        {
+                //            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                //        }
+                //    }
+                //    ViewBag.RL3 = ModelList;
+
+                //    string boss = await GetData.EmployeeNameInfo(model.travel_request.assign_by);
+                //    if (boss == null) boss = "-No data";
+                //    ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model.travel_request.assign_by.ToString().Trim() + ")";
+
+                //    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                //    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+                //    if (bankName.Count != 0)
+                //    {
+                //        model.tbankname = bankName[0].Bank_Name;
+                //        model.tbankaccount = bankName[0].account_number;
+                //    }
+                //    //else
+                //    //{
+                //    //    model.tbankname    = "- Not Available -";
+                //    //    model.tbankaccount = "- Not Available -";
+                //    //}
+
+                //    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+                //    division.Divisi = division.Divisi.Replace("and1", "&");
+                //    ViewBag.division_name = division.Divisi;
+
+
+                //    ViewBag.Username = model.employee_info.name;
+                //    return View("Index", model);
+                //}
+                //return View("Index", model);
                 var headers = Request.Headers.GetValues("User-Agent");
                 string userAgent = string.Join(" ", headers);
 
-                //return View("IndexMSTR", model);
                 if (userAgent.ToLower().Contains("ipad"))
                     return View("IndexMSTR", model);
                 else
@@ -1314,7 +1368,7 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL = await GetData.DestinationInfo();
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
-                if (ViewBag.Bossname == null) ViewBag.Bossname = "-No Data";
+                //return View("Index", temp);
                 //header
                 var headers = Request.Headers.GetValues("User-Agent");
                 string userAgent = string.Join(" ", headers);
@@ -1327,7 +1381,34 @@ namespace CONTRAST_WEB.Controllers
 
             }
             else
-                return View("IndexMSTR");
+            if (clear == "")
+            {
+                TravelRequestHelper temp = model;
+                temp = model;
+                List<string> ModelList = new List<string>();
+
+                List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+                if (bankName.Count != 0)
+                {
+                    temp.tbankname = bankName[0].Bank_Name;
+                    temp.tbankaccount = bankName[0].account_number;
+                }
+
+                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+                ViewBag.division_name = division.Divisi;
+                division.Divisi = division.Divisi.Replace("and1", "&");
+
+                ViewBag.RL3 = ModelList;
+
+                ViewBag.RL = await GetData.DestinationInfo();
+                ViewBag.RL2 = await GetData.PurposeInfo();
+                ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+                return View("Index", temp);
+
+            }
+            else
+                return RedirectToAction("IndexMSTR");
 
         }
 
