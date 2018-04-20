@@ -5,14 +5,9 @@
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
 }
-<div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
-   
-</div>
-
 <div class="container">
     <div style="margin-top:100px" class="row">
         <div class="col-md-12"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
-       
         @using (Html.BeginForm("SubmittedMSTR", "TravelRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
@@ -43,7 +38,7 @@
                     @Html.DisplayFor(m => m[0].employee_info.unit_code_name, new { @class = "form-control", @readonly = "readonly" })
                     @for (int k = 0; k < Model.Count; k++)
                     {@Html.HiddenFor(m => m[k].employee_info.unit_code_name);
-                        @Html.HiddenFor(m => m[k].employee_info.unit_code_code);
+                        @Html.HiddenFor(m => m[k].employee_info.unit_code_code
                 }
                 </div>
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Travel Purpose</label>
