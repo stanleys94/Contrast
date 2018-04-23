@@ -1,4 +1,4 @@
-﻿@model List<CONTRAST_WEB.Models.TravelRequestHelper>
+@model List<CONTRAST_WEB.Models.TravelRequestHelper>
 @{
     ViewBag.Title = "Validation";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
@@ -151,11 +151,38 @@
                 @for (int k = 0; k < Model.Count; k++)
                 {
                     @Html.HiddenFor(m => m[k].travel_request.destination_code)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl1)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl2)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl3)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl4)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl6)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl7)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl8)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl9)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl10)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl11)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl12)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl13)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl14)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl15)
+                    
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl1)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl2)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl3)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl4)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl6)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl7)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl8)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl9)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl10)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl11)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl12)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl13)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl14)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl15)
+
                     @Html.HiddenFor(m => m[k].travel_request.create_date)
                     @Html.HiddenFor(m => m[k].travel_request.exep_empolyee)
                     @Html.HiddenFor(m => m[k].travel_request.user_created)
