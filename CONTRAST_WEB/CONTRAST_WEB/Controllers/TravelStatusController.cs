@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -919,88 +919,112 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.RL2 = await GetData.PurposeInfo();
 
             //Prepare travel request information object to be used at view
-            TravelRequestHelper model2 = new TravelRequestHelper();
+            List<TravelRequestHelper> model2 = new List<TravelRequestHelper>();
 
             List<tb_r_travel_request> model3 = new List<tb_r_travel_request>();
             model3=await GetData.TravelRequestGCList(group_code);
 
-            model2.travel_request = model3[0];
-            model2.employee_info = await GetData.EmployeeInfo(model3.First().no_reg.ToString());
+            for (int k = 0; k < model3.Count(); k++)
+            {
+                model2.Add(new TravelRequestHelper());
+                model2[k].travel_request= model3[k];
+                model2[k].employee_info = await GetData.EmployeeInfo(model3[k].no_reg.ToString());
 
-            ViewBag.Bossname =(await GetData.EmployeeNameInfo(model3.First().assign_by)+"("+model3.First().assign_by+")");
-            tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model3.First().no_reg));
-            division.Divisi = division.Divisi.Replace("and1", "&");
-            ViewBag.division_name = division.Divisi;
+                ViewBag.Bossname = (await GetData.EmployeeNameInfo(model3[k].assign_by) + "(" + model3[k].assign_by + ")");
+                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model3[k].no_reg));
+                division.Divisi = division.Divisi.Replace("and1", "&");
+                ViewBag.division_name = division.Divisi;
 
-            //get participants            
-            model2.participants = await GetData.TravelRequestParticipant(model2.travel_request.no_reg.ToString(), group_code);
-       
+                //get participants            
+                model2[k].participants = await GetData.TravelRequestParticipant(model2[k].travel_request.no_reg.ToString(), group_code);
+
+                //translate data
+                model2[k].destination_string = await GetData.DestinationNameInfo(model2[k].travel_request.id_destination_city);
+
+            }
             return View(model2);
         }
 
         [Authorize]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, DateTime time,DateTime rtime, string delete = "", string loged = "")
+        public async Task<ActionResult> Validate(string validate, string gcode, List<DateTime> time,List<DateTime> rtime, List<DateTime> date, List<DateTime> rdate)
         {
             var identity = (ClaimsIdentity)User.Identity;
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-                       
-            if (validate!= "")
+
+            tb_m_employee employee_info = await GetData.EmployeeInfo(identity.Name);
+
+            if (validate != "")
             {
-                tb_r_travel_request origin_data = new tb_r_travel_request();
-                origin_data = await GetData.TravelRequest(model.travel_request.id_request);
+                List<TravelRequestHelper> model = new List<TravelRequestHelper>();
+                var temp = await GetData.TravelRequestGCList(gcode);
 
-                //start date
-                if (origin_data.start_date != model.travel_request.start_date)
+                for (int i = 0; i < temp.Count(); i++)
                 {
-                    model.travel_request.start_date= model.travel_request.start_date+(time.TimeOfDay);
-                    origin_data.start_date = model.travel_request.start_date;
+                    model.Add(new TravelRequestHelper());
+                   
+                    model[i].travel_request=temp[i];
+                    model[i].employee_info = employee_info;
+
+                    //compare departure date
+                    if (date[i] != model[i].travel_request.start_date)
+                        model[i].travel_request.start_date = model[i].travel_request.start_date = date[i];
+
+                    //compare return date
+                    if (date[i] != model[i].travel_request.end_date)
+                        model[i].travel_request.end_date = model[i].travel_request.end_date = rdate[i];
+
+
+                    //compare depart time
+                    if (time[i].TimeOfDay != model[i].travel_request.start_date.Value.TimeOfDay)
+                     model[i].travel_request.start_date = model[i].travel_request.start_date.Value.Date + (time[i].TimeOfDay);
+                    
+
+                    //end date
+                    if (rtime[i].TimeOfDay != model[i].travel_request.end_date.Value.TimeOfDay)
+                        model[i].travel_request.end_date = model[i].travel_request.end_date.Value.Date + (rtime[i].TimeOfDay);
+                    
+                    //model[i].travel_request = origin_data;
+                    model[i] = await calculate.DateDurationAsync(model[i]);
+
+                    //get bank account
+                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                    bankName = await GetData.VendorEmployee(Convert.ToInt32(identity.Name));
+                    if (bankName.Count != 0)
+                    {
+                        model[i].tbankname = bankName.First().Bank_Name;
+                        model[i].tbankaccount = bankName.First().account_number;
+                    }
+
+                    //execute
+                    //await UpdateData.TravelRequest(origin_data);
+                    List<TravelRequestHelper> model2 = new List<TravelRequestHelper>();
+                    model2.Add(model[i]);
+
+                    string division_r = await GetData.GetDivMapping(model[i].travel_request.no_reg.ToString());
+                    tb_m_budget budget = await GetData.GetCostWbs((bool)model[i].travel_request.overseas_flag, division_r.Trim());
+                    ViewBag.budget = budget.available_amount;
+                    ViewBag.wbs = budget.eoa_wbs_no;
+                    ViewBag.costcenter = budget.cost_center;
+                    //return RedirectToAction("Revise", new { group_code = model.travel_request.group_code});
                 }
-
-                //end date
-                if (origin_data.end_date != model.travel_request.end_date)
-                {
-                    model.travel_request.end_date = model.travel_request.end_date + (rtime.TimeOfDay);
-                    origin_data.end_date = model.travel_request.end_date;
-                }
-                model.travel_request = origin_data;
-                model = await calculate.DateDurationAsync(model);
-
-                //get bank account
-                List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
-                bankName = await GetData.VendorEmployee(Convert.ToInt32(identity.Name));
-                if (bankName.Count != 0)
-                {
-                    model.tbankname = bankName.First().Bank_Name;
-                    model.tbankaccount = bankName.First().account_number;
-                }
-
-                //execute
-                //await UpdateData.TravelRequest(origin_data);
-                List<TravelRequestHelper> model2 = new List<TravelRequestHelper>();
-                model2.Add(model);
-
-                string division_r = await GetData.GetDivMapping(model.travel_request.no_reg.ToString());
-                tb_m_budget budget = await GetData.GetCostWbs((bool)model.travel_request.overseas_flag, division_r.Trim());
-                ViewBag.budget = budget.available_amount;
-                ViewBag.wbs = budget.eoa_wbs_no;
-                ViewBag.costcenter = budget.cost_center;
-                //return RedirectToAction("Revise", new { group_code = model.travel_request.group_code});
-                return View(model2);
+                return View(model);
             }
             else
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
         }
 
         public async Task<ActionResult> Update(TravelRequestHelper[] model) {
 
-            foreach (var item in model)
+            for(int k=0;k<model.Count();k++)
             {
-                item.travel_request.additional1 = null;
+                model[k].travel_request.additional1 = null;
+
                 //execute
-                await UpdateData.TravelRequest(item.travel_request);
+                await UpdateData.TravelRequest(model[k].travel_request);
             }
             return RedirectToAction("Index", "TravelStatus");
         }
