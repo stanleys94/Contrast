@@ -72,9 +72,7 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
-
-            //tb_m_employee model = await GetData.EmployeeInfo("101495");
-
+            
             //Get user name
             ViewBag.Username = model.name;
 
@@ -189,7 +187,6 @@ namespace CONTRAST_WEB.Controllers
         public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "", string clear = "")
         {
             var identity = (ClaimsIdentity)User.Identity;
-            Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
 
@@ -338,8 +335,6 @@ namespace CONTRAST_WEB.Controllers
                                 ListModel[c].participants = new List<tb_r_travel_request_participant>();
                                 ListModel[c].participants = model.participants;
                             }
-                            //c++;
-                            //if (c > model.tend_date.Count()) break;
                         }
                         //if (model.tend_date.Count() == c) break;
                     }
@@ -350,13 +345,7 @@ namespace CONTRAST_WEB.Controllers
                         bool same_date = false;
                         int week_day = 0;
                         TimeSpan range = ((DateTime)ListModel[i].travel_request.end_date).Date - ((DateTime)ListModel[i].travel_request.start_date).Date;
-
-                        //TimeSpan duration = ((DateTime)ListModel[i].travel_request.end_date - (DateTime)ListModel[i].travel_request.start_date);
-
-                        //TimeSpan duration = Convert.ToDateTime(ListModel[i].travel_request.end_date).Date - Convert.ToDateTime(ListModel[i].travel_request.start_date).Date;
-                        //ListModel[i].travel_request.duration = duration.Days;
-
-
+                        
                         if (ListModel.Count() > 1 && i > 0)
                         {
                             if (Convert.ToDateTime(ListModel[i].travel_request.start_date).Date == Convert.ToDateTime(ListModel[i - 1].travel_request.end_date).Date) same_date = true;
@@ -368,10 +357,7 @@ namespace CONTRAST_WEB.Controllers
 
                         int duration = range.Days;
                         if (!same_date) duration = duration + 1;
-
-                        // ListModel[i].travel_request.allowance_meal_idr = EmpInfo.meal_allowance * Convert.ToInt32(duration.Days);
-                        //ListModel[i].travel_request.allowance_meal_idr = EmpInfo.meal_allowance * Convert.ToInt32(duration.Days);
-
+                        
                         ListModel[i].travel_request.duration = duration;
 
                         var mealwinterallowance = await GetData.RateMealWinterInfo(ListModel[i]);
@@ -447,7 +433,6 @@ namespace CONTRAST_WEB.Controllers
                     else
                         model.travel_request.participants_flag = false;
 
-                    //var stringArray = new string[3] { await GetData.DestinationNameInfo(ListModel[0].travel_request.id_destination_city), await GetData.DestinationNameInfo(ListModel[1].travel_request.id_destination_city), await GetData.DestinationNameInfo(ListModel[2].travel_request.id_destination_city) };
                     ViewBag.Destination = new string[ListModel.Count()];
                     for (int k = 0; k < ListModel.Count(); k++)
                     {
@@ -529,11 +514,6 @@ namespace CONTRAST_WEB.Controllers
                         model.tbankname = bankName[0].Bank_Name;
                         model.tbankaccount = bankName[0].account_number;
                     }
-                    //else
-                    //{
-                    //    model.tbankname    = "- Not Available -";
-                    //    model.tbankaccount = "- Not Available -";
-                    //}
 
                     tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
                     division.Divisi = division.Divisi.Replace("and1", "&");
@@ -604,49 +584,7 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
                 if (ViewBag.Bossname == null) ViewBag.Bossname = "-No data";
-                return View("Index", model);
-                //}
-                //else
-                //{
-                //    ViewBag.RL = await GetData.DestinationInfo();
-                //    ViewBag.RL2 = await GetData.PurposeInfo();
-                //    //list participant in string
-
-                //    List<string> ModelList = new List<string>();
-                //    if (model.participants != null)
-                //    {
-                //        for (int k = 0; k < model.participants.Count(); k++)
-                //        {
-                //            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
-                //        }
-                //    }
-                //    ViewBag.RL3 = ModelList;
-
-                //    string boss = await GetData.EmployeeNameInfo(model.travel_request.assign_by);
-                //    if (boss == null) boss = "-No data";
-                //    ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model.travel_request.assign_by.ToString().Trim() + ")";
-
-                //    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
-                //    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
-                //    if (bankName.Count != 0)
-                //    {
-                //        model.tbankname = bankName[0].Bank_Name;
-                //        model.tbankaccount = bankName[0].account_number;
-                //    }
-                //    //else
-                //    //{
-                //    //    model.tbankname    = "- Not Available -";
-                //    //    model.tbankaccount = "- Not Available -";
-                //    //}
-
-                //    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
-                //    division.Divisi = division.Divisi.Replace("and1", "&");
-                //    ViewBag.division_name = division.Divisi;
-
-
-                //    ViewBag.Username = model.employee_info.name;
-                //    return View("Index", model);
-                //}
+                return View("Index", model);               
             }
             else
             if (delete != "")
@@ -1014,13 +952,7 @@ namespace CONTRAST_WEB.Controllers
                         bool same_date = false;
                         int week_day = 0;
                         TimeSpan range = ((DateTime)ListModel[i].travel_request.end_date).Date - ((DateTime)ListModel[i].travel_request.start_date).Date;
-
-                        //TimeSpan duration = ((DateTime)ListModel[i].travel_request.end_date - (DateTime)ListModel[i].travel_request.start_date);
-
-                        //TimeSpan duration = Convert.ToDateTime(ListModel[i].travel_request.end_date).Date - Convert.ToDateTime(ListModel[i].travel_request.start_date).Date;
-                        //ListModel[i].travel_request.duration = duration.Days;
-
-
+                       
                         if (ListModel.Count() > 1 && i > 0)
                         {
                             if (Convert.ToDateTime(ListModel[i].travel_request.start_date).Date == Convert.ToDateTime(ListModel[i - 1].travel_request.end_date).Date) same_date = true;
@@ -1032,9 +964,6 @@ namespace CONTRAST_WEB.Controllers
 
                         int duration = range.Days;
                         if (!same_date) duration = duration + 1;
-
-                        // ListModel[i].travel_request.allowance_meal_idr = EmpInfo.meal_allowance * Convert.ToInt32(duration.Days);
-                        //ListModel[i].travel_request.allowance_meal_idr = EmpInfo.meal_allowance * Convert.ToInt32(duration.Days);
 
                         ListModel[i].travel_request.duration = duration;
 

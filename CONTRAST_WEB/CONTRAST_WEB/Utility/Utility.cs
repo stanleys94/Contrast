@@ -20,12 +20,12 @@ namespace CONTRAST_WEB.Models
 {
     public static class Utility
     {
-        public static int CountDuration(DateTime start_date,DateTime end_date)
+        public static int CountDuration(DateTime start_date, DateTime end_date)
         {
             return 1;
         }
 
-        
+
         public static string UploadSettlementReceipt(HttpPostedFileBase file, string formatter)
         {
             if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
@@ -66,19 +66,19 @@ namespace CONTRAST_WEB.Models
             }
             return "Error";
         }
-        
+
         public static string UploadPhoto(HttpPostedFileBase file, string formatter)
         {
             if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
             {
-                string fileName = formatter+DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString()
+                string fileName = formatter + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString()
                     + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + ".jpg";
                 //fileName = formatter + fileName;
                 string fileContentType = file.ContentType;
                 byte[] fileBytes = new byte[file.ContentLength];
 
                 var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.TPhotoEmployeeFolder), fileName);
-                
+
                 file.SaveAs(path);
                 return fileName;
             }
@@ -323,7 +323,7 @@ namespace CONTRAST_WEB.Models
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-               // HttpResponseMessage response = await client.PostAsJsonAsync("api/VendorEmployee", model);
+                // HttpResponseMessage response = await client.PostAsJsonAsync("api/VendorEmployee", model);
 
                 HttpResponseMessage response = await client.PostAsync("api/VendorEmployee", new StringContent(
                                         new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
@@ -334,7 +334,7 @@ namespace CONTRAST_WEB.Models
         {
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.LogFolder), "log.txt");
             var sw = new System.IO.StreamWriter(path, true);
-            sw.WriteLine("-"+DateTime.Now+":"+eventlog);
+            sw.WriteLine("-" + DateTime.Now + ":" + eventlog);
             sw.Close();
 
         }
