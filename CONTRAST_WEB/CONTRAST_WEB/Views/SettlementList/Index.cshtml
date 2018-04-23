@@ -15,7 +15,7 @@
     </ol>
 </div>
 <div class="container">
-    <div style="margin-top:120px; padding:0 90px;" id="products" class="row list-group _3EibU">
+    <div style="margin-top:110px; padding:0 90px;" id="products" class="row list-group _3EibU">
         @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
@@ -23,19 +23,36 @@
             {
                 if (item == "contrast.travelcoordinator")
                 {
-                    <div class="col-md-11 col-md-offset-1">
-                        <div>
-                            <strong style="color:deepskyblue">ADD EMPLOYEE :</strong>
-                            <div style="width:450px;" class="input-group">
-                                @Html.TextBox("applied", (object)ViewBag.applied, new { @class = "form-control", placeholder = "Type Employee Name..", id = "searchInput2" })
-                                <input type="text" id="code" name="code" value=@ViewBag.applied hidden>
-
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-info btn-lg form-control" name="Add" value="Submit">Add</button>
-                                </span>
-                            </div>
-                        </div>
+                <div style="width:960px;" class="col-md-11 ">
+                    <hr>
+                </div>
+                <div style="width:950px;text-align:center" class="col-md-11" >
+                    <div style="margin:5px;" class="form-group form-inline">
+                        <strong style="color:deepskyblue;">TRAVEL COORDINATOR :</strong> @ViewBag.loged_name (@ViewBag.loged_id)
                     </div>
+                </div> 
+                <div style="width:475px;" class="col-md-5">
+                    <div style="margin:5px;" class="form-group form-inline">
+                        Type name Employee :
+                        <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@ViewBag.applied />
+                        <input type="text" id="code" name="code" value=@ViewBag.applied hidden>
+                        <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
+                    </div>
+                </div>
+
+                 <div style="width:475px;padding-top:5px" class="col-md-5">
+                    <div style="margin:5px;" class="form-group form-inline">
+                        Assigned Employee :
+                        @if (ViewBag.applied_name != null)
+                        {
+                            <label>@ViewBag.applied_name (@ViewBag.applied)</label>
+                        }
+                    </div>
+                </div>
+
+                <div style="width:960px;" class="col-md-11 ">
+                    <hr>
+                </div>
                 }
             }
         }
@@ -96,7 +113,7 @@
      $("#searchInput2").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '@Url.Action("GetSearchValue2", "SettlementList")',
+                url: '@Url.Action("GetSearchValue", "SettlementList")',
                 dataType: "json",
 	        data: { search: $("#searchInput2").val(), code: $("#code").val() },
                 success: function (data) {

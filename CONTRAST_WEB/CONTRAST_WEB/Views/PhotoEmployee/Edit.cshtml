@@ -13,20 +13,6 @@
         </li>
         <li class="breadcrumb-item"><a style="color:gray;" href="javascript:void(0);" onclick="history.go(-1);">Profile</a></li>
         <li class="breadcrumb-item active">Edit Profile</li>
-        <label style="margin-left:100px">
-            @using (Html.BeginForm("Edit", "PhotoEmployee", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-question-sign"></span> DOWNLOAD FAQ</button>
-            }
-        </label>
-        <label style="margin-left:10px">
-            @using (Html.BeginForm("Edit", "PhotoEmployee", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-info-sign"></span> DOWNLOAD SOP</button>
-            }
-        </label>
     </ol>
 </div>
 <div class="container">

@@ -25,29 +25,29 @@
             <div>
                 <div>
                     <span>
-                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Type/Destination" style="width:310px" />
+                        <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search Group Code/Name/Status/Destination" style="width:310px" />
                         @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
                     </span>
-                    <span style=" margin-left : 100px">
+                    <span style=" margin-left : 250px">
                         Start Date Range :
                         @if (ViewBag.startdate != null)
                         {
-                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd") })
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
                         }
                         else
                         {
-                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date" })
+                            @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @class = "form-control", style = "width:170px" })
+                        }
+                        @if (ViewBag.enddate != null)
+                        {
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
+                        }
+                        else
+                        {
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
                         }
                     </span>
 
-                    @if (ViewBag.enddate != null)
-                    {
-                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd") })
-                    }
-                    else
-                    {
-                        @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date" })
-                    }
                     <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
                 </div>
             </div>
@@ -57,14 +57,14 @@
     @using (Html.BeginForm("Search", "TrackProgressPersonal", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div style="width:100%;text-align:left;height:380px;overflow-y:scroll;border:0px;" class="clearfix">
+        <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;" class="clearfix">
             <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
-                <table style="width:1450px;margin-bottom:0px;" class="table table-condensed table-striped">
+                <table style="width:1850px;margin-bottom:0px;" class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:50px;">
-                            BTA NO
+                            NUMBER
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:220px;">
                             NAME
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
@@ -73,41 +73,35 @@
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
                             TRANSACTION
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:210px;">
                             AMOUNT
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
                             DESTINATION
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:320px;">
                             STATUS
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
                             OUTSTANDING
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:130px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:350px;">
                             WBS NO
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:200px;">
                             COST CENTER
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
-                            TAX
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
                             VENDOR
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            INVOICE NO
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:350px;">
                             START DATE
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:350px;">
                             END DATE
                         </th>
 
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:350px;">
                             GENERATED DATE
                         </th>
                     </tr>
@@ -189,24 +183,30 @@
                                 </td>
                                 @*add*@
                                 <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.wbs_no)
+                                    @if (Model[k].TrackedList.wbs_no != null)
+                                    {
+                                        @Html.DisplayFor(Model => Model[k].TrackedList.wbs_no)
+                                    }
+                                    else
+                                    {
+                                        <label>None</label>
+                                    }
                                     @Html.HiddenFor(Model => Model[k].TrackedList.wbs_no, new { Value = @Model[k].TrackedList.wbs_no })
                                 </td>
                                 <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.cost_center)
+                                    @if (Model[k].TrackedList.cost_center != null)
+                                    {   
+                                        @Html.DisplayFor(Model => Model[k].TrackedList.cost_center)
+                                    }
+                                    else
+                                    {
+                                        <label>None</label>
+                                    }
                                     @Html.HiddenFor(Model => Model[k].TrackedList.cost_center, new { Value = @Model[k].TrackedList.cost_center })
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.tax)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.tax, new { Value = @Model[k].TrackedList.tax })
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.vendor_code)
                                     @Html.HiddenFor(Model => Model[k].TrackedList.vendor_code, new { Value = @Model[k].TrackedList.vendor_code })
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.invoice_number)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.invoice_number, new { Value = @Model[k].TrackedList.invoice_number })
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.start_date)
@@ -228,12 +228,12 @@
                 </table>
             </div>
         </div>
-        <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-10">
+        <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-3">
             <button type="submit" class="btn btn-info" value="Download" name="download">Download</button>
             <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
         </div>
     }
-    <br />
+    <div style="float:right;margin-top:10px;" class="col-lg-7">
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     @if (ViewBag.startdate != null || ViewBag.enddate != null)
     {
@@ -246,6 +246,7 @@
         @Html.PagedListPager(Model, page => Url.Action("Index",
                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
     }
+    </div>
 </div>
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>

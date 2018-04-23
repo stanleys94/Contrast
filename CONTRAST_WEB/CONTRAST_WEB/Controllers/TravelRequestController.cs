@@ -184,7 +184,7 @@ namespace CONTRAST_WEB.Controllers
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "")
+        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "", string clear = "")
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
@@ -533,18 +533,28 @@ namespace CONTRAST_WEB.Controllers
                 //{
                 List<string> ModelList = new List<string>();
                 int noreg;
+                string exist = "";
+
                 if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
                 {
                     if (model.participants == null)
                         model.participants = new List<tb_r_travel_request_participant>();
-                    model.participants.Add(new tb_r_travel_request_participant());
-                    model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
-                    model.participants[model.participants.Count() - 1].active_flag = true;
-                    model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
+                    foreach (var item in model.participants)
+                    {
+                        if (item.no_reg == noreg) exist = await GetData.EmployeeNameInfo(noreg);
+                    }
+                    if (exist == "")
+                    {
+                        model.participants.Add(new tb_r_travel_request_participant());
+                        model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
+                        model.participants[model.participants.Count() - 1].active_flag = true;
+                        model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
 
-                    model.travel_request.participants_flag = true;
+                        model.travel_request.participants_flag = true;
+                    }
+
                 }
-
+                ViewBag.Exist = exist;
                 if (model.participants != null)
                 {
                     for (int k = 0; k < model.participants.Count(); k++)
@@ -620,6 +630,33 @@ namespace CONTRAST_WEB.Controllers
                 return View("Index", temp);
 
             }
+            else 
+            if (clear == "")
+            {
+                TravelRequestHelper temp = model;
+                temp = model;
+                List<string> ModelList = new List<string>();
+
+                List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+                if (bankName.Count != 0)
+                {
+                    temp.tbankname = bankName[0].Bank_Name;
+                    temp.tbankaccount = bankName[0].account_number;
+                }
+
+                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+                ViewBag.division_name = division.Divisi;
+                division.Divisi = division.Divisi.Replace("and1", "&");
+
+                ViewBag.RL3 = ModelList;
+
+                ViewBag.RL = await GetData.DestinationInfo();
+                ViewBag.RL2 = await GetData.PurposeInfo();
+                ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+                return View("Index", temp);
+
+            }
             else
                 return RedirectToAction("Index");
         }
@@ -631,6 +668,13 @@ namespace CONTRAST_WEB.Controllers
             //string noreg = "101799";
             tb_m_employee model = new tb_m_employee();
             model = await GetData.EmployeeInfo(noreg);
+
+            tb_m_employee created = await GetData.EmployeeInfo(model.code);
+            ViewBag.loged_id = created.code.Trim(' ');
+            ViewBag.loged_name = created.name.Trim(' ');
+
+            //tb_m_employee model = await GetData.EmployeeInfo("101495");
+
             //Get user name
             ViewBag.Username = model.name;
 
@@ -649,7 +693,13 @@ namespace CONTRAST_WEB.Controllers
 
             //Get user direct superior info
             var assignedby = await GetData.AssignedBy(model2.employee_info.unit_code_code);
-            var procedures = await GetData.Procedures(model2.employee_info.@class);
+            tb_m_travel_procedures procedures = new tb_m_travel_procedures();
+            if (model2.employee_info.position.Trim() == "SECO" || model2.employee_info.position.Trim() == "SEA" || model2.employee_info.position.Trim() == "SMEC" || model2.employee_info.position.Trim() == "AADV" || model2.employee_info.position.Trim() == "GM")
+            {
+                procedures = await GetData.Procedures(model2.employee_info.position);
+            }
+            else
+                procedures = await GetData.Procedures(model2.employee_info.@class);
 
             if (assignedby.pd == Convert.ToInt32(model2.employee_info.code)) model2.travel_request.assign_by = Convert.ToInt32(model2.employee_info.code);
             else
@@ -669,6 +719,8 @@ namespace CONTRAST_WEB.Controllers
             {
                 if (assignedby.dh_code != null) model2.travel_request.assign_by = assignedby.dh_code;
                 else
+                    if (assignedby.egm != null) model2.travel_request.assign_by = assignedby.egm;
+                else
                     if (assignedby.director != null) model2.travel_request.assign_by = assignedby.director;
                 else
                     if (assignedby.local_fd != null) model2.travel_request.assign_by = assignedby.local_fd;
@@ -682,15 +734,15 @@ namespace CONTRAST_WEB.Controllers
 
             //Get user direct superior name
             string boss = await GetData.EmployeeNameInfo(model2.travel_request.assign_by);
-            if (boss == null) boss = "-No data";
+            if (boss == null) boss = "-No Data";
             ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model2.travel_request.assign_by.ToString().Trim() + ")";
+            ViewBag.Bossname2 = boss != null ? boss.Trim() : "No supperior registered";
 
             //Set request type default to false
             model2.travel_request.request_type = false;
 
             //Set activity id default to 3 (Regular)
             model2.travel_request.id_activity = 3;
-
 
             List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
             bankName = await GetData.VendorEmployee(Convert.ToInt32(model.code));
@@ -705,9 +757,30 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.ebankaccount = "No bank name registered,contact finance division";
             }
 
-            tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
-            division.Divisi = division.Divisi.Replace("and1", "&");
-            ViewBag.division_name = division.Divisi;
+            //special employee
+            //List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(identity.Name);
+            List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(model.code);
+            if (special_model.Count != 0)
+            {
+                List<string> division_model = new List<string>();
+                for (int k = 0; k < special_model.Count; k++)
+                {
+                    division_model.Add(special_model[k].Divisi);
+                }
+                model2.special_employee_flag = true;
+                model2.travel_request.exep_empolyee = true;
+                var selectListItems = division_model.Select(x => new SelectListItem() { Value = x, Text = x }).ToList();
+                ViewBag.division_name2 = selectListItems;
+            }
+            else
+            {
+                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
+                division.Divisi = division.Divisi.Replace("and1", "&");
+                ViewBag.division_name = division.Divisi;
+                model2.special_employee_flag = false;
+            }
+
+            ViewBag.Username = model2.employee_info.name;
 
             var headers = Request.Headers.GetValues("User-Agent");
             string userAgent = string.Join(" ", headers);
@@ -720,8 +793,12 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ValidateMSTR(TravelRequestHelper model, string validate, string add, string delete = "")
+        public async Task<ActionResult> ValidateMSTR(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "")
         {
+            tb_m_employee created = await GetData.EmployeeInfo(model.employee_info.code);
+            ViewBag.loged_id = created.code.Trim(' ');
+            ViewBag.loged_name = created.name.Trim(' ');
+
             if (validate != null && model.travel_request != null)
             {
                 if (ModelState.IsValid)
@@ -758,16 +835,17 @@ namespace CONTRAST_WEB.Controllers
                     DateTime now = DateTime.Now;
 
                     ViewBag.Title = model.employee_info.code;
-                    //request no reg name
-                    //model.employee_info = await GetData.EmployeeInfo(model.employee_info);
 
                     ViewBag.Username = model.employee_info.name;
                     model.travel_request.active_flag = false;
                     model.travel_request.status_request = "0";
                     model.travel_request.comments = "Comment";
 
+                    model.travel_request.exep_empolyee = model.travel_request.exep_empolyee;
+                    model.travel_request.additional2 = model.employee_info.unit_code_name;
+
+
                     model.travel_request.invited_by = model.travel_request.no_reg;
-                    //model.travel_request.multiple_destination_flag = false;
                     model.travel_request.create_date = now;
 
                     //list participant in string
@@ -783,10 +861,7 @@ namespace CONTRAST_WEB.Controllers
                     List<TravelRequestHelper> ListModel = new List<TravelRequestHelper>();
 
                     for (int c = 0; c < 3; c++)
-                    //int c = 0;
-                    //while (model.travel_request.multiple_destination_flag == true)
                     {
-                        //if (model.tend_date[c] != null && model.tstart_date[c]!= null && model.toverseas_flag[c]!= null && model.tid_destination_city[c]!= null)
                         {
                             //if (model.tend_date[c] == null) break;
                             if (c == 0 && model.tend_date0 == null) break;
@@ -794,8 +869,6 @@ namespace CONTRAST_WEB.Controllers
                             if (c == 1 && model.tend_date1 == null) break;
                             else
                             if (c == 2 && model.tend_date2 == null) break;
-
-
 
                             ListModel.Add(new TravelRequestHelper());
                             ListModel[c].employee_info = new tb_m_employee();
@@ -844,12 +917,14 @@ namespace CONTRAST_WEB.Controllers
                                 ListModel[c].travel_request.end_date = model.tend_date2;
                             }
 
+                            ListModel[c].travel_request.additional2 = model.travel_request.additional2;
+
                             ListModel[c].travel_request.id_destination_city = model.tid_destination_city[c];
                             ListModel[c].travel_request.air_ticket_flag = model.tair_ticket_flag[c];
                             ListModel[c].travel_request.destination_code = await GetData.RegionInfo(ListModel[c].travel_request.id_destination_city);
 
                             //ListModel[c].travel_request.overseas_flag = model.toverseas_flag[c];
-                            ListModel[c].travel_request.user_created = Convert.ToInt32(model.employee_info.code);
+                            ListModel[c].travel_request.user_created = Convert.ToInt32(created.code);
                             ListModel[c].travel_request.reason_of_assigment = model.treason;
                             ListModel[c].travel_request.travel_purpose = model.tpurpose;
                             ListModel[c].travel_request.id_activity = model.tactivity;
@@ -986,7 +1061,6 @@ namespace CONTRAST_WEB.Controllers
                     ViewBag.wbs = budget.eoa_wbs_no;
                     ViewBag.costcenter = budget.cost_center;
 
-
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
                     bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
                     if (bankName.Count != 0)
@@ -1018,15 +1092,8 @@ namespace CONTRAST_WEB.Controllers
                     ViewBag.Ticket = ticket;
                     ViewBag.Total = total;
 
-                    //return View("ValidateMSTR", ListModel);
-                    var headers = Request.Headers.GetValues("User-Agent");
-                    string userAgent = string.Join(" ", headers);
-
-                    if (userAgent.ToLower().Contains("ipad"))
-                        return View("ValidateMSTR", ListModel);
-                    else
-                        return View("ValidateMSTRMobile", ListModel);
-
+                    return View(ListModel);
+                    // Do stuff
                 }
                 else
                 {
@@ -1055,13 +1122,19 @@ namespace CONTRAST_WEB.Controllers
                         model.tbankname = bankName[0].Bank_Name;
                         model.tbankaccount = bankName[0].account_number;
                     }
-
+                    //else
+                    //{
+                    //    model.tbankname    = "- Not Available -";
+                    //    model.tbankaccount = "- Not Available -";
+                    //}
 
                     tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
                     division.Divisi = division.Divisi.Replace("and1", "&");
                     ViewBag.division_name = division.Divisi;
 
+
                     ViewBag.Username = model.employee_info.name;
+                    //return View("Index", model);
                     var headers = Request.Headers.GetValues("User-Agent");
                     string userAgent = string.Join(" ", headers);
 
@@ -1075,20 +1148,33 @@ namespace CONTRAST_WEB.Controllers
             else
             if (add != null)
             {
+                //List<tb_m_vendor_employee> valid = await GetData.VendorEmployee(Convert.ToInt32(model.tparticipant));
+                //if (ModelState.IsValid || valid.Count > 0)
+                //{
                 List<string> ModelList = new List<string>();
                 int noreg;
+                string exist = "";
+
                 if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
                 {
                     if (model.participants == null)
                         model.participants = new List<tb_r_travel_request_participant>();
-                    model.participants.Add(new tb_r_travel_request_participant());
-                    model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
-                    model.participants[model.participants.Count() - 1].active_flag = true;
-                    model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
+                    foreach (var item in model.participants)
+                    {
+                        if (item.no_reg == noreg) exist = await GetData.EmployeeNameInfo(noreg);
+                    }
+                    if (exist == "")
+                    {
+                        model.participants.Add(new tb_r_travel_request_participant());
+                        model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
+                        model.participants[model.participants.Count() - 1].active_flag = true;
+                        model.participants[model.participants.Count() - 1].no_reg = Convert.ToInt32(noreg);
 
-                    model.travel_request.participants_flag = true;
+                        model.travel_request.participants_flag = true;
+                    }
+
                 }
-
+                ViewBag.Exist = exist;
                 if (model.participants != null)
                 {
                     for (int k = 0; k < model.participants.Count(); k++)
@@ -1118,16 +1204,57 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
                 if (ViewBag.Bossname == null) ViewBag.Bossname = "-No data";
+                //return View("Index", model);
+                //}
+                //else
+                //{
+                //    ViewBag.RL = await GetData.DestinationInfo();
+                //    ViewBag.RL2 = await GetData.PurposeInfo();
+                //    //list participant in string
 
+                //    List<string> ModelList = new List<string>();
+                //    if (model.participants != null)
+                //    {
+                //        for (int k = 0; k < model.participants.Count(); k++)
+                //        {
+                //            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                //        }
+                //    }
+                //    ViewBag.RL3 = ModelList;
+
+                //    string boss = await GetData.EmployeeNameInfo(model.travel_request.assign_by);
+                //    if (boss == null) boss = "-No data";
+                //    ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model.travel_request.assign_by.ToString().Trim() + ")";
+
+                //    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                //    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+                //    if (bankName.Count != 0)
+                //    {
+                //        model.tbankname = bankName[0].Bank_Name;
+                //        model.tbankaccount = bankName[0].account_number;
+                //    }
+                //    //else
+                //    //{
+                //    //    model.tbankname    = "- Not Available -";
+                //    //    model.tbankaccount = "- Not Available -";
+                //    //}
+
+                //    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+                //    division.Divisi = division.Divisi.Replace("and1", "&");
+                //    ViewBag.division_name = division.Divisi;
+
+
+                //    ViewBag.Username = model.employee_info.name;
+                //    return View("Index", model);
+                //}
+                //return View("Index", model);
                 var headers = Request.Headers.GetValues("User-Agent");
                 string userAgent = string.Join(" ", headers);
 
-                //return View("IndexMSTR", model);
                 if (userAgent.ToLower().Contains("ipad"))
                     return View("IndexMSTR", model);
                 else
                     return View("IndexMSTRMobile", model);
-
             }
             else
             if (delete != "")
@@ -1138,8 +1265,6 @@ namespace CONTRAST_WEB.Controllers
                 int count = model.participants.Count;
                 temp = model;
                 temp.participants.RemoveAt(del);
-
-
                 List<string> ModelList = new List<string>();
 
                 temp.travel_request.participants_flag = true;
@@ -1172,9 +1297,7 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL = await GetData.DestinationInfo();
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
-                if (ViewBag.Bossname == null) ViewBag.Bossname = "-No Data";
-                //return View("IndexMSTR", temp);
-
+                //return View("Index", temp);
                 //header
                 var headers = Request.Headers.GetValues("User-Agent");
                 string userAgent = string.Join(" ", headers);
@@ -1186,8 +1309,35 @@ namespace CONTRAST_WEB.Controllers
                     return View("IndexMSTRMobile", temp);
 
             }
+            //else
+            //if (clear == "")
+            //{
+            //    TravelRequestHelper temp = model;
+            //    temp = model;
+            //    List<string> ModelList = new List<string>();
+
+            //    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+            //    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
+            //    if (bankName.Count != 0)
+            //    {
+            //        temp.tbankname = bankName[0].Bank_Name;
+            //        temp.tbankaccount = bankName[0].account_number;
+            //    }
+
+            //    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
+            //    ViewBag.division_name = division.Divisi;
+            //    division.Divisi = division.Divisi.Replace("and1", "&");
+
+            //    ViewBag.RL3 = ModelList;
+
+            //    ViewBag.RL = await GetData.DestinationInfo();
+            //    ViewBag.RL2 = await GetData.PurposeInfo();
+            //    ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+            //    return View("Index", temp);
+
+            //}
             else
-                return View("IndexMSTR");
+                return RedirectToAction("IndexMSTR");
 
         }
 

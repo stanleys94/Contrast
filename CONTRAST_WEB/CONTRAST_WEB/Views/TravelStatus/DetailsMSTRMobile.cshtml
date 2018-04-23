@@ -1,20 +1,20 @@
 ﻿@model CONTRAST_WEB.Models.TravelStatusHelper
 @{
     ViewBag.Title = "DETAIL TRAVEL STATUS";
-    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    Layout = "~/Views/Shared/_LayoutM.Mobile.cshtml";
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL;
 }
-@using (Html.BeginForm("DropMSTR", "TravelStatus", FormMethod.Post))
+
+@using (Html.BeginForm("DropMSTRMobile", "TravelStatus", FormMethod.Post))
 {
-    
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.travel_request.group_code)
     <div class="container">
-        <div style="margin-top:100px" class="row">
-            <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left;">DETAIL TRAVEL STATUS @Html.HiddenFor(m => m.travel_request.id_request)</h4></div>
-            <div class="col-md-3"></div>
+        <div style="margin-top:70px" class="row">
+            <div class="col-xs-12"><h4 style="text-align:left;">DETAIL TRAVEL STATUS @Html.HiddenFor(m => m.travel_request.id_request)</h4></div>
             <form action="" id="loginForm">
-                <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-5 col-md-offset-1">
+                <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-xs-12">
                     <h5 class="h5a">No Reg :</h5>
                     @Html.DisplayFor(m => m.travel_request.no_reg, new { placeholder = "No Reg", @readonly = "readonly" })
                     <h5 class="h5a">Request Purpose :</h5>
@@ -61,8 +61,7 @@
                         <h5 class="h5a">Return Date :</h5>
                         <p>@Html.DisplayFor(m => m.travel_request.endDate_1, new { @type = "datetime-local", placeholder = "Return", @readonly = "readonly" })</p>
                     }
-                </div>
-                <div class="col-md-5">
+
                     <div class="wellIn2">
                         <span><strong>CURRENT STATUS :</strong></span>
                     </div>
@@ -90,7 +89,7 @@
                                         </div>
                                     </div>
                                 }
-                                <div class="teks">
+                                <div class="teks" style="max-width:250px;min-width:250px;">
                                     <div style="color:gray" class="teks1">
                                         @if (k >= ViewBag.StatusState.Count)
                                         {
@@ -148,15 +147,38 @@
                         </ol>
                     </div>
                     <br />
-                    
-                    <button style="width:145px;position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-lg">Download</button>
+                    <button type="button" class="btn btn-default btn-xs" onclick="goBack()">Back</button>
+                    <button style="position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-xs">Download</button>
                     @if (Model.travel_request.status_request == null)
                     {
-                        <button type="button" style="width:145px; position:relative;left:10px" class="btn btn-danger btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
+                        @*<button type="button" style="position:relative;left:10px" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".bs-example-modal-xs" value="Submit">Drop Request</button>*@
+                        <button style="position:relative;left:10px" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
+                        @*<div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xs">
+                                    <div class="modal-content">
+                                        <div style="height:50px" class="modal-header">
+                                            <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div style="text-align:center;">
+                                                <strong>Are you sure you want to drop this request ?? </strong>
+                                                <br />click Yes to drop
+                                            </div>
+                                            <div style="margin:5px 50px; text-align:center; ">
+                                                <br />
+                                                <span> <button type="submit" position:center;" class="btn btn-danger btn-xs" name="drop" value="submit">Yes</button></span>
+                                                <span> <button type="button" position:center;" class="btn btn-info btn-xs" name="close" data-dismiss="modal">No</button></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+
                         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <div style="height:50px" class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
                                         <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
                                     </div>
                                     <div class="modal-body">
@@ -164,10 +186,10 @@
                                             <strong>Are you sure you want to drop this request ?? </strong>
                                             <br />click Yes to drop
                                         </div>
-                                        <div style="margin:10px 100px; text-align:center; ">
-                                            <br />
-                                            <span> <button type="submit" style="width:75px; position:center;" class="btn btn-danger btn-lg" name="drop" value="submit">Yes</button></span>
-                                            <span> <button type="button" style="width:75px; position:center;" class="btn btn-info btn-lg" name="close" data-dismiss="modal">No</button></span>
+
+                                        <div style="margin:10px 50px;text-align:center;">
+                                            <span> <button type="submit" position:center;" class="btn btn-danger btn-xs" name="drop" value="submit">Yes</button></span>
+                                            <span> <button type="button" position:center;" class="btn btn-info btn-xs" name="close" data-dismiss="modal">No</button></span>
                                         </div>
                                     </div>
                                 </div>

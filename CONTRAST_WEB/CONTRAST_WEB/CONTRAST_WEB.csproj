@@ -361,7 +361,6 @@
     <Compile Include="Models\vw_travel_execution_list.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Utility\Calculate.cs" />
     <Compile Include="Utility\Class1.cs" />
     <Compile Include="Utility\Constant.cs" />
     <Compile Include="Models\CONTRAST_DB.Context.cs">
@@ -791,8 +790,17 @@
     <Content Include="Views\PaymentProposal\Index.cshtml" />
     <Content Include="Views\TravelRequest\ValidateMSTRMobile.cshtml" />
     <Content Include="Views\SettlementList\Insert.cshtml" />
-    <Content Include="Views\TravelStatus\Revise.cshtml" />
-    <Content Include="Views\TravelStatus\Validate.cshtml" />
+    <Content Include="Views\TravelStatus\Comment.Mobile.cshtml" />
+    <Content Include="Views\TravelStatus\DetailsMSTRMobile.cshtml" />
+    <Content Include="Views\TravelStatus\CommentMSTR.cshtml" />
+    <Content Include="Views\TravelStatus\CommentMSTRMobile.cshtml" />
+    <Content Include="Views\SettlementList\SummaryPaid.Mobile.cshtml" />
+    <Content Include="Views\SettlementList\SummaryPaidMSTRMobile.cshtml" />
+    <Content Include="Views\SettlementList\InsertMSTR.cshtml" />
+    <Content Include="Views\SettlementList\InsertMSTRMobile.cshtml" />
+    <Content Include="Views\Shared\_LayoutM.Mobile.cshtml" />
+    <Content Include="Views\TravelConfirmation\ConfirmationMSTRMobile.cshtml" />
+    <Content Include="Views\TravelConfirmation\Validate.Mobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -12,20 +12,6 @@
             }
         </li>
         <li class="breadcrumb-item active">Profile</li>
-        <label style="margin-left:100px">
-            @using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-question-sign"></span> DOWNLOAD FAQ</button>
-            }
-        </label>
-        <label style="margin-left:10px">
-            @using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning btn-xs"><span style="color:gray" class="glyphicon glyphicon-info-sign"></span> DOWNLOAD SOP</button>
-            }
-        </label>
     </ol>
 </div>
 <div class="container">

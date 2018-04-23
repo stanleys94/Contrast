@@ -34,6 +34,8 @@
             @Html.HiddenFor(m => m.TravelRequest.start_date)
             @Html.HiddenFor(m => m.TravelRequest.end_date)
 
+            @Html.HiddenFor(m => m.TravelRequest.emp_name)
+
             if (Model.TravelRequest.final_status == "2")
             {
                 <strong><h2>Rejected settlement</h2></strong>
@@ -42,8 +44,22 @@
             }
 
             <div class="col-md-11 col-md-offset-1"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div><br />
+            <div class="col-md-5 col-md-offset-1">
+                <strong class="fnt2">NAME</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.emp_name)
+                </div>
+            </div>
+
+            <div class="col-md-5 col-md-offset-1">
+                <strong class="fnt2">BTA NUMBER</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.group_code)
+                </div>
+            </div>
+
             <div class="col-md-11 col-md-offset-1">
-                <strong class="fnt2">DESTINATION :</strong>
+                <strong class="fnt2">DESTINATION</strong>
                 <div class="form-group input-group">
                     <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
                     @Html.HiddenFor(m=>m.TravelRequest.id_destination_city)
@@ -51,7 +67,7 @@
             </div>
 
             <div class="col-md-5 col-md-offset-1">
-                <strong class="fnt2">DEPARTURE DATE :</strong>
+                <strong class="fnt2">DEPARTURE DATE</strong>
                 <div class="form-group input-group">
                     @Html.DisplayFor(m => m.TravelRequest.start_date)
                 </div>
@@ -104,7 +120,7 @@
                 </div>
                 <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="ifYa5">
                     @Html.CheckBoxFor(m => m.halfday_flag2)
-                    <label>HALF DAY ARRIVAL</label>
+                    <label>HALF DAY RETURN</label>
                 </div>
             </div>
 

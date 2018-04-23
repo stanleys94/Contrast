@@ -1,16 +1,14 @@
 ﻿@model CONTRAST_WEB.Models.SettlementHelper
-
 @{
+    /**/
+
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
 
-<div style="height:100px; padding:70px 0 0 0;" class="well navbar-fixed-top">
-    
-</div>
-
 <div class="container">
     <div style="margin-top:110px" class="row">
+
         @using (Html.BeginForm("InsertMSTR", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
 
         {
@@ -21,24 +19,72 @@
             @Html.HiddenFor(m => m.TravelRequest.no_reg)
             @Html.HiddenFor(m => m.TravelRequest.group_code)
             @Html.HiddenFor(m => m.TravelRequest.login_id)
+            @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
+            @Html.HiddenFor(m => m.TravelRequest.destination_name)
+            @Html.HiddenFor(m => m.TravelRequest.start_date)
+            @Html.HiddenFor(m => m.TravelRequest.end_date)
+
+            @Html.HiddenFor(m => m.TravelRequest.emp_name)
+
+            if (Model.TravelRequest.final_status == "2")
+            {
+                <strong><h2>Rejected settlement</h2></strong>
+                <span style="text-align:right;margin-left:100px;">REASON OF REJECTION : </span>
+                <span style="color:red"> @Model.TravelRequest.comment</span>
+            }
+
+            <div class="col-md-12"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div><br />
+            <div class="col-md-12">
+                <strong class="fnt2">NAME</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.emp_name)
+                </div>
+            </div>
+
+            <div class="col-md-5 col-md-offset-1">
+                <strong class="fnt2">BTA NUMBER</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.group_code)
+                </div>
+            </div>
+
             <div class="col-md-11 col-md-offset-1">
-                <label>EXTEND ?</label>
+                <strong class="fnt2">DESTINATION</strong>
+                <div class="form-group input-group">
+                    <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
+                    @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong class="fnt2">DEPARTURE DATE</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.start_date)
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong class="fnt2">RETURN DATE :</strong>
+                <div class="form-group input-group">
+                    @Html.DisplayFor(m => m.TravelRequest.end_date)
+                </div>
+            </div>
+
+            <br />
+            <div class="col-md-12">
+                <p style="width:940px;color:darkslategray;float:left;background-color:lightgray;padding:5px;">EXTEND TRAVEL ?</p>
                 <div style="width:125px;" class="radio">
-                    <label style="float:right;">
-                        @*<input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" value="false">
-                        NO*@
-                        @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "noCheck" }) NO
+                    <label>
+                        @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:Check();", name = "yes", id = "yesCheck" })<span>YES</span>
                     </label>
-                    <label style="float:left;">
-                        @*<input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck" value="true" checked>
-                        YES*@
-                        @Html.RadioButtonFor(m => m.extend_flag, true, new { onclick = "javascript:yesnoCheck();", name = "yesno", id = "yesCheck", @checked = true }) YES
+                    <label style="float:right;">
+                        @Html.RadioButtonFor(m => m.extend_flag, false, new { onclick = "javascript:Check();", name = "no", id = "noCheck", @checked = "checked" })<span>NO</span>
                     </label>
                 </div>
             </div>
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-lg-11 col-lg-offset-1" id="ifYa1"><label>DURATION Of EXTEND :</label></div>
-            
-            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5 col-lg-offset-1" id="ifYa2">
+            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-12" id="ifYa1"><h5 style="width:940px;margin-bottom:0px;padding-bottom:0px;" class="h5z2">DURATION Of EXTEND :</h5></div>
+
+            <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5" id="ifYa2">
                 @Html.ValidationMessageFor(m => m.Start_Extend, "", new { @class = "text-danger" })<br />
                 <label>Start</label>
                 <div class="form-group input-group">
@@ -47,8 +93,12 @@
                     @Html.TextBoxFor(m => m.Start_Extend, new { @class = "form-control", @type = "date", placeholder = "Departure" })
                     @*@Html.HiddenFor(m => m.Start_Extend)*@
                 </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-offset-0" id="ifYa4">
+                    @Html.CheckBoxFor(m => m.halfday_flag1)
+                    <label>HALF DAY DEPARTURE</label>
+                </div>
             </div>
-           
+
             <div style="margin-bottom:0px;display:block;float:left;" class="col-md-5" id="ifYa3">
                 @Html.ValidationMessageFor(m => m.End_Extend, "", new { @class = "text-danger" })<br />
                 <label>End</label>
@@ -57,6 +107,10 @@
                     <!--<input type="date" style="width:100%" />-->
                     @Html.TextBoxFor(m => m.End_Extend, new { @class = "form-control", @type = "date", placeholder = "Arrival" })
                     @*@Html.HiddenFor(m => m.End_Extend)*@
+                </div>
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="ifYa5">
+                    @Html.CheckBoxFor(m => m.halfday_flag2)
+                    <label>HALF DAY RETURN</label>
                 </div>
             </div>
 
@@ -82,7 +136,9 @@
             <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
                 <H6 class="h6s">Reimburse</H6>
                 <div class="form-group input-group">
-                    @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", Value = String.Format("{0:n0}", Model.MealSettlement) })
+                    @*@Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @Value = String.Format("{0:n0}", Model.MealSettlement) })*@
+                    @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.HiddenFor(m => m.MealSettlement)
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
             </div>
@@ -162,6 +218,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
                 <div style="position:relative;">
+                    @Html.ValidationMessageFor(m => m.ReceiptFileTransportation, "", new { @class = "text-danger" })<br />
                     <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                         Choose File...
                         <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info5").html($(this).val());'>-->
@@ -184,6 +241,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
                 <div style="position:relative;">
+                    @Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />
                     <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                         Choose File...
                         <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info6").html($(this).val());'>-->
@@ -205,6 +263,7 @@
                     <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                 </div>
                 <div style="position:relative;">
+                    @Html.ValidationMessageFor(m => m.ReceiptFileOther, "", new { @class = "text-danger" })<br />
                     <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                         Choose File...
                         <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val());'>
@@ -220,19 +279,17 @@
             </div>
             //}
 
-         
+
             <div style="margin-left:100px" class="col-md-11 col-md-offset-1">
                 <button type="submit" style="width:145px" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
             </div>
         }
-
     </div>
     <hr />
 </div>
 
-
 <script>
-    function yesnoCheck() {
+    function Check() {
         if (document.getElementById('yesCheck').checked) {
             document.getElementById('ifYes').style.display = 'block';
             document.getElementById('ifYesm1').style.display = 'block';
@@ -242,7 +299,7 @@
             document.getElementById('ifYa2').style.display = 'block';
             document.getElementById('ifYa3').style.display = 'block';
         }
-        else {
+        else if (document.getElementById('noCheck').checked) {
             document.getElementById('ifYes').style.display = 'none';
             document.getElementById('ifYesm1').style.display = 'none';
             document.getElementById('ifYes2').style.display = 'none';
@@ -250,6 +307,14 @@
             document.getElementById('ifYa1').style.display = 'none';
             document.getElementById('ifYa2').style.display = 'none';
             document.getElementById('ifYa3').style.display = 'none';
+        } else {
+            document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('ifYesm1').style.display = 'block';
+            document.getElementById('ifYes2').style.display = 'block';
+            document.getElementById('ifYes3').style.display = 'block';
+            document.getElementById('ifYa1').style.display = 'block';
+            document.getElementById('ifYa2').style.display = 'block';
+            document.getElementById('ifYa3').style.display = 'block';
         }
     }
 </script>

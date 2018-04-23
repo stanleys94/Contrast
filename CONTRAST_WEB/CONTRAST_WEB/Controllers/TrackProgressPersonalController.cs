@@ -101,6 +101,7 @@ namespace CONTRAST_WEB.Controllers
                         || track[k].TrackedList.name.ToLower().Contains(searchString.ToLower())
                         || track[k].TrackedList.destination_name.ToLower().Contains(searchString.ToLower())
                         || track[k].TrackedList.verified_flag.ToLower().Contains(searchString.ToLower())
+                        || track[k].TrackedList.TYPES_OF_TRANSACTIONS.ToLower().Contains(searchString.ToLower())
                        )
                         temp.Add(track[k]);
                 }
