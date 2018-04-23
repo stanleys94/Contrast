@@ -36,7 +36,7 @@
                                 <span><input type="image" img style="margin:15px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
                             </div>
                             <div style="padding:10px 1px; width:170px;" class="column menu">
-                                <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span>
+                                <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span><br />
                                 <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
                                 @if (item.final_status == "2")
                                 {

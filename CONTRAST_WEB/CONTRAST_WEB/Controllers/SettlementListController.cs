@@ -316,9 +316,9 @@ namespace CONTRAST_WEB.Controllers
                     if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
                         await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
                     else
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                       await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
-                    //migrate ke helper baru
+                    migrate ke helper baru
 
                     if (model.HotelSettlement > 0) SummarySettlementObject.HotelSettlement = model.HotelSettlement;
                     else SummarySettlementObject.HotelSettlement = 0;
@@ -357,11 +357,16 @@ namespace CONTRAST_WEB.Controllers
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SummaryPaid(vw_summary_settlement model)
         {
-
             return View("Index");
+        }
+
+        [HttpPost]
+        public ActionResult SummaryPaidMSTR(SettlementHelper model)
+        {
+            return RedirectToAction("Index");
         }
 
         // GET: SettlementList
@@ -586,7 +591,7 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
 
                     //if (!model.extend_flag)
-                    return View("SummaryPaid", SummarySettlementObject);
+                    return View("SummaryPaidMSTR", SummarySettlementObject);
                 }
                 else
                 if (sum != null)
