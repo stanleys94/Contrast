@@ -318,7 +318,7 @@ namespace CONTRAST_WEB.Controllers
                     else
                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
-                    migrate ke helper baru
+                    //migrate ke helper baru
 
                     if (model.HotelSettlement > 0) SummarySettlementObject.HotelSettlement = model.HotelSettlement;
                     else SummarySettlementObject.HotelSettlement = 0;
