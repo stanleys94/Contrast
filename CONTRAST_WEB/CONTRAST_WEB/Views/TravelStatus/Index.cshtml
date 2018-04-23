@@ -36,13 +36,18 @@
 
                             </div>
                             <div style="width:200px;" class="column menu">
-                                <div>                                    
-                                        @Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code }) 
+                                <div>   
+                                        
                                         @if (ViewBag.reviseflag[i] == true)
                                         {
-                                           <span></span> <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
+                                            @Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code }) 
+                                            <span></span> <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
                                         }
-                                        
+                                        else
+                                        {
+                                            @Html.DisplayFor(m=>m[i].group_code)
+                                        }
+
                                 </div>
                                
                                 <div>

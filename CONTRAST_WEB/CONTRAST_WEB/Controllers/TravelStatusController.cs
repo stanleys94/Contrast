@@ -900,7 +900,7 @@ namespace CONTRAST_WEB.Controllers
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Revise(string group_code, string participant)
+        public async Task<ActionResult> Revise(string group_code)
         {
             //identity
             var identity = (ClaimsIdentity)User.Identity;
@@ -932,71 +932,77 @@ namespace CONTRAST_WEB.Controllers
             division.Divisi = division.Divisi.Replace("and1", "&");
             ViewBag.division_name = division.Divisi;
 
-            //get participants
-            if (participant==null)
-                model2.participants = await GetData.TravelRequestParticipant(model2.travel_request.no_reg.ToString(), group_code);
-            else
-                model2.participants = JsonConvert.DeserializeObject<List<tb_r_travel_request_participant>>(participant);
-
+            //get participants            
+            model2.participants = await GetData.TravelRequestParticipant(model2.travel_request.no_reg.ToString(), group_code);
+       
             return View(model2);
         }
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "")
+        public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, DateTime time,DateTime rtime, string delete = "", string loged = "")
         {
             var identity = (ClaimsIdentity)User.Identity;
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
                        
-            if (add != null)
-            {
-                //get participants
-                //List<tb_r_travel_request_participant> model2 = new List<tb_r_travel_request_participant>();
-                //model2 = await GetData.TravelRequestParticipant(model.employee_info.code, model.travel_request.group_code);
-                model.participants.Add(new tb_r_travel_request_participant {
-                    active_flag = true,
-                    no_reg_parent = Convert.ToInt32(model.employee_info.code),
-                    no_reg = Convert.ToInt32(model.tparticipant),
-                    created_date = model.travel_request.create_date
-                    });
-                return RedirectToAction("Revise", new { group_code= model.travel_request.group_code, participant= JsonConvert.SerializeObject(model.participants) });
-            }
-            else
-            if (delete != "")
-            {
-                //get participants
-                model.participants.RemoveAt(Convert.ToInt32(delete));
-
-                return RedirectToAction("Revise", new { group_code = model.travel_request.group_code, participant = JsonConvert.SerializeObject(model.participants) });
-            }
-            else
             if (validate!= "")
             {
                 tb_r_travel_request origin_data = new tb_r_travel_request();
                 origin_data = await GetData.TravelRequest(model.travel_request.id_request);
-                //assign activity difference
-                if (origin_data.id_activity != model.travel_request.id_activity) origin_data.id_activity = model.travel_request.id_activity;
-                //assign passport flag
-                if (origin_data.passport_flag != model.travel_request.passport_flag) origin_data.passport_flag = model.travel_request.passport_flag;
-                //reason of assignment
-                if (origin_data.reason_of_assigment != model.travel_request.reason_of_assigment) origin_data.reason_of_assigment = model.travel_request.reason_of_assigment;
-                //travel purpose
-                if (origin_data.travel_purpose != model.travel_request.travel_purpose) origin_data.travel_purpose = model.travel_request.travel_purpose;
-                
-                //assign destination city difference
-                if (origin_data.id_destination_city != model.travel_request.id_destination_city) origin_data.id_destination_city = model.travel_request.id_destination_city;
+
                 //start date
-                if (origin_data.start_date != model.travel_request.start_date) origin_data.start_date = model.travel_request.start_date;
+                if (origin_data.start_date != model.travel_request.start_date)
+                {
+                    model.travel_request.start_date= model.travel_request.start_date+(time.TimeOfDay);
+                    origin_data.start_date = model.travel_request.start_date;
+                }
+
                 //end date
-                if (origin_data.end_date != model.travel_request.end_date) origin_data.end_date = model.travel_request.end_date;
+                if (origin_data.end_date != model.travel_request.end_date)
+                {
+                    model.travel_request.end_date = model.travel_request.end_date + (rtime.TimeOfDay);
+                    origin_data.end_date = model.travel_request.end_date;
+                }
+                model.travel_request = origin_data;
+                model = await calculate.DateDurationAsync(model);
 
+                //get bank account
+                List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                bankName = await GetData.VendorEmployee(Convert.ToInt32(identity.Name));
+                if (bankName.Count != 0)
+                {
+                    model.tbankname = bankName.First().Bank_Name;
+                    model.tbankaccount = bankName.First().account_number;
+                }
 
-                return RedirectToAction("Revise", new { group_code = model.travel_request.group_code, participant = JsonConvert.SerializeObject(model.participants) });
+                //execute
+                //await UpdateData.TravelRequest(origin_data);
+                List<TravelRequestHelper> model2 = new List<TravelRequestHelper>();
+                model2.Add(model);
+
+                string division_r = await GetData.GetDivMapping(model.travel_request.no_reg.ToString());
+                tb_m_budget budget = await GetData.GetCostWbs((bool)model.travel_request.overseas_flag, division_r.Trim());
+                ViewBag.budget = budget.available_amount;
+                ViewBag.wbs = budget.eoa_wbs_no;
+                ViewBag.costcenter = budget.cost_center;
+                //return RedirectToAction("Revise", new { group_code = model.travel_request.group_code});
+                return View(model2);
             }
             else
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Update(TravelRequestHelper[] model) {
+
+            foreach (var item in model)
+            {
+                item.travel_request.additional1 = null;
+                //execute
+                await UpdateData.TravelRequest(item.travel_request);
+            }
+            return RedirectToAction("Index", "TravelStatus");
         }
 
         //[HttpPost]         

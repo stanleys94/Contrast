@@ -193,6 +193,18 @@ namespace CONTRAST_WEB.Models
 
         public TravelRequestHelper() { }
 
+        public string destination_string { get; set; }
+        public string bossname_string { get; set; }
+        public string bank_name_string { get; set; }
+        public string bank_account_string { get; set; }
+
+
+        public int total_days_validate { get; set; }
+        public int total_meal_validate { get; set; }
+        public float total_hotel_validate { get; set; }
+        public float total_allowance_validate { get; set; }
+        public float total_ticket_validate { get; set; }
+        
     }
 
 

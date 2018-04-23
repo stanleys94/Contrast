@@ -279,6 +279,24 @@ namespace CONTRAST_WEB.Models
 
         }
 
+        public static async Task TravelRequest(tb_r_travel_request model)
+        {            
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PutAsJsonAsync("api/TravelRequest/" + TRSource[k].id_request, TRSource[k]);
+                HttpResponseMessage response = await client.PutAsync("api/TravelRequest/" + model.id_request, new StringContent(
+                            new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+}   
+        }
+
         public static async Task Budget(string wbs_no, string cost_center, double money)
         {
             tb_m_budget UpdatedData = new tb_m_budget();
