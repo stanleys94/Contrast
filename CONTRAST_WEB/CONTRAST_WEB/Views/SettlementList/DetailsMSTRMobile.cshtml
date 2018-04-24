@@ -193,10 +193,10 @@
                 <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                     Choose File...
                     <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info5").html($(this).val());'>-->
-                    <input type="file" id="FileUpload1" name="UploadedFile1" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val());'>
+                    <input type="file" id="FileUpload1" name="UploadedFile1" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val().replace(/.*(\/|\\)/,""));'>
                 </a>
                 &nbsp;
-                <span class='label label-info' id="upload-file-info5"></span>
+                <label style="color:dimgray;font-size:13px;" class='h5s' id="upload-file-info5"></label>
                 <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
             </div>
         </div>
@@ -215,10 +215,10 @@
                 <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                     Choose File...
                     <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info6").html($(this).val());'>-->
-                    <input type="file" id="FileUpload2" name="UploadedFile2" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+                    <input type="file" id="FileUpload2" name="UploadedFile2" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val().replace(/.*(\/|\\)/,""));'>
                 </a>
                 &nbsp;
-                <span class='label label-info' id="upload-file-info6"></span>
+                <label style="color:dimgray;font-size:13px;" class='h5s' id="upload-file-info6"></label>
                 <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
             </div>
         </div>
@@ -235,10 +235,10 @@
             <div style="position:relative;">
                 <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
                     Choose File...
-                    <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val());'>
+                    <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val().replace(/.*(\/|\\)/,""));'>
                 </a>
                 &nbsp;
-                <span class='label label-info' id="upload-file-info7"></span>
+                <label style="color:dimgray;font-size:13px;" class='h5s' id="upload-file-info7"></label>
                 <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
             </div>
         </div>

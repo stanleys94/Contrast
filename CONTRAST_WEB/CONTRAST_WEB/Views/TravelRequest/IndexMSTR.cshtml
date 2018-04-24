@@ -369,25 +369,14 @@
                 <strong style="color:deepskyblue">TRAVEL DOCUMENT</strong>
             </div>
 
-            @*<div class="col-lg-5 col-lg-offset-1">
-                    <div style="position:relative;">
-                        <span class="fnt2">General Documents :</span><br />
-                        <div>
-                            <input type="file" id="generaldoc" name="generaldoc" class="btn" style="border:0;width:450px;" />
-                            <span class='label label-info' id="upload-file-info6"></span>
-                            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p><br>
-                        </div>
-                    </div>
-                </div>*@
-
             <div class="col-lg-5 col-lg-offset-1">
                 <span class="fnt2">General Documents :</span>
                 <div style="position:relative;">
                     <a style="font-size:13px" class='btn btn-primary'>
-                        <input type="file" id="generaldoc" name="generaldoc" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+                        <input type="file" id="generaldoc" name="generaldoc" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val().replace(/.*(\/|\\)/,""));'>
                         <i class="glyphicon glyphicon-search"></i>&nbsp;Browse
                     </a>
-                    <span class='label label-info' id="upload-file-info6"></span>
+                    <label style="color:dimgray;font-size:13px;" class='h5s' id="upload-file-info6"></label>
                     <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
                 </div>
             </div>
