@@ -361,6 +361,7 @@
     <Compile Include="Models\vw_travel_execution_list.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Calculate.cs" />
     <Compile Include="Utility\Class1.cs" />
     <Compile Include="Utility\Constant.cs" />
     <Compile Include="Models\CONTRAST_DB.Context.cs">
