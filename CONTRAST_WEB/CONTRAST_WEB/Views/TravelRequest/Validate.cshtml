@@ -233,11 +233,19 @@
                 <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
                     <label class="fnt2">Ticket Allowance&nbsp;</label>
                     <br />
-                    @for (int k = 0; k < Model.Count; k++)
+                    @if (ViewBag.Ticket != null)
                     {
-                        @Html.HiddenFor(m => m[k].travel_request.allowance_ticket);
+                        for(int k = 0; k < Model.Count; k++)
+                        {
+                            @Html.HiddenFor(m => m[k].travel_request.allowance_ticket);
+                        }
+                        <label>&nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Ticket)</label>
                     }
-                    <label>&nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Ticket)</label>
+                    else
+                    {
+                        <label style="color:red;">Rate Flight Has null, Please contact Admin</label>
+                    }
+
                 </div>
                 @if (Model[0].travel_request.allowance_winter == 0)
                 {
