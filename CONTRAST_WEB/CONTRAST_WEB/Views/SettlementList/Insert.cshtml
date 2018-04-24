@@ -230,15 +230,14 @@
             <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
         </div>
         <div style="position:relative;">
-            @Html.ValidationMessageFor(m => m.ReceiptFileTransportation, "", new { @class = "text-danger" })<br />
-            <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
-                Choose File...
-                <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info5").html($(this).val());'>-->
-                <input type="file" id="FileUpload1" name="UploadedFile1" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val());'>
+            @*@Html.ValidationMessageFor(m => m.ReceiptFileTransportation, "", new { @class = "text-danger" })<br />*@
+            <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
+                <input type="file" id="FileUpload1" name="UploadedFile1" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val());'>
+                <i class="glyphicon glyphicon-upload"></i>&nbsp;Choose File...
             </a>
             &nbsp;
             <span class='label label-info' id="upload-file-info5"></span>
-            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB (.jpeg Format)</p>
+            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
         </div>
     </div>
 
@@ -253,15 +252,14 @@
             <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
         </div>
         <div style="position:relative;">
-            @Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />
-            <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
-                Choose File...
-                <!--<input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info6").html($(this).val());'>-->
-                <input type="file" id="FileUpload2" name="UploadedFile2" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+            @*@Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />*@
+            <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
+                <input type="file" id="FileUpload2" name="UploadedFile2" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+                <i class="glyphicon glyphicon-upload"></i>&nbsp;Choose File...
             </a>
             &nbsp;
             <span class='label label-info' id="upload-file-info6"></span>
-            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB (.jpeg Format)</p>
+            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
         </div>
     </div>
 
@@ -275,14 +273,14 @@
             <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
         </div>
         <div style="position:relative;">
-            @Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />
-            <a style="font-size:12px" class='btn btn-primary' href='javascript:;'>
-                Choose File...
-                <input type="file" id="FileUpload3" name="UploadedFile3" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val());'>
+            @*@Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />*@
+            <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
+                <input type="file" id="FileUpload3" name="UploadedFile3" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val());'>
+                <i class="glyphicon glyphicon-upload"></i>&nbsp;Choose File...
             </a>
             &nbsp;
             <span class='label label-info' id="upload-file-info7"></span>
-            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB (.jpeg Format)</p>
+            <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
         </div>
     </div>
 
