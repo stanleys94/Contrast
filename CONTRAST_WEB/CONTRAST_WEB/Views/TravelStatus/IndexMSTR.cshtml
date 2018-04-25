@@ -29,7 +29,7 @@
 
                                         @if (ViewBag.reviseflag[i] == true)
                                         {
-                                            <strong>@Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code })</strong>
+                                            <strong>@Html.ActionLink(Model[i].group_code, "ReviseMSTR", new { group_code = Model[i].group_code })</strong>
                                             <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
                                         }
                                         else
