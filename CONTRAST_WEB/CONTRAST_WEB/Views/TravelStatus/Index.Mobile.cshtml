@@ -6,7 +6,7 @@
 
 }
 <div class="container">
-    <div style="margin-top:70px; id="products" class="row list-group _3EibU">
+    <div style="margin-top:70px;" id="products" class="row list-group _3EibU">
         @if (Model.Count > 0)
         {
             for (var i = 0; i < Model.Count; i++)
@@ -21,16 +21,17 @@
                                     @Html.AntiForgeryToken()
                                     <input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Travel-Status-icon-b.png" />
                                 </div>
-                                
                                 <div style="width:200px;" class="column menu">
                                     <div>
-                                        <strong>@Html.DisplayFor(m => Model[i].group_code)</strong> 
-                                        @*@Html.ActionLink(Model[i].group_code, "Comment", new { group_code = Model[i].group_code })*@
                                         @if (ViewBag.reviseflag[i] == true)
                                         {
-                                            <span></span> <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">Revised</span>
+                                            <strong>@Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code })</strong>
+                                            <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
                                         }
-
+                                        else
+                                        {
+                                            <strong>@Html.DisplayFor(m => m[i].group_code)</strong>
+                                        }
                                     </div>
 
                                     <div>
@@ -64,8 +65,8 @@
                                                 {
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl6 != null)
@@ -85,8 +86,7 @@
                                                 {
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl5 != null)
@@ -106,8 +106,7 @@
                                                 {
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl4 != null)
@@ -127,8 +126,7 @@
                                                 {
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl3 != null)
@@ -148,8 +146,7 @@
                                                 {
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl2 != null)
@@ -169,8 +166,7 @@
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
 
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl1 != null)
@@ -190,8 +186,7 @@
                                                 {
                                                     <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br />
-                                                @ViewBag.Bossname[i]
+                                                <br /><strong>@ViewBag.Bossname[i]</strong>
                                             }
 
 
@@ -211,13 +206,17 @@
                                             <img src='@Url.Content("~/img/Travel-Status-Comment.png")' />
                                         </a>
                                         @if (ViewBag.newmsg[i] == 0)
-                                        {<strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>}
-                                    else
-                                    {<strong style="color:red">@ViewBag.newmsg[i] Comment unread</strong>}
+                                        {
+                                            <strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong style="color:red">@ViewBag.newmsg[i] Comment unread</strong>
+                                        }
 
                                     </div>
                                 </div>
-                                
+
                                 <div style="width:120px;" class="column content2">
                                     <span><strong style="color:darkgray">BUDGET</strong> </span><br />
                                     <h5>

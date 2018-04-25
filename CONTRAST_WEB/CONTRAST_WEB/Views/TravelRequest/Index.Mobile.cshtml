@@ -388,10 +388,10 @@
             <span class="fnt2">General Documents :</span>
             <div style="position:relative;">
                 <a style="font-size:13px" class='btn btn-primary'>
-                    <input type="file" id="generaldoc" name="generaldoc" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val());'>
+                    <input type="file" id="generaldoc" name="generaldoc" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val().replace(/.*(\/|\\)/,""));'>
                     <i class="glyphicon glyphicon-search"></i>&nbsp;Browse
                 </a>
-                <span class='label label-info' id="upload-file-info6"></span>
+                <label style="color:dimgray;font-size:13px;" class='h5s' id="upload-file-info6"></label>
                 <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
             </div>
         </div>

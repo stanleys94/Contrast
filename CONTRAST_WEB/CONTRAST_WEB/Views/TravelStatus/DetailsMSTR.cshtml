@@ -7,12 +7,11 @@
 }
 @using (Html.BeginForm("DropMSTR", "TravelStatus", FormMethod.Post))
 {
-    
+
     @Html.HiddenFor(m => m.travel_request.group_code)
     <div class="container">
-        <div style="margin-top:100px" class="row">
-            <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left;">DETAIL TRAVEL STATUS @Html.HiddenFor(m => m.travel_request.id_request)</h4></div>
-            <div class="col-md-3"></div>
+        <div style="margin-top:70px" class="row">
+            <div class="col-md-11 col-md-offset-1"><h5 class="h5z">DETAIL TRAVEL STATUS @Html.HiddenFor(m => m.travel_request.id_request)</h5></div>
             <form action="" id="loginForm">
                 <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-5 col-md-offset-1">
                     <h5 class="h5a">No Reg :</h5>
@@ -66,7 +65,7 @@
                     <div class="wellIn2">
                         <span><strong>CURRENT STATUS :</strong></span>
                     </div>
-                    <div style="margin-bottom:0px; padding-bottom:0px;" class="clearfix main">
+                    <div style="margin-bottom:0px;padding-bottom:0px;height:150px; overflow-y:scroll; border:0px;" class="clearfix main">
                         @for (int k = 0; k < ViewBag.Approvalnum; k++)
                         {
                             if (ViewBag.Bossname[k] == null) { break; }

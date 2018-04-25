@@ -1,27 +1,15 @@
-﻿@model List<CONTRAST_WEB.Models.TravelRequestHelper>
+@model List<CONTRAST_WEB.Models.TravelRequestHelper>
 @{
     ViewBag.Title = "Validation";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
 }
-<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            @using (Html.BeginForm("Index", "Home"))
-            {
-                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
-            }
-        </li>
-        <li class="breadcrumb-item active">Travel Verification</li>
-    </ol>
-</div>
 
 <div class="container">
     <div style="margin-top:100px" class="row">
-        <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
-        <div class="col-md-3"></div>
-        @using (Html.BeginForm("Submitted", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        <div class="col-md-11 col-md-offset-1"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
+        @using (Html.BeginForm("Update", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="col-md-5 col-md-offset-1">
@@ -61,15 +49,9 @@
                     {@Html.HiddenFor(m => m[k].travel_request.travel_purpose);
                 }
                 </div>
-                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Assigned By</label>
-                <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
-                    <!--<input class="form-control" type="text" name='division' placeholder="Assigned By" />-->
-                    @*@Html.DisplayFor(m => m[0].travel_request.assign_by, new { @class = "form-control", @readonly = "readonly" })*@
-                    @ViewBag.Bossname
-                    @for (int k = 0; k < Model.Count; k++)
-                    {@Html.HiddenFor(m => m[k].travel_request.assign_by);
-                }
-                </div>
+              
+                @for (int k = 0; k < Model.Count; k++){@Html.HiddenFor(m => m[k].travel_request.assign_by);}
+                
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Reason Of Assignment</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
                     @Html.TextAreaFor(m => m[0].travel_request.reason_of_assigment, new { @class = "form-control", @style = "max-width:400px;min-width:400px;" })
@@ -105,11 +87,11 @@
                 </div>
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Bank Account</label>
                 <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
-                    @*@Html.DisplayFor(m => m[0].employee_info.bank_account, new { @class = "form-control", @readonly = "readonly" })*@
-                    @ViewBag.bankAccount
+                    @Html.DisplayFor(m => m.First().tbankname, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.DisplayFor(m => m.First().tbankaccount, new { @class = "form-control", @readonly = "readonly" })
                     @for (int k = 0; k < Model.Count; k++)
                     {@Html.HiddenFor(m => m[k].employee_info.bank_account);
-                }
+                    }
                     <!--<input class="form-control" type="text" name='destination' style="margin-top: 3px; display:block;" placeholder="No. Rekening" />-->
                     <br />
                 </div>
@@ -119,8 +101,8 @@
                     {
                         @Html.HiddenFor(m => m[k].travel_request.duration);
                     }
-                    <label>
-                        @ViewBag.Duration Days
+                    <label>@String.Format("{0:n0}", Model.Select(m => m.travel_request.duration).Sum()) days
+                        @*@Html.DisplayFor(m=>m.Select(x=>x.travel_request.trav).travel_request.duration)*@
                     </label>
                 </div>
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">List Participants</label>
@@ -157,11 +139,38 @@
                 @for (int k = 0; k < Model.Count; k++)
                 {
                     @Html.HiddenFor(m => m[k].travel_request.destination_code)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl1)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl2)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl3)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl4)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl6)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl7)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl8)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl9)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl10)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl11)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl12)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl13)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl14)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl15)
+                    
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl1)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl2)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl3)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl4)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl6)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl7)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl8)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl9)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl10)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl11)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl12)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl13)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl14)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl15)
+
                     @Html.HiddenFor(m => m[k].travel_request.create_date)
                     @Html.HiddenFor(m => m[k].travel_request.exep_empolyee)
                     @Html.HiddenFor(m => m[k].travel_request.user_created)
@@ -178,6 +187,9 @@
                     @Html.HiddenFor(m => m[k].travel_request.path_itinerary)
                     @Html.HiddenFor(m => m[k].travel_request.comments_by20)
                     @Html.HiddenFor(m => m[k].travel_request.additional2)
+                    @Html.HiddenFor(m => m[k].travel_request.group_code)
+                    @Html.HiddenFor(m => m[k].travel_request.additional1)
+                    @Html.HiddenFor(m => m[k].travel_request.id_request)                    
                 }
                 <div class="col-lg-12">
                 </div>
@@ -188,7 +200,7 @@
                 <div style="text-align:left; padding:15px 15px; margin-bottom:10px;" class="form-control input-group wellIn">
                     @for (int c = 0; c < Model.Count(); c++)
                     {
-                        <h5 style="margin-bottom:10px;" class="h5sl">Travel assignment to <strong>@ViewBag.Destination[c]</strong> </h5>
+                        <h5 style="margin-bottom:10px;" class="h5sl">Travel assignment to <strong>@*@ViewBag.Destination[c]*@</strong> </h5>
                         <label>Departure Date</label>
                         <div style="margin-bottom:10px;" class="input-group">
                             <span>@Html.DisplayFor(m => m[c].travel_request.start_date, new { @class = "form-control", @type = "datetime-local", placeholder = "Departure" })</span>
@@ -216,7 +228,7 @@
                         @Html.HiddenFor(m => m[k].travel_request.allowance_meal_idr);
                     }
                     <label>
-                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", ViewBag.Meal)
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m=>m.travel_request.allowance_meal_idr).Sum())
                     </label>
                 </div>
                 <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
@@ -227,25 +239,17 @@
                         @Html.HiddenFor(m => m[k].travel_request.allowance_hotel);
                     }
                     <label>
-                        &nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Hotel)
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m => m.travel_request.allowance_hotel).Sum())
                     </label>
                 </div>
                 <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
                     <label class="fnt2">Ticket Allowance&nbsp;</label>
                     <br />
-                    @if (ViewBag.Ticket != null)
+                    @for (int k = 0; k < Model.Count; k++)
                     {
-                        for(int k = 0; k < Model.Count; k++)
-                        {
-                            @Html.HiddenFor(m => m[k].travel_request.allowance_ticket);
-                        }
-                        <label>&nbsp; RP.&nbsp;@String.Format("{0:n0}", ViewBag.Ticket)</label>
+                        @Html.HiddenFor(m => m[k].travel_request.allowance_ticket);
                     }
-                    else
-                    {
-                        <label style="color:red;">Rate Flight Has null, Please contact Admin</label>
-                    }
-
+                    &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m=>m.travel_request.allowance_ticket).Sum())
                 </div>
                 @if (Model[0].travel_request.allowance_winter == 0)
                 {
@@ -304,7 +308,7 @@
                         @Html.HiddenFor(m => m[k].generaldoc_file)
                     }
                     <label>
-                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", ViewBag.Total, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m=>m.travel_request.grand_total_allowance).Sum(), new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })
                     </label>
                 </div>
                 @if (ViewBag.budget != null)

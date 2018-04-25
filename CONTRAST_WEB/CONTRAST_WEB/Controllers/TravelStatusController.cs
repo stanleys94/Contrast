@@ -1029,7 +1029,7 @@ namespace CONTRAST_WEB.Controllers
             return RedirectToAction("Index", "TravelStatus");
         }
 
-        //[HttpPost]         
+        //[HttpPost]
         // GET: TravelStatus
         public async Task<ActionResult> IndexMSTR(string noreg, string mstr)
         {
@@ -1865,5 +1865,170 @@ namespace CONTRAST_WEB.Controllers
             return View("/TravelRequest/SubmittedMSTR");
         }
 
+        // GET: TravelStatus
+        public async Task<ActionResult> CommentMSTR(string noreg, string group_code)
+        {
+            //var identity = (ClaimsIdentity)User.Identity;
+            tb_m_employee model = new tb_m_employee();
+            model = await GetData.EmployeeInfo(noreg);
+
+            List<tb_r_travel_request_comment> comment = new List<tb_r_travel_request_comment>();
+            comment = await GetData.Comment(group_code);
+
+            int newmsg_count = 0;
+            if (comment.Count > 0)
+            {
+                var newmsg = comment.Where(x => x.read_flag == false && x.no_reg_comment != Convert.ToInt32(model.name));
+                newmsg_count = newmsg.Count();
+            }
+
+            if (newmsg_count > 0)
+                await UpdateData.TravelRequestCommentRead(group_code);
+
+            ViewBag.group_code = group_code;
+            return View(comment);
+        }
+
+        public async Task<ActionResult> AddCommentMSTR(string noreg, string commentbox, string groupcode)
+        {
+            //var identity = (ClaimsIdentity)User.Identity;
+            //tb_m_employee model = new tb_m_employee();
+            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            //ViewBag.Privillege = claims;
+            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            tb_m_employee model = new tb_m_employee();
+            model = await GetData.EmployeeInfo(noreg);
+
+            if (!String.IsNullOrEmpty(commentbox))
+                await InsertData.TravelStatuscomment(commentbox, groupcode, groupcode, Convert.ToInt32(model.name));
+
+            //return View("Comment", comment);
+            //return RedirectToAction("Comment", new { @group_code = groupcode });
+            var headers = Request.Headers.GetValues("User-Agent");
+            string userAgent = string.Join(" ", headers);
+
+            if (userAgent.ToLower().Contains("ipad"))
+                return RedirectToAction("CommentMSTR", new { @group_code = groupcode });
+            else
+                return RedirectToAction("CommentMSTRMobile", new { @group_code = groupcode });
+        }
+
+        public async Task<ActionResult> ReviseMSTR(string noreg, string group_code)
+        {
+            //identity
+            //var identity = (ClaimsIdentity)User.Identity;
+            //Utility.Logger(identity.Name);
+            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            //ViewBag.Privillege = claims;
+            //tb_m_employee model = new tb_m_employee();
+            tb_m_employee model = new tb_m_employee();
+            model = await GetData.EmployeeInfo(noreg);
+
+            //Get user name
+            ViewBag.Username = model.name;
+
+            //Get destination list info for dropdown list
+            ViewBag.RL = await GetData.DestinationInfo();
+
+            //Get purpose list info for travel purpose list
+            ViewBag.RL2 = await GetData.PurposeInfo();
+
+            //Prepare travel request information object to be used at view
+            List<TravelRequestHelper> model2 = new List<TravelRequestHelper>();
+
+            List<tb_r_travel_request> model3 = new List<tb_r_travel_request>();
+            model3 = await GetData.TravelRequestGCList(group_code);
+
+            for (int k = 0; k < model3.Count(); k++)
+            {
+                model2.Add(new TravelRequestHelper());
+                model2[k].travel_request = model3[k];
+                model2[k].employee_info = await GetData.EmployeeInfo(model3[k].no_reg.ToString());
+
+                ViewBag.Bossname = (await GetData.EmployeeNameInfo(model3[k].assign_by) + "(" + model3[k].assign_by + ")");
+                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model3[k].no_reg));
+                division.Divisi = division.Divisi.Replace("and1", "&");
+                ViewBag.division_name = division.Divisi;
+
+                //get participants            
+                model2[k].participants = await GetData.TravelRequestParticipant(model2[k].travel_request.no_reg.ToString(), group_code);
+
+                //translate data
+                model2[k].destination_string = await GetData.DestinationNameInfo(model2[k].travel_request.id_destination_city);
+
+            }
+            return View(model2);
+        }
+
+        public async Task<ActionResult> ValidateMSTR(string noreg, string validate, string gcode, List<DateTime> time, List<DateTime> rtime, List<DateTime> date, List<DateTime> rdate)
+        {
+            //var identity = (ClaimsIdentity)User.Identity;
+            //Utility.Logger(identity.Name);
+            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            //ViewBag.Privillege = claims;
+            tb_m_employee model3 = new tb_m_employee();
+            model3 = await GetData.EmployeeInfo(noreg);
+
+            tb_m_employee employee_info = await GetData.EmployeeInfo(model3.name);
+
+            if (validate != "")
+            {
+                List<TravelRequestHelper> model = new List<TravelRequestHelper>();
+                var temp = await GetData.TravelRequestGCList(gcode);
+
+                for (int i = 0; i < temp.Count(); i++)
+                {
+                    model.Add(new TravelRequestHelper());
+
+                    model[i].travel_request = temp[i];
+                    model[i].employee_info = employee_info;
+
+                    //compare departure date
+                    if (date[i] != model[i].travel_request.start_date)
+                        model[i].travel_request.start_date = model[i].travel_request.start_date = date[i];
+
+                    //compare return date
+                    if (date[i] != model[i].travel_request.end_date)
+                        model[i].travel_request.end_date = model[i].travel_request.end_date = rdate[i];
+
+
+                    //compare depart time
+                    if (time[i].TimeOfDay != model[i].travel_request.start_date.Value.TimeOfDay)
+                        model[i].travel_request.start_date = model[i].travel_request.start_date.Value.Date + (time[i].TimeOfDay);
+
+
+                    //end date
+                    if (rtime[i].TimeOfDay != model[i].travel_request.end_date.Value.TimeOfDay)
+                        model[i].travel_request.end_date = model[i].travel_request.end_date.Value.Date + (rtime[i].TimeOfDay);
+
+                    //model[i].travel_request = origin_data;
+                    model[i] = await calculate.DateDurationAsync(model[i]);
+
+                    //get bank account
+                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+                    bankName = await GetData.VendorEmployee(Convert.ToInt32(model3.name));
+                    if (bankName.Count != 0)
+                    {
+                        model[i].tbankname = bankName.First().Bank_Name;
+                        model[i].tbankaccount = bankName.First().account_number;
+                    }
+
+                    //execute
+                    //await UpdateData.TravelRequest(origin_data);
+                    List<TravelRequestHelper> model2 = new List<TravelRequestHelper>();
+                    model2.Add(model[i]);
+
+                    string division_r = await GetData.GetDivMapping(model[i].travel_request.no_reg.ToString());
+                    tb_m_budget budget = await GetData.GetCostWbs((bool)model[i].travel_request.overseas_flag, division_r.Trim());
+                    ViewBag.budget = budget.available_amount;
+                    ViewBag.wbs = budget.eoa_wbs_no;
+                    ViewBag.costcenter = budget.cost_center;
+                    //return RedirectToAction("Revise", new { group_code = model.travel_request.group_code});
+                }
+                return View(model);
+            }
+            else
+                return RedirectToAction("Index");
+        }
     }
 }
