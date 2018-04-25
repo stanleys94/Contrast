@@ -1,0 +1,346 @@
+@model List<CONTRAST_WEB.Models.TravelRequestHelper>
+@{
+    ViewBag.Title = "Validation";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    List<string> ModelList = new List<string>();
+    ModelList = ViewBag.RL3;
+}
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Travel Verification</li>
+    </ol>
+</div>
+
+<div class="container">
+    <div style="margin-top:100px" class="row">
+        <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
+        <div class="col-md-3"></div>
+        @using (Html.BeginForm("Update", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-5 col-md-offset-1">
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">NO REG</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey;max-width:400px;min-width:400px;color:grey; text-align:left; ">
+                    @Html.DisplayFor(m => m[0].employee_info.code, new { @class = "form-control", placeholder = "No Reg", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].employee_info.code);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">USERNAME</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey;max-width:400px;min-width:400px;color:grey; text-align:left; ">
+                    @Html.DisplayFor(m => m[0].employee_info.name, new { @class = "form-control", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].employee_info.name);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Class</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey;max-width:400px;min-width:400px;color:grey; text-align:left; ">
+                    @Html.DisplayFor(m => m[0].employee_info.@class, new { @class = "form-control", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].employee_info.@class);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Division</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
+                    @Html.DisplayFor(m => m[0].employee_info.unit_code_name, new { @class = "form-control", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].employee_info.unit_code_name);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Travel Purpose</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
+                    <!--<input class="form-control" type="text" name='division' placeholder="Assigned By" />-->
+                    @Html.DisplayFor(m => m[0].travel_request.travel_purpose, new { @class = "form-control", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].travel_request.travel_purpose);
+                }
+                </div>
+              
+                @for (int k = 0; k < Model.Count; k++){@Html.HiddenFor(m => m[k].travel_request.assign_by);}
+                
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Reason Of Assignment</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
+                    @Html.TextAreaFor(m => m[0].travel_request.reason_of_assigment, new { @class = "form-control", @style = "max-width:400px;min-width:400px;" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].travel_request.reason_of_assigment);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray; ">Request Type</label>
+                <div class="form-group input-group" style="color:grey; text-align:left; ">
+                    @Html.TextBox("adasd", Model[0].travel_request.request_type.Value == true ? "Planned" : "Unplanned", new { @style = "padding:0px; border:0px;border-bottom:0.5px solid grey; max-width:400px;min-width:400px;color:grey; ", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].travel_request.request_type);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Destination Type</label>
+                <div class="form-group input-group" style="color:grey; text-align:left; ">
+                    @Html.TextBox("adasd", Model[0].travel_request.overseas_flag.Value == true ? "Overseas" : "Domestic", new { @style = "border:0px;border-bottom:0.5px solid grey; max-width:400px;min-width:400px;color:grey;", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].travel_request.overseas_flag);
+                }
+                </div>
+
+                @for (int k = 0; k < Model.Count; k++)
+                {
+                    @Html.HiddenFor(m => m[k].travel_request.id_destination_city);
+                }
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">New or Renewal Passport ?</label>
+                <div class="form-group input-group" style=" ">
+                    @Html.TextBox("adasd", Model[0].travel_request.passport_flag == true ? "Yes" : "No", new { @style = "color:grey; text-align:left; border:0px;border-bottom:0.5px solid grey; max-width:400px;min-width:400px; ", placeholder = "Reason Assigment", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].travel_request.passport_flag);
+                }
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Bank Account</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
+                    @Html.DisplayFor(m => m.First().tbankname, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.DisplayFor(m => m.First().tbankaccount, new { @class = "form-control", @readonly = "readonly" })
+                    @for (int k = 0; k < Model.Count; k++)
+                    {@Html.HiddenFor(m => m[k].employee_info.bank_account);
+                    }
+                    <!--<input class="form-control" type="text" name='destination' style="margin-top: 3px; display:block;" placeholder="No. Rekening" />-->
+                    <br />
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">Duration</label>
+                <div class="form-group input-group" style="border-bottom:0.5px solid grey; max-width:400px;min-width:400px; color:grey; text-align:left; ">
+                    @for (int k = 0; k < Model.Count; k++)
+                    {
+                        @Html.HiddenFor(m => m[k].travel_request.duration);
+                    }
+                    <label>@String.Format("{0:n0}", Model.Select(m => m.travel_request.duration).Sum()) days
+                        @*@Html.DisplayFor(m=>m.Select(x=>x.travel_request.trav).travel_request.duration)*@
+                    </label>
+                </div>
+                <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">List Participants</label>
+                <div style="border-radius: 4px;max-width:400px;min-width:400px;height:100px;overflow-y: scroll;" class="wellNo">
+                    <div style="text-align:left;margin-top:10px;" class="input-group">
+                        <ol style="padding-left:0px;">
+                            @if (Model[0].participants != null)
+                            {
+                                for (int k = 0; k < Model.Count(); k++)
+                                {
+                                    for (int i = 0; i < Model[k].participants.Count; i++)
+                                    {
+                                        @Html.HiddenFor(m => m[k].participants[i].no_reg)
+                                        @Html.HiddenFor(m => m[k].participants[i].no_reg_parent)
+                                        @Html.HiddenFor(m => m[k].participants[i].created_date)
+                                        @Html.HiddenFor(m => m[k].participants[i].active_flag)
+                                    }
+                                }
+
+                                for (int i = 0; i < Model[0].participants.Count; i++)
+                                {
+                                    if (Model[0].participants != null)
+                                    {
+                                        <li>
+                                            @*@Html.DisplayFor(m => m[0].participants[i].no_reg, new { @class = "form-control", placeholder = "No Reg", @readonly = "readonly" })*@
+                                            @Html.TextBox("aaaa", ModelList[i], new { @readonly = "readonly", @style = "border:0px;color:grey;" })
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ol>
+                    </div>
+                </div>
+                @for (int k = 0; k < Model.Count; k++)
+                {
+                    @Html.HiddenFor(m => m[k].travel_request.destination_code)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl1)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl2)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl3)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl4)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl6)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl7)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl8)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl9)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl10)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl11)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl12)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl13)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl14)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl15)
+                    
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl1)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl2)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl3)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl4)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl5)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl6)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl7)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl8)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl9)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl10)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl11)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl12)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl13)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl14)
+                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl15)
+
+                    @Html.HiddenFor(m => m[k].travel_request.create_date)
+                    @Html.HiddenFor(m => m[k].travel_request.exep_empolyee)
+                    @Html.HiddenFor(m => m[k].travel_request.user_created)
+                    @Html.HiddenFor(m => m[k].travel_request.active_flag)
+                    @Html.HiddenFor(m => m[k].travel_request.air_ticket_flag)
+                    @Html.HiddenFor(m => m[k].travel_request.id_activity)
+                    @Html.HiddenFor(m => m[k].travel_request.invited_by)
+                    @Html.HiddenFor(m => m[k].travel_request.multiple_destination_flag)
+                    @Html.HiddenFor(m => m[k].travel_request.no_reg)
+                    @Html.HiddenFor(m => m[k].travel_request.participants_flag)
+                    @Html.HiddenFor(m => m[k].travel_request.status_request)
+                    @Html.HiddenFor(m => m[k].travel_request.path_general)
+                    @Html.HiddenFor(m => m[k].travel_request.path_invitation)
+                    @Html.HiddenFor(m => m[k].travel_request.path_itinerary)
+                    @Html.HiddenFor(m => m[k].travel_request.comments_by20)
+                    @Html.HiddenFor(m => m[k].travel_request.additional2)
+                    @Html.HiddenFor(m => m[k].travel_request.group_code)
+                    @Html.HiddenFor(m => m[k].travel_request.additional1)
+                    @Html.HiddenFor(m => m[k].travel_request.id_request)                    
+                }
+                <div class="col-lg-12">
+                </div>
+            </div>
+
+            <div style="height:500px;" class="col-md-5">
+                <label class="fnt1">TRAVEL DESTINATION</label>
+                <div style="text-align:left; padding:15px 15px; margin-bottom:10px;" class="form-control input-group wellIn">
+                    @for (int c = 0; c < Model.Count(); c++)
+                    {
+                        <h5 style="margin-bottom:10px;" class="h5sl">Travel assignment to <strong>@*@ViewBag.Destination[c]*@</strong> </h5>
+                        <label>Departure Date</label>
+                        <div style="margin-bottom:10px;" class="input-group">
+                            <span>@Html.DisplayFor(m => m[c].travel_request.start_date, new { @class = "form-control", @type = "datetime-local", placeholder = "Departure" })</span>
+                            @Html.HiddenFor(m => m[c].travel_request.start_date)
+                            @*<br />
+                                <span>@Html.DisplayFor(m => m[c].travel_request.end_date, new { @class = "form-control", @type = "datetime-local", placeholder = "Return" })</span>*@
+                            @Html.HiddenFor(m => m[c].travel_request.end_date)
+                        </div>
+                        if (c == Model.Count() - 1)
+                        {
+                            <label>Return Date</label>
+                            <div style="margin-bottom:10px;" class="input-group">
+                                @Html.DisplayFor(m => m[c].travel_request.end_date, new { @class = "form-control", @type = "datetime-local", placeholder = "Return" })
+                            </div>
+                        }
+                    }
+                </div>
+                <label class="fnt1">BUDGET</label>
+                <br />
+                <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
+                    <label class="fnt2">Meal Allowance&nbsp;</label>
+                    <br />
+                    @for (int k = 0; k < Model.Count; k++)
+                    {
+                        @Html.HiddenFor(m => m[k].travel_request.allowance_meal_idr);
+                    }
+                    <label>
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m=>m.travel_request.allowance_meal_idr).Sum())
+                    </label>
+                </div>
+                <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
+                    <label class="fnt2">Hotel Allowance&nbsp;</label>
+                    <br />
+                    @for (int k = 0; k < Model.Count; k++)
+                    {
+                        @Html.HiddenFor(m => m[k].travel_request.allowance_hotel);
+                    }
+                    <label>
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m => m.travel_request.allowance_hotel).Sum())
+                    </label>
+                </div>
+                <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
+                    <label class="fnt2">Ticket Allowance&nbsp;</label>
+                    <br />
+                    @for (int k = 0; k < Model.Count; k++)
+                    {
+                        @Html.HiddenFor(m => m[k].travel_request.allowance_ticket);
+                    }
+                    &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m=>m.travel_request.allowance_ticket).Sum())
+                </div>
+                @if (Model[0].travel_request.allowance_winter == 0)
+                {
+
+                }
+                else
+                {
+                    <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
+                        <label class="fnt2">Winter Allowance&nbsp;</label>
+                        <br />
+                        @for (int k = 0; k < Model.Count; k++)
+                        {
+                            <label>RP.&nbsp;@String.Format("{0:n0}", Model[k].travel_request.allowance_winter) @*@Html.DisplayFor(m => m[0].travel_request.allowance_winter, new { @class = "form-control", placeholder = "Allowance Allowance" })*@</label>
+                            @Html.HiddenFor(m => m[k].travel_request.allowance_winter);
+                        }
+                    </div>
+                }
+                @if (Model[0].travel_request.allowance_preparation == 0)
+                {
+
+                }
+                else
+                {
+                    <div style="text-align:left; padding:0px 15px; margin-bottom:10px;" class="wellIn">
+                        <label class="fnt2">Preparation Allowance&nbsp;</label>
+                        <br />
+                        @for (int k = 0; k < Model.Count; k++)
+                        {
+                            <label>RP.&nbsp;@String.Format("{0:n0}", Model[k].travel_request.allowance_preparation) @*@Html.DisplayFor(m => m[0].travel_request.allowance_preparation, new { @class = "form-control", placeholder = "Allowance Allowance" })*@</label>
+                            @Html.HiddenFor(m => m[k].travel_request.allowance_preparation);
+                        }
+                    </div>
+                }
+                <label class="fnt1">BUDGETARY DETAILS</label>
+                <div style="text-align:left; padding:15px 15px; margin-bottom:10px;" class="form-control input-group wellIn">
+                    <label>WBS Number</label>
+                    <div style="margin-bottom:10px;" class="input-group">
+                        @if (ViewBag.wbs != null)
+                        {<span>@ViewBag.wbs</span>}
+                    else
+                    { @Html.Label("This account wbs number is not available, contact finance division", new { @class = "text-danger" })}
+                    </div>
+                    <label>Cost Center</label>
+                    <div style="margin-bottom:10px;" class="input-group">
+                        @if (ViewBag.costcenter != null)
+                        {<span>@ViewBag.costcenter</span>}
+                    else
+                    { @Html.Label("This account cost center is not available, contact finance division", new { @class = "text-danger" })}
+                    </div>
+                </div>
+                <label class="fnt1">GRAND TOTAL</label>
+                <div class="form-group" style="padding:10px 10px; background-color: #228B22;color: white; text-align: center;font-weight: bold;">
+                    @for (int k = 0; k < Model.Count; k++)
+                    {
+                        @Html.HiddenFor(m => m[k].travel_request.grand_total_allowance);
+                        @Html.HiddenFor(m => m[k].generaldoc_file)
+                    }
+                    <label>
+                        &nbsp;RP.&nbsp;@String.Format("{0:n0}", Model.Select(m=>m.travel_request.grand_total_allowance).Sum(), new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })
+                    </label>
+                </div>
+                @if (ViewBag.budget != null)
+                {
+                    <label class="fnt1">REMAINING BUDGET</label>
+                    <div class="form-group" style="padding:10px 10px; background-color: red;color: white; text-align: center;font-weight: bold;">
+                        RP. @String.Format("{0:n0}", ViewBag.budget, new { @class = "form-control", @readonly = "readonly", @style = " background-color: red;color: white; text-align: center;font-weight: bold;" }) @*@Html.TextBox("asda", "RP. " + Model[0].travel_request.grand_total_allowance, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })*@
+                    </div>
+                }
+                <div class="form-group" style="padding:10px 10px; margin-bottom:10px; center;font-weight: bold;">
+                    @if (ViewBag.wbs != null && ViewBag.costcenter != null)
+                    {
+                        <button type="submit" style="width:145px" class="btn btn-info btn-lg" value="Submit">Submit</button>
+                    }
+                    <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Cancel</button>
+                </div>
+
+            </div>
+
+
+        }
+    </div>
+</div>

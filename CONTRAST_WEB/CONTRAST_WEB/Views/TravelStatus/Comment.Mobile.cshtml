@@ -7,7 +7,7 @@
 
 <div class="container">
     <div style="margin-top:70px" class="row">
-        <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left;">Comment for @ViewBag.group_code </h4></div>
+        <div class="col-md-8 col-md-offset-1"><h5 class="h5s">COMMENT FOR @ViewBag.group_code</h5></div>
          
 
         <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-10 col-md-offset-1">
@@ -32,9 +32,10 @@
                   @Html.Hidden("no_reg_to", (object)ViewBag.no_reg_to)
                 
             </div>
-            <div class="col-md-2 "style="padding-top:20px;">
-                <input type="submit" class="btn btn-info btn-lg form-control" value="Submit" />                
+            <div class="col-md-2 " style="padding-top:20px;">
+                <span><input type="submit" class="btn btn-info btn-xs" value="Submit" /></span>
+                <span class="btn btn-xs btn-default">@Html.ActionLink("Back", "Index")</span>
             </div>
         }
-     
+     </div>
 </div>

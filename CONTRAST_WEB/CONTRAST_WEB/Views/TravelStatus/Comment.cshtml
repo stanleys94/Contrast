@@ -13,13 +13,13 @@
                 <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
             }
         </li>
-        <li class="breadcrumb-item active">@Html.ActionLink("Travel Status","Index")</li>
+        <li class="breadcrumb-item active">Comment</li>
     </ol>
 </div>
 
 <div class="container">
     <div style="margin-top:100px" class="row">
-        <div class="col-md-8 col-md-offset-1"><h4 style="text-align:left;">Comment for @ViewBag.group_code </h4></div>
+        <div class="col-md-8 col-md-offset-1"><h5 class="h5s">COMMENT FOR @ViewBag.group_code</h5></div>
          
 
         <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="col-md-10 col-md-offset-1">
@@ -45,7 +45,8 @@
                 
             </div>
             <div class="col-md-2 "style="padding-top:20px;">
-                <input type="submit" class="btn btn-info btn-lg form-control" value="Submit" />                
+                <span><input type="submit" class="btn btn-info btn-lg" value="Submit" /></span>
+                <span class="btn btn-lg btn-default">@Html.ActionLink("Back", "Index")</span>
             </div>
         }
      
