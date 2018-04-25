@@ -24,15 +24,9 @@ namespace CONTRAST_WEB.Controllers
     {
         public async Task<JsonResult> GetSearchValue2(string search, string code)
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            tb_m_employee_source_data div = await GetData.GetDivisionSource(Convert.ToInt32(identity.Name));
-            if (div.Divisi.Contains("and1"))
-            {
-                div.Divisi = div.Divisi.Replace("and1", "&");
-            }
+
             List<Class1> list = new List<Class1>();
-            list = await GetData.SearchNameDiv(search, div.Divisi);
+            list = await GetData.SearchNameDiv(search);
             //list = await GetData.SearchName(search);
             List<Class1> filtered = new List<Class1>();
             foreach (var item in list)
@@ -92,7 +86,7 @@ namespace CONTRAST_WEB.Controllers
             //Get user direct superior info
             var assignedby = await GetData.AssignedBy(model2.employee_info.unit_code_code);
             tb_m_travel_procedures procedures= new tb_m_travel_procedures();
-            if (model2.employee_info.position.Trim() == "SECO"|| model2.employee_info.position.Trim() == "SEA"|| model2.employee_info.position.Trim() == "SMEC"|| model2.employee_info.position.Trim() == "AADV"|| model2.employee_info.position.Trim() == "GM")
+            if (model2.employee_info.position.Trim() == "SECO"|| model2.employee_info.position.Trim() == "SEA"|| model2.employee_info.position.Trim() == "SMEC"|| model2.employee_info.position.Trim() == "AADV"|| model2.employee_info.position.Trim() == "GM"|| model2.employee_info.position.Trim() == "EGM")
             {
                 procedures = await GetData.Procedures(model2.employee_info.position);
             }
@@ -115,9 +109,9 @@ namespace CONTRAST_WEB.Controllers
             //if still empty - for special case
             if (model2.travel_request.assign_by == null)
             {
-                if (assignedby.dh_code != null) model2.travel_request.assign_by = assignedby.dh_code;
+                if (assignedby.dh_code != null && model2.employee_info.position.Trim() != "DH" && model2.employee_info.position.Trim() != "EGM") model2.travel_request.assign_by = assignedby.dh_code;
                 else
-                    if (assignedby.egm != null) model2.travel_request.assign_by = assignedby.egm;
+                    if (assignedby.egm != null && model2.employee_info.position.Trim() != "EGM") model2.travel_request.assign_by = assignedby.egm;
                 else
                     if (assignedby.director != null) model2.travel_request.assign_by = assignedby.director;
                 else
