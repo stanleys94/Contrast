@@ -422,7 +422,7 @@ namespace CONTRAST_WEB.Models
             return ListItem2;
         }
 
-        public static async Task<List<Class1>> SearchNameDiv(string search)
+        public static async Task<List<Class1>> SearchNameDiv(string search, string div)
         {
             List<Class1> ListItem2 = new List<Class1>();
             using (var client = new HttpClient())
@@ -437,7 +437,7 @@ namespace CONTRAST_WEB.Models
 
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage response = await client.GetAsync("api/EmployeeCoordinated/Search?name=" + search);
+                HttpResponseMessage response = await client.GetAsync("api/EmployeeSourceData/Search?name=" + search + "&div=" + div);
 
                 //Checking the response is successful or not which is sent using HttpClient  
                 if (response.IsSuccessStatusCode)
@@ -451,7 +451,7 @@ namespace CONTRAST_WEB.Models
                     {
                         var listItem = new Class1();
                         listItem = item;
-                        listItem.name = "(" + item.code.Trim() + ") " + item.name.Trim();
+
                         ListItem2.Add(listItem);
 
                     }
@@ -460,7 +460,6 @@ namespace CONTRAST_WEB.Models
 
             return ListItem2;
         }
-
         public static async Task<tb_m_employee> EmployeeInfo(string noreg)
         {
             tb_m_employee model = new tb_m_employee();

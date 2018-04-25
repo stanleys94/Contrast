@@ -94,8 +94,8 @@
      $("#searchInput2").autocomplete({
         source: function (request, response) {
             $.ajax({
-                //url: '@Url.Action("GetSearchValue", "TravelExecution")',
-                url: '@Url.Action("GetSearchValue2", "TravelExecution")',
+                url: '@Url.Action("GetSearchValue", "TravelExecution")',
+                //url: '@Url.Action("GetSearchValue2", "TravelExecution")',
                 dataType: "json",
 	        data: { search: $("#searchInput2").val(), code: $("#code").val() },
                 success: function (data) {

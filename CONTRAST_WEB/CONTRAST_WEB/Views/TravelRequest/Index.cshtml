@@ -549,7 +549,7 @@
     $("#searchInput2").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '@Url.Action("GetSearchValue2", "TravelRequest")',
+                url: '@Url.Action("GetSearchValue", "TravelRequest")',
                 dataType: "json",
                 data: { search: $("#searchInput2").val(), code: $("#code").val() },
                 success: function (data) {
