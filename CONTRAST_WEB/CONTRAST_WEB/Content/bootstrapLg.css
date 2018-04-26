@@ -7373,6 +7373,23 @@ ol li {
     color: deepskyblue;
 }
 
+.h5r {
+    padding-top: 10px;
+    margin-top: 0;
+    margin-bottom: 0px;
+    text-align: left;
+    color: red;
+}
+
+.h5rev {
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: cornflowerblue;
+    color: white;
+    font-size: 10px;
+    vertical-align: middle;
+}
+
 .h5sl {
     padding: 5px 10px 5px 10px;
     margin-bottom: 0px;
