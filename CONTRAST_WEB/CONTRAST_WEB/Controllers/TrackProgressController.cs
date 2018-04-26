@@ -687,7 +687,25 @@ namespace CONTRAST_WEB.Controllers
                         new_cost.Approved_Status = "Not Created Yet";
                         new_cost.Pending = "Staff-GA";
                     }
-                  
+
+                    if (item.path_file != null)
+                    {
+                        if (item.path_file != "Error")
+                        {
+
+                            //new_cost.Path = "http://passport.toyota.astra.co.id:5006/";
+                            //new_cost.Path = "http://10.85.40.68:91/";
+                            new_cost.Path = Constant.Attch;
+
+                            string[] newPath = item.path_file.Split('\\');
+                            for (int k = newPath.Count() - 2; k < newPath.Count(); k++)
+                            {
+
+                                if (k < (newPath.Count() - 1)) new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20") + "/";
+                                else new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20");
+                            }
+                        }
+                    }
                     Detailed.SettlementCost.Add(new_cost);
                 }
                 else if (item.information_actualcost.Contains("BPD"))
