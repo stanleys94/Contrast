@@ -14,68 +14,65 @@
             {
                 var item = Model[i];
                 <div class="item col-xs-12 col-lg-12">
-                    <div class="thumbnail">
-                        <div class="clearfix">
-                            @using (Html.BeginForm("DetailsMSTR", "TravelStatus", Model[i]))
-                            {
+                    @using (Html.BeginForm("DetailsMSTR", "TravelStatus", Model[i]))
+                    {
+                        <button style="width:100%;" class="thumbnail">
+                            <div class="clearfix">
                                 <div class="column content">
-
                                     @Html.AntiForgeryToken()
-                                    <input type="image" img style="margin:5px 0px; width:auto; height:70px" src="~/img/Travel-Status-icon-b.png" />
-
+                                    <img type="submit" img style="margin:5px 0px; width:auto; height:70px" src="~/img/Travel-Status-icon-b.png" />
                                 </div>
                                 <div style="width:200px;" class="column menu">
                                     <div>
-
                                         @if (ViewBag.reviseflag[i] == true)
                                         {
-                                            <strong>@Html.ActionLink(Model[i].group_code, "ReviseMSTR", new { group_code = Model[i].group_code, noreg = Model[i].no_reg.ToString() })</strong>
-                                            <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
+                                            <strong style="float:left;padding-right:5px;">@Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code }, new { @class = "h5r" })</strong>
+                                            <strong style="float:left;">@Html.ActionLink("REVISION NOTICE", "Revise", new { group_code = Model[i].group_code }, new { @class = "h5rev" })</strong>
                                         }
                                         else
                                         {
-                                            <strong>@Html.DisplayFor(m => m[i].group_code)</strong>
+                                            <strong style="float:left;">@Html.DisplayFor(m => m[i].group_code)</strong>
                                         }
 
                                     </div>
 
                                     <div>
-                                        <span class="fnt3">
+                                        <br />
+                                        <span style="float:left;" class="fnt3">
                                             <strong>To</strong>
-                                            @Html.DisplayFor(m => item.destination_1)@Html.TextBox("a", Model[i].multiple_destination_flag == true ? "Multiple Trip" : "Single Trip", new { @style = "border:0px;   color:grey;", @readonly = "readonly" })
-
+                                            @Html.DisplayFor(m => item.destination_1)
                                         </span>
-                                        <span>
-
+                                        <span style="float:left;" class="fnt3">
+                                            @Html.TextBox("a", Model[i].multiple_destination_flag == true ? "Multiple Trip" : "Single Trip", new { @style = "border:0px;   color:grey;", @readonly = "readonly" })
                                         </span>
-                                    </div>
-                                    <div>
-                                        <span class="fnt3">
+                                        @*margin-right:20px;*@
+                                        <span style="float:left;" class="fnt3">
                                             <strong>For</strong>
                                             @ViewBag.Duration[i]
                                             days
                                         </span>
                                     </div>
                                     <div>
-                                        <span style="color:grey;" class="fnt1">
+                                        <br />
+                                        <span style="color:grey;float:left;" class="fnt1">
                                             @if (Model[i].apprv_flag_lvl7 != null)
                                             {
                                                 if (Model[i].apprv_flag_lvl7 == "2" || Model[i].apprv_flag_lvl7 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
 
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl7 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl7 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
 
                                             }
                                             else
@@ -83,151 +80,149 @@
                                             {
                                                 if (Model[i].apprv_flag_lvl6 == "2" || Model[i].apprv_flag_lvl6 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
 
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl6 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl6 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl5 != null)
                                             {
                                                 if (Model[i].apprv_flag_lvl5 == "2" || Model[i].apprv_flag_lvl5 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
 
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl5 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl5 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl4 != null)
                                             {
                                                 if (Model[i].apprv_flag_lvl4 == "2" || Model[i].apprv_flag_lvl4 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
 
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl4 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl4 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl3 != null)
                                             {
                                                 if (Model[i].apprv_flag_lvl3 == "2" || Model[i].apprv_flag_lvl3 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
 
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl3 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl3 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl2 != null)
                                             {
                                                 if (Model[i].apprv_flag_lvl2 == "2" || Model[i].apprv_flag_lvl2 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl2 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl2 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
 
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
                                             }
                                             else
                                             if (Model[i].apprv_flag_lvl1 != null)
                                             {
                                                 if (Model[i].apprv_flag_lvl1 == "2" || Model[i].apprv_flag_lvl1 == "3")
                                                 {
-                                                    <span>@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Rejected by", new { @style = "color:red;  margin-bottom:0px;" })</span>
 
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl1 == "1")
                                                 {
-                                                    <span>@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Approved By", new { @style = "color:blue;  margin-bottom:0px;" })</span>
                                                 }
                                                 else
                                                 if (Model[i].apprv_flag_lvl1 == "0")
                                                 {
-                                                    <span>@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
+                                                    <span style="float:left;">@Html.Label("Waiting For", new { @style = "color:orange;  margin-bottom:0px;" })</span>
                                                 }
-                                                <br /><strong>@ViewBag.Bossname[i]</strong>
+                                                <br /><strong style="float:left;">@ViewBag.Bossname[i]</strong>
                                             }
 
 
                                         </span>
                                     </div>
                                 </div>
-
                                 <div style="width:300px;" class="column menu">
-                                    <div>
-                                        <h1></h1>
+                                    <div style="float:left;">
+                                        <span class="fnt3"><strong>Departure&nbsp;</strong>@Html.DisplayFor(m => item.startDate_1)</span>
                                     </div>
-                                    <div>
-                                        <span class="fnt3"><strong>Departure</strong>@Html.DisplayFor(m => item.startDate_1)</span>
+                                    <div style="float:left;">
+                                        <span class="fnt3"><strong>Return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>@ViewBag.ReturnDate[i]</span>
                                     </div>
-                                    <div>
-                                        <span class="fnt3"><strong>Return</strong>@ViewBag.ReturnDate[i]</span>
-                                    </div>
-                                    <div style="padding-top:15px">
-                                        <a href='@Url.Action("CommentMSTR", "TravelStatus",new { group_code = Model[i].group_code, noreg=Model[i].no_reg.ToString() })'>
+                                    <div style="padding-top:15px;float:left;">
+                                        <a href='@Url.Action("Comment", "TravelStatus",new { group_code = Model[i].group_code })'>
                                             <img src='@Url.Content("~/img/Travel-Status-Comment.png")' />
                                         </a>
                                         @if (ViewBag.newmsg[i] == 0)
-                                        {<strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>}
-                                    else
-                                    {<strong style="color:red">@ViewBag.newmsg[i] Comment unread</strong>}
+                                        {
+                                            <strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong style="color:red">@ViewBag.newmsg[i]</strong>
+                                            <strong style="color:red">@Html.ActionLink("Comment unread", "Comment", "", new { @class = "h5r" })</strong>
+                                        }
 
                                     </div>
                                 </div>
-
-
-
                                 <div style="width:120px;" class="column content2">
                                     <span><strong style="color:darkgray">BUDGET</strong> </span><br />
                                     <h5>
@@ -239,12 +234,10 @@
                                         </strong>
                                     </h5>
                                 </div>
-
-                            }
-                        </div>
-                    </div>
+                            </div>
+                        </button>
+                    }
                 </div>
-
             }
 
         }
