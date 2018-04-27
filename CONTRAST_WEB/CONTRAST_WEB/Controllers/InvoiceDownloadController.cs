@@ -1680,7 +1680,7 @@ namespace CONTRAST_WEB.Controllers
 
                 if (!copy && !pos.Departemen.Contains("GENERAL"))
                 {
-                    //  await InsertData.InvoiceWrite(saved);
+                    await InsertData.InvoiceWrite(saved);
                 }
 
                 if (!copyGA && pos.Departemen.Contains("GENERAL"))
