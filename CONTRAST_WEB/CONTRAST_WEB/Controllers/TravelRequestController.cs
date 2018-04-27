@@ -231,8 +231,6 @@ namespace CONTRAST_WEB.Controllers
                     model.travel_request.comments = "Comment";
 
                     model.travel_request.exep_empolyee = model.travel_request.exep_empolyee;
-                    model.travel_request.additional2 = model.employee_info.unit_code_name;
-
 
                     model.travel_request.invited_by = model.travel_request.no_reg;
                     model.travel_request.create_date = now;
@@ -305,9 +303,7 @@ namespace CONTRAST_WEB.Controllers
                                 ListModel[c].travel_request.start_date = model.tstart_date2;
                                 ListModel[c].travel_request.end_date = model.tend_date2;
                             }
-
-                            ListModel[c].travel_request.additional2 = model.travel_request.additional2;
-
+                            
                             ListModel[c].travel_request.id_destination_city = model.tid_destination_city[c];
                             ListModel[c].travel_request.air_ticket_flag = model.tair_ticket_flag[c];
                             ListModel[c].travel_request.destination_code = await GetData.RegionInfo(ListModel[c].travel_request.id_destination_city);
@@ -836,8 +832,6 @@ namespace CONTRAST_WEB.Controllers
                     model.travel_request.comments = "Comment";
 
                     model.travel_request.exep_empolyee = model.travel_request.exep_empolyee;
-                    model.travel_request.additional2 = model.employee_info.unit_code_name;
-
 
                     model.travel_request.invited_by = model.travel_request.no_reg;
                     model.travel_request.create_date = now;
@@ -910,9 +904,7 @@ namespace CONTRAST_WEB.Controllers
                                 ListModel[c].travel_request.start_date = model.tstart_date2;
                                 ListModel[c].travel_request.end_date = model.tend_date2;
                             }
-
-                            ListModel[c].travel_request.additional2 = model.travel_request.additional2;
-
+                            
                             ListModel[c].travel_request.id_destination_city = model.tid_destination_city[c];
                             ListModel[c].travel_request.air_ticket_flag = model.tair_ticket_flag[c];
                             ListModel[c].travel_request.destination_code = await GetData.RegionInfo(ListModel[c].travel_request.id_destination_city);
