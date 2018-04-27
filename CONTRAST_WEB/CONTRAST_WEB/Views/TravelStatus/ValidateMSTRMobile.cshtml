@@ -9,7 +9,7 @@
 <div class="container">
     <div style="margin-top:100px" class="row">
         <div class="col-md-11 col-md-offset-1"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
-        @using (Html.BeginForm("Update", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("UpdateMSTR", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="col-md-5 col-md-offset-1">
@@ -189,6 +189,7 @@
                     @Html.HiddenFor(m => m[k].travel_request.additional2)
                     @Html.HiddenFor(m => m[k].travel_request.group_code)
                     @Html.HiddenFor(m => m[k].travel_request.additional1)
+                    @Html.HiddenFor(m => m[k].travel_request.additional3)
                     @Html.HiddenFor(m => m[k].travel_request.id_request)                    
                 }
                 <div class="col-lg-12">

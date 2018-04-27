@@ -25,7 +25,7 @@
                                     <div>
                                         @if (ViewBag.reviseflag[i] == true)
                                         {
-                                            <strong>@Html.ActionLink(Model[i].group_code, "Revise", new { group_code = Model[i].group_code })</strong>
+                                            <strong>@Html.ActionLink(Model[i].group_code, "ReviseMSTR", new { group_code = Model[i].group_code, noreg = Model[i].no_reg.ToString() })</strong>
                                             <span style="padding-left:5px; padding-right:5px;background-color:red;color:white; font-size:10px; vertical-align:middle;">REVISION NOTICE</span>
                                         }
                                         else
@@ -202,7 +202,7 @@
                                         <span class="fnt3"><strong>Return</strong> @ViewBag.ReturnDate[i]</span>
                                     </div>
                                     <div style="padding-top:15px">
-                                        <a href='@Url.Action("CommentMSTR", "TravelStatus",new { group_code = Model[i].group_code })'>
+                                        <a href='@Url.Action("CommentMSTR", "TravelStatus",new { group_code = Model[i].group_code, noreg=Model[i].no_reg.ToString() })'>
                                             <img src='@Url.Content("~/img/Travel-Status-Comment.png")' />
                                         </a>
                                         @if (ViewBag.newmsg[i] == 0)

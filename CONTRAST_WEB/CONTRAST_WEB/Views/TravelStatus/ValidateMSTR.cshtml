@@ -9,7 +9,7 @@
 <div class="container">
     <div style="margin-top:100px" class="row">
         <div class="col-md-11 col-md-offset-1"><h4 style="text-align:left; padding:10px;">DATA VERIFICATION</h4></div>
-        @using (Html.BeginForm("Update", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("UpdateMSTR", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="col-md-5 col-md-offset-1">
@@ -155,22 +155,7 @@
                     @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl14)
                     @Html.HiddenFor(m => m[k].travel_request.apprv_by_lvl15)
                     
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl1)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl2)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl3)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl4)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl5)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl6)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl7)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl8)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl9)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl10)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl11)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl12)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl13)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl14)
-                    @Html.HiddenFor(m => m[k].travel_request.apprv_flag_lvl15)
-
+               
                     @Html.HiddenFor(m => m[k].travel_request.create_date)
                     @Html.HiddenFor(m => m[k].travel_request.exep_empolyee)
                     @Html.HiddenFor(m => m[k].travel_request.user_created)
@@ -187,6 +172,7 @@
                     @Html.HiddenFor(m => m[k].travel_request.path_itinerary)
                     @Html.HiddenFor(m => m[k].travel_request.comments_by20)
                     @Html.HiddenFor(m => m[k].travel_request.additional2)
+                    @Html.HiddenFor(m => m[k].travel_request.additional3)
                     @Html.HiddenFor(m => m[k].travel_request.group_code)
                     @Html.HiddenFor(m => m[k].travel_request.additional1)
                     @Html.HiddenFor(m => m[k].travel_request.id_request)                    

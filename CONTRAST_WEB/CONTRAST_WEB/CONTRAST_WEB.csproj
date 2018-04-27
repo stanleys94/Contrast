@@ -814,6 +814,7 @@
     <Content Include="Views\TravelStatus\Validate.Mobile.cshtml" />
     <Content Include="Views\TravelStatus\ValidateMSTR.cshtml" />
     <Content Include="Views\TravelStatus\ValidateMSTRMobile.cshtml" />
+    <Content Include="Views\TravelStatus\SubmittedMSTR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

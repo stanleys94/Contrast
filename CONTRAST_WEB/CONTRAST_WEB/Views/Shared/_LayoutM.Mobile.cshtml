@@ -11,26 +11,17 @@
 </head>
 <body data-spy="scroll">
     <nav class="navbar navbar-fixed-top navbar-default">
-                @*<a  class="navbar-brand" onclick="goBack()">
-				<a href='@Url.Action("Index", "Menu")' class="navbar-brand" onclick="goBack()">
-                    <span>
-					<i class="glyphicon glyphicon-chevron-left white"></i>
-					</span>
-                    <span style="margin:10px;"><strong style="color:white">@ViewBag.Title</strong></span>
-                </a>*@
-				
-				@using (Html.BeginForm("Index", "Home"))
-				{
-                    
-                    <span>
-					
-					</span>
-					<span style="margin:10px;"><strong style="color:white">@ViewBag.Title</strong></span>
-                    
-                    @Html.AntiForgeryToken()
-				}
+ 
+
+            <span>
+                <button style="color:transparent;background-color:transparent;border:0px;padding-top:10px;" >
+                    <span style="color:transparent;font-size:20px;" class="glyphicon glyphicon-chevron-left"></span>
+                </button>
+            </span>
+            <span style="margin:10px; padding-top:10px;"><strong style="color:white">@ViewBag.Title</strong></span>
+         
     </nav>
-    
+
     <div class="container">
         @RenderBody()
     </div>
