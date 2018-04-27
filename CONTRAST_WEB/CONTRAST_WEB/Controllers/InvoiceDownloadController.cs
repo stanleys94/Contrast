@@ -21,12 +21,12 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         // GET: InvoiceDownload
-        public async Task<ActionResult> Index(tb_m_employee model)
+        public async Task<ActionResult> Index()
         {
-            //var identity = (ClaimsIdentity)User.Identity;
-            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            //ViewBag.Privillege = claims;
-            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
             List<vw_invoice_actualcost_new> result = await GetData.InvoiceActualCostNew();
             List<tb_r_invoice_actualcost> issued = await GetData.TableInvoiceActualcostAll();
@@ -2939,12 +2939,12 @@ namespace CONTRAST_WEB.Controllers
 
                 if (!copy && !pos.Departemen.Contains("GENERAL"))
                 {
-                    //  await InsertData.InvoiceWrite(saved);
+                    await InsertData.InvoiceWrite(saved);
                 }
 
                 if (!copyGA && pos.Departemen.Contains("GENERAL"))
                 {
-                    //await UpdateData.InvoiceActualCost(saved);
+                    await UpdateData.InvoiceActualCost(saved);
                 }
 
                 if (newList.Count == 1)

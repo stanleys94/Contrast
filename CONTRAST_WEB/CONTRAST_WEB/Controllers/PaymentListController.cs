@@ -121,11 +121,18 @@ namespace CONTRAST_WEB.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Generate(List<int> id_data)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee employee = await GetData.EmployeeInfo(identity.Name);
+
             List<PaymentListHelper> model = new List<PaymentListHelper>();
             for (int k = 0; k < id_data.Count(); k++)
             {
                 model.Add(new PaymentListHelper());
                 model[k].Entity = await GetData.PaymentList(id_data[k]);
+                model[k].Name = employee.name.Trim();
+                model[k].No_Reg = Convert.ToInt32(employee.code);
             }
 
             XLWorkbook CreateExcell = new XLWorkbook();
@@ -235,7 +242,7 @@ namespace CONTRAST_WEB.Controllers
                     record.generate_by = model[0].No_Reg.ToString();
                     record.generate_date = DateTime.Now;
 
-                    //await InsertData.RecordPaymentList(record);
+                    await InsertData.RecordPaymentList(record);
                 }
             }
 

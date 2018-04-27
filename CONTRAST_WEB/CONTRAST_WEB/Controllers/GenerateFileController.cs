@@ -136,11 +136,19 @@ namespace CONTRAST_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Generate(List<int>id_data)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee employee = await GetData.EmployeeInfo(identity.Name);
+
             List<GenerateFileHelper> model= new List<GenerateFileHelper>();
             for (int k = 0; k < id_data.Count(); k++)
             {
+                
                 model.Add(new GenerateFileHelper());
-                model[k].Entity=await GetData.GenerateFile(id_data[k]);
+                model[k].Entity = await GetData.GenerateFile(id_data[k]);
+                model[k].No_Reg = Convert.ToInt32(employee.code);
+                model[k].Name = employee.name.Trim();
 
             }
             //todo: add some data from your database into that string:
