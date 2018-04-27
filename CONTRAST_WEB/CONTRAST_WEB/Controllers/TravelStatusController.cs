@@ -352,10 +352,6 @@ namespace CONTRAST_WEB.Controllers
                 List<vw_request_summary> request = new List<vw_request_summary>();
                 List<vw_request_summary> ResponseList = new List<vw_request_summary>();
 
-                //model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
-                //model2.active_flag = true;
-                //model2.status_request = "99";
-
                 model2 = await GetData.TravelRequestGCList(model.travel_request.group_code);
                 foreach (var item in model2)
                 {
@@ -372,20 +368,6 @@ namespace CONTRAST_WEB.Controllers
                 }
 
                 string name = await GetData.EmployeeNameInfo(model2[0].no_reg);
-
-                //double budget = Convert.ToDouble(model2.allowance_meal_idr + model2.allowance_preparation + model2.allowance_winter);
-
-                //await UpdateData.TravelRequestPersonal(model2);
-
-                //request = await GetData.RequestSummaryListInfo(model2.no_reg.ToString());
-
-                //foreach (var item in request)
-                //{
-                //    if (item.status_request != "99") ResponseList.Add(item);
-                //}
-
-                //string name = await GetData.EmployeeNameInfo(model2.no_reg);
-
 
                 List<DateTime> return_date = new List<DateTime>();
                 List<int> travel_duration = new List<int>();
@@ -1021,12 +1003,24 @@ namespace CONTRAST_WEB.Controllers
 
             for(int k=0;k<model.Count();k++)
             {
-                model[k].travel_request.additional1 = null;
+                model[k].travel_request.additional1 = "2";
 
                 //execute
                 await UpdateData.TravelRequest(model[k].travel_request);
             }
             return RedirectToAction("Index", "TravelStatus");
+        }
+
+        public async Task<ActionResult> UpdateMSTR(TravelRequestHelper[] model) {
+
+            for(int k=0;k<model.Count();k++)
+            {
+                model[k].travel_request.additional1 = "2";
+
+                //execute
+                await UpdateData.TravelRequest(model[k].travel_request);
+            }
+            return View("SubmittedMSTR");
         }
 
         //[HttpPost]
@@ -1382,20 +1376,7 @@ namespace CONTRAST_WEB.Controllers
                 }
 
                 string name = await GetData.EmployeeNameInfo(model2[0].no_reg);
-
-                //double budget = Convert.ToDouble(model2.allowance_meal_idr + model2.allowance_preparation + model2.allowance_winter);
-
-                //await UpdateData.TravelRequestPersonal(model2);
-
-                //request = await GetData.RequestSummaryListInfo(model2.no_reg.ToString());
-
-                //foreach (var item in request)
-                //{
-                //    if (item.status_request != "99") ResponseList.Add(item);
-                //}
-
-                //string name = await GetData.EmployeeNameInfo(model2.no_reg);
-
+                              
 
                 List<DateTime> return_date = new List<DateTime>();
                 List<int> travel_duration = new List<int>();
@@ -1878,7 +1859,7 @@ namespace CONTRAST_WEB.Controllers
             int newmsg_count = 0;
             if (comment.Count > 0)
             {
-                var newmsg = comment.Where(x => x.read_flag == false && x.no_reg_comment != Convert.ToInt32(model.name));
+                var newmsg = comment.Where(x => x.read_flag == false && x.no_reg_comment != Convert.ToInt32(noreg));
                 newmsg_count = newmsg.Count();
             }
 
@@ -1886,41 +1867,28 @@ namespace CONTRAST_WEB.Controllers
                 await UpdateData.TravelRequestCommentRead(group_code);
 
             ViewBag.group_code = group_code;
+            ViewBag.noreg = noreg;
             return View(comment);
         }
 
         public async Task<ActionResult> AddCommentMSTR(string noreg, string commentbox, string groupcode)
         {
-            //var identity = (ClaimsIdentity)User.Identity;
-            //tb_m_employee model = new tb_m_employee();
-            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            //ViewBag.Privillege = claims;
-            //tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
             tb_m_employee model = new tb_m_employee();
             model = await GetData.EmployeeInfo(noreg);
 
             if (!String.IsNullOrEmpty(commentbox))
-                await InsertData.TravelStatuscomment(commentbox, groupcode, groupcode, Convert.ToInt32(model.name));
-
-            //return View("Comment", comment);
-            //return RedirectToAction("Comment", new { @group_code = groupcode });
+                await InsertData.TravelStatuscomment(commentbox, groupcode, groupcode, Convert.ToInt32(noreg));
+           
             var headers = Request.Headers.GetValues("User-Agent");
             string userAgent = string.Join(" ", headers);
-
-            if (userAgent.ToLower().Contains("ipad"))
-                return RedirectToAction("CommentMSTR", new { @group_code = groupcode });
-            else
-                return RedirectToAction("CommentMSTRMobile", new { @group_code = groupcode });
+            
+            return RedirectToAction("CommentMSTR", new { @group_code = groupcode,@noreg=noreg });           
         }
 
         public async Task<ActionResult> ReviseMSTR(string noreg, string group_code)
         {
-            //identity
-            //var identity = (ClaimsIdentity)User.Identity;
-            //Utility.Logger(identity.Name);
-            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            //ViewBag.Privillege = claims;
-            //tb_m_employee model = new tb_m_employee();
+            //noreg = "101813";
+            //group_code = "BTA2993";
             tb_m_employee model = new tb_m_employee();
             model = await GetData.EmployeeInfo(noreg);
 
@@ -1957,19 +1925,25 @@ namespace CONTRAST_WEB.Controllers
                 model2[k].destination_string = await GetData.DestinationNameInfo(model2[k].travel_request.id_destination_city);
 
             }
-            return View(model2);
+
+
+            var headers = Request.Headers.GetValues("User-Agent");
+            string userAgent = string.Join(" ", headers);
+
+            if (userAgent.ToLower().Contains("ipad"))
+                return View("ReviseMSTR", model2);
+            else
+                return View("ReviseMSTRMobile", model2);
+            
         }
 
         public async Task<ActionResult> ValidateMSTR(string noreg, string validate, string gcode, List<DateTime> time, List<DateTime> rtime, List<DateTime> date, List<DateTime> rdate)
         {
-            //var identity = (ClaimsIdentity)User.Identity;
-            //Utility.Logger(identity.Name);
-            //string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            //ViewBag.Privillege = claims;
+
             tb_m_employee model3 = new tb_m_employee();
             model3 = await GetData.EmployeeInfo(noreg);
 
-            tb_m_employee employee_info = await GetData.EmployeeInfo(model3.name);
+            tb_m_employee employee_info = await GetData.EmployeeInfo(model3.code);
 
             if (validate != "")
             {
@@ -2006,7 +1980,7 @@ namespace CONTRAST_WEB.Controllers
 
                     //get bank account
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
-                    bankName = await GetData.VendorEmployee(Convert.ToInt32(model3.name));
+                    bankName = await GetData.VendorEmployee(Convert.ToInt32(noreg));
                     if (bankName.Count != 0)
                     {
                         model[i].tbankname = bankName.First().Bank_Name;

@@ -280,7 +280,16 @@ namespace CONTRAST_WEB.Models
         }
 
         public static async Task TravelRequest(tb_r_travel_request model)
-        {            
+        {
+            var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
+            model.create_date = model.create_date.Value.ToUniversalTime();
+            model.create_date = model.create_date + offset;
+            model.end_date = model.end_date.Value.ToUniversalTime();
+            model.end_date = model.end_date + offset;
+            model.start_date = model.start_date.Value.ToUniversalTime();
+            model.start_date = model.start_date + offset;
+
+
             using (var client = new HttpClient())
             {
                 //Passing service base url  
