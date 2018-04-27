@@ -138,8 +138,8 @@ namespace CONTRAST_WEB.Controllers
                 {
                     //by group code
                     if (
-                        track[k].TrackedList.start_date >= startdate
-                        && track[k].TrackedList.start_date <= enddate
+                        track[k].TrackedList.create_date >= startdate
+                        && track[k].TrackedList.create_date <= enddate
                        )
                         temp.Add(track[k]);
                 }
