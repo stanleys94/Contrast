@@ -102,8 +102,8 @@ namespace CONTRAST_WEB.Controllers
             HttpContext.GetOwinContext().Authentication.SignOut();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-            return Redirect("https://passport.toyota.astra.co.id");
-            //return Redirect("http://10.85.40.47/Auth/Logout");
+            //return Redirect("https://passport.toyota.astra.co.id");
+            return Redirect("http://10.85.40.47/Auth/Logout");
             //return RedirectToAction("Index", "Home");
         }
          

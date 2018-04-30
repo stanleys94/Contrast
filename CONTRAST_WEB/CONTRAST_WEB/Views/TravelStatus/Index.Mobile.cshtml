@@ -202,16 +202,15 @@
                                         <span class="fnt3"><strong>Return</strong> @ViewBag.ReturnDate[i]</span>
                                     </div>
                                     <div style="padding-top:15px">
-                                        <a href='@Url.Action("Comment", "TravelStatus",new { group_code = Model[i].group_code })'>
-                                            <img src='@Url.Content("~/img/Travel-Status-Comment.png")' />
-                                        </a>
-                                        @if (ViewBag.newmsg[i] == 0)
+                                        @if (ViewBag.reviseflag[i] == true)
                                         {
-                                            <strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>
-                                        }
-                                        else
-                                        {
-                                            <strong style="color:red">@ViewBag.newmsg[i] Comment unread</strong>
+                                            <a href='@Url.Action("Comment", "TravelStatus", new { group_code = Model[i].group_code })'>
+                                                <img src='@Url.Content("~/img/Travel-Status-Comment.png")' />
+                                            </a>
+                                            if (ViewBag.newmsg[i] == 0)
+                                            {<strong style="color:darkgray;">@ViewBag.newmsg[i] Comment unread</strong>}
+                                            else
+                                            {<strong style="color:red">@ViewBag.newmsg[i] Comment unread</strong>}
                                         }
 
                                     </div>
