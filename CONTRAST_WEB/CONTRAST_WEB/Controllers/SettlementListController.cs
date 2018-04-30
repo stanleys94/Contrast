@@ -605,8 +605,8 @@ namespace CONTRAST_WEB.Controllers
 
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
