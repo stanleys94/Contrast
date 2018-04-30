@@ -128,7 +128,8 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
                     @if (Model.special_employee_flag == true)
                     {
-                        @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "-Division-", new { @class = "form-control", placeholder = "Purpose" })
+                        @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "", new { @class = "form-control", placeholder = "Purpose" , @disabled="disabled"})
+						@Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
                     }
                     else
                     {
