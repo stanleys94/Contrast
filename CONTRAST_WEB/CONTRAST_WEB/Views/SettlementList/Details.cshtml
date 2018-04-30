@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="col-md-11 col-md-offset-1"><H5 class="h5s">MEAL</H5></div>
-                <div class="col-md-5 col-md-offset-1">
+                <div class="col-md-5 col-md-offset-1" style="height:125px;">
                     <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
                     <div class="form-group input-group">
                         <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_meal)" />
@@ -128,12 +128,19 @@
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
 
-                    <div style="margin-bottom:0px;display:none;float:left;" class="col-md-offset-0" id="ifYa4">
-                        @Html.CheckBoxFor(m => m.halfday_flag1)
+                    <div style="margin-bottom:0px;display:block;float:left;" id="halfdepart">
+                        @Html.CheckBoxFor(m => m.halfday_flag1, new { onClick = "javascript:toggle(this);", name = "check", @id = "hd1" })
                         <label>HALF DAY DEPARTURE</label>
                     </div>
+                    <div style="margin-bottom:0px;float:left;margin-left:5px;" id="timedepart">
+                        <label>
+                            @Html.TextBox("time11", (object)ViewBag.time11, new { hidden = true, @id = "time11", @type = "time", @Value = ViewBag.time11 })
+                            @*@Html.TextBoxFor(m => m.date_depart, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
+                        </label>
+                    </div>
                 </div>
-                <div class="col-md-5">
+
+                <div class="col-md-5" style="height:125px;">
                     <H6 style="text-align:left; color:darkgrey;">Actual</H6>
                     <div class="form-group input-group">
                         @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
@@ -142,16 +149,22 @@
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
 
-                    <div style="margin-bottom:0px;display:none;float:left;" class="col-md-" id="ifYa5">
-                        @Html.CheckBoxFor(m => m.halfday_flag2)
-                        <label>HALF DAY RETURN</label>
+                    <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="halfreturn">
+                        @Html.CheckBoxFor(m => m.halfday_flag2, new { hidden = true, disabled = "true", onClick = "javascript:toggle(this);", name = "check", @id = "hr2" })
+                        <label></label>
+                    </div>
+                    <div style="margin-bottom:0px;float:left;margin-left:5px;" class="col-md-offset-0" id="timereturn">
+                        <label>
+                            @Html.TextBox("time22", (object)ViewBag.time2, new { hidden = true, @id = "time22", @type = "time", @Value = ViewBag.time2 })
+                            @*@Html.TextBoxFor(m  => m.date_return, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
                     <H6 class="h6s">Reimburse</H6>
                     <div class="form-group input-group">
                         @*@Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @Value = String.Format("{0:n0}", Model.MealSettlement) })*@
-                        @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @id = "r2" })
                         @Html.HiddenFor(m => m.MealSettlement)
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
@@ -162,6 +175,7 @@
                         <button type="submit" class="btn btn-default" name="sum" value="Submit">Calculate Meal/Day</button>
                     </div>
                 </div>
+
                 <div class="col-md-11 col-md-offset-1"><H5 class="h5s">HOTEL</H5></div>
                 <div class="col-md-5 col-md-offset-1">
                     <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
@@ -362,6 +376,7 @@
                         </label>
                     </div>
                 </div>
+
                 <div class="col-md-5" style="height:125px;">
                     <H6 style="text-align:left; color:darkgrey;">Actual</H6>
                     <div class="form-group input-group">
@@ -386,7 +401,7 @@
                     <H6 class="h6s">Reimburse</H6>
                     <div class="form-group input-group">
                         @*@Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @Value = String.Format("{0:n0}", Model.MealSettlement) })*@
-                        @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.MealSettlement, new { @class = "form-control", @readonly = "readonly", @id = "r2" })
                         @Html.HiddenFor(m => m.MealSettlement)
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
@@ -566,6 +581,10 @@
             if ($this.is(':checked')) {
                 $('#set2').hide();
                 $('#set1').show();
+                $('#hd').prop('checked', false);
+                $('#hr').prop('checked', false);
+                $('#time1').val('').hide();
+                $('#time2').val('').hide();
             }
         });
     });
@@ -574,9 +593,10 @@
         $('#noCheck').click(function () {
             var $this = $(this);
             if ($this.is(':checked')) {
-
                 $('#set1').hide();
                 $('#set2').show();
+                $('#hd').prop('checked', false);
+                $('#hr').prop('checked', false);
             }
         });
     });
@@ -587,7 +607,7 @@
             if ($this.is(':checked')) {
                 $('#time1').show();
             } else {
-                $('#time1').hide();
+                $('#time1').hide().val('');
             }
         });
     });
@@ -598,7 +618,18 @@
             if ($this.is(':checked')) {
                 $('#time2').show();
             } else {
-                $('#time2').hide();
+                $('#time2').hide().val('');
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#hd1').click(function () {
+            var $this = $(this);
+            if ($this.is(':checked')) {
+                $('#time11').show();
+            } else {
+                $('#time11').hide().val('');
             }
         });
     });

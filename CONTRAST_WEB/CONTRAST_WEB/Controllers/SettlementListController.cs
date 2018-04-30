@@ -31,10 +31,20 @@ namespace CONTRAST_WEB.Controllers
             var rank = await GetData.EmployeeInfo(model.TravelRequest.no_reg.ToString());
 
             //var diff = (model.End_Extend - model.Start_Extend);
-
             var meal_platform = await GetData.Procedures(rank.@class);
-            model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
-
+            if (model.halfday_flag1 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance / 2;
+            }
+            else if (model.halfday_flag1 == true)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance / 2;
+            }
+            else
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
+            }
+            //model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
             //ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
             return (model);
         }
@@ -138,20 +148,24 @@ namespace CONTRAST_WEB.Controllers
         //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         [NoCache]
-        public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert, string time1, string time2)
+        public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert, string time11, string time2)
         {
-            if (time1 != null)
-            {
-                model.date_depart = time1;
-            }
-
-            if (time2 != null)
-            {
-                model.date_return = time2;
-            }
-
             if (ModelState.IsValid)
             {
+                ViewBag.time11 = time11;
+                ViewBag.time2 = time2;
+
+                if (time11 != null)
+                {
+                    model.date_depart = time11;
+                }
+
+                if (time2 != null)
+                {
+                    model.date_return = time2;
+                }
+
+
                 if (insert != null)
                 {
                     if (Request.Files["UploadedFile1"] != null)
