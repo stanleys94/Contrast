@@ -128,8 +128,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         [NoCache]
         public async Task<ActionResult> Details(vw_travel_for_settlement model)
@@ -144,8 +144,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         [NoCache]
         public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert, string time11, string time2)
@@ -184,7 +184,7 @@ namespace CONTRAST_WEB.Controllers
                         model.ReceiptFileOther = file;
                     }
 
-                    //await UpdateData.RejectedClearance(model.TravelRequest.group_code);
+                    await UpdateData.RejectedClearance(model.TravelRequest.group_code);
 
                     tb_r_travel_actualcost ActualCostObject = new tb_r_travel_actualcost();
                     ActualCostObject.information_actualcost = "Settlement";
@@ -293,10 +293,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    //else
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    else
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -374,7 +374,7 @@ namespace CONTRAST_WEB.Controllers
                         model.ReceiptFileOther = file;
                     }
 
-                    //await UpdateData.RejectedClearance(model.TravelRequest.group_code);
+                    await UpdateData.RejectedClearance(model.TravelRequest.group_code);
 
                     tb_r_travel_actualcost ActualCostObject = new tb_r_travel_actualcost();
                     ActualCostObject.information_actualcost = "Settlement";
@@ -482,10 +482,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    //else
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    else
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -530,8 +530,8 @@ namespace CONTRAST_WEB.Controllers
 
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public ActionResult SummaryPaid(vw_summary_settlement model)
         {
@@ -780,8 +780,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-        //[Authorize(Roles = "contrast.user")]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
