@@ -129,16 +129,16 @@
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
 
-                    <div style="margin-bottom:0px;display:block;float:left;" id="halfdepart">
-                        @Html.CheckBoxFor(m => m.halfday_flag1, new { onClick = "javascript:toggle(this);", name = "check", @id = "hd1" })
-                        <label>HALF DAY DEPARTURE</label>
-                    </div>
-                    <div style="margin-bottom:0px;float:left;margin-left:5px;" id="timedepart">
-                        <label>
-                            @Html.TextBox("time11", (object)ViewBag.time11, new { hidden = true, @id = "time11", @type = "time", @Value = ViewBag.time11 })
-                            @*@Html.TextBoxFor(m => m.date_depart, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
-                        </label>
-                    </div>
+                    <!-- <div style="margin-bottom:0px;display:block;float:left;" id="halfdepart">
+        @Html.CheckBoxFor(m => m.halfday_flag1, new { hidden = true, onClick = "javascript:toggle(this);", name = "check", @id = "hd1" })
+        <label></label>
+    </div>
+    <div style="margin-bottom:0px;float:left;margin-left:5px;" id="timedepart">
+        <label>
+            @Html.TextBox("time11", (object)ViewBag.time11, new { hidden = true, @id = "time11", @type = "time", @Value = ViewBag.time11 })
+            @*@Html.TextBoxFor(m => m.date_depart, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
+        </label>
+    </div> -->
                 </div>
 
                 <div class="col-md-5" style="height:125px;">
@@ -150,16 +150,16 @@
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
 
-                    <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="halfreturn">
-                        @Html.CheckBoxFor(m => m.halfday_flag2, new { hidden = true, disabled = "true", onClick = "javascript:toggle(this);", name = "check", @id = "hr2" })
-                        <label></label>
-                    </div>
-                    <div style="margin-bottom:0px;float:left;margin-left:5px;" class="col-md-offset-0" id="timereturn">
-                        <label>
-                            @Html.TextBox("time22", (object)ViewBag.time2, new { hidden = true, @id = "time22", @type = "time", @Value = ViewBag.time2 })
-                            @*@Html.TextBoxFor(m  => m.date_return, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
-                        </label>
-                    </div>
+                    <!-- <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="halfreturn">
+        @Html.CheckBoxFor(m => m.halfday_flag2, new { hidden = true, disabled = "true", onClick = "javascript:toggle(this);", name = "check", @id = "hr2" })
+        <label></label>
+    </div>
+    <div style="margin-bottom:0px;float:left;margin-left:5px;" class="col-md-offset-0" id="timereturn">
+        <label>
+            @Html.TextBox("time22", (object)ViewBag.time2, new { hidden = true, @id = "time22", @type = "time", @Value = ViewBag.time2 })
+            @*@Html.TextBoxFor(m  => m.date_return, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
+        </label>
+    </div> -->
                 </div>
                 <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
                     <H6 class="h6s">Reimburse</H6>
