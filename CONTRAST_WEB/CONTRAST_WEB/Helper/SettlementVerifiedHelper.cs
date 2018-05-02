@@ -8,6 +8,10 @@ namespace CONTRAST_WEB.Models
     public class SettlementVerifiedHelper
     {
         public vw_settlement_verified Settlement_Verified { get; set; }
+        public string HDReturn { get; set; }
+        public string HDDepart { get; set; }
+        public string HDReturnFlag { get; set; }
+        public string HDDepartFlag { get; set; }
         public tb_m_employee EmployeeInfo { get; set; }
         public bool check_verify { get; set; }
         public bool check_reject { get; set; }
@@ -17,5 +21,6 @@ namespace CONTRAST_WEB.Models
         public string comment { get; set; }
 
         public string path { get; set; }
+
     }
 }

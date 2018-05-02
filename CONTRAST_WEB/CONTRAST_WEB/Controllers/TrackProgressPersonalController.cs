@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
+using PdfSharp;
+using PdfSharp.Pdf;
 
 namespace CONTRAST_WEB.Controllers
 {
@@ -620,42 +624,58 @@ namespace CONTRAST_WEB.Controllers
                 }
                 else if (item.information_actualcost.Contains("Settlement"))
                 {
-                    if (item.ap_verified_status != null)
+                    if (item.final_status != null)
                     {
-                        new_cost.Approved = "AP";
-                        new_cost.ApprovedDate = Convert.ToDateTime(item.ap_verified_datetime);
-                        if (item.ap_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
-                        else if (item.ap_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
-                        else if (item.ap_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
-                        if (!item.ap_verified_status.Contains("1")) new_cost.Pending = "None";
-                        else new_cost.Pending = "None";
+                        if (item.final_status.Contains("2"))
+                        {
+                            new_cost.Approved = "None";
+                            new_cost.ApprovedDate = Convert.ToDateTime(item.create_date);
+                            new_cost.Approved_Status = "Rejected";
+                            new_cost.Pending = "None";
+                        }
+                        else if (item.final_status.Contains("3"))
+                        {
+                            new_cost.Approved = "None";
+                            new_cost.ApprovedDate = Convert.ToDateTime(item.create_date);
+                            new_cost.Approved_Status = "Inactive Settlement";
+                            new_cost.Pending = "None";
+                        }
+                        else
+                        {
+                            if (item.ap_verified_status != null)
+                            {
+                                new_cost.Approved = "AP";
+                                new_cost.ApprovedDate = Convert.ToDateTime(item.ap_verified_datetime);
+                                if (item.ap_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                                else if (item.ap_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                                if (!item.ap_verified_status.Contains("1")) new_cost.Pending = "None";
+                                else new_cost.Pending = "None";
+                            }
+                            else if (item.dph_verified_status != null)
+                            {
+                                new_cost.Approved = "DpH-GA";
+                                new_cost.ApprovedDate = Convert.ToDateTime(item.dph_verified_datetime);
+                                if (item.dph_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                                else if (item.dph_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                                if (!item.dph_verified_status.Contains("1")) new_cost.Pending = "None";
+                                else new_cost.Pending = "AP";
+                            }
+                            else if (item.ga_status != null)
+                            {
+                                new_cost.Approved = "Staff-GA";
+                                new_cost.ApprovedDate = Convert.ToDateTime(item.ga_insert_datetime);
+                                if (item.ga_status.Contains("1")) new_cost.Approved_Status = "Approved";
+                                else if (item.ga_status.Contains("2")) new_cost.Approved_Status = "Rejected";
+                                if (!item.ga_status.Contains("1")) new_cost.Pending = "None";
+                                else new_cost.Pending = "DpH-GA";
+                            }
+                        }
                     }
-                    else if (item.dph_verified_status != null)
-                    {
-                        new_cost.Approved = "DpH-GA";
-                        new_cost.ApprovedDate = Convert.ToDateTime(item.dph_verified_datetime);
-                        if (item.dph_verified_status.Contains("1")) new_cost.Approved_Status = "Approved";
-                        else if (item.dph_verified_status.Contains("2")) new_cost.Approved_Status = "Rejected";
-                        else if (item.dph_verified_status.Contains("3")) new_cost.Approved_Status = "Rejected";
-                        if (!item.dph_verified_status.Contains("1")) new_cost.Pending = "None";
-                        else new_cost.Pending = "AP";
-                    }
-                    else if (item.ga_status != null)
-                    {
-                        new_cost.Approved = "Staff-GA";
-                        new_cost.ApprovedDate = Convert.ToDateTime(item.ga_insert_datetime);
-                        if (item.ga_status.Contains("1")) new_cost.Approved_Status = "Approved";
-                        else if (item.ga_status.Contains("2")) new_cost.Approved_Status = "Rejected";
-                        else if (item.ga_status.Contains("3")) new_cost.Approved_Status = "Rejected";
-                        if (!item.ga_status.Contains("1")) new_cost.Pending = "None";
-                        else new_cost.Pending = "DpH-GA";
-                    }
-
                     else
                     {
                         new_cost.Approved = "None";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.create_date);
-                        new_cost.Approved_Status = "Not Created Yet";
+                        new_cost.Approved_Status = "Submitted";
                         new_cost.Pending = "Staff-GA";
                     }
 
@@ -671,6 +691,7 @@ namespace CONTRAST_WEB.Controllers
                             string[] newPath = item.path_file.Split('\\');
                             for (int k = newPath.Count() - 2; k < newPath.Count(); k++)
                             {
+
                                 if (k < (newPath.Count() - 1)) new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20") + "/";
                                 else new_cost.Path = new_cost.Path + newPath[k].Replace(" ", "%20");
                             }
@@ -721,6 +742,499 @@ namespace CONTRAST_WEB.Controllers
 
             }
             return View(Detailed);
+        }
+
+        public async Task<ActionResult> Print(string BTA)
+        {
+            List<tb_r_travel_request> request = await GetData.TravelRequestGCList(BTA);
+            List<tb_r_travel_actualcost> actual = await GetData.ActualCostBTA(BTA);
+
+            int meal_allowance = 0, meal_reimburse = 0, ticket_allowance = 0, ticket_reimburse = 0, hotel_allowance = 0, hotel_reimburse = 0, winter_allowance = 0, winter_reimburse = 0;
+            int misc_allowance = 0, misc_reimburse = 0, laundry_allowance = 0, laundry_reimburse = 0, transport_allowance = 0, transport_reimburse = 0;
+            string HDDepart, HDDepartFlag, HDReturn, HDReturnFlag;
+            DateTime? start_extend = null, end_extend = null;
+            foreach (var item in actual)
+            {
+                if (item.information_actualcost == "BPD")
+                {
+                    if (item.jenis_transaksi.Contains("Meal"))
+                    {
+                        meal_allowance = meal_allowance + item.amount;
+                    }
+                    if (item.jenis_transaksi.Contains("Winter"))
+                    {
+                        winter_allowance = winter_allowance + item.amount;
+                    }
+                }
+                else if (item.information_actualcost == "ACTUAL COST")
+                {
+                    if (item.jenis_transaksi.Contains("ticket"))
+                    {
+                        ticket_allowance = ticket_allowance + item.amount;
+                    }
+                    else if (item.jenis_transaksi.Contains("hotel"))
+                    {
+                        hotel_allowance = hotel_allowance + item.amount;
+                    }
+                }
+
+                else if (item.information_actualcost == "Settlement")
+                {
+                    bool settle = false;
+                    if (item.final_status != null)
+                    {
+                        if (item.final_status.Contains("3") && !item.final_status.Contains("2")) settle = false;
+                        else settle = true;
+                    }
+                    else settle = true;
+                    if (settle)
+                    {
+                        if (item.jenis_transaksi.Contains("Meal"))
+                        {
+                            meal_reimburse = meal_reimburse + item.amount;
+                        }
+                        else if (item.jenis_transaksi.Contains("Ticket"))
+                        {
+                            ticket_reimburse = ticket_reimburse + item.amount;
+                        }
+                        else if (item.jenis_transaksi.Contains("Winter"))
+                        {
+                            winter_reimburse = winter_reimburse + item.amount;
+                        }
+                        else if (item.jenis_transaksi.Contains("Hotel"))
+                        {
+                            ticket_reimburse = ticket_reimburse + item.amount;
+                        }
+
+                        else if (item.jenis_transaksi.Contains("Laundry"))
+                        {
+                            laundry_reimburse = laundry_reimburse + item.amount;
+                        }
+                        else if (item.jenis_transaksi.Contains("Transportation"))
+                        {
+                            transport_reimburse = transport_reimburse + item.amount;
+                        }
+                        else if (item.jenis_transaksi.Contains("Miscellaneous"))
+                        {
+                            misc_reimburse = misc_reimburse + item.amount;
+                        }
+                        if (item.additional1 == "True") HDDepartFlag = "Half Day Departure";
+                        if (item.additional2 == "True") HDReturnFlag = "Half Day Return";
+                        if (item.additional3 != null)
+                        {
+                            if (item.additional3 != "")
+                            {
+                                HDDepart = Convert.ToDateTime(item.additional3).ToString("hh:mm:ss tt");
+                            }
+                        }
+                        if (item.additional4 != null)
+                        {
+                            if (item.additional4 != "")
+                            {
+                                HDReturn = Convert.ToDateTime(item.additional3).ToString("hh:mm:ss tt");
+                            }
+                        }
+                        if (item.start_date_extend != null) start_extend = item.start_date_extend;
+                        if (item.end_date_extend != null) end_extend = item.end_date_extend;
+                    }
+                }
+            }
+            SettlementPaidHelper model = new SettlementPaidHelper();
+            model.Summary = new vw_summary_settlement();
+            request = request.OrderBy(b => b.id_request).ToList();
+            for (int k = 0; k < request.Count; k++)
+            {
+                if (k == 0)
+                {
+                    model.Summary.destination_1 = await GetData.DestinationNameInfo(request[k].id_destination_city);
+                    model.Summary.startDate_1 = request[k].start_date;
+                    model.Summary.endDate_1 = request[k].end_date;
+                }
+                else if (k == 1)
+                {
+                    model.Summary.destination_2 = await GetData.DestinationNameInfo(request[k].id_destination_city);
+                    model.Summary.startDate_2 = request[k].start_date;
+                    model.Summary.endDate_2 = request[k].end_date;
+                }
+                else if (k == 2)
+                {
+                    model.Summary.destination_3 = await GetData.DestinationNameInfo(request[k].id_destination_city);
+                    model.Summary.startDate_3 = request[k].start_date;
+                    model.Summary.endDate_3 = request[k].end_date;
+                }
+                else if (k == 3)
+                {
+                    model.Summary.destination_4 = await GetData.DestinationNameInfo(request[k].id_destination_city);
+                    model.Summary.startDate_4 = request[k].start_date;
+                    model.Summary.endDate_4 = request[k].end_date;
+                }
+                else if (k == 4)
+                {
+                    model.Summary.destination_5 = await GetData.DestinationNameInfo(request[k].id_destination_city);
+                    model.Summary.startDate_5 = request[k].start_date;
+                    model.Summary.endDate_5 = request[k].end_date;
+                }
+                else if (k == 5)
+                {
+                    model.Summary.destination_6 = await GetData.DestinationNameInfo(request[k].id_destination_city);
+                    model.Summary.startDate_6 = request[k].start_date;
+                    model.Summary.endDate_6 = request[k].end_date;
+                }
+            }
+            model.HotelSettlement = hotel_reimburse;
+            model.MealSettlement = meal_reimburse;
+            model.TicketSettlement = ticket_reimburse;
+
+            if (start_extend != null)
+            {
+                model.StartSettlement = start_extend;
+            }
+            if (end_extend != null)
+            {
+                model.EndSettlement = end_extend;
+            }
+            model.Summary.create_date = request[0].create_date;
+            model.Summary.emp_name = await GetData.EmployeeNameInfo(request[0].no_reg);
+            model.Summary.grand_total_settlement = hotel_reimburse + laundry_reimburse + meal_reimburse + misc_reimburse + ticket_reimburse + transport_reimburse;
+            model.Summary.grand_total_settlement = model.Summary.grand_total_settlement + hotel_allowance + ticket_allowance + meal_allowance + winter_allowance;
+            model.Summary.group_code = BTA;
+            model.Summary.no_reg = request[0].no_reg;
+            model.Summary.total_hotel = hotel_allowance;
+            model.Summary.total_laundry = laundry_reimburse;
+            model.Summary.total_meal = meal_allowance;
+            model.Summary.total_miscellaneous = misc_reimburse;
+            model.Summary.total_ticket = ticket_allowance;
+            model.Summary.total_transportation = transport_reimburse;
+            model.Summary.total_winter = winter_allowance;
+
+            PdfDocument document = new PdfDocument();
+            document.Info.Title = "Purchase Receipt";
+            PdfPage page = document.AddPage();
+            page.Orientation = PdfSharp.PageOrientation.Portrait;
+            XSize size = PageSizeConverter.ToSize(PdfSharp.PageSize.A4);
+            page.Height = size.Height;
+            page.Width = size.Width;
+
+            XGraphics gfx = XGraphics.FromPdfPage(page, XGraphicsPdfPageOptions.Prepend);
+            XFont watermark_font = new XFont("Calibri", 200, XFontStyle.Bold);
+            XSize watermark_size = gfx.MeasureString("COPY", watermark_font);
+
+            // Create a string format
+            XStringFormat format = new XStringFormat();
+            format.Alignment = XStringAlignment.Near;
+            format.LineAlignment = XLineAlignment.Near;
+
+            // Create a dimmed red brush
+            XBrush brush = new XSolidBrush(XColor.FromArgb(150, 200, 200, 200));
+
+            // Draw the string
+            gfx.RotateTransform(-45);
+            gfx.DrawString("COPY", watermark_font, brush, new XPoint(-350, 400), format);
+            gfx.RotateTransform(45);
+
+
+
+
+            XFont head = new XFont("Arial Narrow", 16, XFontStyle.Regular);
+            XFont address = new XFont("Arial Narrow", 11, XFontStyle.Regular);
+            XFont body = new XFont("Calibri", 10, XFontStyle.Regular);
+            XFont bodyBold = new XFont("Calibri", 10, XFontStyle.Bold);
+            XFont body_title = new XFont("Calibri", 10, XFontStyle.Regular);
+            XFont total = new XFont("Lucida Grande", 11, XFontStyle.Bold);
+            XFont title = new XFont("Lucida Grande", 12, XFontStyle.Regular);
+            XFont titleBold = new XFont("Lucida Grande", 12, XFontStyle.Bold);
+            XFont credit = new XFont("Lucida Sans", 9, XFontStyle.Regular);
+
+            XPen header_line = new XPen(XColors.Black, 2);
+            XPen body_line = new XPen(XColors.DimGray, 0.5);
+            XPen POLine = new XPen(XColors.SteelBlue, 3);
+
+            string PT_TAM = "PT. TOYOTA ASTRA MOTOR";
+            string receipt = "SETTLEMENT RECEIPT";
+            string add1 = "Jl. Laks. Yos Sudarso, Sunter II";
+            string add2 = "Jakarta Utara - Indonesia";
+            string add3 = "Phone :62-21 - 6515551(Hunting)";
+
+            string btr = model.Summary.group_code;
+            string name = model.Summary.emp_name.ToUpper();
+            string noreg = model.Summary.no_reg.ToString();
+            string TAMPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.ImgPath), "tam_logo.PNG");
+            string Paid = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.ImgPath), "receipt-paid4.png");
+            string ContrastPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.ImgPath), "small_logo_horizontal.png");
+
+            // string date = model.invoice.start_date.ToString();
+
+            int total_Reimburse = 0;
+            int total_Actual = 0;
+
+            List<string> start_date = new List<string>();
+            List<string> start_time = new List<string>();
+
+            List<string> end_date = new List<string>();
+            List<string> end_time = new List<string>();
+
+            List<string> destination = new List<string>();
+            List<string> from = new List<string>();
+
+            int x_pad_max = 0;
+            int x_pad = 0;
+            int y_pad = 0;
+            int y_pad_max = 0;
+            int legend = 0;
+
+            int count = 0;
+            if (model.Summary.startDate_1.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_1).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_1).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_1).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_1).ToString("hh:mm tt"));
+
+                destination.Add(model.Summary.destination_1);
+                from.Add("Jakarta");
+                count++;
+            }
+            if (model.Summary.startDate_2.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_2).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_2).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_2).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_2).ToString("hh:mm tt"));
+
+                destination.Add(model.Summary.destination_2);
+                from.Add(model.Summary.destination_1);
+                count++;
+            }
+            if (model.Summary.startDate_3.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_3).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_3).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_3).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_3).ToString("hh:mm tt"));
+
+                destination.Add(model.Summary.destination_3);
+                from.Add(model.Summary.destination_2);
+                count++;
+            }
+            if (model.Summary.startDate_4.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_4).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_4).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_4).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_4).ToString("hh:mm tt"));
+
+                destination.Add(model.Summary.destination_4);
+                from.Add(model.Summary.destination_3);
+                count++;
+            }
+            if (model.Summary.startDate_5.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_5).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_5).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_5).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_5).ToString("hh:mm tt"));
+
+                destination.Add(model.Summary.destination_5);
+                from.Add(model.Summary.destination_4);
+                count++;
+            }
+            if (model.Summary.startDate_6.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.Summary.startDate_6).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.Summary.endDate_6).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.Summary.startDate_6).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.Summary.endDate_6).ToString("hh:mm tt"));
+
+                destination.Add(model.Summary.destination_6);
+                from.Add(model.Summary.destination_5);
+                count++;
+            }
+            if (model.StartSettlement.HasValue)
+            {
+                start_date.Add(Convert.ToDateTime(model.StartSettlement).ToString("dd MMM yyyy"));
+                end_date.Add(Convert.ToDateTime(model.EndSettlement).ToString("dd MMM yyyy"));
+
+                start_time.Add(Convert.ToDateTime(model.StartSettlement).ToString("hh:mm tt"));
+                end_time.Add(Convert.ToDateTime(model.EndSettlement).ToString("hh:mm tt"));
+
+                destination.Add("Extend");
+                from.Add(destination[count - 1]);
+            }
+
+            //gfx.DrawRectangle(XBrushes.GhostWhite, 50, 735, 495, 63);
+
+            XImage TAM = XImage.FromFile(TAMPath);
+            gfx.DrawImage(TAM, 60, 50, 40, 40);
+
+            //XImage contrast = XImage.FromFile(ContrastPath);
+            //gfx.DrawImage(contrast, 60, 735);
+
+            XImage paid = XImage.FromFile(Paid);
+            gfx.DrawImage(paid, 60, 675, 150, 150);
+
+            gfx.DrawString(PT_TAM, head, XBrushes.Black, 105, 60, XStringFormats.TopLeft);
+            gfx.DrawRectangle(XBrushes.GhostWhite, 377, 55, 168, 28);
+            gfx.DrawLine(POLine, 377, 55, 377, 83);
+
+            gfx.DrawString(receipt, head, XBrushes.Gray, 385, 60, XStringFormats.TopLeft);
+
+            gfx.DrawLine(header_line, 50, 95, 545, 95);
+
+            gfx.DrawString(add1, address, XBrushes.Black, 60, 105, XStringFormats.TopLeft);
+            gfx.DrawString(add2, address, XBrushes.Black, 60, 120, XStringFormats.TopLeft);
+            gfx.DrawString(add3, address, XBrushes.Black, 60, 135, XStringFormats.TopLeft);
+
+            gfx.DrawString("BTA", address, XBrushes.Black, 385, 105, XStringFormats.TopLeft);
+            gfx.DrawString("NOREG", address, XBrushes.Black, 385, 120, XStringFormats.TopLeft);
+            gfx.DrawString("NAME", address, XBrushes.Black, 385, 135, XStringFormats.TopLeft);
+
+            gfx.DrawString(":", address, XBrushes.Black, 425, 105, XStringFormats.TopLeft);
+            gfx.DrawString(":", address, XBrushes.Black, 425, 120, XStringFormats.TopLeft);
+            gfx.DrawString(":", address, XBrushes.Black, 425, 135, XStringFormats.TopLeft);
+
+            gfx.DrawString(btr, address, XBrushes.Black, 435, 105, XStringFormats.TopLeft);
+            gfx.DrawString(noreg, address, XBrushes.Black, 435, 120, XStringFormats.TopLeft);
+            gfx.DrawString(name, address, XBrushes.Black, 435, 135, XStringFormats.TopLeft);
+
+            gfx.DrawLine(body_line, 75, 200, 520, 200);
+
+            gfx.DrawString("DETAIL TRAVEL", title, XBrushes.Black, 85, 207, XStringFormats.TopLeft);
+
+            gfx.DrawLine(body_line, 75, 230, 520, 230);
+
+            int gap_now = 0;
+            x_pad = 30;
+
+            gfx.DrawString("From", body, XBrushes.Black, 85, 240, XStringFormats.TopLeft);
+            gfx.DrawString("To", body, XBrushes.Black, 180, 240, XStringFormats.TopLeft);
+
+            gfx.DrawString("Depart", body, XBrushes.Black, 280 + x_pad, 240, XStringFormats.TopLeft);
+            gfx.DrawString("Return", body, XBrushes.Black, 385 + x_pad, 240, XStringFormats.TopLeft);
+
+            int i = 0;
+            foreach (var item in start_date)
+            {
+                gap_now = (i + 1) * 15;
+                gfx.DrawString(from[i], body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(destination[i], body, XBrushes.Black, 180, 240 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(start_date[i], body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(start_time[i], body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(end_date[i], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(end_time[i], body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                i++;
+            }
+            int xItem = 120;
+            int xSuspense = 260;
+            int xReimburse = 400;
+
+
+            gfx.DrawLine(body_line, 75, 280 + gap_now, 520, 280 + gap_now);
+
+            gfx.DrawString("ITEM", title, XBrushes.Black, xItem, 287 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawString("SUSPENSE", title, XBrushes.Black, xSuspense, 287 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawString("REIMBURSE", title, XBrushes.Black, xReimburse, 287 + gap_now, XStringFormats.TopLeft);
+            gfx.DrawLine(body_line, 75, 310 + gap_now, 520, 310 + gap_now);
+
+            // BUDGET DETAIL PER ITEM
+            XTextFormatter tx = new XTextFormatter(gfx);
+            XTextFormatter rx = new XTextFormatter(gfx);
+
+            tx.Alignment = XParagraphAlignment.Right;
+            rx.Alignment = XParagraphAlignment.Left;
+
+            gfx.DrawRectangle(XBrushes.GhostWhite, 85 - 3, 320 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 320 + gap_now, 85 - 3, 340 + gap_now);
+
+            gfx.DrawRectangle(XBrushes.GhostWhite, 85 - 3, 360 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 360 + gap_now, 85 - 3, 380 + gap_now);
+
+            gfx.DrawRectangle(XBrushes.GhostWhite, 85 - 3, 400 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 400 + gap_now, 85 - 3, 420 + gap_now);
+
+            gfx.DrawRectangle(XBrushes.LightCyan, 85 - 3, 450 + gap_now, 432, 20);
+            gfx.DrawLine(POLine, 85, 450 + gap_now, 85 - 3, 470 + gap_now);
+
+            gfx.DrawRectangle(XBrushes.LightCyan, 85 - 3, 516 + gap_now, 432, 34);
+            gfx.DrawLine(POLine, 85, 516 + gap_now, 85 - 3, 550 + gap_now);
+
+
+            XRect rect1 = new XRect(xItem + 5, 323 + gap_now, 200, 20);
+            XRect rect1s = new XRect(xItem + 205, 323 + gap_now, 150, 20);
+
+            rx.DrawString("Meal", body_title, XBrushes.DarkBlue, rect1);
+            tx.DrawString("Rp. " + model.Summary.total_meal.ToString("N"), body, XBrushes.Black, rect1);
+            tx.DrawString("Rp. " + model.MealSettlement.ToString("N"), body, XBrushes.Black, rect1s);
+
+
+            XRect rect2 = new XRect(xItem + 5, 343 + gap_now, 200, 20);
+            XRect rect2s = new XRect(xItem + 205, 343 + gap_now, 150, 20);
+
+            rx.DrawString("Hotel", body_title, XBrushes.DarkBlue, rect2);
+            tx.DrawString("Rp. " + model.Summary.total_hotel.ToString("N"), body, XBrushes.Black, rect2);
+            tx.DrawString("Rp. " + model.HotelSettlement.ToString("N"), body, XBrushes.Black, rect2s);
+
+
+
+            XRect rect3 = new XRect(xItem + 5, 363 + gap_now, 200, 20);
+            XRect rect3s = new XRect(xItem + 205, 363 + gap_now, 150, 20);
+
+            rx.DrawString("Ticket", body_title, XBrushes.DarkBlue, rect3);
+            tx.DrawString("Rp. " + model.Summary.total_ticket.ToString("N"), body, XBrushes.Black, rect3);
+            tx.DrawString("Rp. " + model.TicketSettlement.ToString("N"), body, XBrushes.Black, rect3s);
+
+
+            XRect rect4 = new XRect(xItem + 5, 383 + gap_now, 200, 20);
+            XRect rect4s = new XRect(xItem + 205, 383 + gap_now, 150, 20);
+
+            rx.DrawString("Land Transport", body_title, XBrushes.DarkBlue, rect4);
+            tx.DrawString("Rp. 0.00", body, XBrushes.Black, rect4);
+            tx.DrawString("Rp. " + model.Summary.total_transportation.ToString("N"), body, XBrushes.Black, rect4s);
+
+            XRect rect5 = new XRect(xItem + 5, 403 + gap_now, 200, 20);
+            XRect rect5s = new XRect(xItem + 205, 403 + gap_now, 150, 20);
+
+            rx.DrawString("Laundry", body_title, XBrushes.DarkBlue, rect5);
+            tx.DrawString("Rp. 0.00", body, XBrushes.Black, rect5);
+            tx.DrawString("Rp. " + model.Summary.total_laundry.ToString("N"), body, XBrushes.Black, rect5s);
+
+            XRect rect6 = new XRect(xItem + 5, 423 + gap_now, 200, 20);
+            XRect rect6s = new XRect(xItem + 205, 423 + gap_now, 150, 20);
+            rx.DrawString("Misc", body_title, XBrushes.DarkBlue, rect6);
+            tx.DrawString("Rp. 0.00", body, XBrushes.Black, rect6);
+            tx.DrawString("Rp. " + model.Summary.total_miscellaneous.ToString("N"), body, XBrushes.Black, rect6s);
+
+
+
+            // Perhitungan Total
+            total_Actual = model.Summary.total_meal + model.Summary.total_ticket + model.Summary.total_hotel;
+            int t_Reimburse = Convert.ToInt32(model.MealSettlement + model.HotelSettlement + model.TicketSettlement);
+            total_Reimburse = model.Summary.total_laundry + model.Summary.total_transportation + model.Summary.total_miscellaneous + t_Reimburse;
+
+
+            XRect rect7 = new XRect(xItem + 5, 454 + gap_now, 200, 20);
+            XRect rect7s = new XRect(xItem + 205, 454 + gap_now, 150, 20);
+            rx.DrawString("TOTAL", title, XBrushes.DarkBlue, rect7);
+            tx.DrawString("Rp. " + total_Actual.ToString("N"), body, XBrushes.Black, rect7);
+            tx.DrawString("Rp. " + total_Reimburse.ToString("N"), body, XBrushes.Black, rect7s);
+
+            XRect rect9 = new XRect(xItem + 5, 526 + gap_now, 350, 20);
+            rx.DrawString("GRAND TOTAL", titleBold, XBrushes.DarkBlue, rect9);
+            tx.DrawString("Rp. " + Convert.ToInt32(model.Summary.grand_total_settlement).ToString("N"), bodyBold, XBrushes.Black, rect9);
+
+
+            MemoryStream stream = new MemoryStream();
+            document.Save(stream, false);
+            stream.Position = 0;
+            return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model.Summary.group_code.Trim(' ') + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
+
         }
     }
 }

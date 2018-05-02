@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/CONTRAST_WEB_deploy" />
+  <setParameter name="CONTRASTEntities-Web.config Connection String" value="metadata=res://*/Models.CONTRAST_DB.csdl|res://*/Models.CONTRAST_DB.ssdl|res://*/Models.CONTRAST_DB.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=10.85.40.68;initial catalog=CONTRAST;user id=contrast;password=Toyota2017;multipleactiveresultsets=True;application name=EntityFramework&quot;" />
+  <setParameter name="DefaultConnection-Web.config Connection String" value="DefaultConnection_ConnectionString" />
+</parameters>

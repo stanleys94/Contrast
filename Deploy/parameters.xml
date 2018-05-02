@@ -1,0 +1,12 @@
+﻿<parameters>
+  <parameter name="IIS Web Application Name" defaultValue="Default Web Site/CONTRAST_WEB_deploy" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\GitHub\\Contrast\\CONTRAST_WEB\\CONTRAST_WEB\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^D:\\GitHub\\Contrast\\CONTRAST_WEB\\CONTRAST_WEB\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="CONTRASTEntities-Web.config Connection String" defaultValue="metadata=res://*/Models.CONTRAST_DB.csdl|res://*/Models.CONTRAST_DB.ssdl|res://*/Models.CONTRAST_DB.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=10.85.40.68;initial catalog=CONTRAST;user id=contrast;password=Toyota2017;multipleactiveresultsets=True;application name=EntityFramework&quot;">
+    <parameterEntry kind="XmlFile" scope="D:\\GitHub\\Contrast\\CONTRAST_WEB\\CONTRAST_WEB\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='CONTRASTEntities']/@connectionString" />
+  </parameter>
+  <parameter name="DefaultConnection-Web.config Connection String" defaultValue="DefaultConnection_ConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\GitHub\\Contrast\\CONTRAST_WEB\\CONTRAST_WEB\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+</parameters>
