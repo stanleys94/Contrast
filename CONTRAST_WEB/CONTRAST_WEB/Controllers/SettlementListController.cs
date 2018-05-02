@@ -31,22 +31,12 @@ namespace CONTRAST_WEB.Controllers
             var rank = await GetData.EmployeeInfo(model.TravelRequest.no_reg.ToString());
 
             //var diff = (model.End_Extend - model.Start_Extend);
-
             var meal_platform = await GetData.Procedures(rank.@class);
-            if (model.halfday_flag1 & model.halfday_flag2 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
-            {
-                model.MealSettlement = (float)meal_platform.meal_allowance;
-            }
-            else if (model.halfday_flag1 | model.halfday_flag2 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
+            if (model.halfday_flag1 == true && (DateTime)model.End_Extend == (DateTime)model.Start_Extend)
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance / 2;
-
             }
-            else if (model.halfday_flag1 & model.halfday_flag2 == true)
-            {
-                model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance;
-            }
-            else if (model.halfday_flag1 | model.halfday_flag2 == true)
+            else if (model.halfday_flag1 == true)
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days) + (float)meal_platform.meal_allowance / 2;
             }
@@ -54,35 +44,30 @@ namespace CONTRAST_WEB.Controllers
             {
                 model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
             }
+            //model.MealSettlement = (float)meal_platform.meal_allowance * Convert.ToInt32(duration.Days);
             //ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
             return (model);
         }
 
-        public async Task<JsonResult> GetSearchValue(string search, string code)
+        public async Task<SettlementHelper> Sum2(SettlementHelper model)
         {
-            List<Class1> list = new List<Class1>();
-            list = await GetData.SearchName(search);
-            List<Class1> filtered = new List<Class1>();
-            foreach (var item in list)
+            var rank = await GetData.EmployeeInfo(model.TravelRequest.no_reg.ToString());
+
+            var meal_platform = await GetData.Procedures(rank.@class);
+            if (model.halfday_flag1 & model.halfday_flag2 == true)
             {
-                if (!item.code.Contains(code)) filtered.Add(item);
+                model.MealSettlement = (float)meal_platform.meal_allowance;
+            }
+            else if (model.halfday_flag1 | model.halfday_flag2 == true)
+            {
+                model.MealSettlement = (float)meal_platform.meal_allowance / 2;
+            }
+            else
+            {
+                model.MealSettlement = 0;
             }
 
-            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-        public async Task<JsonResult> GetSearchValue2(string search, string code)
-        {
-            
-            List<Class1> list = new List<Class1>();
-            list = await GetData.SearchNameDiv(search);
-            //list = await GetData.SearchName(search);
-            List<Class1> filtered = new List<Class1>();
-            foreach (var item in list)
-            {
-                if (!item.code.Contains(code)) filtered.Add(item);
-            }
-
-            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return (model);
         }
 
         // GET: SettlementList
@@ -90,25 +75,14 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(string applied)
+        public async Task<ActionResult> Index()
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-            tb_m_employee model = new tb_m_employee();
-
-            if (applied != null) model = await GetData.EmployeeInfo(applied);
-            else model = await GetData.EmployeeInfo(identity.Name);
-
-            tb_m_employee logged = await GetData.EmployeeInfo(identity.Name);
-
-            ViewBag.loged_id = logged.code.Trim();
-            ViewBag.loged_name = logged.name.Trim(' ');
-
-            ViewBag.applied_name = model.name.Trim();
+            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
 
             ViewBag.Employee = model;
-            ViewBag.applied = model.code.Trim();
 
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
@@ -154,12 +128,14 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         [NoCache]
         public async Task<ActionResult> Details(vw_travel_for_settlement model)
         {
+            string time = "";
+            ViewBag.time2 = time;
             SettlementHelper Settlement = new SettlementHelper();
             Settlement.TravelRequest = model;
             Settlement.extend_flag = true;
@@ -168,18 +144,28 @@ namespace CONTRAST_WEB.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
         [NoCache]
-        public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert)
+        public async Task<ActionResult> Insert(SettlementHelper model, string sum, string insert, string time11, string time2)
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
-            ViewBag.Privillege = claims;
-
             if (ModelState.IsValid)
             {
+                ViewBag.time11 = time11;
+                ViewBag.time2 = time2;
+
+                if (time11 != null)
+                {
+                    model.date_depart = time11;
+                }
+
+                if (time2 != null)
+                {
+                    model.date_return = time2;
+                }
+
+
                 if (insert != null)
                 {
                     if (Request.Files["UploadedFile1"] != null)
@@ -198,16 +184,17 @@ namespace CONTRAST_WEB.Controllers
                         model.ReceiptFileOther = file;
                     }
 
-                    await UpdateData.RejectedClearance(model.TravelRequest.group_code);
+                    //await UpdateData.RejectedClearance(model.TravelRequest.group_code);
 
                     tb_r_travel_actualcost ActualCostObject = new tb_r_travel_actualcost();
                     ActualCostObject.information_actualcost = "Settlement";
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
-
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
                     ActualCostObject.additional1 = model.halfday_flag1.ToString();
                     ActualCostObject.additional2 = model.halfday_flag2.ToString();
+                    ActualCostObject.additional3 = model.date_depart;
+                    ActualCostObject.additional4 = model.date_return;
 
 
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
@@ -306,11 +293,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //cek update data
-                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    else
-                       await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    //else
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -331,7 +317,12 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
 
                     //if (!model.extend_flag)
-                    return View("SummaryPaid", SummarySettlementObject);                    
+                    return View("SummaryPaid", SummarySettlementObject);
+                    //else
+                    //    return View("SummaryAdditional", SummarySettlementObject);
+                    //*/
+                    //return View("SummaryPaid", model);
+
                 }
                 else
                 if (sum != null)
@@ -339,8 +330,8 @@ namespace CONTRAST_WEB.Controllers
                     SettlementHelper return_model = await Sum(model);
                     ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
                     return View("Insert", return_model);
-                    //return View("Details", return_model);
                 }
+
                 else
                     return View("Details", model);
             }
@@ -348,19 +339,204 @@ namespace CONTRAST_WEB.Controllers
                 return View("Details", model);
         }
 
-        [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
-        public ActionResult SummaryPaid(vw_summary_settlement model)
+        public async Task<ActionResult> Insert2(SettlementHelper model, string sum2, string insert, string time1, string time2)
         {
-            return View("Index");
+            if (ModelState.IsValid)
+            {
+                ViewBag.time1 = time1;
+                ViewBag.time2 = time2;
+
+                if (time1 != null)
+                {
+                    model.date_depart = time1;
+                }
+
+                if (time2 != null)
+                {
+                    model.date_return = time2;
+                }
+
+                if (insert != null)
+                {
+                    if (Request.Files["UploadedFile1"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["UploadedFile1"];
+                        model.ReceiptFileTransportation = file;
+                    }
+                    if (Request.Files["UploadedFile2"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["UploadedFile2"];
+                        model.ReceiptFileLaundry = file;
+                    }
+                    if (Request.Files["UploadedFile3"] != null)
+                    {
+                        HttpPostedFileBase file = Request.Files["UploadedFile3"];
+                        model.ReceiptFileOther = file;
+                    }
+
+                    //await UpdateData.RejectedClearance(model.TravelRequest.group_code);
+
+                    tb_r_travel_actualcost ActualCostObject = new tb_r_travel_actualcost();
+                    ActualCostObject.information_actualcost = "Settlement";
+                    ActualCostObject.end_date_extend = model.End_Extend;
+                    ActualCostObject.start_date_extend = model.Start_Extend;
+                    ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
+                    ActualCostObject.additional1 = model.halfday_flag1.ToString();
+                    ActualCostObject.additional2 = model.halfday_flag2.ToString();
+                    ActualCostObject.additional3 = model.date_depart;
+                    ActualCostObject.additional4 = model.date_return;
+
+                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
+
+                    bankName = await GetData.VendorEmployee((model.TravelRequest.no_reg));
+
+                    ActualCostObject.vendor_code = bankName[0].vendor_code_employee;
+
+                    ActualCostObject.group_code = model.TravelRequest.group_code;
+                    ActualCostObject.id_request = model.TravelRequest.id_request;
+                    ActualCostObject.create_date = DateTime.Now;
+
+                    string division_r = await GetData.GetDivMapping(model.TravelRequest.no_reg.ToString());
+                    var region = await GetData.RegionInfo(model.TravelRequest.id_destination_city);
+                    tb_m_budget budget = await GetData.GetCostWbs(region == 4 ? false : true, division_r.Trim());
+
+                    ActualCostObject.wbs_no = budget.eoa_wbs_no;
+                    ActualCostObject.cost_center = budget.cost_center;
+
+                    ActualCostObject.no_reg = model.TravelRequest.no_reg ?? default(int);
+
+                    List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
+
+                    ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.TravelRequest.login_id));
+                    ///*
+                    for (int i = 0; i < ResponseList.Count(); i++)
+                    {
+                        ResponseList[i].login_id = model.TravelRequest.login_id;
+                    }
+
+                    //temporary time container
+                    DateTime? temp_start = ActualCostObject.start_date_extend;
+                    DateTime? temp_end = ActualCostObject.end_date_extend;
+
+                    if (model.MealSettlement > 0)
+                    {
+                        ActualCostObject.amount = (int)model.MealSettlement;
+                        ActualCostObject.jenis_transaksi = "Meal";
+                        await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
+                    }
+
+                    if (model.HotelSettlement > 0)
+                    {
+                        ActualCostObject.amount = (int)model.HotelSettlement;
+                        ActualCostObject.jenis_transaksi = "Hotel";
+                        await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
+                    }
+
+                    if (model.TicketSettlement > 0)
+                    {
+
+                        ActualCostObject.amount = (int)model.TicketSettlement;
+                        ActualCostObject.jenis_transaksi = "Ticket";
+                        await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
+                    }
+
+                    if (model.LaundrySettlement > 0)
+                    {
+                        ActualCostObject.amount = (int)model.LaundrySettlement;
+                        ActualCostObject.jenis_transaksi = "Laundry";
+                        ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileLaundry, "Laundry_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                        await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
+                    }
+
+                    if (model.TransportationSettlement > 0)
+                    {
+                        ActualCostObject.amount = (int)model.TransportationSettlement;
+                        ActualCostObject.jenis_transaksi = "Transportation";
+                        ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileTransportation, "Transport_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                        await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
+                    }
+
+                    if (model.MiscSettlement > 0)
+                    {
+                        ActualCostObject.amount = (int)model.MiscSettlement;
+                        ActualCostObject.jenis_transaksi = "Miscellaneous";
+                        ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileOther, "Other_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
+                        await InsertData.ActualCost(ActualCostObject);
+                        ActualCostObject.start_date_extend = temp_start;
+                        ActualCostObject.end_date_extend = temp_end;
+                    }
+
+                    //update data
+                    //vw_summary_settlement SummarySettlementObject = new vw_summary_settlement();
+                    //SummarySettlementObject = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
+                    SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
+                    SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
+
+                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    //else
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+
+                    //migrate ke helper baru
+
+                    if (model.HotelSettlement > 0) SummarySettlementObject.HotelSettlement = model.HotelSettlement;
+                    else SummarySettlementObject.HotelSettlement = 0;
+
+                    if (model.MealSettlement > 0) SummarySettlementObject.MealSettlement = model.MealSettlement;
+                    else SummarySettlementObject.MealSettlement = 0;
+
+                    if (model.TicketSettlement > 0) SummarySettlementObject.TicketSettlement = model.TicketSettlement;
+                    else SummarySettlementObject.TicketSettlement = 0;
+
+                    if (model.Start_Extend.HasValue) SummarySettlementObject.StartSettlement = model.Start_Extend;
+                    if (model.End_Extend.HasValue) SummarySettlementObject.EndSettlement = model.End_Extend;
+
+                    SummarySettlementObject.Summary.total_meal = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_meal) - SummarySettlementObject.MealSettlement);
+                    SummarySettlementObject.Summary.total_hotel = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_hotel) - SummarySettlementObject.HotelSettlement);
+                    SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
+
+                    //if (!model.extend_flag)
+                    return View("SummaryPaid", SummarySettlementObject);
+                    //else
+                    //    return View("SummaryAdditional", SummarySettlementObject);
+                    //*/
+                    //return View("SummaryPaid", model);
+
+                }
+                else if (sum2 != null)
+                {
+                    SettlementHelper return_model = await Sum2(model);
+                    ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
+                    return View("Details", return_model);
+                }
+
+                else
+                    return View("Details", model);
+            }
+            else
+                return View("Details", model);
         }
 
+
+
         [HttpPost]
-        public ActionResult SummaryPaidMSTR(SettlementHelper model)
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]
+        public ActionResult SummaryPaid(vw_summary_settlement model)
         {
-            return RedirectToAction("Index");
+
+            return View("Index");
         }
 
         // GET: SettlementList
@@ -369,7 +545,7 @@ namespace CONTRAST_WEB.Controllers
         {
             tb_m_employee model = await GetData.EmployeeInfo(noreg);
             ViewBag.Employee = model;
-            ViewBag.applied = model.code;
+
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
             ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.code));
@@ -410,6 +586,7 @@ namespace CONTRAST_WEB.Controllers
                 temp.total_winter = item.total_winter;
                 ResponseList.Add(temp);
             }
+            //return View(ResponseList);
 
             var headers = Request.Headers.GetValues("User-Agent");
             string userAgent = string.Join(" ", headers);
@@ -419,15 +596,6 @@ namespace CONTRAST_WEB.Controllers
             else
                 return View("IndexMSTRMobile", ResponseList);
 
-        }
-
-        public async Task<ActionResult> DetailsMSTR(vw_travel_for_settlement model)
-        {
-            SettlementHelper Settlement = new SettlementHelper();
-            Settlement.TravelRequest = model;
-            Settlement.extend_flag = true;
-            Response.Cache.SetNoStore();
-            return View(Settlement);
         }
 
         public async Task<ActionResult> InsertMSTR(SettlementHelper model, string sum, string insert)
@@ -452,17 +620,13 @@ namespace CONTRAST_WEB.Controllers
                         model.ReceiptFileOther = file;
                     }
 
-                    await UpdateData.RejectedClearance(model.TravelRequest.group_code);
+                    //await UpdateData.RejectedClearance(model.TravelRequest.group_code);
 
                     tb_r_travel_actualcost ActualCostObject = new tb_r_travel_actualcost();
                     ActualCostObject.information_actualcost = "Settlement";
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
-
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
-                    ActualCostObject.additional1 = model.halfday_flag1.ToString();
-                    ActualCostObject.additional2 = model.halfday_flag2.ToString();
-
 
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
 
@@ -495,6 +659,7 @@ namespace CONTRAST_WEB.Controllers
                     //temporary time container
                     DateTime? temp_start = ActualCostObject.start_date_extend;
                     DateTime? temp_end = ActualCostObject.end_date_extend;
+
 
                     if (model.MealSettlement > 0)
                     {
@@ -560,11 +725,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //cek update data
-                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    else
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                    //await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    //else
+                    //await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -586,15 +750,18 @@ namespace CONTRAST_WEB.Controllers
 
                     //if (!model.extend_flag)
                     return View("SummaryPaidMSTR", SummarySettlementObject);
+                    //else
+                    //    return View("SummaryAdditional", SummarySettlementObject);
+                    //*/
+                    //return View("SummaryPaid", model);
+
                 }
                 else
                 if (sum != null)
                 {
                     SettlementHelper return_model = await Sum(model);
                     ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("MealSettlement")));
-                    return View("InsertMSTR", return_model);
-                    //return View("Insert", return_model);
-                    //return View("Details", return_model);
+                    return View("DetailsMSTR", return_model);
                 }
                 else
                     return View("DetailsMSTR", model);
@@ -603,11 +770,19 @@ namespace CONTRAST_WEB.Controllers
                 return View("DetailsMSTR", model);
         }
 
+        public async Task<ActionResult> DetailsMSTR(vw_travel_for_settlement model)
+        {
+            SettlementHelper Settlement = new SettlementHelper();
+            Settlement.TravelRequest = model;
+            Settlement.extend_flag = true;
+            Response.Cache.SetNoStore();
+            return View("DetailsMSTR", Settlement);
+        }
 
         [HttpPost]
         //[Authorize]
         //[Authorize(Roles = "contrast.user")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
             PdfDocument document = new PdfDocument();
