@@ -7637,3 +7637,15 @@ RouteSummary.css:13 .bulet1, .bulet {
     max-width: 145px;
 }
 
+.strong {
+    float: left;
+    color: grey;
+    width:auto;
+}
+
+.raw {
+    float:left;
+    width:auto;
+    padding-right:100px;
+    margin-bottom:0px;
+}
