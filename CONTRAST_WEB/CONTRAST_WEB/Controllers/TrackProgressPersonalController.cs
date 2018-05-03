@@ -751,7 +751,7 @@ namespace CONTRAST_WEB.Controllers
 
             int meal_allowance = 0, meal_reimburse = 0, ticket_allowance = 0, ticket_reimburse = 0, hotel_allowance = 0, hotel_reimburse = 0, winter_allowance = 0, winter_reimburse = 0;
             int misc_allowance = 0, misc_reimburse = 0, laundry_allowance = 0, laundry_reimburse = 0, transport_allowance = 0, transport_reimburse = 0;
-            string HDDepart, HDDepartFlag, HDReturn, HDReturnFlag;
+            string HDDepart = null, HDDepartFlag = null, HDReturn = null, HDReturnFlag = null;
             DateTime? start_extend = null, end_extend = null;
             foreach (var item in actual)
             {
@@ -791,7 +791,7 @@ namespace CONTRAST_WEB.Controllers
                     {
                         if (item.jenis_transaksi.Contains("Meal"))
                         {
-                            meal_reimburse = meal_reimburse + item.amount;
+                            meal_reimburse = meal_reimburse + item.amount;  
                         }
                         else if (item.jenis_transaksi.Contains("Ticket"))
                         {
@@ -824,14 +824,14 @@ namespace CONTRAST_WEB.Controllers
                         {
                             if (item.additional3 != "")
                             {
-                                HDDepart = Convert.ToDateTime(item.additional3).ToString("hh:mm:ss tt");
+                                HDDepart = Convert.ToDateTime(item.additional3).ToString("hh:mm tt");
                             }
                         }
                         if (item.additional4 != null)
                         {
                             if (item.additional4 != "")
                             {
-                                HDReturn = Convert.ToDateTime(item.additional3).ToString("hh:mm:ss tt");
+                                HDReturn = Convert.ToDateTime(item.additional4).ToString("hh:mm tt");
                             }
                         }
                         if (item.start_date_extend != null) start_extend = item.start_date_extend;
@@ -1117,9 +1117,10 @@ namespace CONTRAST_WEB.Controllers
             gfx.DrawString("Depart", body, XBrushes.Black, 280 + x_pad, 240, XStringFormats.TopLeft);
             gfx.DrawString("Return", body, XBrushes.Black, 385 + x_pad, 240, XStringFormats.TopLeft);
 
-            int i = 0;
+            int i = 0, last_date = 0;
             foreach (var item in start_date)
             {
+                last_date = i;
                 gap_now = (i + 1) * 15;
                 gfx.DrawString(from[i], body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(destination[i], body, XBrushes.Black, 180, 240 + gap_now, XStringFormats.TopLeft);
@@ -1130,7 +1131,32 @@ namespace CONTRAST_WEB.Controllers
                 gfx.DrawString(end_date[i], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(end_time[i], body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 i++;
+                
             }
+            if (HDDepartFlag != null)
+            {
+                gap_now = (i + 1) * 15;
+                gfx.DrawString(HDDepartFlag, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(start_date[0], body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+
+                if (HDDepart != null)
+                    gfx.DrawString(HDDepart, body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                else gfx.DrawString("00:00 AM", body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                i++;
+            }
+            if (HDReturnFlag != null)
+            {
+                gap_now = (i + 1) * 15;
+                gfx.DrawString(HDReturnFlag, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(end_date[last_date], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                if (HDReturn != null)
+                    gfx.DrawString(HDReturn, body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                else gfx.DrawString("00:00 AM", body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                i++;
+            }
+
             int xItem = 120;
             int xSuspense = 260;
             int xReimburse = 400;
