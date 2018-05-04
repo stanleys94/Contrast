@@ -60,13 +60,13 @@
          {
             @Html.AntiForgeryToken()
              <input type="hidden" name="SearchString" value="@ViewBag.CurrentFilter" />
-             <div style="width:100%;text-align:left;height:80px;border:0px;" class="clearfix">
+             <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;margin-top:20px;" class="clearfix">
                 <table class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
-                            Group Code
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            Number
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
                             Name
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
@@ -82,10 +82,10 @@
                             End Date
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
-                            Ammount
+                            Amount
                         </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
-                            Document
+                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                            Doc.
                         </th>
                         <th style="color:white; background-color:limegreen; text-align:left; border-right:1px solid white; width:60px;">
                             <div style="margin:1.5px 0;" class="checkbox">
@@ -103,12 +103,15 @@
                                 <label>Reject</label>
                             </div>
                         </th>
+                        <th style="color:white;background-color:red;text-align:left;border-right:1px solid white;width:180px;text-align:center;">
+                            <label>Reason</label>
+                        </th>
 
                     </tr>
-                </table>
+                @*</table>
             </div>
             <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;margin-top:20px;" class="clearfix">
-                <table class="table table-condensed table-striped">
+                <table class="table table-condensed table-striped">*@
                     @if (Model[0].Settlement_Verified == null)
                     {
                         @Html.HiddenFor(Model => Model[0].EmployeeInfo.code, new { @Value = Model[0].EmployeeInfo.code })
@@ -125,27 +128,27 @@
                             @Html.HiddenFor(Model => Model[k].Settlement_Verified.cost_center, new { @Value = Model[k].Settlement_Verified.cost_center })
 
                             <tr class="table-responsive">
-                                <td style="width:130px;" class="td">
+                                <td style="width:90px;text-align:center;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.group_code)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.group_code, new { @Value = Model[k].Settlement_Verified.group_code })
                                 </td>
-                                <td style="width:130px;" class="td">
+                                <td style="width:145px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.name)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.name, new { @Value = Model[k].Settlement_Verified.name })
                                 </td>
-                                <td style="width:130px;" class="td">
+                                <td style="width:120px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.jenis_transaksi)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.jenis_transaksi, new { @Value = Model[k].Settlement_Verified.jenis_transaksi })
                                 </td>
-                                <td style="width:140px;" class="td">
+                                <td style="width:120px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.destination_name)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.destination_name, new { @Value = Model[k].Settlement_Verified.destination_name })
                                 </td>
-                                <td style="width:140px;" class="td">
+                                <td style="width:115px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.start_date)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.start_date, new { @Value = Model[k].Settlement_Verified.start_date })
                                 </td>
-                                <td style="width:140px;" class="td">
+                                <td style="width:115px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.end_date)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.end_date, new { @Value = Model[k].Settlement_Verified.end_date })
                                 </td>
@@ -153,14 +156,18 @@
                                     @Html.DisplayFor(Model => Model[k].money, new { @Value = Model[k].money })
                                     @Html.HiddenFor(Model => Model[k].money, new { @Value = Model[k].money })
                                 </td>
-                                <td style="width:130px;" class="td">
+                                <td style="width:110px;text-align:center;" class="td">
                                     @*@Html.ActionLink("Link", Model[k].path)*@
                                     @if (Model[k].path != null)
                                     {
-                                        <a href="@Model[k].path" target="_blank">Link</a>
+                                        <a href="@Model[k].path" target="_blank"><span style="font-size:20px;" class="glyphicon glyphicon-folder-open"></span></a>
+                                    }
+                                    else
+                                    {
+                                        <label>None</label>
                                     }
                                 </td>
-                                <td style="width:110px;" class="td" id="item_checkbox">
+                                <td style="width:105px;" class="td" id="item_checkbox">
                                     <div style="margin:1.5px" class="checkbox">
                                         <label>
                                             @*@Html.CheckBox("false", new { value = item.ga_status, @name = "select-item", @class = "select-item" })*@
@@ -171,7 +178,7 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td style="width:80px;" class="td" id="item_checkbox">
+                                <td style="width:70px;" class="td" id="item_checkbox">
                                     <div style="margin:1.5px" class="checkbox">
                                         <label>
                                             @*@Html.CheckBox("true", new { value = item.ga_status, @name = "select-item2", @class = "select-item2" })*@
@@ -182,7 +189,21 @@
                                         </label>
                                     </div>
                                 </td>
-
+                                <td class="td item_requeststatus">
+                                    @if (k == 0 || Model[k].Settlement_Verified.group_code != Model[k - 1].Settlement_Verified.group_code)
+                                    {
+                                        @Html.DropDownListFor(m => m[k].comment, new SelectList(
+                                                                             new[]
+                                                                             {
+                                                                                 new { Value = "Document Revision", Text = "Document Revision" ,},
+                                                                                 new { Value = "Amount Revision", Text = "Amount Revision" },
+                                                                             },
+                                                                             "Value",
+                                                                             "Text",
+                                                                             Model
+                                                                             ), "-Rejection-", new { @id = "reason" + k, @name = "reason", @class = "form-control" })
+                                    }
+                                </td>
                                
                             </tr>
 
@@ -192,7 +213,7 @@
             </div>
 
 
-            <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-6">
+            <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-5">
                 @if (position.ToLower().Contains("dph") || position.ToLower().Contains("ap"))
                 {
                     <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">SUBMIT</button>
@@ -201,10 +222,10 @@
                 {
                     <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">SUBMIT</button>
                 }
-                @Html.ActionLink("Cancel", "Index", "Home")
+                @Html.ActionLink("Cancel", "Index", "Home", "", new { @class="btn btn-default" })
             </div>
          }
-        <div style="float:left;margin-top:10px;" class="col-lg-3">
+        <div style="float:left;margin-top:10px;" class="col-lg-4">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         @if (ViewBag.startdate != null || ViewBag.enddate != null)
         {

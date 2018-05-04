@@ -1419,13 +1419,15 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.Duration = travel_duration;
 
                 ModelState.Clear();
-                if (ResponseList.Count > 0) return RedirectToAction("IndexMSTR", ResponseList.OrderBy(r => r.status_request).ToList());
-                //if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
-                else
-                {
-                    return RedirectToAction("IndexMSTR", ResponseList);
+                //if (ResponseList.Count > 0) {
+                //    return RedirectToAction("SubmittedMSTR");
+                //}
+                ////if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
+                //else
+                //{
+                    return RedirectToAction("SubmittedMSTR");
                     //return View("Index", ResponseList);
-                }
+                //}
             }
             else if (download == "download")
             {
