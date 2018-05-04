@@ -584,7 +584,7 @@ namespace CONTRAST_WEB.Controllers
         {
             tb_m_employee model = await GetData.EmployeeInfo(noreg);
             ViewBag.Employee = model;
-
+            ViewBag.applied = model.code;
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
             ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.code));
