@@ -22,10 +22,27 @@
 
         @if (Model.TravelRequest.final_status == "2")
         {
-            <strong><h2>Rejected settlement</h2></strong>
-            <span style="text-align:right;margin-left:100px;">REASON OF REJECTION : </span>
-            <span style="color:red"> @Model.TravelRequest.comment</span>
-        }
+
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
+            @Html.HiddenFor(m => m.TotalSettlement)
+            @Html.HiddenFor(m => m.TravelRequest.id_request)
+            @Html.HiddenFor(m => m.TravelRequest.no_reg)
+            @Html.HiddenFor(m => m.TravelRequest.group_code)
+            @Html.HiddenFor(m => m.TravelRequest.login_id)
+            @Html.HiddenFor(m => m.TravelRequest.destination_name)
+            @Html.HiddenFor(m => m.TravelRequest.start_date)
+            @Html.HiddenFor(m => m.TravelRequest.end_date)
+
+            @Html.HiddenFor(m => m.TravelRequest.emp_name)
+
+            if (Model.TravelRequest.final_status == "2")
+            {
+                <strong><h2>Rejected settlement</h2></strong>
+                <span style="text-align:right;margin-left:100px;">REASON OF REJECTION : </span>
+                <span style="color:red"> @Model.TravelRequest.comment</span>
+            }
+
 
         <div class="col-md-11 col-md-offset-1"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div><br />
         <div class="col-md-5 col-md-offset-1">
@@ -571,6 +588,7 @@
     </div>
 </div>
 
+
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script src="~/Scripts/verify.js"></script>
@@ -633,6 +651,3 @@
             }
         });
     });
-
-
-</script>
