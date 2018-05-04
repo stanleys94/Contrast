@@ -583,8 +583,8 @@
                 $('#set1').show();
                 $('#hd').prop('checked', false);
                 $('#hr').prop('checked', false);
-                $('#time1').val('');
-                $('#time2').val('');
+                $('#time1').val(null);
+                $('#time2').val(null);
             }
         });
     });
@@ -595,6 +595,8 @@
             if ($this.is(':checked')) {
                 $('#set1').hide();
                 $('#set2').show();
+                $('#hd').prop('checked', false);
+                $('#hr').prop('checked', false)
             }
         });
     });
