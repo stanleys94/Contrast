@@ -822,10 +822,10 @@ namespace CONTRAST_WEB.Controllers
             return View("DetailsMSTR", Settlement);
         }
 
-        [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[Authorize]
+        //[Authorize(Roles = "contrast.user")]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
             PdfDocument document = new PdfDocument();
