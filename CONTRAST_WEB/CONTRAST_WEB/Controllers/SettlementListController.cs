@@ -666,6 +666,10 @@ namespace CONTRAST_WEB.Controllers
                     ActualCostObject.end_date_extend = model.End_Extend;
                     ActualCostObject.start_date_extend = model.Start_Extend;
                     ActualCostObject.user_created = model.TravelRequest.no_reg.ToString();
+                    ActualCostObject.additional1 = model.halfday_flag1.ToString();
+                    ActualCostObject.additional2 = model.halfday_flag2.ToString();
+                    ActualCostObject.additional3 = model.date_depart;
+                    ActualCostObject.additional4 = model.date_return;
 
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
 
