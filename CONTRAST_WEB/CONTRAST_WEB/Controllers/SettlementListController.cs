@@ -822,12 +822,37 @@ namespace CONTRAST_WEB.Controllers
             return View("DetailsMSTR", Settlement);
         }
 
-        [HttpPost]
-        [Authorize]
-        [Authorize(Roles = "contrast.user")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
+            List<tb_r_travel_actualcost> CheckHD = await GetData.ActualCostOrigins(model.Summary.group_code);
+            string HDDepartFlag = null, HDDepart = null, HDReturn = null, HDReturnFlag = null;
+
+            foreach (var item in CheckHD)
+            {
+                if (item.jenis_transaksi == "Meal")
+                {
+                    if (item.additional1 == "True") HDDepartFlag = "Half Day Derpature";
+                    if (item.additional2 == "True") HDReturnFlag = "Half Day Return";
+                    if (item.additional3 != null)
+                    {
+                        if (item.additional3 != "")
+                        {
+                            DateTime check = Convert.ToDateTime(item.additional3);
+                            HDDepart = check.ToString("hh:mm tt");
+                        }
+                    }
+                    if (item.additional4 != null)
+                    {
+                        if (item.additional4 != "")
+                        {
+                            DateTime check = Convert.ToDateTime(item.additional4);
+                            HDReturn = check.ToString("hh:mm tt");
+                        }
+                    }
+
+                }
+            }
+
             PdfDocument document = new PdfDocument();
             document.Info.Title = "Purchase Receipt";
             PdfPage page = document.AddPage();
@@ -1020,9 +1045,10 @@ namespace CONTRAST_WEB.Controllers
             gfx.DrawString("Depart", body, XBrushes.Black, 280 + x_pad, 240, XStringFormats.TopLeft);
             gfx.DrawString("Return", body, XBrushes.Black, 385 + x_pad, 240, XStringFormats.TopLeft);
 
-            int i = 0;
+            int i = 0, last_date = 0;
             foreach (var item in start_date)
             {
+                last_date = i;
                 gap_now = (i + 1) * 15;
                 gfx.DrawString(from[i], body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(destination[i], body, XBrushes.Black, 180, 240 + gap_now, XStringFormats.TopLeft);
@@ -1032,6 +1058,30 @@ namespace CONTRAST_WEB.Controllers
 
                 gfx.DrawString(end_date[i], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 gfx.DrawString(end_time[i], body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                i++;
+
+            }
+            if (HDDepartFlag != null)
+            {
+                gap_now = (i + 1) * 15;
+                gfx.DrawString(HDDepartFlag, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(start_date[0], body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+
+                if (HDDepart != null)
+                    gfx.DrawString(HDDepart, body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                else gfx.DrawString("00:00 AM", body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                i++;
+            }
+            if (HDReturnFlag != null)
+            {
+                gap_now = (i + 1) * 15;
+                gfx.DrawString(HDReturnFlag, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
+
+                gfx.DrawString(end_date[last_date], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                if (HDReturn != null)
+                    gfx.DrawString(HDReturn, body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                else gfx.DrawString("00:00 AM", body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 i++;
             }
             int xItem = 120;

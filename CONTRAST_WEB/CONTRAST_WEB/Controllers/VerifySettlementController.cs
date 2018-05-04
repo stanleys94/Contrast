@@ -40,7 +40,41 @@ namespace CONTRAST_WEB.Controllers
                 ResultObject2[k].Settlement_Verified = ResultObject[k];
                 ResultObject2[k].EmployeeInfo = model;
                 ResultObject2[k].money = ResultObject[k].amount.ToString("c", Constant.culture);
-                              
+                if (ResultObject2[k].Settlement_Verified.jenis_transaksi.Contains("Meal"))
+                {
+                    tb_r_travel_actualcost HalfDayCheck = await GetData.ActualCostOrigin(ResultObject2[k].Settlement_Verified.id_actualcost);
+                    if (HalfDayCheck.additional1 != null)
+                    {
+                        if (HalfDayCheck.additional1.Contains("True"))
+                        {
+                            if (HalfDayCheck.additional3 != null)
+                            {
+                                if (HalfDayCheck.additional3 != "")
+                                {
+                                    DateTime check = Convert.ToDateTime(HalfDayCheck.additional3);
+                                    ResultObject2[k].HDDepart = check.ToString("hh:mm:ss tt");
+                                }
+                            }
+                            ResultObject2[k].HDDepartFlag = "HD Departure";
+                        }
+                    }
+                    if (HalfDayCheck.additional2 != null)
+                    {
+                        if (HalfDayCheck.additional2.Contains("True"))
+                        {
+                            if (HalfDayCheck.additional4 != null)
+                            {
+                                if (HalfDayCheck.additional4 != "")
+                                {
+                                    DateTime check = Convert.ToDateTime(HalfDayCheck.additional4);
+                                    ResultObject2[k].HDReturn = check.ToString("hh:mm:ss tt");
+
+                                }
+                            }
+                            ResultObject2[k].HDReturnFlag = "HD Return";
+                        }
+                    }
+                }
             }
 
             //if search / page empty

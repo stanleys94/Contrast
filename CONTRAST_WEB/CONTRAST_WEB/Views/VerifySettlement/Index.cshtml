@@ -144,13 +144,26 @@
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.destination_name)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.destination_name, new { @Value = Model[k].Settlement_Verified.destination_name })
                                 </td>
-                                <td style="width:115px;" class="td">
+                                < <td style="width:140px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.start_date)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.start_date, new { @Value = Model[k].Settlement_Verified.start_date })
+                                    @if (Model[k].HDDepartFlag != null)
+                                    {
+                                        <br /> <strong style="color:red">@Model[k].HDDepartFlag</strong><br />
+                                        if (Model[k].HDDepart != null)
+                                        {@Html.DisplayFor(Model => Model[k].HDDepart)}
+                                    }
+                                   
                                 </td>
-                                <td style="width:115px;" class="td">
+                                <td style="width:140px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.end_date)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.end_date, new { @Value = Model[k].Settlement_Verified.end_date })
+                                    @if (Model[k].HDReturnFlag != null)
+                                    {
+                                        <br /> <strong style="color:red">@Model[k].HDReturnFlag</strong> <br />
+                                        if (Model[k].HDReturn != null)
+                                        {@Html.DisplayFor(Model => Model[k].HDReturn) }
+                                    }
                                 </td>
                                 <td style="width:115px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].money, new { @Value = Model[k].money })

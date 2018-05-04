@@ -20,9 +20,7 @@
     <div style="margin-top:110px" class="row">
         @* if travel execution false , please upload file foto/boarding pass travel yesterday then muncul details settlements for submit final *@
 
-        @if (Model.TravelRequest.final_status == "2")
-        {
-
+       
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
             @Html.HiddenFor(m => m.TotalSettlement)
@@ -36,7 +34,7 @@
 
             @Html.HiddenFor(m => m.TravelRequest.emp_name)
 
-            if (Model.TravelRequest.final_status == "2")
+            @if (Model.TravelRequest.final_status == "2")
             {
                 <strong><h2>Rejected settlement</h2></strong>
                 <span style="text-align:right;margin-left:100px;">REASON OF REJECTION : </span>
@@ -651,3 +649,4 @@
             }
         });
     });
+</script>
