@@ -70,19 +70,57 @@ namespace CONTRAST_WEB.Controllers
             return (model);
         }
 
+        public async Task<JsonResult> GetSearchValue(string search, string code)
+        {
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public async Task<JsonResult> GetSearchValue2(string search, string code)
+        {
+
+            List<Class1> list = new List<Class1>();
+            list = await GetData.SearchNameDiv(search);
+            //list = await GetData.SearchName(search);
+            List<Class1> filtered = new List<Class1>();
+            foreach (var item in list)
+            {
+                if (!item.code.Contains(code)) filtered.Add(item);
+            }
+
+            return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         // GET: SettlementList
         [HttpPost]
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string applied)
         {
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
-            tb_m_employee model = await GetData.EmployeeInfo(identity.Name);
+            tb_m_employee model = new tb_m_employee();
+
+            if (applied != null) model = await GetData.EmployeeInfo(applied);
+            else model = await GetData.EmployeeInfo(identity.Name);
+
+            tb_m_employee logged = await GetData.EmployeeInfo(identity.Name);
+
+            ViewBag.loged_id = logged.code.Trim();
+            ViewBag.loged_name = logged.name.Trim(' ');
+
+            ViewBag.applied_name = model.name.Trim();
 
             ViewBag.Employee = model;
+            ViewBag.applied = model.code.Trim();
 
             List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
             List<vw_rejected_travel_for_settlement> RejectList = new List<vw_rejected_travel_for_settlement>();
@@ -126,6 +164,7 @@ namespace CONTRAST_WEB.Controllers
             }
             return View(ResponseList);
         }
+
 
         [HttpPost]
         [Authorize]
@@ -620,7 +659,7 @@ namespace CONTRAST_WEB.Controllers
                         model.ReceiptFileOther = file;
                     }
 
-                    //await UpdateData.RejectedClearance(model.TravelRequest.group_code);
+                    await UpdateData.RejectedClearance(model.TravelRequest.group_code);
 
                     tb_r_travel_actualcost ActualCostObject = new tb_r_travel_actualcost();
                     ActualCostObject.information_actualcost = "Settlement";
@@ -725,10 +764,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                    //await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    //else
-                    //await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    else
+                    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
