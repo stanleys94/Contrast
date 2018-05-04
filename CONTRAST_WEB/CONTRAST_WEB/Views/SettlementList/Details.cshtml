@@ -386,7 +386,7 @@
                     </div>
                     <div style="margin-bottom:0px;float:left;margin-left:5px;" id="timedepart">
                         <label>
-                            @Html.TextBox("time1", (object)ViewBag.time1, new { hidden = true, @id = "time1", @type = "time", @Value = ViewBag.time1 })
+                            @Html.TextBox("time1", (object)ViewBag.time1, new { @readonly = "readonly", @id = "time1", @type = "time", @Value = ViewBag.time1 })
                             @*@Html.TextBoxFor(m => m.date_depart, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
                         </label>
                     </div>
@@ -407,7 +407,7 @@
                     </div>
                     <div style="margin-bottom:0px;float:left;margin-left:5px;" class="col-md-offset-0" id="timereturn">
                         <label>
-                            @Html.TextBox("time2", (object)ViewBag.time2, new { hidden = true, @id = "time2", @type = "time", @Value = ViewBag.time2 })
+                            @Html.TextBox("time2", (object)ViewBag.time2, new { @readonly = "readonly", @id = "time2", @type = "time", @Value = ViewBag.time2 })
                             @*@Html.TextBoxFor(m  => m.date_return, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
                         </label>
                     </div>
@@ -617,13 +617,14 @@
         });
     });
 
+
     $(document).ready(function () {
         $('#hd').click(function () {
             var $this = $(this);
             if ($this.is(':checked')) {
-                $('#time1').show();
+                $('#time1').prop('readOnly', false);
             } else {
-                $('#time1').hide().val('');
+                $('#time1').val(null).prop('readOnly', true);
             }
         });
     });
@@ -632,9 +633,9 @@
         $('#hr').click(function () {
             var $this = $(this);
             if ($this.is(':checked')) {
-                $('#time2').show();
+                $('#time2').prop('readOnly', false);
             } else {
-                $('#time2').hide().val('');
+                $('#time2').val(null).prop('readOnly', true);
             }
         });
     });
