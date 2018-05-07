@@ -7,11 +7,7 @@
 <div class="container">
     <div style="margin-top:100px" class="row">
         <div>
-            @using (Html.BeginForm("Index", "Home"))
-            {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.logged_id.name)
-            @Html.HiddenFor(m => m.logged_id.code)
+           
 
             <div>
                 <label><h5 class="h5c" style="width:1150px;"><b>DETAILS</b> ( @Model.GroupCode.Trim(' ') )</h5></label><br />
@@ -79,7 +75,14 @@
 
                 @if (Model.SettlementCost.Count > 0)
                 {
-                <label><h5 class="h5s">SETTLEMENT DETAILS</h5></label>
+
+                using (Html.BeginForm("Print", "TrackProgressPersonal"))
+                        {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("BTA",Model.GroupCode.Trim())
+                        <label><h5 class="h5s">SETTLEMENT DETAILS</h5></label>
+                        <button type="submit" class="btn form-control" style="width:145px">Receipt</button>
+                        }
                 <table>
                     <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th><th>Attachment</th></tr>
                     @for (int k = 0; k < Model.SettlementCost.Count; k++)
@@ -129,8 +132,7 @@
                 </table>
                 }
             </div>
-            <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
-            }
+            <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>      
         </div>
         <hr />
     </div>
