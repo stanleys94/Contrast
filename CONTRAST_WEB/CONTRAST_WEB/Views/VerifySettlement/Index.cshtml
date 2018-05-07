@@ -108,10 +108,7 @@
                         </th>
 
                     </tr>
-                @*</table>
-            </div>
-            <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;margin-top:20px;" class="clearfix">
-                <table class="table table-condensed table-striped">*@
+                
                     @if (Model[0].Settlement_Verified == null)
                     {
                         @Html.HiddenFor(Model => Model[0].EmployeeInfo.code, new { @Value = Model[0].EmployeeInfo.code })
@@ -144,7 +141,7 @@
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.destination_name)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.destination_name, new { @Value = Model[k].Settlement_Verified.destination_name })
                                 </td>
-                                < <td style="width:140px;" class="td">
+                                <td style="width:140px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.start_date)
                                     @Html.HiddenFor(Model => Model[k].Settlement_Verified.start_date, new { @Value = Model[k].Settlement_Verified.start_date })
                                     @if (Model[k].HDDepartFlag != null)
