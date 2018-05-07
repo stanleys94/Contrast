@@ -822,6 +822,7 @@ namespace CONTRAST_WEB.Controllers
             return View("DetailsMSTR", Settlement);
         }
 
+
         public async Task<ActionResult> Print(SettlementPaidHelper model)
         {
             List<tb_r_travel_actualcost> CheckHD = await GetData.ActualCostOrigins(model.Summary.group_code);
