@@ -599,8 +599,8 @@
                 $('#set1').show();
                 $('#hd').prop('checked', false);
                 $('#hr').prop('checked', false);
-                $('#time1').val(null);
-                $('#time2').val(null);
+                $('#time1').prop('readOnly', true).val(null);
+                $('#time2').prop('readOnly', true).val(null);
             }
         });
     });
@@ -613,6 +613,8 @@
                 $('#set2').show();
                 $('#hd').prop('checked', false);
                 $('#hr').prop('checked', false);
+                $('#time1').prop('readOnly', true).val(null);
+                $('#time2').prop('readOnly', true).val(null);
             }
         });
     });
@@ -646,7 +648,7 @@
             if ($this.is(':checked')) {
                 $('#time11').show();
             } else {
-                $('#time11').hide().val('');
+                $('#time11').hide().val(null);
             }
         });
     });
