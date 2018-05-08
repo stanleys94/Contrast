@@ -19,12 +19,31 @@
 <div class="container">
     <div style="margin-top:110px" class="row">
         @* if travel execution false , please upload file foto/boarding pass travel yesterday then muncul details settlements for submit final *@
+        @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.TravelRequest.grand_total_settlement)
+            @Html.HiddenFor(m => m.TotalSettlement)
+            @Html.HiddenFor(m => m.TravelRequest.id_request)
+            @Html.HiddenFor(m => m.TravelRequest.no_reg)
+            @Html.HiddenFor(m => m.TravelRequest.group_code)
+            @Html.HiddenFor(m => m.TravelRequest.login_id)
+            @Html.HiddenFor(m => m.TravelRequest.destination_name)
+            @Html.HiddenFor(m => m.TravelRequest.start_date)
+            @Html.HiddenFor(m => m.TravelRequest.end_date)
+
+            @Html.HiddenFor(m => m.TravelRequest.emp_name)
+            @Html.HiddenFor(m => m.TravelRequest.group_code)
+            @Html.HiddenFor(m => m.TravelRequest.comment)
+            @Html.HiddenFor(m => m.TravelRequest.final_status)
+
+            @Html.HiddenFor(m => m.TravelRequest.emp_name)
 
         @if (Model.TravelRequest.final_status == "2")
         {
-            <strong><h2>Rejected settlement</h2></strong>
-            <span style="text-align:right;margin-left:100px;">REASON OF REJECTION : </span>
-            <span style="color:red"> @Model.TravelRequest.comment</span>
+            <div class="col-md-10 col-md-offset-1">
+                <h5 style="margin-bottom:5px;" class="h5z">REJECTED SETTLEMENT</h5>
+                <h5 class="h5s">REASON OF REJECTION</h5>
+                <span style="color:red"> @Model.TravelRequest.comment</span>
+            </div>
         }
 
         <div class="col-md-11 col-md-offset-1"><H5 class="h5s">CURRENT TRAVEL DETAILS</H5></div><br />
@@ -93,8 +112,9 @@
                 @Html.HiddenFor(m => m.TravelRequest.start_date)
                 @Html.HiddenFor(m => m.TravelRequest.end_date)
 
-
                 @Html.HiddenFor(m => m.TravelRequest.emp_name)
+                @Html.HiddenFor(m => m.TravelRequest.group_code)
+                @Html.HiddenFor(m => m.TravelRequest.comment)
 
                 <div style="margin-bottom:0px;display:block;float:left;" class="col-lg-11 col-lg-offset-1" id="ifYa1"><h5 style="width:940px;margin-bottom:0px;padding-bottom:0px;" class="h5z2">DURATION Of EXTEND :</h5></div>
 

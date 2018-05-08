@@ -31,7 +31,7 @@
                             @*@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)*@
                         </span>
                         <span style="margin-left:270px">
-                            Start Date Range :
+                            Departure Date Range :
                             @if (ViewBag.startdate != null)
                             {
                                 @Html.TextBox("startdate", ViewBag.startdate as DateTime?, new { @id = "startdate", @type = "date", @Value = ViewBag.startdate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
@@ -76,10 +76,10 @@
                             Destination
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
-                            Start Date
+                            Departure
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
-                            End Date
+                            Return
                         </th>
                         <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:100px;">
                             Amount
@@ -148,9 +148,10 @@
                                     {
                                         <br /> <strong style="color:red">@Model[k].HDDepartFlag</strong><br />
                                         if (Model[k].HDDepart != null)
-                                        {@Html.DisplayFor(Model => Model[k].HDDepart)}
+                                        {
+                                            @Html.DisplayFor(Model => Model[k].HDDepart)
+                                        }
                                     }
-                                   
                                 </td>
                                 <td style="width:140px;" class="td">
                                     @Html.DisplayFor(Model => Model[k].Settlement_Verified.end_date)
