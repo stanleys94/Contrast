@@ -73,6 +73,13 @@ namespace CONTRAST_WEB.Controllers
             for (int k = 0; k < ListModel.Count(); k++)
             {
 
+                string division_r = await GetData.GetDivMapping(ListModel[k].travel_request.no_reg.ToString());
+
+                tb_m_budget div_budget = await GetData.GetCostWbs((bool)ListModel[k].travel_request.overseas_flag, division_r);
+
+                double total = Convert.ToDouble(ListModel[k].travel_request.grand_total_allowance);
+                await UpdateData.Budget(div_budget.eoa_wbs_no, div_budget.cost_center, total);
+
                 await InsertData.TravelRequest(ListModel[k]);
                 if (ListModel[k].travel_request.participants_flag == true)
                 {

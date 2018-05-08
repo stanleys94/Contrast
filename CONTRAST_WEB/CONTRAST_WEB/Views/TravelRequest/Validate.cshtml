@@ -309,13 +309,20 @@
                 </div>
                 @if (ViewBag.budget != null)
                 {
-                    <label class="fnt1">REMAINING BUDGET</label>
+                    if (ViewBag.totalbudget < 0)
+                    {
+                        <label class="fnt1" style="color:red">INSUFFICIENT REMAINING BUDGET</label>
+                    }
+                    else
+                    {
+                        <label class="fnt1">REMAINING BUDGET</label>
+                    }
                     <div class="form-group" style="padding:10px 10px; background-color: red;color: white; text-align: center;font-weight: bold;">
                         RP. @String.Format("{0:n0}", ViewBag.budget, new { @class = "form-control", @readonly = "readonly", @style = " background-color: red;color: white; text-align: center;font-weight: bold;" }) @*@Html.TextBox("asda", "RP. " + Model[0].travel_request.grand_total_allowance, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })*@
                     </div>
                 }
                 <div class="form-group" style="padding:10px 10px; margin-bottom:10px; center;font-weight: bold;">
-                    @if (ViewBag.wbs != null && ViewBag.costcenter != null)
+                    @if (ViewBag.wbs != null && ViewBag.costcenter != null && ViewBag.totalbudget >= 0)
                     {
                         <button type="submit" style="width:145px" class="btn btn-info btn-lg" value="Submit">Submit</button>
                     }

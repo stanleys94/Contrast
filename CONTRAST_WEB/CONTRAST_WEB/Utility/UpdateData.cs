@@ -329,6 +329,29 @@ namespace CONTRAST_WEB.Models
             }
         }
 
+        public static async Task BudgetAdd(string wbs_no, string cost_center, double money)
+        {
+            tb_m_budget UpdatedData = new tb_m_budget();
+            UpdatedData = await GetData.Budget(wbs_no, cost_center);
+            UpdatedData.available_amount = UpdatedData.available_amount + money;
+            UpdatedData.budget_remining = UpdatedData.available_amount;
+
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PutAsJsonAsync("api/ActualCost/" + model.ActualCost_Verified.id_actualcost, UpdatedData);
+                HttpResponseMessage response = await client.PutAsync("api/Budget/" + UpdatedData.id_budget, new StringContent(
+                                new JavaScriptSerializer().Serialize(UpdatedData), Encoding.UTF8, "application/json"));
+            }
+        }
+
         public static async Task TravelRequestPersonal(tb_r_travel_request request)
         {
             using (var client = new HttpClient())

@@ -122,6 +122,7 @@
                         {
                             for (int k = 0; k < Model.Count(); k++)
                             {
+                                @Html.HiddenFor(Model => Model[k].ActualCost_Verified.id_request)
                                 @Html.HiddenFor(Model => Model[k].EmployeeInfo.code, new { @Value = Model[k].EmployeeInfo.code })
                                 @Html.HiddenFor(Model => Model[k].EmployeeInfo.position, new { @Value = Model[k].EmployeeInfo.position })
                                 @Html.HiddenFor(Model => Model[k].ActualCost_Verified.id_actualcost, new { @Value = Model[k].ActualCost_Verified.id_actualcost })

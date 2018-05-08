@@ -346,15 +346,24 @@ namespace CONTRAST_WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Drop(TravelStatusHelper model, string download = "", string drop = "")
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+
             if (drop == "submit")
             {
                 List<tb_r_travel_request> model2 = new List<tb_r_travel_request>();
                 List<vw_request_summary> request = new List<vw_request_summary>();
                 List<vw_request_summary> ResponseList = new List<vw_request_summary>();
+                string div = await GetData.GetDivMapping(model.travel_request.no_reg.ToString());
 
                 model2 = await GetData.TravelRequestGCList(model.travel_request.group_code);
+
                 foreach (var item in model2)
                 {
+                    tb_m_budget budget = await GetData.GetCostWbs((bool)item.overseas_flag, div);
+                    await UpdateData.BudgetAdd(budget.eoa_wbs_no, budget.cost_center, Convert.ToDouble(item.grand_total_allowance));
+
                     item.active_flag = true;
                     item.status_request = "99";
 
@@ -1350,6 +1359,7 @@ namespace CONTRAST_WEB.Controllers
 
         public async Task<ActionResult> DropMSTR(TravelStatusHelper model, string download = "", string drop = "")
         {
+            string div = await GetData.GetDivMapping(model.travel_request.no_reg.ToString());
             if (drop == "submit")
             {
                 List<tb_r_travel_request> model2 = new List<tb_r_travel_request>();
@@ -1359,10 +1369,12 @@ namespace CONTRAST_WEB.Controllers
                 //model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
                 //model2.active_flag = true;
                 //model2.status_request = "99";
-
-                model2 = await GetData.TravelRequestGCList(model.travel_request.group_code);
+     
                 foreach (var item in model2)
                 {
+                    tb_m_budget budget = await GetData.GetCostWbs((bool)item.overseas_flag, div);
+                    await UpdateData.BudgetAdd(budget.eoa_wbs_no, budget.cost_center, Convert.ToDouble(item.grand_total_allowance));
+
                     item.active_flag = true;
                     item.status_request = "99";
 
