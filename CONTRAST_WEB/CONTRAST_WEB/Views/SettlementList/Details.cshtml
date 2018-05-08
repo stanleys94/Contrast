@@ -122,7 +122,6 @@
                     <label>Start</label>
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <!--<input type="date" style="width:100%" />-->
                         @Html.TextBoxFor(m => m.Start_Extend, new { @class = "form-control", @type = "date", placeholder = "Departure" })
                         @*@Html.HiddenFor(m => m.Start_Extend)*@
                     </div>
@@ -133,34 +132,30 @@
                     <label>End</label>
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <!--<input type="date" style="width:100%" />-->
                         @Html.TextBoxFor(m => m.End_Extend, new { @class = "form-control", @type = "date", placeholder = "Return" })
                         @*@Html.HiddenFor(m => m.End_Extend)*@
                     </div>
                 </div>
 
+                <div style="margin-bottom:0px;display:block;float:left;" class="col-lg-11 col-lg-offset-1" id="ifYa1"><h5 style="width:940px;margin-bottom:0px;padding-bottom:0px;" class="h5z2">&nbsp;</h5></div>
+
                 <div class="col-md-11 col-md-offset-1"><H5 class="h5s">MEAL</H5></div>
-                <div class="col-md-5 col-md-offset-1" style="height:125px;">
+                <div class="col-md-5 col-md-offset-1" style="height:90px;">
                     <H6 style="text-align:left; color:darkgrey;">Suspense</H6>
                     <div class="form-group input-group">
                         <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_meal)" />
-                        @*@Html.TextBoxFor(m => m.TravelRequest.total_meal, new { placeholder = "Availability", @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
                         @Html.HiddenFor(m => m.TravelRequest.total_meal)
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
 
                 </div>
 
-                <div class="col-md-5" style="height:125px;">
+                <div class="col-md-5" style="height:90px;">
                     <H6 style="text-align:left; color:darkgrey;">Actual</H6>
                     <div class="form-group input-group">
-                        @*@Html.TextBoxFor(m => m.MealSettlement, new { placeholder = "Budget", @class = "form-control" })*@
                         <input class="form-control" type="text" name='preparation_allowance' placeholder="Availability" disabled value="@String.Format("{0:n0}", Model.TravelRequest.total_meal)" />
-                        @*@Html.TextBoxFor(m => m.TravelRequest.total_meal, new { placeholder = "Availability", @class = "form-control", @readonly = "readonly", @disabled = "true" })*@
                         <span class="input-group-addon"><i style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="glyphicon">IDR</i></span>
                     </div>
-
-                    
                 </div>
                 <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">
                     <H6 class="h6s">Reimburse</H6>
@@ -250,7 +245,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <h6 class="h6a">*Max size file 3MB</h6>
+                        <h6 style="margin-top:20px;" class="h6a">*Max size file 3MB</h6>
                         <div style="position:relative;">
                             @*@Html.ValidationMessageFor(m => m.ReceiptFileTransportation, "", new { @class = "text-danger" })<br />*@
                             <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
@@ -274,7 +269,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <h6 class="h6a">*Max size file 3MB</h6>
+                        <h6 style="margin-top:20px;" class="h6a">*Max size file 3MB</h6>
                         <div style="position:relative;">
                             @*@Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />*@
                             <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
@@ -297,7 +292,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <h6 class="h5s">*Max size file 3MB</h6>
+                        <h6 style="margin-top:20px;" class="h5a">*Max size file 3MB</h6>
                         <div style="position:relative;">
                             @*@Html.ValidationMessageFor(m => m.ReceiptFileOther, "", new { @class = "text-danger" })<br />*@
                             <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
@@ -316,8 +311,29 @@
                 //}
 
 
-                <div style="margin-left:100px" class="col-md-5 col-md-offset-1">
-                    <button type="submit" style="width:145px" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
+                <div style="margin-left:100px" class="col-md-11 col-md-offset-1">
+                    <button type="button" style="width:145px" class="btn btn-danger btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm1" value="Submit">Submit</button>
+                    
+                </div>
+
+                <div class="modal fade bs-example-modal-sm1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div style="height:50px" class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div style="text-align:center;">
+                                    <strong>Make sure your data is valid</strong>, click ok to continue
+                                </div>
+
+                                <div class="text-center" style="margin-top:10px;">
+                                    <button type="submit" style="width:150px;" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
@@ -362,6 +378,8 @@
                         @*@Html.HiddenFor(m => m.End_Extend)*@
                     </div>
                 </div>
+
+                
 
                 <div class="col-md-11 col-md-offset-1"><H5 class="h5s">MEAL</H5></div>
                 <div class="col-md-5 col-md-offset-1" style="height:125px;">
@@ -491,7 +509,8 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div style="position:relative;margin-top:34px;">
+                    <h6 style="margin-top:20px;" class="h6a">*Max size file 3MB</h6>
+                    <div style="position:relative;">
                         @*@Html.ValidationMessageFor(m => m.ReceiptFileTransportation, "", new { @class = "text-danger" })<br />*@
                         <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
                             <input type="file" id="FileUpload1" name="UploadedFile1" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info5").html($(this).val().replace(/.*(\/|\\)/,""));'>
@@ -499,7 +518,6 @@
                         </a>
                         &nbsp;
                         <label style="color:gray;font-size:13px;padding-top:0px;" class='h5s' id="upload-file-info5"></label>
-                        <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
                     </div>
                 </div>
                 
@@ -514,7 +532,8 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div style="position:relative;margin-top:34px;">
+                    <h6 style="margin-top:20px;" class="h6a">*Max size file 3MB</h6>
+                    <div style="position:relative;">
                         @*@Html.ValidationMessageFor(m => m.ReceiptFileLaundry, "", new { @class = "text-danger" })<br />*@
                         <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
                             <input type="file" id="FileUpload2" name="UploadedFile2" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val().replace(/.*(\/|\\)/,""));'>
@@ -522,7 +541,6 @@
                         </a>
                         &nbsp;
                         <label style="color:gray;font-size:13px;padding-top:0px;" class='h5s' id="upload-file-info6"></label>
-                        <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
                     </div>
                 </div>
 
@@ -537,7 +555,8 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div style="position:relative;margin-top:34px;">
+                    <h6 style="margin-top:20px;" class="h6a">*Max size file 3MB</h6>
+                    <div style="position:relative;">
                         @*@Html.ValidationMessageFor(m => m.ReceiptFileOther, "", new { @class = "text-danger" })<br />*@
                         <a style="font-size:13px" class='btn btn-primary' href='javascript:;'>
                             <input type="file" id="FileUpload3" name="UploadedFile3" style='height:30px;position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" onchange='$("#upload-file-info7").html($(this).val().replace(/.*(\/|\\)/,""));'>
@@ -545,7 +564,6 @@
                         </a>
                         &nbsp;
                         <label style="color:gray;font-size:13px;padding-top:0px;" class='h5s' id="upload-file-info7"></label>
-                        <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
                     </div>
                 </div>
 
@@ -556,32 +574,34 @@
 
 
                 <div style="margin-left:100px" class="col-md-11 col-md-offset-1">
-                    <button type="submit" style="width:145px" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">Submit</button>
+                    <button type="button" style="width:145px" class="btn btn-danger btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Submit</button>
+                    
+                </div>
+
+                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div style="height:50px" class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div style="text-align:center;">
+                                    <strong>Make sure your data is valid</strong>, click ok to continue
+                                </div>
+
+                                <div class="text-center" style="margin-top:10px;">
+                                    <button type="submit" style="width:150px;" class="btn btn-info btn-lg" target=".bs-example-modal-sm" name="insert" value="Submit">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
 
     </div>
     <hr />
-    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div style="height:50px" class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
-                </div>
-                <div class="modal-body">
-                    <div style="text-align:center;">
-                        <strong>Make sure your data is valid</strong>, click ok to continue
-                    </div>
-
-                    <div style="margin:10px 100px;">
-                        <button type="submit" style="width:150px; margin:0 100px;" class="btn btn-info btn-lg" name="validate" value="Submit">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 

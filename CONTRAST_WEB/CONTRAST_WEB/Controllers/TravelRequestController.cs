@@ -625,7 +625,16 @@ namespace CONTRAST_WEB.Controllers
             {
                 TravelRequestHelper temp = model;
                 temp = model;
+
                 List<string> ModelList = new List<string>();
+                if (model.participants != null)
+                {
+                    for (int k = 0; k < model.participants.Count(); k++)
+                    {
+                        ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                    }
+                }
+                ViewBag.RL3 = ModelList;
 
                 List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
                 bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));

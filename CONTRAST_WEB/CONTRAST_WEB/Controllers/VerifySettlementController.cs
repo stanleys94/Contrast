@@ -55,7 +55,7 @@ namespace CONTRAST_WEB.Controllers
                                     ResultObject2[k].HDDepart = check.ToString("hh:mm:ss tt");
                                 }
                             }
-                            ResultObject2[k].HDDepartFlag = "HD Departure";
+                            ResultObject2[k].HDDepartFlag = "Half Day";
                         }
                     }
                     if (HalfDayCheck.additional2 != null)
@@ -71,7 +71,7 @@ namespace CONTRAST_WEB.Controllers
 
                                 }
                             }
-                            ResultObject2[k].HDReturnFlag = "HD Return";
+                            ResultObject2[k].HDReturnFlag = "Half day";
                         }
                     }
                 }
