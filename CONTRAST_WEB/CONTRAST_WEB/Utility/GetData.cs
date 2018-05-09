@@ -156,6 +156,35 @@ namespace CONTRAST_WEB.Models
             return division_name;
         }
 
+        public static async Task<string> GetDivisionSourceName(int code)
+        {
+            tb_m_employee_source_data division_name = new tb_m_employee_source_data();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/EmployeeSourceData/GetDivision?id=" + code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    division_name = JsonConvert.DeserializeObject<tb_m_employee_source_data>(EmpResponse);
+                }
+            }
+            
+            return division_name.Divisi;
+        }
+
         public static async Task<tb_m_budget> GetCostWbs(bool overseas_flag,string division)
         {
             tb_m_budget division_name = new tb_m_budget();

@@ -58,15 +58,18 @@ namespace CONTRAST_WEB.Controllers
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
+
             tb_m_employee model = new tb_m_employee();
-
+            //as normal user
             if (applied == "") model = await GetData.EmployeeInfo(identity.Name);
-            else model = await GetData.EmployeeInfo(applied);
-
-            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
-            ViewBag.loged_id = created.code.Trim(' ');
-            ViewBag.loged_name = created.name.Trim(' ');
-            
+            else
+            {
+                //as travel coordinator
+                model = await GetData.EmployeeInfo(applied);
+                tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
+                ViewBag.loged_id = created.code.Trim(' ');
+                ViewBag.loged_name = created.name.Trim(' ');
+            }
             //Get user name
             ViewBag.Username = model.name;
 
@@ -83,47 +86,12 @@ namespace CONTRAST_WEB.Controllers
             model2.travel_request = new tb_r_travel_request();
             model2.employee_info = model;
 
-            //Get user direct superior info
-            var assignedby = await GetData.AssignedBy(model2.employee_info.unit_code_code);
-            tb_m_travel_procedures procedures= new tb_m_travel_procedures();
-            if (model2.employee_info.position.Trim() == "SECO"|| model2.employee_info.position.Trim() == "SEA"|| model2.employee_info.position.Trim() == "SMEC"|| model2.employee_info.position.Trim() == "AADV"|| model2.employee_info.position.Trim() == "GM"|| model2.employee_info.position.Trim() == "EGM")
-            {
-                procedures = await GetData.Procedures(model2.employee_info.position);
-            }
-            else
-                procedures = await GetData.Procedures(model2.employee_info.@class);
+            //get employee assigned by
+            model2.travel_request.assign_by = await Utility.AssignedBy(model2.employee_info);
 
-            if (assignedby.pd == Convert.ToInt32(model2.employee_info.code)) model2.travel_request.assign_by = Convert.ToInt32(model2.employee_info.code);
-            else
-            //If the direct superior is DH, then get who is the DH from travel procedure table
-            if (procedures.apprv_by_lvl1 == "DH") model2.travel_request.assign_by = assignedby.dh_code;
-            else
-            //If the direct superior is Div Director, then get who is the Div Director from travel procedure table
-            if (procedures.apprv_by_lvl1 == "Div Director") model2.travel_request.assign_by = assignedby.director;
-            //If the direct superior is vice president, then get who is the VP from travel procedure table
-            else
-            if (procedures.apprv_by_lvl1 == "VP") model2.travel_request.assign_by = assignedby.vp;
-            else
-            if (procedures.apprv_by_lvl1 == "EGM") model2.travel_request.assign_by = assignedby.egm;
-
-            //if still empty - for special case
-            if (model2.travel_request.assign_by == null)
-            {
-                if (assignedby.dh_code != null && model2.employee_info.position.Trim() != "DH" && model2.employee_info.position.Trim() != "EGM") model2.travel_request.assign_by = assignedby.dh_code;
-                else
-                    if (assignedby.egm != null && model2.employee_info.position.Trim() != "EGM") model2.travel_request.assign_by = assignedby.egm;
-                else
-                    if (assignedby.director != null) model2.travel_request.assign_by = assignedby.director;
-                else
-                    if (assignedby.local_fd != null) model2.travel_request.assign_by = assignedby.local_fd;
-                else
-                    if (assignedby.japan_fd != null) model2.travel_request.assign_by = assignedby.japan_fd;
-                else
-                    if (assignedby.vp != null) model2.travel_request.assign_by = assignedby.vp;
-                else
-                    if (assignedby.pd != null) model2.travel_request.assign_by = assignedby.pd;
-            }
-
+            //get division name
+            ViewBag.division_name = await GetData.GetDivisionSourceName(Convert.ToInt32(model.code));
+            
             //Get user direct superior name
             string boss = await GetData.EmployeeNameInfo(model2.travel_request.assign_by);
             if (boss == null) boss = "-No Data";
@@ -135,13 +103,13 @@ namespace CONTRAST_WEB.Controllers
 
             //Set activity id default to 3 (Regular)
             model2.travel_request.id_activity = 3;
-            
+
             List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
             bankName = await GetData.VendorEmployee(Convert.ToInt32(model.code));
             if (bankName.Count != 0)
             {
-                model2.tbankname = bankName[0].Bank_Name;
-                model2.tbankaccount = bankName[0].account_number;
+                model2.tbankname = bankName.First().Bank_Name;
+                model2.tbankaccount = bankName.First().account_number;
             }
             else
             {
@@ -149,30 +117,7 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.ebankaccount = "No bank name registered,contact finance division";
             }
 
-            //special employee
-            //List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(identity.Name);
-            List<tb_m_special_employee> special_model = await GetData.SpecialEmployee(model.code);
-            if (special_model.Count != 0)
-            {
-                List<string> division_model = new List<string>(); 
-                for (int k = 0; k < special_model.Count; k++)
-                {
-                    division_model.Add(special_model[k].Divisi);
-                }
-                model2.special_employee_flag = true;
-                model2.travel_request.exep_empolyee = true;
-                var selectListItems = division_model.Select(x => new SelectListItem() { Value = x, Text = x }).ToList();
-                ViewBag.division_name2 = selectListItems;
-            }
-            else
-            { 
-                tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
-                division.Divisi = division.Divisi.Replace("and1", "&");
-                ViewBag.division_name = division.Divisi;
-                model2.special_employee_flag = false;
-            }
-
-            ViewBag.Username = model2.employee_info.name;            
+            ViewBag.Username = model2.employee_info.name;
             return View(model2);
         }
 
@@ -431,9 +376,9 @@ namespace CONTRAST_WEB.Controllers
                     ViewBag.Bossname = await GetData.EmployeeNameInfo(model.travel_request.assign_by);
                     if (ViewBag.Bossname == null) ViewBag.Bossname = "-No Data";
                     //isi wbs no and cost center
-                    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
-                    division.Divisi = division.Divisi.Replace("and1", "&");
-                    ViewBag.division_name = division.Divisi;
+
+                    //get division name
+                    ViewBag.division_name = await GetData.GetDivisionSourceName(Convert.ToInt32(model.employee_info.code));
 
                     string division_r = await GetData.GetDivMapping(ListModel[0].travel_request.no_reg.ToString());
 
@@ -504,11 +449,7 @@ namespace CONTRAST_WEB.Controllers
                         model.tbankname = bankName[0].Bank_Name;
                         model.tbankaccount = bankName[0].account_number;
                     }
-
-                    tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
-                    division.Divisi = division.Divisi.Replace("and1", "&");
-                    ViewBag.division_name = division.Divisi;
-
+                    
 
                     ViewBag.Username = model.employee_info.name;
                     return View("Index", model);
