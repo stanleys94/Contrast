@@ -5,17 +5,7 @@
     ViewBag.Title = "SETTLEMENT";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
-<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
-    <ol class="breadcrumb">
-        <li>
-            @using (Html.BeginForm("IndexMSTR", "Home"))
-            {
-                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
-            }
-        </li>
-        <li class="breadcrumb-item active">Settlement</li>
-    </ol>
-</div>
+
 <div class="container">
     <div style="margin-top:110px" class="row">
         @* if travel execution false , please upload file foto/boarding pass travel yesterday then muncul details settlements for submit final *@
