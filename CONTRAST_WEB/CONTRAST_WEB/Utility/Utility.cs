@@ -345,7 +345,7 @@ namespace CONTRAST_WEB.Models
             //Get user direct superior info
             var assignedby = await GetData.AssignedBy(model.unit_code_code);
             tb_m_travel_procedures procedures = new tb_m_travel_procedures();
-            if (model.position.Trim() == "SECO" || model.position.Trim() == "SEA" || model.position.Trim() == "SMEC" || model.position.Trim() == "AADV" || model.position.Trim() == "GM" || model.position.Trim() == "EGM")
+            if (model.position.Trim() == "SECO" || model.position.Trim() == "SEA" || model.position.Trim() == "SMEC" || model.position.Trim() == "AADV" || model.position.Trim() == "GM" || model.position.Trim() == "EGM" || model.position.Trim() == "EC")
             {
                 procedures = await GetData.Procedures(model.position);
             }
