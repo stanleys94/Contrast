@@ -34,11 +34,7 @@ namespace CONTRAST_WEB.Controllers
             int privillage = 0;
             string privillage_desc = "";
 
-            tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
-            tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
 
-            string division = Admin.Divisi;
-            if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
             //#1 verifier employee
             //#2 admin istd
             //#3 individual
@@ -46,7 +42,7 @@ namespace CONTRAST_WEB.Controllers
             //cek privillege
             for (int k = 0; k < claims.Count(); k++)
             {
-                if (claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
+                if (claims[k] == "contrast.secretary" || claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
                 {
                     privillage = 1;
                     privillage_desc = "all";
@@ -71,9 +67,21 @@ namespace CONTRAST_WEB.Controllers
             int pageNumber = (page ?? 1);
 
             //data aggregation
-            if (privillage == 1) new_list = await GetData.TrackingListAll();
-            else if (privillage == 2) new_list = await GetData.TrackingListDivisonAll(Admin.Divisi.Trim());
-            else if (privillage == 3) new_list = await GetData.TrackingListIndividual(model.code);
+            if (privillage == 1)
+                new_list = await GetData.TrackingListAll();
+            else if (privillage == 2)
+            {
+                tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
+                tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
+
+                string division = Admin.Divisi;
+                if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
+
+                new_list = await GetData.TrackingListDivisonAll(Admin.Divisi.Trim());
+            }
+            else 
+                if (privillage == 3) new_list = await GetData.TrackingListIndividual(model.code);
+
             if (new_list.Count > 0)
             {
                 foreach (var item in new_list)
@@ -86,18 +94,7 @@ namespace CONTRAST_WEB.Controllers
                     track.Add(temp);
                 }
             }
-            //else
-            //{
-            //    TrackingHelper temp = new TrackingHelper();
-            //    temp.login_id = model.code;
-            //    temp.login_name = model.name;
-            //    temp.privilage = privillage_desc;
-            //    track.Add(temp);
-            //    //return View(track);
-            //    //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
-            //}
-            //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
-
+            
             //if search / page empty
             if (searchString != null)
                 page = 1;

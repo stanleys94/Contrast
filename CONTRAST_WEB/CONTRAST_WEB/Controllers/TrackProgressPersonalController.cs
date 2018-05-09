@@ -31,11 +31,7 @@ namespace CONTRAST_WEB.Controllers
             List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
             int privillage = 0;
             string privillage_desc = "";
-            tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(model.code));
-            tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(model.code));
-
-            string division = Admin.Divisi;
-            if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
+           
             //#1 verifier employee
             //#2 admin istd
             //#3 individual
@@ -49,9 +45,8 @@ namespace CONTRAST_WEB.Controllers
             int pageNumber = (page ?? 1);
 
             //data aggregation
-            if (privillage == 1) new_list = await GetData.TrackingListAll();
-            else if (privillage == 2) new_list = await GetData.TrackingListDivisonAll(Admin.Divisi.Trim());
-            else if (privillage == 3) new_list = await GetData.TrackingListIndividual(model.code);
+            if (privillage == 3) new_list = await GetData.TrackingListIndividual(model.code);
+
             if (new_list.Count > 0)
             {
                 foreach (var item in new_list)
@@ -64,17 +59,6 @@ namespace CONTRAST_WEB.Controllers
                     track.Add(temp);
                 }
             }
-            //else
-            //{
-            //    TrackingHelper temp = new TrackingHelper();
-            //    temp.login_id = model.code;
-            //    temp.login_name = model.name;
-            //    temp.privilage = privillage_desc;
-            //    track.Add(temp);
-            //    //return View(track);
-            //    //return View(track.OrderBy(m => m.TrackedList.group_code).ToPagedList(pageNumber, pageSize));
-            //}
-            //return View("Index", track.OrderBy(m => m.TrackedList.group_code).ThenBy(m => m.TrackedList.create_date).ToList());
 
             //if search / page empty
             if (searchString != null)
@@ -109,7 +93,7 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(track[k]);
                 }
-                /*if (temp.Count() > 0)*/
+                
                 track = temp;
 
             }

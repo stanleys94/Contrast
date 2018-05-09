@@ -292,7 +292,7 @@
     }
     @foreach (var items in ViewBag.Privillege)
     {
-        if (items == "contrast.ap" || items == "contrast.staffga" || items == "contrast.staffpac")
+        if (items == "contrast.ap" || items == "contrast.staffga" || items == "contrast.staffpac" || items == "contrast.secretary")
         {
             <div class="item col-xs-12 col-lg-3">
                 @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
@@ -321,7 +321,7 @@
     }
     @foreach (var items in ViewBag.Privillege)
     {
-        if (items == "contrast.administd"||items=="contrast.secretary")
+        if (items == "contrast.administd")
         {
             <div class="item col-xs-12 col-lg-3">
                 @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
