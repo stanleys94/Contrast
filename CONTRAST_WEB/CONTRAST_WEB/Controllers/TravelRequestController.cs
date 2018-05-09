@@ -61,16 +61,17 @@ namespace CONTRAST_WEB.Controllers
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
 
+            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
+            ViewBag.loged_id = created.code.Trim(' ');
+            ViewBag.loged_name = created.name.Trim(' ');
+
             tb_m_employee model = new tb_m_employee();
             //as normal user
             if (applied == "") model = await GetData.EmployeeInfo(identity.Name);
             else
             {
                 //as travel coordinator
-                model = await GetData.EmployeeInfo(applied);
-                tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
-                ViewBag.loged_id = created.code.Trim(' ');
-                ViewBag.loged_name = created.name.Trim(' ');
+                model = await GetData.EmployeeInfo(applied);                
             }
             //Get user name
             ViewBag.Username = model.name;
