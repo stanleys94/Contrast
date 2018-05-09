@@ -71,7 +71,11 @@ namespace CONTRAST_WEB.Controllers
             else
             {
                 //as travel coordinator
-                model = await GetData.EmployeeInfo(applied);                
+                model = await GetData.EmployeeInfo(applied);
+                if (model.name == null)
+                {
+                    model = await GetData.EmployeeInfo(identity.Name);
+                }
             }
             //Get user name
             ViewBag.Username = model.name;
