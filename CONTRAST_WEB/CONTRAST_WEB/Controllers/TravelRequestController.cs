@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -62,15 +62,13 @@ namespace CONTRAST_WEB.Controllers
             ViewBag.Privillege = claims;
 
             tb_m_employee model = new tb_m_employee();
-            //give travel coordinator id
-            model = await GetData.EmployeeInfo(applied);
-            tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
-            
             //as normal user
             if (applied == "") model = await GetData.EmployeeInfo(identity.Name);
             else
             {
-                //as travel coordinator                
+                //as travel coordinator
+                model = await GetData.EmployeeInfo(applied);
+                tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
                 ViewBag.loged_id = created.code.Trim(' ');
                 ViewBag.loged_name = created.name.Trim(' ');
             }
