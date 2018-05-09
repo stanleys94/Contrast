@@ -66,7 +66,20 @@
         <div class="col-md-11 col-md-offset-1">
             <strong class="fnt2">DESTINATION</strong>
             <div class="form-group input-group">
-                <strong>@Html.DisplayFor(m => m.TravelRequest.destination_name)</strong>
+                @*@if (Model.Summary.destination_1 != null)
+                {
+                    <strong>@Html.DisplayFor(m => m.Summary.destination_1)</strong>
+                    @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
+                }
+                else if (Model.Summary.destination_2 != null)
+                {
+                    <strong>@Html.DisplayFor(m => m.Summary.destination_2)</strong>
+                }
+                else if (Model.Summary.destination_3 != null)
+                {
+                    <strong>@Html.DisplayFor(m => m.Summary.destination_3)</strong>
+                }*@
+                <strong>@Html.DisplayFor(m => m.Summary.destination_1)</strong>
                 @Html.HiddenFor(m => m.TravelRequest.id_destination_city)
             </div>
         </div>
@@ -393,13 +406,14 @@
 
                     <div style="margin-bottom:0px;display:block;float:left;" id="halfdepart">
                         @Html.CheckBoxFor(m => m.halfday_flag1, new { onClick = "javascript:toggle(this);", name = "check", @id = "hd" })
-                        <label>HALF DAY DEPARTURE</label>
+                        <label>EXTRA HALF DAY</label>
                     </div>
                     <div style="margin-bottom:0px;float:left;margin-left:5px;" id="timedepart">
                         <label>
                             @Html.TextBox("time1", (object)ViewBag.time1, new { @readonly = "readonly", @id = "time1", @type = "time", @Value = ViewBag.time1, @class = "form-control" })
                             @*@Html.TextBoxFor(m => m.date_depart, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
                         </label>
+                        <span style="font-size:12px;color:gray;height:300px;">*Departure Time</span>
                     </div>
                 </div>
 
@@ -414,13 +428,14 @@
 
                     <div style="margin-bottom:0px;display:block;float:left;" class="col-md-" id="halfreturn">
                         @Html.CheckBoxFor(m => m.halfday_flag2, new { onClick = "javascript:toggle(this);", name = "check", @id = "hr" })
-                        <label>HALF DAY RETURN</label>
+                        <label>EXTRA HALF DAY</label>
                     </div>
                     <div style="margin-bottom:0px;float:left;margin-left:5px;" class="col-md-offset-0" id="timereturn">
                         <label>
                             @Html.TextBox("time2", (object)ViewBag.time2, new { @readonly = "readonly", @id = "time2", @type = "time", @Value = ViewBag.time2, @class = "form-control" })
                             @*@Html.TextBoxFor(m  => m.date_return, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
                         </label>
+                        <span style="font-size:12px;color:gray;height:300px;">*Return Time</span>
                     </div>
                 </div>
                 <div class="col-md-5 col-md-offset-1" style="margin-bottom:0px;display:block;float:left;" id="ifYes">

@@ -5,18 +5,18 @@
 }
 
 <div class="container">
-    <div style="margin-top:100px" class="row">
-        <div>
-            
+    <div style="margin-top:80px" class="row">            
                 <div>
-                    <label><h5 class="h5c" style="width:1150px;"><b>DETAILS</b> ( @Model.GroupCode.Trim(' ') )</h5></label><br />
-                    <label><h5 class="h5s">EMPLOYEE INFO</h5></label><br />
+                    <label class="h5c" style="width:1150px;"><b>DETAILS</b> ( @Model.GroupCode.Trim(' ') )</label><br />
+                    <label class="h5s">EMPLOYEE INFO</label><br />
                     <table>
                         <tr><td style="font-weight:bold">NAME</td><td>&nbsp;:&nbsp;</td><td>@Model.Name</td></tr>
                         <tr><td style="font-weight:bold">NOREG</td><td>&nbsp;:&nbsp;</td><td>@Model.EmployeeCode</td></tr>
                         <tr><td style="font-weight:bold">DIVISION</td><td>&nbsp;:&nbsp;</td><td>@Model.Division</td></tr>
-                    </table><br />
-                    <label><h5 class="h5s">TRAVEL INFO</h5></label>
+                    </table>
+                    <br />
+                    
+                    <label class="h5s">TRAVEL INFO</label>
                     <table style="border:none;">
                         <tr><th style="width:250px">From</th><th style="width:250px">To</th><th style="width:250px">Start Date</th><th style="width:250px">End Date</th></tr>
                         @if (Model.Destination.Count > 0)
@@ -36,6 +36,7 @@
                         }
                     </table>
                     <br />
+
                     <table style="border:none;">
                         <tr><th style="width:250px">Approver</th><th style="width:250px">Approver Code</th><th style="width:250px">Status</th><th style="width:250px">Approval Date</th></tr>
                         @if (Model.Destination.Count > 0)
@@ -45,10 +46,10 @@
                                 <tr><td>@Model.HigherUp[k]</td><td>@Model.HigherUpCode[k]</td><td>@Model.HigherUpApprovalStatus[k]</td><td>@Model.HigherUpApprovalDate[k]</td></tr>
                             }
                         }
-                    </table><br /><br />
+                    </table><br />
                     @if (Model.ActualCost.Count > 0)
                     {
-                        <label><h5 class="h5s">ACTUAL COST DETAILS</h5></label>
+                        <label class="h5s">ACTUAL COST DETAILS</label>
                         <table>
                             <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
                             @for (int k = 0; k < Model.ActualCost.Count; k++)
@@ -61,7 +62,7 @@
 
                     @if (Model.BPD.Count > 0)
                     {
-                        <label><h5 class="h5s">BPD DETAILS</h5></label>
+                        <label class="h5s">BPD DETAILS</label>
                         <table>
                             <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
                             @for (int k = 0; k < Model.BPD.Count; k++)
@@ -74,13 +75,7 @@
 
                     @if (Model.SettlementCost.Count > 0)
                     {
-                       using (Html.BeginForm("Print", "TrackProgress"))
-                        {
-                        @Html.AntiForgeryToken()
-                        @Html.Hidden("BTA",Model.GroupCode.Trim())
-                        <label><h5 class="h5s">SETTLEMENT DETAILS</h5></label>
-                        <button type="submit" class="btn form-control" style="width:145px">Receipt</button>
-                        }
+                        <label class="h5s">SETTLEMENT DETAILS</label>
                         <table>
                             <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th><th>Attachment</th></tr>
                             @for (int k = 0; k < Model.SettlementCost.Count; k++)
@@ -94,7 +89,7 @@
                                     <td>@Model.SettlementCost[k].Pending</td>
                                     @if (Model.SettlementCost[k].Path != null)
                                     {
-                                        <td><a href=@Model.SettlementCost[k].Path id="link" target="_blank">Link</a></td>
+                                        <td><a href=@Model.SettlementCost[k].Path id="link" target="_blank">Open</a></td>
                                     }
                                     else
                                     {
@@ -104,11 +99,18 @@
 
                             }
                         </table><br />
+                        using (Html.BeginForm("Print", "TrackProgress"))
+                        {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("BTA",Model.GroupCode.Trim())
+                        <label style="color:darkgray;">Settlement Receipt : </label>
+                        <button type="submit" class="btn btn-toolbar btn-sm" style="width:145px"><i class="glyphicon glyphicon-download"></i> Re-Download</button>
+                        }
                     }
 
                     @if (Model.Executed.Count > 0)
                     {
-                        <label><h5 class="h5s">TRAVEL EXECUTION DETAILS</h5></label>
+                        <label class="h5s">TRAVEL EXECUTION DETAILS</label>
                         <table>
                             <tr><th>Lat Coor</th><th>Long Coor</th><th>Execute Date</th><th>Proof</th></tr>
                             @for (int i = 0; i < Model.Executed.Count; i++)
@@ -127,12 +129,10 @@
                                     }
                                 </tr>
                             }
-                        </table>
+                        </table><br />
                     }
                 </div>
-                <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
-        </div>
-        <hr />
+                <button style="width:145px;float:right;margin-bottom:30px;" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
     </div>
 </div>
 

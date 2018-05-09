@@ -9,8 +9,9 @@ namespace CONTRAST_WEB.Models
     public class SettlementHelper
     {
         public vw_travel_for_settlement TravelRequest { get; set; }
-      
-        
+        public vw_summary_settlement Summary { get; set; }
+
+
         public float MealSettlement{get;set;}
         public float PreparationSettlement{get;set;}
         public float HotelSettlement{get;set;}
