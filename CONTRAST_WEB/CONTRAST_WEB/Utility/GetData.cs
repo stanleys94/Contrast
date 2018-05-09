@@ -277,8 +277,7 @@ namespace CONTRAST_WEB.Models
             division_name = division_name.Replace("&", "and1");
             return division_name;
         }
-
-
+        
         public static async Task<tb_m_budget> Budget(string wbs_no,string cost_center)
         {
             tb_m_budget division_name = new tb_m_budget();
@@ -307,8 +306,7 @@ namespace CONTRAST_WEB.Models
             }
             return division_name;
         }
-
-
+        
         internal static Task TravelRequestDateTimeList(int? no_reg)
         {
             throw new NotImplementedException();
@@ -645,9 +643,7 @@ namespace CONTRAST_WEB.Models
             }
             return ReturnList;
         }
-
-
-
+        
         public static async Task<tb_m_verifier_employee> ActualCostPosition(int model)
         {
             tb_m_verifier_employee Response = new tb_m_verifier_employee();
@@ -759,8 +755,7 @@ namespace CONTRAST_WEB.Models
             }
             return employee_object;
         }
-
-
+        
         public static async Task<List<vw_rejected_actualcost_verification>> ActualCostRejected()
         {
 
@@ -817,9 +812,7 @@ namespace CONTRAST_WEB.Models
             }
             return employee_object;
         }
-
-
-
+                
         public static async Task<List<tb_m_vendor_employee>> VendorEmployee(int? no_reg)
         {
             List<tb_m_vendor_employee> ResponseList = new List<tb_m_vendor_employee>();
