@@ -117,18 +117,9 @@
 
             <h6 style="text-align:left" class="fnt2">DIVISION</h6>
             <div style="width:300px;border-bottom:solid 2px;border-bottom-color:lavender;" class="input-group">
-
-                @if (Model.special_employee_flag == true)
-            {
-                @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "-Division-", new { @class = "form-control", placeholder = "Purpose" })
-        }
-        else
-        {
-            @Html.TextBox("asd", (string)@ViewBag.division_name, new { @readonly = "readonly", @style = "border:0px;font-size:11px;width:400px;" })
-            @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
-            @Html.HiddenFor(m => m.employee_info.unit_code_name)
-    }
-
+                @Html.TextBox("asd", (string)@ViewBag.division_name, new { @readonly = "readonly", @style = "border:0px;font-size:11px;width:400px;" })
+                @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
+                @Html.HiddenFor(m => m.employee_info.unit_code_name)
             </div>
 
             <h6 style="text-align:left" class="fnt2">ASSIGNED BY</h6>

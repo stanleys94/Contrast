@@ -86,17 +86,10 @@
                     @Html.TextBoxFor(m => m.employee_info.@class, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <div style="margin-bottom:-10px;" class="form-group input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                    @if (Model.special_employee_flag == true)
-                    {
-                        @Html.DropDownListFor(m => m.employee_info.unit_code_name, division.OrderBy(m => m.Text).ToList(), "-Division-", new { @class = "form-control", placeholder = "Purpose" })
-                    }
-                    else
-                    {
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>                    
                         @Html.TextBox("asd", (string)@ViewBag.division_name, new { @class = "form-control", @readonly = "readonly" })
                         @Html.HiddenFor(m => m.employee_info.unit_code_code, new { @class = "form-control", @readonly = "readonly" })
-                        @Html.HiddenFor(m => m.employee_info.unit_code_name)
-                    }
+                        @Html.HiddenFor(m => m.employee_info.unit_code_name)                    
                 </div>
             </div>
 

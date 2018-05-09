@@ -338,5 +338,100 @@ namespace CONTRAST_WEB.Models
             sw.Close();
 
         }
+
+        public static async Task<int?> AssignedBy(tb_m_employee model)
+        {
+            int? assign_by = null;
+            //Get user direct superior info
+            var assignedby = await GetData.AssignedBy(model.unit_code_code);
+            tb_m_travel_procedures procedures = new tb_m_travel_procedures();
+            if (model.position.Trim() == "SECO" || model.position.Trim() == "SEA" || model.position.Trim() == "SMEC" || model.position.Trim() == "AADV" || model.position.Trim() == "GM" || model.position.Trim() == "EGM")
+            {
+                procedures = await GetData.Procedures(model.position);
+            }
+            else
+                procedures = await GetData.Procedures(model.@class);
+
+            //mr nakata desu
+            if (assignedby.pd == Convert.ToInt32(model.code)) assign_by = Convert.ToInt32(model.code);
+            else
+            //If the direct superior is DH, then get who is the DH from travel procedure table
+            if (procedures.apprv_by_lvl1 == "DH") assign_by = assignedby.dh_code;
+            else
+            //If the direct superior is Div Director, then get who is the Div Director from travel procedure table
+            if (procedures.apprv_by_lvl1 == "Div Director") assign_by = assignedby.director;
+            //If the direct superior is vice president, then get who is the VP from travel procedure table
+            else
+            if (procedures.apprv_by_lvl1 == "VP") assign_by = assignedby.vp;
+            else
+            if (procedures.apprv_by_lvl1 == "EGM") assign_by = assignedby.egm;
+
+            //if still empty - for special case
+            if (assign_by == null)
+            {
+                if (assignedby.dh_code != null && model.position.Trim() != "DH" && model.position.Trim() != "EGM") assign_by = assignedby.dh_code;
+                else
+                    if (assignedby.egm != null && model.position.Trim() != "EGM") assign_by = assignedby.egm;
+                else
+                    if (assignedby.director != null) assign_by = assignedby.director;
+                else
+                    if (assignedby.local_fd != null) assign_by = assignedby.local_fd;
+                else
+                    if (assignedby.japan_fd != null) assign_by = assignedby.japan_fd;
+                else
+                    if (assignedby.vp != null) assign_by = assignedby.vp;
+                else
+                    if (assignedby.pd != null) assign_by = assignedby.pd;
+            }
+
+            return assign_by;
+        }
+
+        public abstract class ModelStateTempDataTransfer : ActionFilterAttribute
+        {
+            protected static readonly string Key = typeof(ModelStateTempDataTransfer).FullName;
+        }
+
+        public class ExportModelStateToTempData : ModelStateTempDataTransfer
+        {
+            public override void OnActionExecuted(ActionExecutedContext filterContext)
+            {
+                //Only export when ModelState is not valid
+                if (!filterContext.Controller.ViewData.ModelState.IsValid)
+                {
+                    //Export if we are redirecting
+                    if ((filterContext.Result is RedirectResult) || (filterContext.Result is RedirectToRouteResult))
+                    {
+                        filterContext.Controller.TempData[Key] = filterContext.Controller.ViewData.ModelState;
+                    }
+                }
+
+                base.OnActionExecuted(filterContext);
+            }
+        }
+
+        public class ImportModelStateFromTempData : ModelStateTempDataTransfer
+        {
+            public override void OnActionExecuted(ActionExecutedContext filterContext)
+            {
+                ModelStateDictionary modelState = filterContext.Controller.TempData[Key] as ModelStateDictionary;
+
+                if (modelState != null)
+                {
+                    //Only Import if we are viewing
+                    if (filterContext.Result is ViewResult)
+                    {
+                        filterContext.Controller.ViewData.ModelState.Merge(modelState);
+                    }
+                    else
+                    {
+                        //Otherwise remove it.
+                        filterContext.Controller.TempData.Remove(Key);
+                    }
+                }
+
+                base.OnActionExecuted(filterContext);
+            }
+        }
     }
 }
