@@ -13,6 +13,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using AutoMapper;
 using System.Security.Claims;
+using static CONTRAST_WEB.Models.Utility;
 
 namespace CONTRAST_WEB.Controllers
 {
@@ -52,6 +53,7 @@ namespace CONTRAST_WEB.Controllers
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
+        [ImportModelStateFromTempData]
         public async Task<ActionResult> Index(string applied = "")
         {
             var identity = (ClaimsIdentity)User.Identity;
@@ -123,6 +125,7 @@ namespace CONTRAST_WEB.Controllers
 
         [Authorize]
         [Authorize(Roles = "contrast.user")]
+        [AcceptVerbs(HttpVerbs.Post), ExportModelStateToTempData]
         public async Task<ActionResult> Validate(TravelRequestHelper model, string validate, string add, string delete = "", string loged = "", string clear = "")
         {
             var identity = (ClaimsIdentity)User.Identity;
@@ -141,21 +144,6 @@ namespace CONTRAST_WEB.Controllers
                     {
                         HttpPostedFileBase file = Request.Files["generaldoc"];
                         model.generaldoc_file = file;
-                    }
-                    if (Request.Files["itinerarydoc"] != null)
-                    {
-                        HttpPostedFileBase file = Request.Files["itinerarydoc"];
-                        model.itinerary_file = file;
-                    }
-                    if (Request.Files["invitationdoc"] != null)
-                    {
-                        HttpPostedFileBase file = Request.Files["invitationdoc"];
-                        model.invitation_file = file;
-                    }
-                    if (Request.Files["proposaldoc"] != null)
-                    {
-                        HttpPostedFileBase file = Request.Files["proposaldoc"];
-                        model.proposaldoc_file = file;
                     }
 
                     var config = new MapperConfiguration(cfg =>
@@ -213,23 +201,7 @@ namespace CONTRAST_WEB.Controllers
                             {
                                 ListModel[c].generaldoc_file = model.generaldoc_file;
                                 ListModel[c].travel_request.path_general = Utility.UploadFileUniversal(ListModel[c].generaldoc_file, Constant.TravelDocumentsFolder, "GENERAL_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                            }
-                            if (model.invitation_file.FileName != "")
-                            {
-                                ListModel[c].invitation_file = model.invitation_file;
-                                ListModel[c].travel_request.path_invitation = Utility.UploadFileUniversal(ListModel[c].invitation_file, Constant.TravelDocumentsFolder, "INVITE_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                            }
-                            if (model.itinerary_file.FileName != "")
-                            {
-                                ListModel[c].itinerary_file = model.itinerary_file;
-                                ListModel[c].travel_request.path_itinerary = Utility.UploadFileUniversal(ListModel[c].itinerary_file, Constant.TravelDocumentsFolder, "PLAN_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                            }
-
-                            if (model.proposaldoc_file.FileName != "")
-                            {
-                                ListModel[c].proposaldoc_file = model.proposaldoc_file;
-                                ListModel[c].travel_request.additional1 = Utility.UploadFileUniversal(ListModel[c].proposaldoc_file, Constant.TravelDocumentsFolder, "PROPOSAL_" + ListModel[c].travel_request.no_reg + "_" + "_" + DateTime.Now.ToShortDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                            }
+                            }                           
 
                             if (c == 0)
                             {
@@ -277,70 +249,9 @@ namespace CONTRAST_WEB.Controllers
                     //hitung
                     for (int i = 0; i < ListModel.Count(); i++)
                     {
-                        bool same_date = false;
-                        int week_day = 0;
-                        TimeSpan range = ((DateTime)ListModel[i].travel_request.end_date).Date - ((DateTime)ListModel[i].travel_request.start_date).Date;
-                        
-                        if (ListModel.Count() > 1 && i > 0)
-                        {
-                            if (Convert.ToDateTime(ListModel[i].travel_request.start_date).Date == Convert.ToDateTime(ListModel[i - 1].travel_request.end_date).Date) same_date = true;
-                        }
-                        for (int k = 0; k <= range.Days; k++)
-                        {
-                            if (Convert.ToDateTime(ListModel[i].travel_request.start_date).AddDays(k).DayOfWeek == DayOfWeek.Saturday || Convert.ToDateTime(ListModel[i].travel_request.start_date).AddDays(k).DayOfWeek == DayOfWeek.Sunday) week_day++;
-                        }
+                        //do the calculation
+                        ListModel[i]=await calculate.DateDurationAsync(ListModel[i]);
 
-                        int duration = range.Days;
-                        if (!same_date) duration = duration + 1;
-                        
-                        ListModel[i].travel_request.duration = duration;
-
-                        var mealwinterallowance = await GetData.RateMealWinterInfo(ListModel[i]);
-                        ListModel[i].travel_request.allowance_meal_idr = (mealwinterallowance.meal_allowance * duration) + (mealwinterallowance.meal_allowance * week_day);
-
-                        // cek winter gak?
-                        ///*
-                        if (ListModel[i].travel_request.start_date.Value.Month == 12 || ListModel[i].travel_request.start_date.Value.Month == 1 || ListModel[i].travel_request.start_date.Value.Month == 2)
-                        {
-                            ListModel[i].travel_request.allowance_winter = mealwinterallowance.winter_allowance;
-                        }
-                        else
-                            ListModel[i].travel_request.allowance_winter = 0;
-
-                        if (ListModel[i].travel_request.air_ticket_flag == true)
-                        {
-                            var rateflight = await GetData.RateFlightInfo(ListModel[i]);
-                            ListModel[i].travel_request.allowance_ticket = (rateflight.economy) * 2;
-                        }
-                        else
-                        {
-                            var rateland = await GetData.Procedures(ListModel[i].employee_info.@class);
-                            ListModel[i].travel_request.allowance_ticket = (Convert.ToInt32(rateland.land_transport)) * 2;
-                        }
-
-                        var ratehotel = await GetData.RateHotelInfo(ListModel[i]);
-
-                        if (!same_date)
-                        {
-                            if (ListModel[i].travel_request.overseas_flag == true) ListModel[i].travel_request.allowance_hotel = ratehotel.overseas * (duration - 1);
-                            else
-                                ListModel[i].travel_request.allowance_hotel = ratehotel.domestik * (duration - 1);
-                        }
-                        else
-                        {
-                            if (ListModel[i].travel_request.overseas_flag == true) ListModel[i].travel_request.allowance_hotel = ratehotel.overseas * duration;
-                            else
-                                ListModel[i].travel_request.allowance_hotel = ratehotel.domestik * duration;
-                        }
-
-                        ListModel[i].travel_request.apprv_flag_lvl1 = "0";
-                        ListModel[i].travel_request.allowance_preparation = 0;
-                        ListModel[i].travel_request.grand_total_allowance = (ListModel[i].travel_request.allowance_meal_idr != null ? ListModel[i].travel_request.allowance_meal_idr : 0) +
-                                                                            (ListModel[i].travel_request.allowance_hotel != null ? ListModel[i].travel_request.allowance_hotel : 0) +
-                                                                            (ListModel[i].travel_request.allowance_preparation != null ? ListModel[i].travel_request.allowance_preparation : 0) +
-                                                                            (ListModel[i].travel_request.allowance_ticket != null ? ListModel[i].travel_request.allowance_ticket : 0) +
-                                                                            (ListModel[i].travel_request.allowance_winter != null ? ListModel[i].travel_request.allowance_winter : 0)
-                                                                            ;
                         ListModel[i].travel_request.create_date = now;
 
                         if (ListModel[i].participants != null)
@@ -354,10 +265,9 @@ namespace CONTRAST_WEB.Controllers
                             ListModel[i].travel_request.participants_flag = true;
                         }
                         else
-                            for (int k = 0; k < ListModel.Count(); k++)
-                            {
-                                ListModel[k].travel_request.participants_flag = false;
-                            }
+                        for (int k = 0; k < ListModel.Count(); k++)                        
+                            ListModel[k].travel_request.participants_flag = false;
+                        
                         //for exep employee
                         ListModel[i].travel_request.exep_empolyee = false;
                     }
@@ -423,45 +333,15 @@ namespace CONTRAST_WEB.Controllers
                     // Do stuff
                 }
                 else
-                {
-                    ViewBag.RL = await GetData.DestinationInfo();
-                    ViewBag.RL2 = await GetData.PurposeInfo();
-                    //list participant in string
-
-                    List<string> ModelList = new List<string>();
-                    if (model.participants != null)
-                    {
-                        for (int k = 0; k < model.participants.Count(); k++)
-                        {
-                            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
-                        }
-                    }
-                    ViewBag.RL3 = ModelList;
-
-                    string boss = await GetData.EmployeeNameInfo(model.travel_request.assign_by);
-                    if (boss == null) boss = "-No data";
-                    ViewBag.Bossname = "Assigned by " + boss.Trim() + " (" + model.travel_request.assign_by.ToString().Trim() + ")";
-
-                    List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
-                    bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
-                    if (bankName.Count != 0)
-                    {
-                        model.tbankname = bankName[0].Bank_Name;
-                        model.tbankaccount = bankName[0].account_number;
-                    }
-                    
-
-                    ViewBag.Username = model.employee_info.name;
-                    return View("Index", model);
+                {                    
+                    //if model is invalid
+                    return Redirect("Index");
                 }
 
             }
             else
             if (add != null)
-            {
-                //List<tb_m_vendor_employee> valid = await GetData.VendorEmployee(Convert.ToInt32(model.tparticipant));
-                //if (ModelState.IsValid || valid.Count > 0)
-                //{
+            {                
                 List<string> ModelList = new List<string>();
                 int noreg;
                 string exist = "";
@@ -558,6 +438,7 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL = await GetData.DestinationInfo();
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+
                 return View("Index", temp);
 
             }
