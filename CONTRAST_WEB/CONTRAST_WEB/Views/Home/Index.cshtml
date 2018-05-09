@@ -316,13 +316,12 @@
                     </button>
                 }
             </div>
-            // break;
         }
 
     }
     @foreach (var items in ViewBag.Privillege)
     {
-        if (items == "contrast.administd")
+        if (items == "contrast.administd"||items=="contrast.secretary")
         {
             <div class="item col-xs-12 col-lg-3">
                 @using (Html.BeginForm("Index", "TrackProgress", FormMethod.Post))
