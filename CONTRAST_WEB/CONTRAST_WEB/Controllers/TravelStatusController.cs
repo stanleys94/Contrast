@@ -1425,8 +1425,8 @@ namespace CONTRAST_WEB.Controllers
                 ////if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
                 //else
                 //{
-                    return RedirectToAction("SubmittedMSTR");
-                    //return View("Index", ResponseList);
+                return View("/TravelRequest/SubmittedMSTR");
+                //return View("Index", ResponseList);
                 //}
             }
             else if (download == "download")
