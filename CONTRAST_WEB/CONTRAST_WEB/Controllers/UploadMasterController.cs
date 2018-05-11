@@ -890,16 +890,18 @@ namespace CONTRAST_WEB.Controllers
                                         try
                                         {
                                             var cellString = workSheet.Cell(i, k);
-                                            if (cellString.GetValue<string>() == "" && k < 9) throw new System.ArgumentException("There's no Value in this Cell");
+                                            if (cellString.GetValue<string>() == "" && k < 11) throw new System.ArgumentException("There's no Value in this Cell");
                                             else if (k == 1) ExcelObject11.division = (cellString.GetValue<string>());
                                             else if (k == 2) ExcelObject11.division_head = cellString.GetValue<string>();
-                                            else if (k == 3) ExcelObject11.directorate = cellString.GetValue<string>();
-                                            else if (k == 4) ExcelObject11.directorate_head = cellString.GetValue<string>();
-                                            else if (k == 5) ExcelObject11.fd_local = cellString.GetValue<string>();
-                                            else if (k == 6) ExcelObject11.fd_japan = cellString.GetValue<string>();
-                                            else if (k == 7) ExcelObject11.vp = cellString.GetValue<string>();
-                                            else if (k == 8) ExcelObject11.pd = (cellString.GetValue<string>());
-                                            if (k >= 9)
+                                            else if (k == 3) ExcelObject11.sub_directorate = cellString.GetValue<string>();
+                                            else if (k == 4) ExcelObject11.egm = cellString.GetValue<string>();
+                                            else if (k == 5) ExcelObject11.directorate = cellString.GetValue<string>();
+                                            else if (k == 6) ExcelObject11.directorate_head = cellString.GetValue<string>();
+                                            else if (k == 7) ExcelObject11.fd_local = cellString.GetValue<string>();
+                                            else if (k == 8) ExcelObject11.fd_japan = cellString.GetValue<string>();
+                                            else if (k == 9) ExcelObject11.vp = cellString.GetValue<string>();
+                                            else if (k == 10) ExcelObject11.pd = (cellString.GetValue<string>());
+                                            if (k >= 11)
                                             {
                                                 if (cellString.GetValue<string>() != "") throw new System.ArgumentException("Invalid Format Excell");
                                                 else break;
@@ -935,14 +937,17 @@ namespace CONTRAST_WEB.Controllers
 
                                             var cellString = workSheet.Cell(i, k);
                                             if (k == 1) ExcelObject11.division = (cellString.GetValue<string>());
+                                            else if (k == 1) ExcelObject11.division = (cellString.GetValue<string>());
                                             else if (k == 2) ExcelObject11.division_head = cellString.GetValue<string>();
-                                            else if (k == 3) ExcelObject11.directorate = cellString.GetValue<string>();
-                                            else if (k == 4) ExcelObject11.directorate_head = cellString.GetValue<string>();
-                                            else if (k == 5) ExcelObject11.fd_local = cellString.GetValue<string>();
-                                            else if (k == 6) ExcelObject11.fd_japan = cellString.GetValue<string>();
-                                            else if (k == 7) ExcelObject11.vp = cellString.GetValue<string>();
-                                            else if (k == 8) ExcelObject11.pd = (cellString.GetValue<string>());
-                                            if (k >= 9)
+                                            else if (k == 3) ExcelObject11.sub_directorate = cellString.GetValue<string>();
+                                            else if (k == 4) ExcelObject11.egm = cellString.GetValue<string>();
+                                            else if (k == 5) ExcelObject11.directorate = cellString.GetValue<string>();
+                                            else if (k == 6) ExcelObject11.directorate_head = cellString.GetValue<string>();
+                                            else if (k == 7) ExcelObject11.fd_local = cellString.GetValue<string>();
+                                            else if (k == 8) ExcelObject11.fd_japan = cellString.GetValue<string>();
+                                            else if (k == 9) ExcelObject11.vp = cellString.GetValue<string>();
+                                            else if (k == 10) ExcelObject11.pd = (cellString.GetValue<string>());
+                                            if (k >= 11)
                                             {
                                                 break;
                                             }
@@ -1386,24 +1391,28 @@ namespace CONTRAST_WEB.Controllers
 
                     InsertData.Cell(1, 1).Value = "Division";
                     InsertData.Cell(1, 2).Value = "Division Head";
-                    InsertData.Cell(1, 3).Value = "Directorate";
-                    InsertData.Cell(1, 4).Value = "Directorate Head";
-                    InsertData.Cell(1, 5).Value = "FD Local";
-                    InsertData.Cell(1, 6).Value = "FD Japan";
-                    InsertData.Cell(1, 7).Value = "VP";
-                    InsertData.Cell(1, 8).Value = "PD";
+                    InsertData.Cell(1, 3).Value = "Sub Directorate";
+                    InsertData.Cell(1, 4).Value = "EGM";
+                    InsertData.Cell(1, 5).Value = "Directorate";
+                    InsertData.Cell(1, 6).Value = "Directorate Head";
+                    InsertData.Cell(1, 7).Value = "FD Local";
+                    InsertData.Cell(1, 8).Value = "FD Japan";
+                    InsertData.Cell(1, 9).Value = "VP";
+                    InsertData.Cell(1, 10).Value = "PD";
 
 
                     for (int i = 0; i < dbObject1.Count(); i++)
                     {
                         InsertData.Cell(i + 2, 1).Value = dbObject1[i].division;
                         InsertData.Cell(i + 2, 2).Value = dbObject1[i].division_head;
-                        InsertData.Cell(i + 2, 3).Value = dbObject1[i].directorate;
-                        InsertData.Cell(i + 2, 4).Value = dbObject1[i].directorate_head;
-                        InsertData.Cell(i + 2, 5).Value = dbObject1[i].fd_local;
-                        InsertData.Cell(i + 2, 6).Value = dbObject1[i].fd_japan;
-                        InsertData.Cell(i + 2, 7).Value = dbObject1[i].vp;
-                        InsertData.Cell(i + 2, 8).Value = dbObject1[i].pd;
+                        InsertData.Cell(i + 2, 3).Value = dbObject1[i].sub_directorate;
+                        InsertData.Cell(i + 2, 4).Value = dbObject1[i].egm;
+                        InsertData.Cell(i + 2, 5).Value = dbObject1[i].directorate;
+                        InsertData.Cell(i + 2, 6).Value = dbObject1[i].directorate_head;
+                        InsertData.Cell(i + 2, 7).Value = dbObject1[i].fd_local;
+                        InsertData.Cell(i + 2, 8).Value = dbObject1[i].fd_japan;
+                        InsertData.Cell(i + 2, 9).Value = dbObject1[i].vp;
+                        InsertData.Cell(i + 2, 10).Value = dbObject1[i].pd;
                     }
                     MemoryStream excelStream = new MemoryStream();
                     CreateExcell.SaveAs(excelStream);
