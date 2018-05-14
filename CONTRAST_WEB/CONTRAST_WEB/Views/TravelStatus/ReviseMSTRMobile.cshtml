@@ -57,8 +57,7 @@
                 <div style="padding-bottom:5px">
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                        @Html.DropDownListFor(m => m.First().travel_request.travel_purpose, asd2.OrderBy(m => m.Text).ToList(), Model.First().travel_request.travel_purpose, new { @class = "form-control", placeholder = "Purpose", @disabled = "disabled" })
-                        @Html.HiddenFor(m => m.First().travel_request.travel_purpose)
+                        @Html.TextBoxFor(m => m.First().travel_request.travel_purpose, new { @class = "form-control", @readonly = "readonly" })
                     </div>
                 </div>
             </div>
