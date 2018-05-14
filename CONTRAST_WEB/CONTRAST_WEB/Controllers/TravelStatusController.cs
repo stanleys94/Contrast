@@ -970,7 +970,7 @@ namespace CONTRAST_WEB.Controllers
                         model[i].travel_request.end_date = model[i].travel_request.end_date.Value.Date + (rtime[i].TimeOfDay);
                     
                     //model[i].travel_request = origin_data;
-                    model[i] = await calculate.DateDurationAsync(model[i]);
+                    model[i] = await calculate.DateDurationAsync(model[i],i);
 
                     //get bank account
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
@@ -1978,7 +1978,7 @@ namespace CONTRAST_WEB.Controllers
                         model[i].travel_request.end_date = model[i].travel_request.end_date.Value.Date + (rtime[i].TimeOfDay);
 
                     //model[i].travel_request = origin_data;
-                    model[i] = await calculate.DateDurationAsync(model[i]);
+                    model[i] = await calculate.DateDurationAsync(model[i],i);
 
                     //get bank account
                     List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
