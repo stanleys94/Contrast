@@ -13,15 +13,17 @@ namespace CONTRAST_WEB.Models
 {
     public static class calculate
     {
-        public static async Task<TravelRequestHelper> DateDurationAsync(TravelRequestHelper model)
+        public static async Task<TravelRequestHelper> DateDurationAsync(TravelRequestHelper model, int model_count)
         {
             bool same_date = false;
             int week_day = 0;
             TimeSpan range = ((DateTime)model.travel_request.end_date).Date - ((DateTime)model.travel_request.start_date).Date;
 
-            if (Convert.ToDateTime(model.travel_request.start_date).Date == Convert.ToDateTime(model.travel_request.end_date).Date) same_date = true;
-            
+            if (model_count > 0)
+            {
+                if (Convert.ToDateTime(model.travel_request.start_date).Date == Convert.ToDateTime(model.travel_request.end_date).Date) same_date = true;
 
+            }
             for (int k = 0; k <= range.Days; k++)
             {
                 if (Convert.ToDateTime(model.travel_request.start_date).AddDays(k).DayOfWeek == DayOfWeek.Saturday || Convert.ToDateTime(model.travel_request.start_date).AddDays(k).DayOfWeek == DayOfWeek.Sunday) week_day++;
