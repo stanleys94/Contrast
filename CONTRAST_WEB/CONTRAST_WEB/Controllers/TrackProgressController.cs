@@ -42,7 +42,7 @@ namespace CONTRAST_WEB.Controllers
             //cek privillege
             for (int k = 0; k < claims.Count(); k++)
             {
-                if (claims[k] == "contrast.secretary" || claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
+                if (claims[k] == "contrast.travelcoordinator" || claims[k] == "contrast.secretary" || claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
                 {
                     privillage = 1;
                     privillage_desc = "all";
