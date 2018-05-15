@@ -13,6 +13,7 @@ namespace CONTRAST_WEB.Models
 {
     public static class UpdateData
     {
+        //time offset fixed
         public static async Task ActualCost(ActualCostVerifiedHelper model, string position)
         {
             tb_r_travel_actualcost UpdatedData = new tb_r_travel_actualcost();
@@ -53,6 +54,7 @@ namespace CONTRAST_WEB.Models
 
             using (var client = new HttpClient())
             {
+                UpdatedData = await Utility.ActualCostTimeOffset(UpdatedData);
                 //Passing service base url  
                 client.BaseAddress = new Uri(Constant.Baseurl);
 
@@ -68,20 +70,17 @@ namespace CONTRAST_WEB.Models
         }
 
         public static async Task Settlement(SettlementVerifiedHelper model, string position)
-        {
-            
+        {            
             List<tb_r_travel_actualcost> UpdatedData = new List<tb_r_travel_actualcost>();
             UpdatedData = await GetData.ActualCostOrigins(model.Settlement_Verified.group_code);
             if (position.Trim() == "AP")
             {
                 for(int k=0;k<UpdatedData.Count();k++)
-                {
-                    
+                {                    
                     UpdatedData[k].ap_verified_by = model.EmployeeInfo.code;
                     UpdatedData[k].ap_verified_datetime = DateTime.Now;
                     UpdatedData[k].ap_verified_status = model.flag;
-                    //UpdatedData[k].final_status = "1";
-                    //if (model.flag == "2") UpdatedData[k].final_status = "2";
+                   
                     if (model.flag == "1" && UpdatedData[k].final_status == null) UpdatedData[k].final_status = "1";
                 }
             }
@@ -93,7 +92,6 @@ namespace CONTRAST_WEB.Models
                     UpdatedData[k].dph_verified_by = model.EmployeeInfo.code;
                     UpdatedData[k].dph_verified_datetime = DateTime.Now;
                     UpdatedData[k].dph_verified_status = model.flag;
-                    //if (model.flag == "2") UpdatedData[k].final_status = "2";
                 }
             }
 
@@ -105,7 +103,6 @@ namespace CONTRAST_WEB.Models
                     UpdatedData[k].ga_insert_by = model.EmployeeInfo.code;
                     UpdatedData[k].ga_insert_datetime = DateTime.Now;
                     UpdatedData[k].ga_status = model.flag;
-                   // if (model.flag == "2") UpdatedData[k].final_status = "2";
                 }
             }
 
@@ -257,6 +254,7 @@ namespace CONTRAST_WEB.Models
             TRSource = await GetData.TravelRequestGCList(group_code);
             for (int k = 0; k < TRSource.Count(); k++)
             {
+                //update time offset
                 TRSource[k]=await Utility.TravelRequestTimeOffset(TRSource[k]);
                 TRSource[k].status_request = "7";
                 if (status_request == "1") TRSource[k].active_flag = true;
