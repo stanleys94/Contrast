@@ -1031,7 +1031,7 @@ namespace CONTRAST_WEB.Controllers
             {
                 if (item.jenis_transaksi == "Meal")
                 {
-                    if (item.additional1 == "True") HDDepartFlag = "Half Day Derpature";
+                    if (item.additional1 == "True") HDDepartFlag = "Half Day Departure";
                     if (item.additional2 == "True") HDReturnFlag = "Half Day Return";
                     if (item.additional3 != null)
                     {

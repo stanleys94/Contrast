@@ -634,6 +634,7 @@
     <Content Include="img\Travel-Status-icon-b.png" />
     <Content Include="img\Travel-Status-icon.png" />
     <Content Include="img\Travel-Status-with-text-icon.png" />
+    <Content Include="img\traveltracking.png" />
     <Content Include="img\verification.png" />
     <Content Include="Models\CONTRAST_DB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
