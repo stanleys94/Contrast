@@ -110,8 +110,7 @@ namespace CONTRAST_WEB.Models
             }
 
             foreach (var item in UpdatedData)
-            {
-                
+            {                
                 using (var client = new HttpClient())
                 {
                     //Passing service base url  
@@ -220,8 +219,7 @@ namespace CONTRAST_WEB.Models
                 }
             }
         }
-
-
+        
         public static async Task FixedCost(FixedCostVerifierHelper model, string position)
         {
             tb_r_travel_actualcost UpdatedData = new tb_r_travel_actualcost();
@@ -251,13 +249,15 @@ namespace CONTRAST_WEB.Models
                 
             }
         }
-
+        
+        //time offset fixed
         public static async Task TravelRequest(string group_code, string status_request)
         {
             List<tb_r_travel_request> TRSource = new List<tb_r_travel_request>();
             TRSource = await GetData.TravelRequestGCList(group_code);
             for (int k = 0; k < TRSource.Count(); k++)
             {
+                TRSource[k]=await Utility.TravelRequestTimeOffset(TRSource[k]);
                 TRSource[k].status_request = "7";
                 if (status_request == "1") TRSource[k].active_flag = true;
                 using (var client = new HttpClient())

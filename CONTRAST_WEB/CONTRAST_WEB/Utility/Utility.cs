@@ -433,5 +433,138 @@ namespace CONTRAST_WEB.Models
                 base.OnActionExecuted(filterContext);
             }
         }
+
+        public static async Task<tb_r_travel_request> TravelRequestTimeOffset(tb_r_travel_request model)
+        {
+            var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
+            model.create_date = model.create_date.Value.ToUniversalTime();
+            model.create_date = model.create_date + offset;
+            model.end_date = model.end_date.Value.ToUniversalTime();
+            model.end_date = model.end_date + offset;
+            model.start_date = model.start_date.Value.ToUniversalTime();
+            model.start_date = model.start_date + offset;
+
+            if (model.apprv_date_lvl1 != null)
+            {
+                model.apprv_date_lvl1 = model.apprv_date_lvl1.Value.ToUniversalTime();
+                model.apprv_date_lvl1 = model.apprv_date_lvl1 + offset;
+            }
+
+            if (model.apprv_date_lvl2 != null)
+            { 
+                model.apprv_date_lvl2 = model.apprv_date_lvl2.Value.ToUniversalTime();
+                model.apprv_date_lvl2 = model.apprv_date_lvl2 + offset;
+            }
+
+            if (model.apprv_date_lvl3 != null)
+            {
+                model.apprv_date_lvl3 = model.apprv_date_lvl3.Value.ToUniversalTime();
+                model.apprv_date_lvl3 = model.apprv_date_lvl3 + offset;
+            }
+
+            if (model.apprv_date_lvl4 != null)
+            {
+                model.apprv_date_lvl4 = model.apprv_date_lvl4.Value.ToUniversalTime();
+                model.apprv_date_lvl4 = model.apprv_date_lvl4 + offset;
+            }
+
+            if (model.apprv_date_lvl5 != null)
+            {
+                model.apprv_date_lvl5 = model.apprv_date_lvl5.Value.ToUniversalTime();
+                model.apprv_date_lvl5 = model.apprv_date_lvl5 + offset;
+            }
+
+            if (model.apprv_date_lvl6 != null)
+            {
+                model.apprv_date_lvl6 = model.apprv_date_lvl6.Value.ToUniversalTime();
+                model.apprv_date_lvl6 = model.apprv_date_lvl6 + offset;
+            }
+
+            if (model.apprv_date_lvl7 != null)
+            {
+                model.apprv_date_lvl7 = model.apprv_date_lvl7.Value.ToUniversalTime();
+                model.apprv_date_lvl7 = model.apprv_date_lvl7 + offset;
+            }
+
+            if (model.apprv_date_lvl8 != null)
+            {
+                model.apprv_date_lvl8 = model.apprv_date_lvl8.Value.ToUniversalTime();
+                model.apprv_date_lvl8 = model.apprv_date_lvl8 + offset;
+            }
+
+            if (model.apprv_date_lvl9 != null)
+            {
+                model.apprv_date_lvl9 = model.apprv_date_lvl9.Value.ToUniversalTime();
+                model.apprv_date_lvl9 = model.apprv_date_lvl9 + offset;
+            }
+
+            if (model.apprv_date_lvl10 != null)
+            {
+                model.apprv_date_lvl10 = model.apprv_date_lvl10.Value.ToUniversalTime();
+                model.apprv_date_lvl10 = model.apprv_date_lvl10 + offset;
+            }
+
+            if (model.apprv_date_lvl11 != null)
+            {
+                model.apprv_date_lvl11 = model.apprv_date_lvl11.Value.ToUniversalTime();
+                model.apprv_date_lvl11 = model.apprv_date_lvl11 + offset;
+            }
+
+            if (model.apprv_date_lvl12 != null)
+            {
+                model.apprv_date_lvl12 = model.apprv_date_lvl12.Value.ToUniversalTime();
+                model.apprv_date_lvl12 = model.apprv_date_lvl12 + offset;
+            }
+
+            if (model.apprv_date_lvl13 != null)
+            {
+                model.apprv_date_lvl13 = model.apprv_date_lvl13.Value.ToUniversalTime();
+                model.apprv_date_lvl13 = model.apprv_date_lvl13 + offset;
+            }
+
+            if (model.apprv_date_lvl14 != null)
+            {
+                model.apprv_date_lvl14 = model.apprv_date_lvl14.Value.ToUniversalTime();
+                model.apprv_date_lvl14 = model.apprv_date_lvl14 + offset;
+            }
+
+            if (model.apprv_date_lvl15 != null)
+            {
+                model.apprv_date_lvl15 = model.apprv_date_lvl15.Value.ToUniversalTime();
+                model.apprv_date_lvl15 = model.apprv_date_lvl15 + offset;
+            }
+
+            if (model.apprv_date_lvl16 != null)
+            {
+                model.apprv_date_lvl16 = model.apprv_date_lvl16.Value.ToUniversalTime();
+                model.apprv_date_lvl16 = model.apprv_date_lvl16 + offset;
+            }
+
+            if (model.apprv_date_lvl7 != null)
+            {
+                model.apprv_date_lvl17 = model.apprv_date_lvl17.Value.ToUniversalTime();
+                model.apprv_date_lvl17 = model.apprv_date_lvl17 + offset;
+            }
+
+            if (model.apprv_date_lvl18 != null)
+            {
+                model.apprv_date_lvl18 = model.apprv_date_lvl18.Value.ToUniversalTime();
+                model.apprv_date_lvl18 = model.apprv_date_lvl18 + offset;
+            }
+
+            if (model.apprv_date_lvl19 != null)
+            {
+                model.apprv_date_lvl19 = model.apprv_date_lvl19.Value.ToUniversalTime();
+                model.apprv_date_lvl19 = model.apprv_date_lvl19 + offset;
+            }
+
+            if (model.apprv_date_lvl20 != null)
+            {
+                model.apprv_date_lvl20 = model.apprv_date_lvl20.Value.ToUniversalTime();
+                model.apprv_date_lvl20 = model.apprv_date_lvl20 + offset;
+            }
+
+            return model;
+        }
     }
 }
