@@ -96,7 +96,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 5) break;
                                         }
@@ -181,7 +181,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " + k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 4) break;
                                         }
@@ -262,7 +262,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " + k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 3) break;
                                         }
@@ -346,7 +346,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 3) break;
                                         }
@@ -437,7 +437,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 9) break;
                                         }
@@ -531,7 +531,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 10) break;
                                         }
@@ -639,7 +639,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 19) break;
                                         }
@@ -777,7 +777,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 40) break;
                                         }
@@ -799,7 +799,6 @@ namespace CONTRAST_WEB.Controllers
 
                                         while (true)
                                         {
-
                                             var cellString = workSheet.Cell(i, k);
                                             if (k == 1) ExcelObject10.@class = cellString.GetValue<string>();
                                             else if (k == 2) ExcelObject10.destination_type = cellString.GetValue<string>();
@@ -890,17 +889,17 @@ namespace CONTRAST_WEB.Controllers
                                         try
                                         {
                                             var cellString = workSheet.Cell(i, k);
-                                            if (cellString.GetValue<string>() == "" && k < 11) throw new System.ArgumentException("There's no Value in this Cell");
+                                            if (cellString.GetValue<string>() == "" && k == 1) throw new System.ArgumentException("There's no Value in this Cell");
                                             else if (k == 1) ExcelObject11.division = (cellString.GetValue<string>());
-                                            else if (k == 2) ExcelObject11.division_head = cellString.GetValue<string>();
-                                            else if (k == 3) ExcelObject11.sub_directorate = cellString.GetValue<string>();
-                                            else if (k == 4) ExcelObject11.egm = cellString.GetValue<string>();
-                                            else if (k == 5) ExcelObject11.directorate = cellString.GetValue<string>();
-                                            else if (k == 6) ExcelObject11.directorate_head = cellString.GetValue<string>();
-                                            else if (k == 7) ExcelObject11.fd_local = cellString.GetValue<string>();
-                                            else if (k == 8) ExcelObject11.fd_japan = cellString.GetValue<string>();
-                                            else if (k == 9) ExcelObject11.vp = cellString.GetValue<string>();
-                                            else if (k == 10) ExcelObject11.pd = (cellString.GetValue<string>());
+                                            else if (k == 2 && cellString.GetValue<string>() != "") ExcelObject11.division_head = cellString.GetValue<string>();
+                                            else if (k == 3 && cellString.GetValue<string>() != "") ExcelObject11.sub_directorate = cellString.GetValue<string>();
+                                            else if (k == 4 && cellString.GetValue<string>() != "") ExcelObject11.egm = cellString.GetValue<string>();
+                                            else if (k == 5 && cellString.GetValue<string>() != "") ExcelObject11.directorate = cellString.GetValue<string>();
+                                            else if (k == 6 && cellString.GetValue<string>() != "") ExcelObject11.directorate_head = cellString.GetValue<string>();
+                                            else if (k == 7 && cellString.GetValue<string>() != "") ExcelObject11.fd_local = cellString.GetValue<string>();
+                                            else if (k == 8 && cellString.GetValue<string>() != "") ExcelObject11.fd_japan = cellString.GetValue<string>();
+                                            else if (k == 9 && cellString.GetValue<string>() != "") ExcelObject11.vp = cellString.GetValue<string>();
+                                            else if (k == 10 && cellString.GetValue<string>() != "") ExcelObject11.pd = (cellString.GetValue<string>());
                                             if (k >= 11)
                                             {
                                                 if (cellString.GetValue<string>() != "") throw new System.ArgumentException("Invalid Format Excell");
@@ -912,7 +911,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 9) break;
                                         }
@@ -937,16 +936,15 @@ namespace CONTRAST_WEB.Controllers
 
                                             var cellString = workSheet.Cell(i, k);
                                             if (k == 1) ExcelObject11.division = (cellString.GetValue<string>());
-                                            else if (k == 1) ExcelObject11.division = (cellString.GetValue<string>());
-                                            else if (k == 2) ExcelObject11.division_head = cellString.GetValue<string>();
-                                            else if (k == 3) ExcelObject11.sub_directorate = cellString.GetValue<string>();
-                                            else if (k == 4) ExcelObject11.egm = cellString.GetValue<string>();
-                                            else if (k == 5) ExcelObject11.directorate = cellString.GetValue<string>();
-                                            else if (k == 6) ExcelObject11.directorate_head = cellString.GetValue<string>();
-                                            else if (k == 7) ExcelObject11.fd_local = cellString.GetValue<string>();
-                                            else if (k == 8) ExcelObject11.fd_japan = cellString.GetValue<string>();
-                                            else if (k == 9) ExcelObject11.vp = cellString.GetValue<string>();
-                                            else if (k == 10) ExcelObject11.pd = (cellString.GetValue<string>());
+                                            else if (k == 2 && cellString.GetValue<string>() != "") ExcelObject11.division_head = cellString.GetValue<string>();
+                                            else if (k == 3 && cellString.GetValue<string>() != "") ExcelObject11.sub_directorate = cellString.GetValue<string>();
+                                            else if (k == 4 && cellString.GetValue<string>() != "") ExcelObject11.egm = cellString.GetValue<string>();
+                                            else if (k == 5 && cellString.GetValue<string>() != "") ExcelObject11.directorate = cellString.GetValue<string>();
+                                            else if (k == 6 && cellString.GetValue<string>() != "") ExcelObject11.directorate_head = cellString.GetValue<string>();
+                                            else if (k == 7 && cellString.GetValue<string>() != "") ExcelObject11.fd_local = cellString.GetValue<string>();
+                                            else if (k == 8 && cellString.GetValue<string>() != "") ExcelObject11.fd_japan = cellString.GetValue<string>();
+                                            else if (k == 9 && cellString.GetValue<string>() != "") ExcelObject11.vp = cellString.GetValue<string>();
+                                            else if (k == 10 && cellString.GetValue<string>() != "") ExcelObject11.pd = (cellString.GetValue<string>());
                                             if (k >= 11)
                                             {
                                                 break;
@@ -994,11 +992,11 @@ namespace CONTRAST_WEB.Controllers
                                         try
                                         {
                                             var cellString = workSheet.Cell(i, k);
-                                            if (cellString.GetValue<string>() == "" && k < 10) throw new System.ArgumentException("There's no Value in this Cell");
+                                            if (cellString.GetValue<string>() == "" && k > 4 && k<11) throw new System.ArgumentException("There's no Value in this Cell");
                                             else if (k == 1) ExcelObject12.Division = cellString.GetValue<string>();
-                                            else if (k == 2) ExcelObject12.Employee_Position = cellString.GetValue<string>();
-                                            else if (k == 3) ExcelObject12.Employee_Name = cellString.GetValue<string>();
-                                            else if (k == 4) ExcelObject12.Department = cellString.GetValue<string>();
+                                            else if (k == 2 && cellString.GetValue<string>() != "") ExcelObject12.Employee_Position = cellString.GetValue<string>();
+                                            else if (k == 3 && cellString.GetValue<string>() != "") ExcelObject12.Employee_Name = cellString.GetValue<string>();
+                                            else if (k == 4 && cellString.GetValue<string>() != "") ExcelObject12.Department = cellString.GetValue<string>();
                                             else if (k == 5) ExcelObject12.Description = cellString.GetValue<string>();
                                             else if (k == 6) ExcelObject12.Travel_Type = cellString.GetValue<string>();
                                             else if (k == 7) ExcelObject12.Cost_Center = cellString.GetValue<string>();
@@ -1015,7 +1013,7 @@ namespace CONTRAST_WEB.Controllers
                                         catch (Exception ex)
                                         {
                                             flag_error = true;
-                                            error = "on row : " + k + ", collumn : " + i + "  " + ex.Message + "\n";
+                                            error = "on row : " + i + ", collumn : " +k + "  " + ex.Message + "\n";
                                             error_list.Add(error);
                                             if (k >= 10) break;
                                         }
@@ -1040,9 +1038,9 @@ namespace CONTRAST_WEB.Controllers
 
                                             var cellString = workSheet.Cell(i, k);
                                             if (k == 1) ExcelObject12.Division = cellString.GetValue<string>();
-                                            else if (k == 2) ExcelObject12.Employee_Position = cellString.GetValue<string>();
-                                            else if (k == 3) ExcelObject12.Employee_Name = cellString.GetValue<string>();
-                                            else if (k == 4) ExcelObject12.Department = cellString.GetValue<string>();
+                                            else if (k == 2 && cellString.GetValue<string>() != "") ExcelObject12.Employee_Position = cellString.GetValue<string>();
+                                            else if (k == 3 && cellString.GetValue<string>() != "") ExcelObject12.Employee_Name = cellString.GetValue<string>();
+                                            else if (k == 4 && cellString.GetValue<string>() != "") ExcelObject12.Department = cellString.GetValue<string>();
                                             else if (k == 5) ExcelObject12.Description = cellString.GetValue<string>();
                                             else if (k == 6) ExcelObject12.Travel_Type = cellString.GetValue<string>();
                                             else if (k == 7) ExcelObject12.Cost_Center = cellString.GetValue<string>();
