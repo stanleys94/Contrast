@@ -355,14 +355,8 @@ namespace CONTRAST_WEB.Controllers
                     SummarySettlementObject.Summary.total_meal = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_meal) - SummarySettlementObject.MealSettlement);
                     SummarySettlementObject.Summary.total_hotel = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_hotel) - SummarySettlementObject.HotelSettlement);
                     SummarySettlementObject.Summary.total_ticket = Convert.ToInt32(Convert.ToDouble(SummarySettlementObject.Summary.total_ticket) - SummarySettlementObject.TicketSettlement);
-
-                    //if (!model.extend_flag)
-                    return View("SummaryPaid", SummarySettlementObject);
-                    //else
-                    //    return View("SummaryAdditional", SummarySettlementObject);
-                    //*/
-                    //return View("SummaryPaid", model);
-
+                    
+                    return View("SummaryPaid", SummarySettlementObject);                    
                 }
                 else
                 if (sum != null)
