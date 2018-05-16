@@ -581,9 +581,9 @@ namespace CONTRAST_WEB.Controllers
                         if (spec_employee.no_reg != null)
                         {
                             ListModel[i].travel_request.exep_empolyee = true;
-
+                            ListModel[i].travel_request.apprv_by_lvl1 = ListModel[i].travel_request.assign_by;
                             List<SelectListItem> SpecAssign = new List<SelectListItem>();
-                            if (spec_employee.apprv_lv_1_1 != null)
+                            if (spec_employee.apprv_lv_1_1 != null )
                             {
                                 SelectListItem temp = new SelectListItem();
                                 temp.Value = spec_employee.apprv_lv_1_1.ToString();
@@ -615,7 +615,7 @@ namespace CONTRAST_WEB.Controllers
                                 }
 
                             }
-                            else if (spec_employee.apprv_lv_2_1 != null)
+                            if (spec_employee.apprv_lv_2_1 != null)
                             {
                                 SelectListItem temp = new SelectListItem();                              
                                 temp.Value = spec_employee.apprv_lv_2_1.ToString();
@@ -647,7 +647,7 @@ namespace CONTRAST_WEB.Controllers
                                 }
 
                             }
-                            else if (spec_employee.apprv_lv_3_1 != null)
+                            if (spec_employee.apprv_lv_3_1 != null)
                             {
                                 SelectListItem temp = new SelectListItem();
                                 temp.Value = spec_employee.apprv_lv_3_1.ToString();
@@ -679,7 +679,7 @@ namespace CONTRAST_WEB.Controllers
                                 }
 
                             }
-                            else if (spec_employee.apprv_lv_4_1 != null)
+                            if (spec_employee.apprv_lv_4_1 != null)
                             {
                                 SelectListItem temp = new SelectListItem();
                                 temp.Value = spec_employee.apprv_lv_4_1.ToString();
@@ -711,7 +711,7 @@ namespace CONTRAST_WEB.Controllers
                                 }
 
                             }
-                            else if (spec_employee.apprv_lv_5_1 != null)
+                            if (spec_employee.apprv_lv_5_1 != null)
                             {
                                 SelectListItem temp = new SelectListItem();
                                 temp.Value = spec_employee.apprv_lv_5_1.ToString();
@@ -743,7 +743,7 @@ namespace CONTRAST_WEB.Controllers
                                 }
 
                             }
-                            else if (spec_employee.apprv_lv_6_1 != null)
+                            if (spec_employee.apprv_lv_6_1 != null)
                             {
                                 SelectListItem temp = new SelectListItem();
                                 temp.Value = spec_employee.apprv_lv_6_1.ToString();
@@ -775,7 +775,7 @@ namespace CONTRAST_WEB.Controllers
                                 }
 
                             }
-                            else if (spec_employee.apprv_lv_7_1 != null)
+                            if (spec_employee.apprv_lv_7_1 != null)
                             {
                                 SelectListItem temp = new SelectListItem();
                                 temp.Value = spec_employee.apprv_lv_7_1.ToString();
@@ -810,12 +810,35 @@ namespace CONTRAST_WEB.Controllers
 
                             for (int k = 0; k < SpecAssign.Count; k++)
                             {
-                                if (k == 0) ListModel[i].travel_request.apprv_flag_lvl1 = "0";
-                                else if (k == 1) ListModel[i].travel_request.apprv_flag_lvl2 = "0";
-                                else if (k == 2) ListModel[i].travel_request.apprv_flag_lvl3 = "0";
-                                else if (k == 3) ListModel[i].travel_request.apprv_flag_lvl4 = "0";
-                                else if (k == 4) ListModel[i].travel_request.apprv_flag_lvl5 = "0";
+                                if (SpecAssign[k].Value.Contains(ListModel[i].travel_request.assign_by.ToString()))
+                                {
+                                    SpecAssign.RemoveAt(k);
+                                    break;
+                                }
                             }
+                            for (int l = 0; l < SpecAssign.Count; l++)
+                            {
+                                if (l == 0) ListModel[i].travel_request.apprv_by_lvl2 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 1) ListModel[i].travel_request.apprv_by_lvl3 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 2) ListModel[i].travel_request.apprv_by_lvl4 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 3) ListModel[i].travel_request.apprv_by_lvl5 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 4) ListModel[i].travel_request.apprv_by_lvl6 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 5) ListModel[i].travel_request.apprv_by_lvl7 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 6) ListModel[i].travel_request.apprv_by_lvl8 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 7) ListModel[i].travel_request.apprv_by_lvl9 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 8) ListModel[i].travel_request.apprv_by_lvl10 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 9) ListModel[i].travel_request.apprv_by_lvl11 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 10) ListModel[i].travel_request.apprv_by_lvl12 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 11) ListModel[i].travel_request.apprv_by_lvl13 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 12) ListModel[i].travel_request.apprv_by_lvl14 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 13) ListModel[i].travel_request.apprv_by_lvl15 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 14) ListModel[i].travel_request.apprv_by_lvl16 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 15) ListModel[i].travel_request.apprv_by_lvl17 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 16) ListModel[i].travel_request.apprv_by_lvl18 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 17) ListModel[i].travel_request.apprv_by_lvl19 = Convert.ToInt32(SpecAssign[l].Value);
+                                else if (l == 18) ListModel[i].travel_request.apprv_by_lvl20 = Convert.ToInt32(SpecAssign[l].Value);
+                            }
+
                         }
                         else
                         {
@@ -1054,6 +1077,8 @@ namespace CONTRAST_WEB.Controllers
 
             //Prepare travel request information object to be used at view
             TravelRequestHelper model2 = new TravelRequestHelper();
+
+            tb_m_special_employee_new spec_employee = await GetData.GetSpecialNoreg(model.code);
 
             //Copy user login information
             model2.travel_request = new tb_r_travel_request();
