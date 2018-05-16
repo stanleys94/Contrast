@@ -332,6 +332,8 @@ namespace CONTRAST_WEB.Controllers
                     ViewBag.Ticket = ticket;
                     ViewBag.Total = total;
 
+                    ViewBag.totalbudget = budget.available_amount - total;
+
                     return View(ListModel);
                     // Do stuff
                 }
@@ -873,6 +875,8 @@ namespace CONTRAST_WEB.Controllers
                     ViewBag.Hotel = hotel;
                     ViewBag.Ticket = ticket;
                     ViewBag.Total = total;
+
+                    ViewBag.totalbudget = budget.available_amount - total;
 
                     return View(ListModel);
                     // Do stuff
