@@ -1369,7 +1369,8 @@ namespace CONTRAST_WEB.Controllers
                 //model2 = await GetData.TravelRequest(Convert.ToInt32(model.travel_request.id_request));
                 //model2.active_flag = true;
                 //model2.status_request = "99";
-     
+
+                model2 = await GetData.TravelRequestGCList(model.travel_request.group_code);
                 foreach (var item in model2)
                 {
                     tb_m_budget budget = await GetData.GetCostWbs((bool)item.overseas_flag, div);
