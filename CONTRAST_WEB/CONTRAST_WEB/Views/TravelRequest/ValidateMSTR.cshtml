@@ -176,7 +176,7 @@
                 <div style="text-align:left; padding:15px 15px; margin-bottom:10px;" class="form-control input-group wellIn">
                     @for (int c = 0; c < Model.Count(); c++)
                     {
-                        <h5 style="margin-bottom:10px;" class="h5sl">Travel assignment to <strong>@ViewBag.Destination[c]</strong> </h5>
+                        <h5 style="margin-bottom:10px;" class="h5sl">To <strong>@ViewBag.Destination[c]</strong> </h5>
                         <label>Departure Date</label>
                         <div style="margin-bottom:10px;" class="input-group">
                             <span>@Html.DisplayFor(m => m[c].travel_request.start_date, new { @class = "form-control", @type = "datetime-local", placeholder = "Departure" })</span>

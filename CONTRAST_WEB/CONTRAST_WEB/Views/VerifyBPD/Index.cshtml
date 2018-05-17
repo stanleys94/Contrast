@@ -23,9 +23,9 @@
 <div class="container">
     <div style="margin-top:110px;" id="products" class="row list-group _3EibU">
         @using (Html.BeginForm("Index", "VerifyBPD", FormMethod.Get))
-        { 
+        {
             @Html.AntiForgeryToken()
-              <div class="navbar-form navbar-left" style="padding-left:10px">
+            <div class="navbar-form navbar-left" style="padding-left:10px">
                 <div>
                     <div>
                         <span>
@@ -44,24 +44,24 @@
                             }
                         </span>
 
-                         @if (ViewBag.enddate != null)
-                         {
+                        @if (ViewBag.enddate != null)
+                        {
                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @Value = ViewBag.enddate.ToString("yyyy-MM-dd"), @class = "form-control", style = "width:170px" })
-                         }
-                         else
-                         {
-                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
-                         }
-                         <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                        }
+                        else
+                        {
+                            @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
+                        }
+                        <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
                     </div>
-               </div>
-              </div>
-         }
+                </div>
+            </div>
+        }
 
         @using (Html.BeginForm("Insert", "VerifyBPD", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
-             <input type="hidden" name="SearchString" value="@ViewBag.CurrentFilter" />
+            <input type="hidden" name="SearchString" value="@ViewBag.CurrentFilter" />
             <div style="width:100%;text-align:left;height:80px;border:0px;" class="clearfix">
                 <table class="table table-condensed table-striped">
                     <tr style="background-color:deepskyblue; text-align:center;">
@@ -174,9 +174,9 @@
                         }
                     }
                 </table>
-            </div>           
+            </div>
 
-            <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-6">
+            <div style="float:right;margin-top:10px;" class="col-lg-2 col-lg-offset-4">
                 @if (position.ToLower().Contains("dph") || position.ToLower().Contains("ap"))
                 {
 
@@ -187,21 +187,21 @@
 
                     <button type="submit" id="selected" class="btn btn-info" value="submit" name="insert">SUBMIT</button>
                 }
-                @Html.ActionLink("Cancel", "Index", "Home", "", new { @class="btn btn-default" })
+                @Html.ActionLink("Cancel", "Index", "Home", "", new { @class = "btn btn-default" })
             </div>
         }
-        <div style="float:left;margin-top:10px;" class="col-lg-3">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-        @if (ViewBag.startdate != null || ViewBag.enddate != null)
-        {
-        @Html.PagedListPager(Model, page => Url.Action("Index",
-                                           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate,enddate = ViewBag.enddate }))
-        }
-        else
-        {
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-                                           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
-        }
+        <div style="float:left;margin-top:10px;" class="col-lg-5">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @if (ViewBag.startdate != null || ViewBag.enddate != null)
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+            }
+            else
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            }
         </div>
     </div>
 </div>

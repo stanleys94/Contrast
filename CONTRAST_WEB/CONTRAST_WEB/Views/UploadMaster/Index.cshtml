@@ -27,7 +27,7 @@
 
             <label style="width:100%;" class="h5c">MASTER DATA</label>
             <div class="well">
-                <div style="margin:10px 100px;">
+                <div style="margin:10px 10px;">
                     <table>
                         <tr>
                             <td><input style="width:auto" type="file" id="FileMaster" name="FileUpload" /></td>
@@ -35,24 +35,24 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
                                     @Html.DropDownListFor(m => m.excell_type,
-                                             new SelectList(
-                                             new List<object>
-                                             {
+                               new SelectList(
+                               new List<object>
+                               {
 
-                                                                 new { Value = "Master Rate Hotel" ,      Text = "Master Rate Hotel"},
-                                                                 new { Value = "Master Rate Flight",      Text = "Master Rate Flight" },
-                                                                 new { Value = "Master Rate Visa",        Text = "Master Rate Visa" },
-                                                                 new { Value = "Master Rate Passport",    Text = "Master Rate Passport"},
-                                                                 //new { Value = "Master Budget",           Text = "Master Budget"},
-                                                                 new { Value = "Master Budget Source Data" ,      Text = "Master Budget Source Data"},
-                                                                 new { Value = "Master Vendor Employee",  Text = "Master Vendor Employee"},
-                                                                 new { Value = "Master Vendor Travel",    Text = "Master Vendor Travel"},
-                                                                 new { Value = "Travel Procedure",        Text = "Travel Procedure"},
-                                                                 new { Value = "Organization Structure",  Text = "Organization Structure"},
+                                                                                 new { Value = "Master Rate Hotel" ,      Text = "Master Rate Hotel"},
+                                                                                 new { Value = "Master Rate Flight",      Text = "Master Rate Flight" },
+                                                                                 new { Value = "Master Rate Visa",        Text = "Master Rate Visa" },
+                                                                                 new { Value = "Master Rate Passport",    Text = "Master Rate Passport"},
+                                                                                 //new { Value = "Master Budget",           Text = "Master Budget"},
+                                                                                 new { Value = "Master Budget Source Data" ,      Text = "Master Budget Source Data"},
+                                                                                 new { Value = "Master Vendor Employee",  Text = "Master Vendor Employee"},
+                                                                                 new { Value = "Master Vendor Travel",    Text = "Master Vendor Travel"},
+                                                                                 new { Value = "Travel Procedure",        Text = "Travel Procedure"},
+                                                                                 new { Value = "Organization Structure",  Text = "Organization Structure"},
 
-                                             }, "Value",
+                               }, "Value",
 
-                                             "Text"), "-Select Table-", new { @class = "form-control", placeholder = "Purpose" })
+                               "Text"), "-Select Master-", new { @class = "form-control", placeholder = "Purpose" })
                                 </div>
                             </td>
                             <td>
@@ -62,17 +62,12 @@
                             </td>
                             <td>
                                 <div style="padding-left:10px;">
-                                    <button id="button" class="btn btn-success btn-sm" type="submit" name="download" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download File</button>
+                                    <button id="button" class="btn btn-success btn-sm" type="submit" name="download" value="Submit"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;Download File</button>
                                 </div>
                             </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                             <td>
                                 <div style="padding-left:10px;">
-                                    <button id="button" class="btn btn-warning btn-sm" type="submit" name="division_input" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download Division Name</button>
+                                    <button id="button" class="btn btn-warning btn-sm" type="submit" name="division_input" value="Submit"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;Download Division Name</button>
                                 </div>
                             </td>
                         </tr>

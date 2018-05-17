@@ -29,7 +29,15 @@
                 <span style="color:white">Hello, <strong>@ViewBag.Username</strong></span>
                 <span>
                     <a href='@Url.Action("Edit", "PhotoEmployee")'>
-                        <img style="height:50px; width:50px;border-radius: 50%;" src="@Url.Content(ViewBag.photo)" />
+                        @if (ViewBag.photo != null)
+                        {
+                            <img style="height:50px; width:50px;border-radius: 50%;" src="@Url.Content(ViewBag.photo)" />
+                        }
+                        else
+                        {
+                            <img style="height:50px; width:50px;border-radius: 50%;" src="~/img/photo4.jpg" />
+                        }
+                            
                     </a>
                 </span>
 

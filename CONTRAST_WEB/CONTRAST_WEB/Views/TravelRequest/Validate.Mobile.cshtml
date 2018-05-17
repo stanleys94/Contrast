@@ -40,7 +40,7 @@
                     @*@Html.DisplayFor(m => m[0].employee_info.unit_code_name, new { @class = "form-control", @readonly = "readonly" })*@
                     @for (int k = 0; k < Model.Count; k++)
                     {@Html.HiddenFor(m => m[k].employee_info.unit_code_name);
-                        @Html.HiddenFor(m => m[k].employee_info.unit_code_code);
+                    @Html.HiddenFor(m => m[k].employee_info.unit_code_code);
                 }
                 </div>
                 <label style="font-family:'Lucida Sans'; font-size:10px; margin-bottom:5px; color:gray;">TRAVEL PURPOSE</label>
@@ -170,12 +170,12 @@
                     @Html.HiddenFor(m => m[k].travel_request.comments_by20)
                     @Html.HiddenFor(m => m[k].travel_request.additional2)
                 }
-            
+
                 <label class="fnt1">TRAVEL DESTINATION</label>
                 <div style="text-align:left; padding:15px 15px; margin-bottom:10px;" class="form-control input-group wellIn">
                     @for (int c = 0; c < Model.Count(); c++)
                     {
-                        <h5 style="margin-bottom:10px;max-width:250px;min-width:250px;" class="h5sl">Travel assignment to <strong>@ViewBag.Destination[c]</strong> </h5>
+                        <h5 style="margin-bottom:10px;max-width:250px;min-width:250px;" class="h5sl">To <strong>@ViewBag.Destination[c]</strong> </h5>
                         <label>Departure Date</label>
                         <div style="margin-bottom:10px;" class="input-group">
                             <span>@Html.DisplayFor(m => m[c].travel_request.start_date, new { @class = "form-control", @type = "datetime-local", placeholder = "Departure" })</span>
@@ -296,6 +296,7 @@
                     {
                         <label class="fnt1">REMAINING BUDGET</label>
                     }
+                    
                     <div class="form-group" style="padding:10px 10px; background-color: red;color: white; text-align: center;font-weight: bold;">
                         RP. @String.Format("{0:n0}", ViewBag.budget, new { @class = "form-control", @readonly = "readonly", @style = " background-color: red;color: white; text-align: center;font-weight: bold;" }) @*@Html.TextBox("asda", "RP. " + Model[0].travel_request.grand_total_allowance, new { @class = "form-control", @readonly = "readonly", @style = " background-color: #228B22;color: white; text-align: center;font-weight: bold;" })*@
                     </div>
@@ -305,7 +306,7 @@
                     {
                         <button type="submit" style="width:145px" class="btn btn-info btn-lg" value="Submit">Submit</button>
                     }
-                    <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Cancel</button>
+                    <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
                 </div>
 
             </div>
