@@ -441,6 +441,7 @@ namespace CONTRAST_WEB.Models
                     {
                         var listItem = new Class1();
                         listItem = item;
+                        listItem.code = listItem.code.Trim();
                         listItem.name = "(" + listItem.code.Trim() + ") " + listItem.name;
                         ListItem2.Add(listItem);
 
@@ -489,7 +490,7 @@ namespace CONTRAST_WEB.Models
 
             return ListItem2;
         }
-
+   
         public static async Task<tb_m_employee> EmployeeInfo(string noreg)
         {
             tb_m_employee model = new tb_m_employee();
@@ -758,7 +759,7 @@ namespace CONTRAST_WEB.Models
                     employee_object = JsonConvert.DeserializeObject<tb_m_employee>(EmpResponse);
                 }
             }
-            return employee_object.name;
+            return employee_object.name.Trim();
         }
 
         public static async Task<tb_m_verifier_employee> EmployeeVerifier(int? no_reg)

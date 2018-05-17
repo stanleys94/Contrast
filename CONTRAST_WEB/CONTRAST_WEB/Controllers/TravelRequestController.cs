@@ -38,14 +38,50 @@ namespace CONTRAST_WEB.Controllers
             return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public async Task<JsonResult> GetSearchValue(string search, string code)
+        public async Task<JsonResult> GetSearchValue(string search, string code, string liststring)
         {
+            string[] temp = liststring.Split(',');
+            List<Class1> ParticipantList = new List<Class1>();
+            foreach (var item in temp)
+            {
+                Class1 temporary = new Class1();
+                if (item != "")
+                {
+                    temporary.name = "";
+                    temporary.code = item;
+                    ParticipantList.Add(temporary);
+                }
+            }
+           ParticipantList.OrderBy(b => b.code);
+
             List<Class1> list = new List<Class1>();
             list = await GetData.SearchName(search);
             List<Class1> filtered = new List<Class1>();
+            List<int> Index = new List<int>();
+
             foreach (var item in list)
             {
-                if (!item.code.Contains(code)) filtered.Add(item);
+                if (!item.code.Contains(code))
+                {
+                    filtered.Add(item);
+                }
+            }
+           
+            for (int k = 0; k < filtered.Count(); k++)
+            {
+                for (int i = 0; i < ParticipantList.Count(); i++)
+                {
+                    if (filtered[k].code.Contains(ParticipantList[i].code))
+                    {
+                        Index.Add(k);
+                        ParticipantList.RemoveAt(i);
+                        break;
+                    }                   
+                }
+            }
+            foreach (var item in Index)
+            {
+                filtered.RemoveAt(item);
             }
 
             return new JsonResult { Data = filtered, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -56,6 +92,7 @@ namespace CONTRAST_WEB.Controllers
         [ImportModelStateFromTempData]
         public async Task<ActionResult> Index(string applied = "")
         {
+            List<string> noreg_participant = new List<string>();
             var identity = (ClaimsIdentity)User.Identity;
             Utility.Logger(identity.Name);
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
@@ -64,17 +101,33 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
-
+            
             tb_m_employee model = new tb_m_employee();
             //as normal user
             if (applied == "") model = await GetData.EmployeeInfo(identity.Name);
             else
             {
-                //as travel coordinator
-                model = await GetData.EmployeeInfo(applied);
-                if (model.name == null)
+                tb_m_employee coordinated = await GetData.EmployeeInfo(applied);
+                if (coordinated.name == null)
                 {
                     model = await GetData.EmployeeInfo(identity.Name);
+                }
+                else
+                {
+                    List<Class1> CoorEmployee = await GetData.SearchNameDiv(coordinated.name.Trim());
+                    if (CoorEmployee.Count > 0)
+                    {
+                        if (applied.Contains(CoorEmployee[0].code) || applied.Contains(identity.Name.Trim()))
+                        {
+                            model = await GetData.EmployeeInfo(applied);
+                        }
+                    }
+                    //as travel coordinator
+
+                    if (model.name == null)
+                    {
+                        model = await GetData.EmployeeInfo(identity.Name);
+                    }
                 }
             }
             //check special employee
@@ -444,6 +497,311 @@ namespace CONTRAST_WEB.Controllers
             tb_m_employee created = await GetData.EmployeeInfo(identity.Name);
             ViewBag.loged_id = created.code.Trim(' ');
             ViewBag.loged_name = created.name.Trim(' ');
+            string NoregParticipant = "";
+            ViewBag.ListString = NoregParticipant;
+
+            List<SelectListItem> SpecAssign = new List<SelectListItem>();
+            tb_m_special_employee_new spec_employee = await GetData.GetSpecialNoreg(model.employee_info.code);
+            if (spec_employee.no_reg != null)
+            {
+                model.travel_request.exep_empolyee = true;
+                if (spec_employee.apprv_lv_1_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_1_1);
+                    temp.Value = spec_employee.apprv_lv_1_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_1_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_1_2);
+                        temp1.Value = spec_employee.apprv_lv_1_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_1_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_1_3);
+                        temp1.Value = spec_employee.apprv_lv_1_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_1_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_1_4);
+                        temp1.Value = spec_employee.apprv_lv_1_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_1_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_1_5);
+                        temp1.Value = spec_employee.apprv_lv_1_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+                else if (spec_employee.apprv_lv_2_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_2_1);
+                    temp.Value = spec_employee.apprv_lv_2_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_2_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_2_2);
+                        temp1.Value = spec_employee.apprv_lv_2_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_2_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_2_3);
+                        temp1.Value = spec_employee.apprv_lv_2_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_2_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_2_4);
+                        temp1.Value = spec_employee.apprv_lv_2_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_2_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_2_5);
+                        temp1.Value = spec_employee.apprv_lv_2_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+                else if (spec_employee.apprv_lv_3_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_3_1);
+                    temp.Value = spec_employee.apprv_lv_3_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_3_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_3_2);
+                        temp1.Value = spec_employee.apprv_lv_3_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_3_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_3_3);
+                        temp1.Value = spec_employee.apprv_lv_3_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_3_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_3_4);
+                        temp1.Value = spec_employee.apprv_lv_3_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_3_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_3_5);
+                        temp1.Value = spec_employee.apprv_lv_3_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+                else if (spec_employee.apprv_lv_4_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_4_1);
+                    temp.Value = spec_employee.apprv_lv_4_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_4_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_4_2);
+                        temp1.Value = spec_employee.apprv_lv_4_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_4_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_4_3);
+                        temp1.Value = spec_employee.apprv_lv_4_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_4_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_4_4);
+                        temp1.Value = spec_employee.apprv_lv_4_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_4_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_4_5);
+                        temp1.Value = spec_employee.apprv_lv_4_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+                else if (spec_employee.apprv_lv_5_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_5_1);
+                    temp.Value = spec_employee.apprv_lv_5_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_5_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_5_2);
+                        temp1.Value = spec_employee.apprv_lv_5_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_5_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_5_3);
+                        temp1.Value = spec_employee.apprv_lv_5_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_5_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_5_4);
+                        temp1.Value = spec_employee.apprv_lv_5_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_5_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_5_5);
+                        temp1.Value = spec_employee.apprv_lv_5_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+                else if (spec_employee.apprv_lv_6_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_6_1);
+                    temp.Value = spec_employee.apprv_lv_6_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_6_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_6_2);
+                        temp1.Value = spec_employee.apprv_lv_6_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_6_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_6_3);
+                        temp1.Value = spec_employee.apprv_lv_6_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_6_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_6_4);
+                        temp1.Value = spec_employee.apprv_lv_6_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_6_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_6_5);
+                        temp1.Value = spec_employee.apprv_lv_6_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+                else if (spec_employee.apprv_lv_7_1 != null)
+                {
+                    SelectListItem temp = new SelectListItem();
+                    temp.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_7_1);
+                    temp.Value = spec_employee.apprv_lv_7_1.ToString();
+                    temp.Text = temp.Text + " (" + temp.Value + ")";
+                    SpecAssign.Add(temp);
+
+                    if (spec_employee.apprv_lv_7_2 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_7_2);
+                        temp1.Value = spec_employee.apprv_lv_7_2.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_7_3 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_7_3);
+                        temp1.Value = spec_employee.apprv_lv_7_3.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_7_4 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_7_4);
+                        temp1.Value = spec_employee.apprv_lv_7_4.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+                    if (spec_employee.apprv_lv_7_5 != null)
+                    {
+                        SelectListItem temp1 = new SelectListItem();
+                        temp1.Text = await GetData.EmployeeNameInfo(spec_employee.apprv_lv_7_5);
+                        temp1.Value = spec_employee.apprv_lv_7_5.ToString();
+                        temp1.Text = temp1.Text + " (" + temp1.Value + ")";
+                        SpecAssign.Add(temp1);
+                    }
+
+                }
+            }
+            ViewBag.SpecAssignBy = SpecAssign;
+
 
             if (validate != null && model.travel_request != null)
             {
@@ -577,273 +935,9 @@ namespace CONTRAST_WEB.Controllers
                             ListModel[k].travel_request.participants_flag = false;
 
                         //for exep employee
-                        tb_m_special_employee_new spec_employee = await GetData.GetSpecialNoreg(model.employee_info.code);
-                        if (spec_employee.no_reg != null)
-                        {
-                            ListModel[i].travel_request.exep_empolyee = true;
-                            ListModel[i].travel_request.apprv_by_lvl1 = ListModel[i].travel_request.assign_by;
-                            List<SelectListItem> SpecAssign = new List<SelectListItem>();
-                            if (spec_employee.apprv_lv_1_1 != null )
-                            {
-                                SelectListItem temp = new SelectListItem();
-                                temp.Value = spec_employee.apprv_lv_1_1.ToString();
-                                SpecAssign.Add(temp);
 
-                                if (spec_employee.apprv_lv_1_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_1_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_1_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_1_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_1_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_1_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_1_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_1_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-                            if (spec_employee.apprv_lv_2_1 != null)
-                            {
-                                SelectListItem temp = new SelectListItem();                              
-                                temp.Value = spec_employee.apprv_lv_2_1.ToString();
-                                SpecAssign.Add(temp);
-
-                                if (spec_employee.apprv_lv_2_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_2_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_2_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_2_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_2_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_2_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_2_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_2_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-                            if (spec_employee.apprv_lv_3_1 != null)
-                            {
-                                SelectListItem temp = new SelectListItem();
-                                temp.Value = spec_employee.apprv_lv_3_1.ToString();
-                                SpecAssign.Add(temp);
-
-                                if (spec_employee.apprv_lv_3_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_3_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_3_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_3_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_3_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_3_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_3_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_3_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-                            if (spec_employee.apprv_lv_4_1 != null)
-                            {
-                                SelectListItem temp = new SelectListItem();
-                                temp.Value = spec_employee.apprv_lv_4_1.ToString();
-                                SpecAssign.Add(temp);
-
-                                if (spec_employee.apprv_lv_4_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_4_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_4_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_4_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_4_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_4_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_4_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_4_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-                            if (spec_employee.apprv_lv_5_1 != null)
-                            {
-                                SelectListItem temp = new SelectListItem();
-                                temp.Value = spec_employee.apprv_lv_5_1.ToString();
-                                SpecAssign.Add(temp);
-
-                                if (spec_employee.apprv_lv_5_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_5_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_5_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_5_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_5_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_5_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_5_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_5_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-                            if (spec_employee.apprv_lv_6_1 != null)
-                            {
-                                SelectListItem temp = new SelectListItem();
-                                temp.Value = spec_employee.apprv_lv_6_1.ToString();
-                                SpecAssign.Add(temp);
-
-                                if (spec_employee.apprv_lv_6_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_6_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_6_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_6_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_6_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_6_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_6_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_6_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-                            if (spec_employee.apprv_lv_7_1 != null)
-                            {
-                                SelectListItem temp = new SelectListItem();
-                                temp.Value = spec_employee.apprv_lv_7_1.ToString();
-                                SpecAssign.Add(temp);
-
-                                if (spec_employee.apprv_lv_7_2 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_7_2.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_7_3 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_7_3.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_7_4 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_7_4.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-                                if (spec_employee.apprv_lv_7_5 != null)
-                                {
-                                    SelectListItem temp1 = new SelectListItem();
-                                    temp1.Value = spec_employee.apprv_lv_7_5.ToString();
-                                    SpecAssign.Add(temp1);
-                                }
-
-                            }
-
-                            for (int k = 0; k < SpecAssign.Count; k++)
-                            {
-                                if (SpecAssign[k].Value.Contains(ListModel[i].travel_request.assign_by.ToString()))
-                                {
-                                    SpecAssign.RemoveAt(k);
-                                    break;
-                                }
-                            }
-                            for (int l = 0; l < SpecAssign.Count; l++)
-                            {
-                                if (l == 0) ListModel[i].travel_request.apprv_by_lvl2 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 1) ListModel[i].travel_request.apprv_by_lvl3 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 2) ListModel[i].travel_request.apprv_by_lvl4 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 3) ListModel[i].travel_request.apprv_by_lvl5 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 4) ListModel[i].travel_request.apprv_by_lvl6 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 5) ListModel[i].travel_request.apprv_by_lvl7 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 6) ListModel[i].travel_request.apprv_by_lvl8 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 7) ListModel[i].travel_request.apprv_by_lvl9 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 8) ListModel[i].travel_request.apprv_by_lvl10 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 9) ListModel[i].travel_request.apprv_by_lvl11 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 10) ListModel[i].travel_request.apprv_by_lvl12 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 11) ListModel[i].travel_request.apprv_by_lvl13 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 12) ListModel[i].travel_request.apprv_by_lvl14 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 13) ListModel[i].travel_request.apprv_by_lvl15 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 14) ListModel[i].travel_request.apprv_by_lvl16 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 15) ListModel[i].travel_request.apprv_by_lvl17 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 16) ListModel[i].travel_request.apprv_by_lvl18 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 17) ListModel[i].travel_request.apprv_by_lvl19 = Convert.ToInt32(SpecAssign[l].Value);
-                                else if (l == 18) ListModel[i].travel_request.apprv_by_lvl20 = Convert.ToInt32(SpecAssign[l].Value);
-                            }
-
-                        }
-                        else
-                        {
-                            ListModel[i].travel_request.exep_empolyee = false;
-                        }    
+                        ListModel[i].travel_request.exep_empolyee = false;
+                           
                     }
 
                     ///*
@@ -896,6 +990,15 @@ namespace CONTRAST_WEB.Controllers
                         days = days + ListModel[k].travel_request.duration;
                     }
 
+                    if (ListModel[0].participants != null)
+                    {
+                        foreach (var item in ListModel[0].participants)
+                        {
+                            NoregParticipant = NoregParticipant + item.no_reg.ToString() + ',';
+                        }
+                    }
+                    ViewBag.ListString = NoregParticipant;
+
                     ViewBag.Duration = days;
                     ViewBag.Meal = meal;
                     ViewBag.Hotel = hotel;
@@ -918,16 +1021,37 @@ namespace CONTRAST_WEB.Controllers
                 List<string> ModelList = new List<string>();
                 int noreg;
                 string exist = "";
+                string noBank = "";
+                string self = "";
+                ViewBag.noBank = noBank;
+                ViewBag.Exist = noBank;
+                ViewBag.Self = noBank;
 
                 if (model.tparticipant != null && int.TryParse(model.tparticipant, out noreg))
                 {
+                    // cek if adding self for participant
+                    if (model.tparticipant.Contains(model.employee_info.code.Trim()))
+                    {
+                        self = await GetData.EmployeeNameInfo(Convert.ToInt32(model.tparticipant));
+                        ViewBag.Self = self;
+                    }
+
+                    // cek if employee has bank account
+                    List<tb_m_vendor_employee> bankNamePart = GetData.VendorEmployeeValidate(Convert.ToInt32(model.tparticipant));
+                    if (bankNamePart.Count < 1)
+                    {
+                        noBank = await GetData.EmployeeNameInfo(Convert.ToInt32(model.tparticipant));
+                        ViewBag.noBank = noBank;
+                    }
                     if (model.participants == null)
                         model.participants = new List<tb_r_travel_request_participant>();
+
+                    // cek if employee already in list
                     foreach (var item in model.participants)
                     {
                         if (item.no_reg == noreg) exist = await GetData.EmployeeNameInfo(noreg);
                     }
-                    if (exist == "")
+                    if (exist == "" && noBank == "" && self == "")
                     {
                         model.participants.Add(new tb_r_travel_request_participant());
                         model.participants[model.participants.Count() - 1].no_reg_parent = Convert.ToInt32(model.employee_info.code);
@@ -942,14 +1066,14 @@ namespace CONTRAST_WEB.Controllers
                 if (model.participants != null)
                 {
                     for (int k = 0; k < model.participants.Count(); k++)
-                    {
-                        ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
-                    }
+                        {
+                            ModelList.Add(await GetData.EmployeeNameInfo(model.participants[k].no_reg));
+                        }
                 }
 
                 ModelState.Remove(ModelState.FirstOrDefault(m => m.Key.ToString().StartsWith("tparticipant")));
                 model.tparticipant = "";
-
+                
                 List<tb_m_vendor_employee> bankName = new List<tb_m_vendor_employee>();
                 bankName = await GetData.VendorEmployee(Convert.ToInt32(model.employee_info.code));
                 if (bankName.Count != 0)
@@ -968,6 +1092,19 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
                 if (ViewBag.Bossname == null) ViewBag.Bossname = "-No data";
+
+                if (model.participants != null)
+                {
+                    foreach (var item in model.participants)
+                    {
+                        NoregParticipant = NoregParticipant + item.no_reg.ToString() + ',';
+                    }
+                }
+                ViewBag.ListString = NoregParticipant;
+
+                //special employee check
+                
+
                 return View("Index", model);               
             }
             else
@@ -1003,14 +1140,24 @@ namespace CONTRAST_WEB.Controllers
                 }
 
                 tb_m_employee_source_data division = await GetData.GetDivisionSource(Convert.ToInt32(model.employee_info.code));
-                ViewBag.division_name = division.Divisi;
+                
                 division.Divisi = division.Divisi.Replace("and1", "&");
+                ViewBag.division_name = division.Divisi;
 
                 ViewBag.RL3 = ModelList;
 
                 ViewBag.RL = await GetData.DestinationInfo();
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+
+                if (temp.participants != null)
+                {
+                    foreach (var item in temp.participants)
+                    {
+                        NoregParticipant = NoregParticipant + item.no_reg.ToString() + ',';
+                    }
+                }
+                ViewBag.ListString = NoregParticipant;
 
                 return View("Index", temp);
 
@@ -1048,6 +1195,16 @@ namespace CONTRAST_WEB.Controllers
                 ViewBag.RL = await GetData.DestinationInfo();
                 ViewBag.RL2 = await GetData.PurposeInfo();
                 ViewBag.Bossname = "Assigned by " + await GetData.EmployeeNameInfo(model.travel_request.assign_by) + " (" + model.travel_request.assign_by.ToString() + ")";
+
+                if (temp.participants != null)
+                {
+                    foreach (var item in temp.participants)
+                    {
+                        NoregParticipant = NoregParticipant + item.no_reg.ToString() + ',';
+                    }
+                }
+                ViewBag.ListString = NoregParticipant;
+
                 return View("Index", temp);
 
             }
@@ -1943,15 +2100,279 @@ namespace CONTRAST_WEB.Controllers
         public async System.Threading.Tasks.Task<ActionResult> SubmittedMSTR(TravelRequestHelper[] ListModel)
         {
 
-            for (int k = 0; k < ListModel.Count(); k++)
+            for (int i = 0; i < ListModel.Count(); i++)
             {
-                await InsertData.TravelRequest(ListModel[k]);
-                if (ListModel[k].travel_request.participants_flag == true)
+                tb_m_special_employee_new spec_employee = await GetData.GetSpecialNoreg(ListModel[i].employee_info.code);
+                if (spec_employee.no_reg != null)
                 {
-                    if (k <= ListModel.Count())
+                    ListModel[i].travel_request.exep_empolyee = true;
+                    ListModel[i].travel_request.apprv_by_lvl1 = ListModel[i].travel_request.assign_by;
+                    List<SelectListItem> SpecAssign = new List<SelectListItem>();
+                    if (spec_employee.apprv_lv_1_1 != null)
                     {
-                        for (int i = 0; i < ListModel[k].participants.Count; i++)
-                            await InsertData.TravelParticipant(ListModel[k].participants[i]);
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_1_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_1_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_1_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_1_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_1_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_1_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_1_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_1_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_1_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+                    if (spec_employee.apprv_lv_2_1 != null)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_2_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_2_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_2_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_2_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_2_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_2_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_2_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_2_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_2_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+                    if (spec_employee.apprv_lv_3_1 != null)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_3_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_3_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_3_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_3_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_3_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_3_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_3_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_3_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_3_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+                    if (spec_employee.apprv_lv_4_1 != null)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_4_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_4_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_4_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_4_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_4_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_4_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_4_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_4_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_4_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+                    if (spec_employee.apprv_lv_5_1 != null)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_5_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_5_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_5_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_5_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_5_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_5_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_5_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_5_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_5_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+                    if (spec_employee.apprv_lv_6_1 != null)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_6_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_6_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_6_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_6_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_6_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_6_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_6_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_6_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_6_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+                    if (spec_employee.apprv_lv_7_1 != null)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = spec_employee.apprv_lv_7_1.ToString();
+                        SpecAssign.Add(temp);
+
+                        if (spec_employee.apprv_lv_7_2 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_7_2.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_7_3 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_7_3.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_7_4 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_7_4.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+                        if (spec_employee.apprv_lv_7_5 != null)
+                        {
+                            SelectListItem temp1 = new SelectListItem();
+                            temp1.Value = spec_employee.apprv_lv_7_5.ToString();
+                            SpecAssign.Add(temp1);
+                        }
+
+                    }
+
+                    for (int k = 0; k < SpecAssign.Count; k++)
+                    {
+                        if (SpecAssign[k].Value.Contains(ListModel[i].travel_request.assign_by.ToString()))
+                        {
+                            SpecAssign.RemoveAt(k);
+                            break;
+                        }
+                    }
+                    for (int l = 0; l < SpecAssign.Count; l++)
+                    {
+                        if (l == 0) ListModel[i].travel_request.apprv_by_lvl2 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 1) ListModel[i].travel_request.apprv_by_lvl3 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 2) ListModel[i].travel_request.apprv_by_lvl4 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 3) ListModel[i].travel_request.apprv_by_lvl5 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 4) ListModel[i].travel_request.apprv_by_lvl6 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 5) ListModel[i].travel_request.apprv_by_lvl7 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 6) ListModel[i].travel_request.apprv_by_lvl8 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 7) ListModel[i].travel_request.apprv_by_lvl9 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 8) ListModel[i].travel_request.apprv_by_lvl10 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 9) ListModel[i].travel_request.apprv_by_lvl11 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 10) ListModel[i].travel_request.apprv_by_lvl12 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 11) ListModel[i].travel_request.apprv_by_lvl13 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 12) ListModel[i].travel_request.apprv_by_lvl14 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 13) ListModel[i].travel_request.apprv_by_lvl15 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 14) ListModel[i].travel_request.apprv_by_lvl16 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 15) ListModel[i].travel_request.apprv_by_lvl17 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 16) ListModel[i].travel_request.apprv_by_lvl18 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 17) ListModel[i].travel_request.apprv_by_lvl19 = Convert.ToInt32(SpecAssign[l].Value);
+                        else if (l == 18) ListModel[i].travel_request.apprv_by_lvl20 = Convert.ToInt32(SpecAssign[l].Value);
+                    }
+
+                }
+
+                await InsertData.TravelRequest(ListModel[i]);
+                if (ListModel[i].travel_request.participants_flag == true)
+                {
+                    if (i <= ListModel.Count())
+                    {
+                        for (int j = 0; j < ListModel[i].participants.Count; j++)
+                            await InsertData.TravelParticipant(ListModel[i].participants[j]);
                     }
                 }
             }

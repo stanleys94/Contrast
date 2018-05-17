@@ -12,6 +12,8 @@
     SpecAssignBy = ViewBag.SpecAssignBy;
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
+    string postdata = ViewBag.ListString;
+
 }
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
@@ -50,6 +52,8 @@
                         <div style="margin:5px;" class="form-group form-inline">
                             Type name Employee :
                             <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@Model.employee_info.code />
+                            @Html.Hidden("noreglist",postdata,new { id = "noreglist"})
+                            @*<input type="text" id="noreglist" name="noreglist" value=@postdata hidden>*@
                             <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
                         </div>
                     </div>
@@ -86,9 +90,17 @@
                 <div>
                     <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
                     @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
-                    @if (ViewBag.Exist != "" && ViewBag.Exist != null)
+                    @if (ViewBag.Exist!=null && ViewBag.Exist != "")
                     {
                         <label style="font-size:11px" class="text-danger">@ViewBag.Exist Already in Participant List</label>
+                    }
+                    else if (ViewBag.noBank!=null && ViewBag.noBank != "")
+                    {
+                        <label style="font-size:11px" class="text-danger">@ViewBag.noBank Has No Bank Account</label>
+                    }
+                    else if (ViewBag.Self!=null && ViewBag.Self != "")
+                    {
+                        <label style="font-size:11px" class="text-danger">@ViewBag.Self is the Parent of this trip</label>
                     }
                     <div style="width:450px;" class="input-group">
                         @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
@@ -159,14 +171,16 @@
 
             <div class="col-md-5 col-md-offset-1">
                 <hr />
-                @if (SpecAssignBy.Count > 0)
+                @if (SpecAssignBy.Count()>0)
                 {
-                    <div class="form-group input-group">
+                
+                 <div class="form-group input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
-                    @Html.DropDownListFor(m=>m.travel_request.assign_by,SpecAssignBy, new { @class = "form-control", placeholder = "Purpose" })
-                    @Html.HiddenFor(m=>m.travel_request.exep_empolyee)
-                </div>
-                }
+                    @Html.DropDownListFor(m => m.travel_request.assign_by, SpecAssignBy, new { @class = "form-control", placeholder = "Purpose" })
+                    @Html.HiddenFor(m => m.travel_request.exep_empolyee)
+                 </div>
+                 }
+                
                 else
                 {
                 <div class="form-group input-group">
@@ -536,8 +550,9 @@
         source: function (request, response) {
             $.ajax({
                 url: '@Url.Action("GetSearchValue", "TravelRequest")',
+                
                 dataType: "json",
-	        data: { search: $("#searchInput").val(), code: $("#code").val() },
+                data: { search: $("#searchInput").val(), code: $("#code").val(), liststring: $("#noreglist").val()},
                 success: function (data) {
                     response($.map(data, function (item) {
                         return { label: item.name, value: item.code };
