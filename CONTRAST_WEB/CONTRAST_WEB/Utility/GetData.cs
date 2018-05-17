@@ -3792,6 +3792,34 @@ namespace CONTRAST_WEB.Models
             return Response;
         }
 
-    }        
- }
+        public static async Task<tb_m_special_employee_new> GetSpecialNoreg(string id)
+        {
+            tb_m_special_employee_new Response = new tb_m_special_employee_new();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/SpecialEmployeeNew/GetID?key=" + id.Trim(' '));
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Response = JsonConvert.DeserializeObject<tb_m_special_employee_new>(EmpResponse);
+                }
+            }
+            return Response;
+        }
+
+    }
+}
     
