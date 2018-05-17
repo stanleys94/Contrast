@@ -287,6 +287,9 @@
     <Compile Include="Models\tb_m_special_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_m_special_employee_new.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_vendor_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
