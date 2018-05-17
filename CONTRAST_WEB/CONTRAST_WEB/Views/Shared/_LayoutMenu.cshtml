@@ -10,14 +10,15 @@
 <body style="background-color:#f5f5f5">
     <div style="box-shadow:1px 1px 3px #767676; border: 0px;" class="page-header navbar-fixed-top">
         <div style="margin:0 215px;">
-	        <a href='@Url.Action("Index", "Home")'>
+	    <a href='@Url.Action("Index", "Home")'>
             <img style="float:left" width="150" src="~/img/small_logo_horizontal.png" />
             </a>
 		
-	        @using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
+	@using (Html.BeginForm("Index", "PhotoEmployee", FormMethod.Post))
             {
 			<span>
 			<button style="color:transparent;background-color:transparent;border:0px;float:left;padding:0px;margin:0px;" type="submit">
+            @*<span style="padding:6px 6px;" class="glyphicon glyphicon-question-sign white"></span>*@
             </button>
 			</span>
 			}
@@ -28,14 +29,7 @@
                 <span style="color:white">Hello, <strong>@ViewBag.Username</strong></span>
                 <span>
                     <a href='@Url.Action("Edit", "PhotoEmployee")'>
-                        @if(ViewBag.photo != null)
-                        {
-                            <img style="height:50px; width:50px;border-radius: 50%;" src="@Url.Content(ViewBag.photo)" />
-                        }
-                        else
-                        {
-                            <img style="height:50px; width:50px;border-radius: 50%;" src="~/img/photo4.jpg" />
-                        }
+                        <img style="height:50px; width:50px;border-radius: 50%;" src="@Url.Content(ViewBag.photo)" />
                     </a>
                 </span>
 

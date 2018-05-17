@@ -613,7 +613,6 @@
     <Content Include="img\newbanner.jpg" />
     <Content Include="img\paymentList.png" />
     <Content Include="img\paymentProposal.png" />
-    <Content Include="img\photo4.jpg" />
     <Content Include="img\question-sign.png" />
     <Content Include="img\receipt-paid4.png" />
     <Content Include="img\Settlement-icon-b.png" />
