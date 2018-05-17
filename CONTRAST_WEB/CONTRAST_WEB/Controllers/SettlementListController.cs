@@ -108,6 +108,7 @@ namespace CONTRAST_WEB.Controllers
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
+
             tb_m_employee model = new tb_m_employee();
 
             if (applied != null) model = await GetData.EmployeeInfo(applied);

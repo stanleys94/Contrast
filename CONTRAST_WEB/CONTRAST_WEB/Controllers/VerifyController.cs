@@ -153,6 +153,10 @@ namespace CONTRAST_WEB.Controllers
                             //bool check = await GetData.GetDivisionDoubleCheck();
                             model[k].money = model[k].money.Replace(".", "");
                             model[k].money = model[k].money.Replace("Rp", "");
+                            tb_r_travel_request down_payment = await GetData.TravelRequest(model[k].ActualCost_Verified.id_request);
+
+                            if (model[k].ActualCost_Verified.jenis_transaksi == "hotel") await UpdateData.BudgetAdd(model[k].ActualCost_Verified.wbs_no, model[k].ActualCost_Verified.cost_center, Convert.ToDouble(down_payment.allowance_hotel));
+                            else if (model[k].ActualCost_Verified.jenis_transaksi == "ticket") await UpdateData.BudgetAdd(model[k].ActualCost_Verified.wbs_no, model[k].ActualCost_Verified.cost_center, Convert.ToDouble(down_payment.allowance_ticket));
 
                             await UpdateData.Budget(model[k].ActualCost_Verified.wbs_no, model[k].ActualCost_Verified.cost_center, Convert.ToDouble(model[k].money));
                         }

@@ -133,6 +133,10 @@ namespace CONTRAST_WEB.Controllers
 
                         tb_r_record_rejected_verification rejected = new tb_r_record_rejected_verification();
 
+                        string division_r = await GetData.GetDivMapping(model[k].FixedCost_Verified.no_reg.ToString());
+                        tb_r_travel_actualcost cost = await GetData.ActualCostOrigin(model[k].FixedCost_Verified.id_actualcost);
+
+                        await UpdateData.BudgetAdd(cost.wbs_no, cost.cost_center, cost.amount);
 
                         rejected.comment = "Cancel Travel By AP";
                         rejected.id_actualcost = model[k].FixedCost_Verified.id_actualcost;
@@ -157,8 +161,7 @@ namespace CONTRAST_WEB.Controllers
                             model[k].money = model[k].money.Replace(".", "");
                             model[k].money = model[k].money.Replace("Rp", "");
 
-                            await UpdateData.Budget(model[k].FixedCost_Verified.wbs_no, model[k].FixedCost_Verified.cost_center, Convert.ToDouble(model[k].money));
-
+                            //await UpdateData.Budget(model[k].FixedCost_Verified.wbs_no, model[k].FixedCost_Verified.cost_center, Convert.ToDouble(model[k].money));
                             //await UpdateData.Budget(model[k].FixedCost_Verified.wbs_no, model[k].FixedCost_Verified.cost_center, double.Parse(model[k].money, NumberStyles.Currency));
                         }
                         await UpdateData.FixedCost(model[k], access_status.position);
