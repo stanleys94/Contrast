@@ -227,6 +227,7 @@
     <Compile Include="Controllers\SettlementListController.cs" />
     <Compile Include="Controllers\TrackProgressController.cs" />
     <Compile Include="Controllers\TrackProgressPersonalController.cs" />
+    <Compile Include="Controllers\TravelAssignmentController.cs" />
     <Compile Include="Controllers\TravelConfirmationController.cs" />
     <Compile Include="Controllers\TravelDitController.cs" />
     <Compile Include="Controllers\TravelExecutionController.cs" />
@@ -248,9 +249,11 @@
     <Compile Include="CustomValidator\SessionExpire.cs" />
     <Compile Include="CustomValidator\SettlementDateValidator.cs" />
     <Compile Include="CustomValidator\ValidTdate.cs" />
+    <Compile Include="DTO\TravelAssignment.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\IdentityModel.cs" />
     <Compile Include="Helper\PaymentListHelper.cs" />
     <Compile Include="Helper\PaymentProposalHelper.cs" />
     <Compile Include="Helper\TrackingDetailHelper.cs" />
@@ -524,6 +527,7 @@
     <Compile Include="Models\tb_test_div_map.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Systems.cs" />
     <Compile Include="Utility\TokenJwt.cs" />
     <Compile Include="Helper\TravelDitHelper.cs" />
     <Compile Include="Helper\TravelExecutionHelper.cs" />
@@ -815,6 +819,7 @@
     <Content Include="Views\TravelStatus\ValidateMSTR.cshtml" />
     <Content Include="Views\TravelStatus\ValidateMSTRMobile.cshtml" />
     <Content Include="Views\TravelStatus\SubmittedMSTR.cshtml" />
+    <Content Include="Views\TravelAssignment\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

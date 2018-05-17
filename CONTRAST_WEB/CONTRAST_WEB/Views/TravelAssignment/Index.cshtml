@@ -1,0 +1,11 @@
+﻿@model CONTRAST_WEB.DTO.TravelAssignment
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@foreach (var items in Model.Identity.Privillege)
+{
+    @items
+}
+

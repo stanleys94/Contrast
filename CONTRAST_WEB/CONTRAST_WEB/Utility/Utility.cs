@@ -15,6 +15,8 @@ using System.Net.Http.Headers;
 using System.Globalization;
 using System.Text;
 using System.Web.Script.Serialization;
+using System.Security.Claims;
+
 
 namespace CONTRAST_WEB.Models
 {
@@ -157,26 +159,7 @@ namespace CONTRAST_WEB.Models
                                 new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
             }
         }
-
-        //public static async Task SpecCase(tb_m_spec_employee model)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        //Passing service base url  
-        //        client.BaseAddress = new Uri(Constant.Baseurl);
-
-        //        client.DefaultRequestHeaders.Clear();
-        //        //Define request data format  
-        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        //        //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-        //        //HttpResponseMessage response = await client.PostAsJsonAsync("api/SpecialEmployee", model);
-
-        //        HttpResponseMessage response = await client.PostAsync("api/SpecialEmployee", new StringContent(
-        //                            new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
-        //    }
-        //}
-
+        
         public static async Task Budget(tb_m_budget model)
         {
             using (var client = new HttpClient())
@@ -330,7 +313,7 @@ namespace CONTRAST_WEB.Models
             }
         }
 
-        public static async Task Logger(string eventlog)
+        public static void Logger(string eventlog)
         {
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(Constant.LogFolder), "log.txt");
             var sw = new System.IO.StreamWriter(path, true);
@@ -386,5 +369,8 @@ namespace CONTRAST_WEB.Models
 
             return assign_by;
         }
+
+       
+         
     }
 }
