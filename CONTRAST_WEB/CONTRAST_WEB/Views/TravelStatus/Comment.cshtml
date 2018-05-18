@@ -44,9 +44,9 @@
                   @Html.Hidden("no_reg_to", (object)ViewBag.no_reg_to)
                 
             </div>
-            <div class="col-md-2 "style="padding-top:20px;">
+            <div class="col-md-2 " style="padding-top:20px;">
                 <span><input type="submit" class="btn btn-info btn-lg" value="Submit" /></span>
-                <span class="btn btn-lg btn-default">@Html.ActionLink("Back", "Index")</span>
+                <span>@Html.ActionLink("Back", "Index", "", new { @class = "btn btn-default" })</span>
             </div>
         }
      
