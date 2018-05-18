@@ -166,6 +166,7 @@ namespace CONTRAST_WEB.Controllers
             newModel = Model[id_data];
             return RedirectToAction("Details", "TrackProgress", newModel);
         }
+
         public async Task<ActionResult> Details(TrackingHelper mood)
         {
             TrackingHelper Model = new TrackingHelper();
@@ -596,7 +597,7 @@ namespace CONTRAST_WEB.Controllers
                 new_cost.Amount = item.amount;
                 new_cost.Vendor = await GetData.VendorCodeInfo(item.vendor_code);
 
-                if (item.information_actualcost.Contains("ACTUAL COST"))
+                if (item.information_actualcost.Contains("ACTUAL COST") || item.information_actualcost.Contains("REJECTED ACTUALCOST") )
                 {
                     if (item.ap_verified_status != null)
                     {
@@ -636,10 +637,10 @@ namespace CONTRAST_WEB.Controllers
                     }
                     else
                     {
-                        new_cost.Approved = "None";
+                        new_cost.Approved = "Staff-PAC";
                         new_cost.ApprovedDate = Convert.ToDateTime(item.create_date);
-                        new_cost.Approved_Status = "Not Created Yet";
-                        new_cost.Pending = "Staff-PAC";
+                        new_cost.Approved_Status = "Submitted";
+                        new_cost.Pending = "DpH-PAC";
                     }
                     Detailed.ActualCost.Add(new_cost);
                 }
@@ -720,7 +721,7 @@ namespace CONTRAST_WEB.Controllers
                     }
                     Detailed.SettlementCost.Add(new_cost);
                 }
-                else if (item.information_actualcost.Contains("BPD"))
+                else if (item.information_actualcost.Contains("BPD")|| item.information_actualcost.Contains("CANCEL TRAVEL"))
                 {
                     if (item.ap_verified_status != null)
                     {

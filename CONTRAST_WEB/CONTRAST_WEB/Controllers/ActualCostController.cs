@@ -304,6 +304,16 @@ namespace CONTRAST_WEB.Controllers
 
                         if (model[ck].TravelRequestRejected != null) await UpdateData.ActualCostPersonal(model[ck].TravelRequestRejected.id_actualcost);
                         await InsertData.ActualCost(model[ck].ActualCost);
+
+                        if (model[ck].ActualCost.amount == 1)
+                        {
+                            tb_r_travel_request add = await GetData.TravelRequest(model[ck].TravelRequest.id_request);
+                            if (model[ck].ActualCost.jenis_transaksi.Contains("hotel"))
+                                await UpdateData.BudgetAdd(budget.eoa_wbs_no.Trim(), budget.cost_center.Trim(), Convert.ToDouble(add.allowance_hotel));
+                            else if (model[ck].ActualCost.jenis_transaksi.Contains("ticket"))
+                                await UpdateData.BudgetAdd(budget.eoa_wbs_no.Trim(), budget.cost_center.Trim(), Convert.ToDouble(add.allowance_ticket));
+
+                        }
                         ModelState.Clear();
                     }
                 }
