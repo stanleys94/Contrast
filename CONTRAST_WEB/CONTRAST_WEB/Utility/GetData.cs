@@ -486,6 +486,34 @@ namespace CONTRAST_WEB.Models
             }
             return model;
         }
+        public static tb_m_employee EmployeeInfoSync(string noreg)
+        {
+            tb_m_employee model = new tb_m_employee();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                Task<HttpResponseMessage> response2 =client.GetAsync("api/Employee/" + noreg);
+                HttpResponseMessage Res = response2.Result;
+                
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    model = JsonConvert.DeserializeObject<tb_m_employee>(EmpResponse);
+                }
+            }
+            return model;
+        }
 
         public static async Task<tb_r_travel_actualcost> ActualCostOrigin(int model)
         {

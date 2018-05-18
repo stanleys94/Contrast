@@ -13,26 +13,42 @@ namespace CONTRAST_WEB.Controllers
         // GET: TravelAssignment
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async System.Threading.Tasks.Task<ActionResult> Index()
+        public async System.Threading.Tasks.Task<ActionResult> Index(string participant, TravelAssignmentDTO posted,string delete)
         {
             TravelAssignmentDTO model = new TravelAssignmentDTO();
             model.SetIdentity(HttpContext);
-            model.AutoFillEmployeeInfo(
-                //get employee info
-                await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name),
-                //get employee division
-                await model.GetEmployeeInfoDivision(model.Identity.ClaimedIdentity.Name),
-                //get employee assigned by
-                await Utility.AssignedBy(await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name)),
-                //get employee bank profile
-                await GetData.VendorEmployeeSingle(Convert.ToInt32(model.Identity.ClaimedIdentity.Name))
-                );
+            await model.AutoFillEmployeeInfo();
 
+            if (participant != null && delete == null)
+            {
+                posted.Identity = model.Identity;
+                model = posted;
+                model.AddParticipant(participant);
+                ModelState.Remove(ModelState.FirstOrDefault(ms => ms.Key.ToString().StartsWith("participant")));
+            }
+            else
+            if (delete != null)
+            {
+                posted.Identity = model.Identity;
+                model = posted;
+                model.DeleteParticipant(Convert.ToInt32(delete));
+                ModelState.Clear();
+            }
+            
             List<TravelAssignmentDTO> model2 = new List<TravelAssignmentDTO>();
             model2.Add(model);
-            //
-
+            
             return View(model2);
         }
+
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        public async System.Threading.Tasks.Task<ActionResult> Validate(TravelAssignmentDTO model)
+        {
+            
+            return View(model);
+        }
+
+
     }
 }

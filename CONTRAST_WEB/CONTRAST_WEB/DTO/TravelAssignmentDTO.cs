@@ -16,7 +16,7 @@ namespace CONTRAST_WEB.DTO
         public string employee_info_name { get; set; }
         public string employee_info_class { get; set; }
         public string employee_info_division { get; set; }
-        public string employee_info_assigned_by { get; set; }
+        public int? employee_info_assigned_by { get; set; }
         public string employee_info_bankname { get; set; }
         public string employee_info_bankaccount { get; set; }
         
@@ -39,21 +39,42 @@ namespace CONTRAST_WEB.DTO
         public bool travel_request_multiple_flag { get; set; }
         public bool travel_request_passport_flag { get; set; }
 
-        public string travel_participant_noreg { get; set;}
+        public List<string> travel_participant_noreg { get; set;}
 
-
-        public void AutoFillEmployeeInfo(tb_m_employee temp,string division,int? assignedby, tb_m_vendor_employee vendor)
+        public TravelAssignmentDTO()
         {
+            travel_participant_noreg = new List<string>();
+        }
+
+        public async Task<string> AutoFillEmployeeInfo()
+        {
+            tb_m_employee temp = new tb_m_employee();
+            temp = await GetData.EmployeeInfo(this.Identity.ClaimedIdentity.Name);
+            
+            //get employee bank profile
+            tb_m_vendor_employee vendor= await GetData.VendorEmployeeSingle(Convert.ToInt32(this.Identity.ClaimedIdentity.Name));
+
             this.employee_info_code    =temp.code;
             this.employee_info_name    =temp.name;
             this.employee_info_class   =temp.@class;
-            this.employee_info_division =division;
+            this.employee_info_division = await this.GetEmployeeInfoDivision(this.Identity.ClaimedIdentity.Name);
             this.travel_request_type = false;
-            this.employee_info_assigned_by = assignedby.ToString();
+            this.employee_info_assigned_by = await Utility.AssignedBy(temp);
             this.employee_info_bankaccount = vendor.account_number;
             this.employee_info_bankname = vendor.Bank_Name;
+
+            return "Ok";
         }
 
+        public void AddParticipant(string noreg)
+        {
+            this.travel_participant_noreg.Add((noreg));
+        }
+
+        public void DeleteParticipant(int index)
+        {
+            this.travel_participant_noreg.RemoveAt(index);
+        }
 
         public async Task<string> GetEmployeeInfoDivision(string noreg)
         {

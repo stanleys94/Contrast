@@ -820,6 +820,7 @@
     <Content Include="Views\TravelStatus\ValidateMSTRMobile.cshtml" />
     <Content Include="Views\TravelStatus\SubmittedMSTR.cshtml" />
     <Content Include="Views\TravelAssignment\Index.cshtml" />
+    <Content Include="Views\TravelAssignment\Validate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

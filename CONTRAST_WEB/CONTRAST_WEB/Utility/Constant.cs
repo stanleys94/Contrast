@@ -50,10 +50,21 @@ namespace CONTRAST_WEB.Models
 
         public static List<SelectListItem>DestinationList = new List<SelectListItem>();
         public static List<SelectListItem> TravelPurposeList = new List<SelectListItem>();
+        public static SelectList ActivityList;
 
         static Constant() {
             DestinationList = GetData.DestinationInfoSync();
             TravelPurposeList=GetData.PurposeInfoSync();
+
+            ActivityList = new SelectList(
+                new[]
+                {
+                      new { Value = "1", Text = "Regular" },
+                      new { Value = "3", Text = "Kyohan" ,},
+                      new { Value = "2", Text = "Tango" },
+                },
+                "Value",
+                "Text");            
         }   
     }
 }

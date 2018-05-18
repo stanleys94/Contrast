@@ -29,15 +29,13 @@
                 <strong style="color:deepskyblue">EMPLOYEE INFO</strong>
             </div>
         </div>
-        @using (Html.BeginForm("Validate", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
-            
+        @using (Html.BeginForm("Index", "TravelAssignment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {   
             <div class="col-md-5">
                 <div>
                     <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
                     <div style="width:450px;" class="input-group">
-                        @*@Html.TextBoxFor(m => m.First().tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput", @readonly = "readonly" })*@
+                        @Html.TextBox("participant",null, new { @class = "form-control", placeholder = "Type Participant Name..", id = "participant"})
                         <input type="text" id="code" name="code" value="" hidden>
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-info btn-lg form-control" name="" value="">Add</button>
@@ -45,7 +43,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="col-md-5 col-md-offset-1">
                 <div class="form-group input-group">
@@ -73,26 +70,18 @@
                 <div style="border-radius: 4px;width:450px;height: 145px;overflow-y: scroll;" class="wellNo">
                     <div style="text-align:left;margin-top:10px;" class="input-group">
                         <ol class="custom-bullet">
-                            @*@if (Model.First().participants != null)
-                            {
-                                if (Model.First().participants.Count > 0)
-                                {
-                                    for (int i = 0; i < Model.First().participants.Count(); i++)
-                                    {
-                                        <li>
-                                            @Html.TextBoxFor(m => m.First().participants[i].no_reg, new { @readonly = "readonly", @style = "border:0px;color:grey;" })
-                                        </li>
-                                        <hr style="margin:10px 5px;" />
-                                        @Html.HiddenFor(m => m.First().participants[i].no_reg)
-                                        @Html.HiddenFor(m => m.First().participants[i].no_reg_parent)
-                                        @Html.HiddenFor(m => m.First().participants[i].group_code)
-                                        @Html.HiddenFor(m => m.First().participants[i].id_request_participant)
-                                        @Html.HiddenFor(m => m.First().participants[i].modified_date)
-                                        @Html.HiddenFor(m => m.First().participants[i].active_flag)
-                                        @Html.HiddenFor(m => m.First().participants[i].created_date)
-                                    }
-                                }
-                            }*@
+                           @if (Model.First().travel_participant_noreg!=null)
+                           {
+                               for (int i = 0; i < Model.First().travel_participant_noreg.Count(); i++)
+                               {
+                                   <li>
+                                        @Html.TextBoxFor(m => m.First().travel_participant_noreg[i], new { @readonly = "readonly", @style = "border:0px;color:grey;" })
+                                       <button style="width:80px" type="submit" class="btn btn-danger btn-xs" name="delete" value=@i>Delete</button>
+                                   </li>
+                                   <hr style="margin:10px 5px;" />                                       
+                               }
+                           }
+                           
                         </ol>
                     </div>
                 </div>
@@ -107,7 +96,7 @@
                 <div style="padding-bottom:5px">
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                        @Html.DropDownListFor(m => m.First().travel_request_purpose,CONTRAST_WEB.Models.Constant.TravelPurposeList, "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose"})
+                        @Html.DropDownListFor(m => m.First().travel_request_purpose, CONTRAST_WEB.Models.Constant.TravelPurposeList, "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose" })
                     </div>
                 </div>
 
@@ -115,6 +104,16 @@
                 <div class="form-group input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
                     @Html.TextBox("qweqd", Model.First().travel_request_multiple_flag == true ? "Multi Trip" : "Single Trip", new { @class = "form-control", @readonly = "readonly" })
+                </div>
+
+                <div>
+                    <strong class="fnt2">Select Activity Budget :</strong>
+                    <div>                       
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                            @Html.DropDownListFor(m => m.First().travel_request_id_activity,CONTRAST_WEB.Models.Constant.ActivityList, new { @class = "form-control" })
+                        </div>
+                    </div>
                 </div>
 
                 <div style="padding:5px;padding-top:40px; margin-bottom:0px;" id="des1">
@@ -126,10 +125,10 @@
                         <div class="form-group input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             <span class="input-group-addon">
-                                @Html.TextBoxFor(m=>m.First().travel_request_arrive_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
+                                @Html.TextBoxFor(m => m.First().travel_request_arrive_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
                             </span>
                             <span class="input-group-addon">
-                                @Html.TextBoxFor(m=>m.First().travel_request_arrive_time, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
+                                @Html.TextBoxFor(m => m.First().travel_request_arrive_time, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
                             </span>
                         </div>
                     </div>
@@ -138,10 +137,10 @@
                         <div class="form-group input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             <span class="input-group-addon">
-                                @Html.TextBoxFor(m=>m.First().travel_request_depart_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
+                                @Html.TextBoxFor(m => m.First().travel_request_depart_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
                             </span>
                             <span class="input-group-addon">
-                                @Html.TextBoxFor(m=>m.First().travel_request_depart_time, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
+                                @Html.TextBoxFor(m => m.First().travel_request_depart_time, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
                             </span>
                         </div>
                     </div>
@@ -161,29 +160,31 @@
                     </div>
                 </div>
 
-
-                <div style="padding:5px;margin-bottom:50px;" id="des1">
+                <div style="padding:10px;" id="des1">
                     <div>
                         <strong class="fnt2">Transportation :</strong>
-                        <div>
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
-                                @Html.TextBoxFor(m => m.First().travel_request_airticket_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
-                            </div>
+                        <div style="width:125px;margin-top:3px;margin-bottom:20px;" class="radio">
+                            <label style="float:left;">
+                                @Html.RadioButtonFor(m => m.First().travel_request_airticket_flag, true) Flight
+                            </label>
+                            <label style="float:right;">
+                                @Html.RadioButtonFor(m => m.First().travel_request_airticket_flag, false) Land
+                            </label>
                         </div>
                     </div>
-                    <div>
+                    <div style="margin-bottom:95px;">
                         <strong class="fnt2">New or Renewal Passport :</strong>
-                        <div>
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
-                                @Html.TextBoxFor(m => m.First().travel_request_passport_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
-                            </div>
+                        <div style="width:125px;margin-top:3px;" class="radio">
+                            <label>
+                                @Html.RadioButtonFor(m => m.First().travel_request_passport_flag, true) Yes
+                            </label>
+                            <label style="float:right;">
+                                @Html.RadioButtonFor(m => m.First().travel_request_passport_flag, false) No
+                            </label>
                         </div>
                     </div>
 
-
-                    <div>
+                    <div style="margin-bottom:25px">
                         <strong class="fnt2">Departure City:</strong>
                         <div>
                             @Html.DropDownListFor(m => m.First().travel_request_departure_city, CONTRAST_WEB.Models.Constant.DestinationList, new { @class = "form-control" })
