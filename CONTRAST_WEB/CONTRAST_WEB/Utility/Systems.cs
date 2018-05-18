@@ -10,7 +10,7 @@ namespace CONTRAST_WEB.Models
 {
     public static class Systems
     {
-        public static async Task<IdentityModel> Identity(HttpContextBase httpContext)
+        public static IdentityModel Identity(HttpContextBase httpContext)
         {
             IdentityModel model = new IdentityModel();
             model.ClaimedIdentity = (ClaimsIdentity)httpContext.User.Identity;            

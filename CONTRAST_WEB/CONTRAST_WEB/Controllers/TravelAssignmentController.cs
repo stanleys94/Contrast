@@ -15,9 +15,11 @@ namespace CONTRAST_WEB.Controllers
         [Authorize(Roles = "contrast.user")]
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
-            TravelAssignment model = new TravelAssignment();
-            model.Identity= await Systems.Identity(HttpContext);
-             
+            TravelAssignmentDTO model = new TravelAssignmentDTO();
+            model.SetIdentity(HttpContext);
+            model.AutoFillEmployeeInfo(await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name), await model.GetEmployeeInfoDivision(model.Identity.ClaimedIdentity.Name));
+            //
+
             return View(model);
         }
     }

@@ -249,7 +249,7 @@
     <Compile Include="CustomValidator\SessionExpire.cs" />
     <Compile Include="CustomValidator\SettlementDateValidator.cs" />
     <Compile Include="CustomValidator\ValidTdate.cs" />
-    <Compile Include="DTO\TravelAssignment.cs" />
+    <Compile Include="DTO\TravelAssignmentDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

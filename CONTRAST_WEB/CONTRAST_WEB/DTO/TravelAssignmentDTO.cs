@@ -8,7 +8,7 @@ using System.Web;
 
 namespace CONTRAST_WEB.DTO
 {
-    public class TravelAssignment
+    public class TravelAssignmentDTO
     {
         public IdentityModel Identity { get; set; }
 
@@ -33,26 +33,24 @@ namespace CONTRAST_WEB.DTO
         public bool travel_request_multiple_flag { get; set; }
         public bool travel_request_passport_flag { get; set; }
 
-        public async void AutoFillEmployeeInfo()
+        public void AutoFillEmployeeInfo(tb_m_employee temp,string division)
         {
-            tb_m_employee temp = new tb_m_employee();
-            temp = await GetData.EmployeeInfo(this.Identity.ClaimedIdentity.Name);
             this.employee_info_code    =temp.code;
             this.employee_info_name    =temp.name;
             this.employee_info_class   =temp.@class;
-            this.employee_info_division =await this.GetEmployeeInfoDivision(temp.code);
+            this.employee_info_division =division;
         }
 
-        public async void ManualFillEmployeeInfo(string noreg)
-        {
-            tb_m_employee temp = new tb_m_employee();
-            temp = await GetData.EmployeeInfo(noreg);
-            this.employee_info_code = temp.code;
-            this.employee_info_name = temp.name;
-            this.employee_info_class = temp.@class;
-            this.employee_info_division = await this.GetEmployeeInfoDivision(temp.code);
+        //public async void ManualFillEmployeeInfo(string noreg)
+        //{
+        //    tb_m_employee temp = new tb_m_employee();
+        //    temp = await GetData.EmployeeInfo(noreg);
+        //    this.employee_info_code = temp.code;
+        //    this.employee_info_name = temp.name;
+        //    this.employee_info_class = temp.@class;
+        //    this.employee_info_division = await this.GetEmployeeInfoDivision(temp.code);
             
-        }
+        //}
 
         public async Task<string> GetEmployeeInfoDivision(string noreg)
         {
@@ -61,9 +59,10 @@ namespace CONTRAST_WEB.DTO
             return division.Divisi;
         }
 
-        public TravelAssignment()
+        public async void SetIdentity(HttpContextBase a)
         {
-            this.AutoFillEmployeeInfo();
+            this.Identity = Systems.Identity(a);
+            //this.AutoFillEmployeeInfo();
         }
 
 
