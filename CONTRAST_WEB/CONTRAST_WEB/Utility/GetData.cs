@@ -836,6 +836,29 @@ namespace CONTRAST_WEB.Models
             return ResponseList;
         }
 
+        public static async Task<tb_m_vendor_employee> VendorEmployeeSingle(int? no_reg)
+        {
+            List<tb_m_vendor_employee> ResponseList = new List<tb_m_vendor_employee>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/VendorEmployee/noreg?id=" + no_reg.ToString());
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_m_vendor_employee>>(str);
+                }
+
+            }
+            return ResponseList.First();
+        }
+
         public static List<tb_m_vendor_employee> VendorEmployeeValidate(int noreg)
         {
 
@@ -1233,6 +1256,41 @@ namespace CONTRAST_WEB.Models
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
                 HttpResponseMessage response = await client.GetAsync("api/Purpose/");
+                if (response.IsSuccessStatusCode)
+                {
+                    List<String> ResponseList = new List<String>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<String>>(str);
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new SelectListItem();
+                        listItem.Text = item;
+                        listItem.Value = item;
+                        ListItem.Add(listItem);
+                        k++;
+                    }
+                }
+                //ViewBag.ResponseList = new List<SelectListItem> { }; 
+            }
+
+            return ListItem;
+        }
+
+        public static List<SelectListItem> PurposeInfoSync()
+        {
+            List<SelectListItem> ListItem = new List<SelectListItem>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                Task<HttpResponseMessage> response2 = client.GetAsync("api/Purpose/");
+                HttpResponseMessage response = response2.Result;
                 if (response.IsSuccessStatusCode)
                 {
                     List<String> ResponseList = new List<String>();

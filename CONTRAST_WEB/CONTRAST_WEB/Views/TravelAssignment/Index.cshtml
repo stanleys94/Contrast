@@ -2,16 +2,7 @@
 @{
     ViewBag.Title = "TRAVEL REQUEST";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
-    List<SelectListItem> asd = new List<SelectListItem>();
-    List<SelectListItem> asd2 = new List<SelectListItem>();
-    List<SelectListItem> division = new List<SelectListItem>();
-
-    asd = CONTRAST_WEB.Models.Constant.DestinationList;
-    asd2 = ViewBag.RL2;
-    division = ViewBag.division_name2;
-
-    List<string> ModelList = new List<string>();
-    ModelList = ViewBag.RL3;
+    
 }
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
@@ -116,7 +107,7 @@
                 <div style="padding-bottom:5px">
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                        @*@Html.DropDownListFor(m => m.First().travel_request_purpose, asd2.OrderBy(m => m.Text).ToList(), "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose", @readonly = "readonly" })*@
+                        @Html.DropDownListFor(m => m.First().travel_request_purpose,CONTRAST_WEB.Models.Constant.TravelPurposeList, "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose"})
                     </div>
                 </div>
 
@@ -128,10 +119,10 @@
 
                 <div style="padding:5px;padding-top:40px; margin-bottom:0px;" id="des1">
                     <div style="margin-bottom:5px">
-                        <strong style="color:deepskyblue;">DESTINATION 1</strong>
+                        <strong style="color:deepskyblue;">TRAVEL PLAN 1</strong>
                     </div>
                     <div>
-                        <strong class="fnt2">Destination :</strong>
+                        <strong class="fnt2">Departure Date:</strong>
                         <div class="form-group input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             <span class="input-group-addon">
@@ -143,7 +134,7 @@
                         </div>
                     </div>
                     <div>
-                        <strong class="fnt2">Departure :</strong>
+                        <strong class="fnt2">End Date :</strong>
                         <div class="form-group input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             <span class="input-group-addon">
@@ -155,43 +146,6 @@
                         </div>
                     </div>
                 </div>
-
-                @*@if (Model.Count() > 1)
-                {
-                    for (int k = 1; k < Model.Count(); k++)
-                    {
-                        <div style="padding:5px;padding-top:40px; margin-bottom:0px;" id="des1">
-                            <div style="margin-bottom:5px">
-                                <strong style="color:deepskyblue;">DESTINATION @(k + 1)</strong>
-                            </div>
-                            <div>
-                                <strong class="fnt2">Destination :</strong>
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    <span class="input-group-addon">
-                                        @Html.TextBox("date", Model[k].travel_request.start_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
-                                    </span>
-                                    <span class="input-group-addon">
-                                        @Html.TextBox("time", Model[k].travel_request.start_date, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
-                                    </span>
-                                </div>
-                            </div>
-                            <div>
-                                <strong class="fnt2">Departure :</strong>
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    <span class="input-group-addon">
-                                        @Html.TextBox("rdate", Model[k].travel_request.end_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
-                                    </span>
-                                    <span class="input-group-addon">
-                                        @Html.TextBox("rtime", Model[k].travel_request.end_date, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }*@
-
             </div>
 
             <div class="col-md-5">
@@ -214,7 +168,7 @@
                         <div>
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
-                                @Html.TextBoxFor(m=>m.First().travel_request_airticket_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.First().travel_request_airticket_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
                             </div>
                         </div>
                     </div>
@@ -223,30 +177,24 @@
                         <div>
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
-                                @Html.TextBoxFor(m=>m.First().travel_request_passport_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.First().travel_request_passport_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
                             </div>
                         </div>
                     </div>
 
 
                     <div>
-                        <strong class="fnt2">Destination :</strong>
+                        <strong class="fnt2">Departure City:</strong>
+                        <div>
+                            @Html.DropDownListFor(m => m.First().travel_request_departure_city, CONTRAST_WEB.Models.Constant.DestinationList, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination City:</strong>
                         <div>
                             @Html.DropDownListFor(m => m.First().travel_request_destination_city, CONTRAST_WEB.Models.Constant.DestinationList, new { @class = "form-control" })
                         </div>
                     </div>
-                    @*@for (int k = 1; k < Model.Count(); k++)
-                    {
-                        <div style="padding-top:170px">
-                            <strong class="fnt2">Destination :</strong>
-                            <div>
-                                @Html.HiddenFor(m => m[k].travel_request.id_destination_city, new { @class = "form-control", @readonly = "readonly" })
-                                @Html.TextBoxFor(m => m[k].destination_string, new { @class = "form-control", @readonly = "readonly" })
-
-                            </div>
-                        </div>
-                    }*@
-
                 </div>
             </div>
 

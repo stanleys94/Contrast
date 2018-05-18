@@ -49,9 +49,11 @@ namespace CONTRAST_WEB.Models
         public static CultureInfo culture = new CultureInfo("id-ID");
 
         public static List<SelectListItem>DestinationList = new List<SelectListItem>();
+        public static List<SelectListItem> TravelPurposeList = new List<SelectListItem>();
 
         static Constant() {
             DestinationList = GetData.DestinationInfoSync();
+            TravelPurposeList=GetData.PurposeInfoSync();
         }   
     }
 }

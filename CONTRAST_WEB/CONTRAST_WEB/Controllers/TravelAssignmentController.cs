@@ -23,7 +23,9 @@ namespace CONTRAST_WEB.Controllers
                 //get employee division
                 await model.GetEmployeeInfoDivision(model.Identity.ClaimedIdentity.Name),
                 //get employee assigned by
-                await Utility.AssignedBy(await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name))
+                await Utility.AssignedBy(await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name)),
+                //get employee bank profile
+                await GetData.VendorEmployeeSingle(Convert.ToInt32(model.Identity.ClaimedIdentity.Name))
                 );
 
             List<TravelAssignmentDTO> model2 = new List<TravelAssignmentDTO>();

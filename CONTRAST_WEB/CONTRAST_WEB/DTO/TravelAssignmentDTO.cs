@@ -24,7 +24,7 @@ namespace CONTRAST_WEB.DTO
         public string travel_request_noreg { get; set; }
         public string travel_request_purpose { get; set; }
         //planned unplanned
-        public string travel_request_type { get; set; }
+        public bool travel_request_type { get; set; }
         public string travel_request_reason { get; set; }
         //budget activity type
         public string travel_request_id_activity { get; set; }
@@ -42,7 +42,7 @@ namespace CONTRAST_WEB.DTO
         public string travel_participant_noreg { get; set;}
 
 
-        public void AutoFillEmployeeInfo(tb_m_employee temp,string division,int? assignedby)
+        public void AutoFillEmployeeInfo(tb_m_employee temp,string division,int? assignedby, tb_m_vendor_employee vendor)
         {
             this.employee_info_code    =temp.code;
             this.employee_info_name    =temp.name;
@@ -50,8 +50,10 @@ namespace CONTRAST_WEB.DTO
             this.employee_info_division =division;
             this.travel_request_type = false;
             this.employee_info_assigned_by = assignedby.ToString();
+            this.employee_info_bankaccount = vendor.account_number;
+            this.employee_info_bankname = vendor.Bank_Name;
         }
-        
+
 
         public async Task<string> GetEmployeeInfoDivision(string noreg)
         {
