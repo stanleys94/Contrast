@@ -149,12 +149,40 @@ namespace CONTRAST_WEB.Controllers
 
                         await Utility.RecordRejected(rejected);
                         await UpdateData.FixedCost(model[k], access_status.position);
+                       
+                        List<tb_r_travel_request> travelList = await GetData.TravelRequestGCList(model[k].FixedCost_Verified.group_code.Trim());
+                        List<tb_r_travel_actualcost> actual_cost = await GetData.ActualCostBTA(model[k].FixedCost_Verified.group_code.Trim());
+                        List<tb_r_travel_actualcost> new_list = actual_cost.Where(b=>b.jenis_transaksi.Contains("hotel") || b.jenis_transaksi.Contains("ticket")).ToList();
+
+                        if (new_list.Count() == 0)
+                        {
+                            foreach (var item in travelList)
+                            {
+                                await UpdateData.BudgetAdd(cost.wbs_no, cost.cost_center, Convert.ToDouble(item.grand_total_allowance - item.allowance_meal_idr));
+                            }
+                        }
+                        else if (new_list.Count()>0)
+                        {
+                            foreach (var item in travelList)
+                            {
+                                List<tb_r_travel_actualcost> TransactionType = new_list.Where(b => b.id_request == item.id_request).ToList();
+                                int Hotel = TransactionType.Where(b => b.jenis_transaksi.Contains("hotel") && b.final_status == null).Count();
+                                int Ticket = TransactionType.Where(b => b.jenis_transaksi.Contains("ticket") && b.final_status == null).Count();
+                                int Hotel_Reject = TransactionType.Where(b => b.jenis_transaksi.Contains("hotel") && b.final_status != null).Count();
+                                int Ticket_Reject = TransactionType.Where(b => b.jenis_transaksi.Contains("ticket") && b.final_status != null).Count();
+
+                                if (Hotel == 0 && Ticket == 0 && Hotel_Reject == 0 && Ticket_Reject == 0)  await UpdateData.BudgetAdd(cost.wbs_no, cost.cost_center, Convert.ToDouble(item.allowance_ticket + item.allowance_hotel));
+                                else if (Hotel == 0 && Hotel_Reject == 0 && Ticket_Reject == 0)  await UpdateData.BudgetAdd(cost.wbs_no, cost.cost_center, Convert.ToDouble(item.allowance_hotel));
+                                else if (Ticket == 0 && Hotel_Reject == 0 && Ticket_Reject == 0)  await UpdateData.BudgetAdd(cost.wbs_no, cost.cost_center, Convert.ToDouble(item.allowance_ticket));
+                            }
+                        }
+                       
                     }
                     else
                     if (model[k].check_verify == true && model[k].check_reject == false)
                     {
                         //model[k].flag = "1";
-                        //await UpdateData.FixedCost(model[k], access_status.position);
+                        await UpdateData.FixedCost(model[k], access_status.position);
                         model[k].flag = "1";
                         if (access_status.position.Trim() == "AP")
                         {
@@ -178,5 +206,7 @@ namespace CONTRAST_WEB.Controllers
                 //return View("Index", model.OrderBy(r => r.FixedCost_Verified.create_date).ToList());
                 return RedirectToAction("Index", new { @searchString = searchString });
         }
+
     }
+   
 }

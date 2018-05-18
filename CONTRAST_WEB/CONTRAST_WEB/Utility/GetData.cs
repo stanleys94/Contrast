@@ -3376,6 +3376,40 @@ namespace CONTRAST_WEB.Models
             return Response;
         }
 
+        // 18/5/2018 adding ActualCostBTAActive (for getting active actual cost on certain BTA)
+        public static async Task<List<tb_r_travel_actualcost>> ActualCostBTAActive(string group_code)
+        {
+            List<tb_r_travel_actualcost> Response = new List<tb_r_travel_actualcost>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/ActualCost/GetBTA?gcode=" + group_code);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    List<tb_r_travel_actualcost> newList = new List<tb_r_travel_actualcost>();
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    newList = JsonConvert.DeserializeObject<List<tb_r_travel_actualcost>>(EmpResponse);
+                    foreach (var item in newList)
+                    {
+                        if (item.final_status == null) Response.Add(item);
+                    }
+                }
+            }
+            return Response;
+        }
+
         public static async Task<List<tb_r_travel_execution>> TravelExecution(string bta)
         {
             using (var client = new HttpClient())
