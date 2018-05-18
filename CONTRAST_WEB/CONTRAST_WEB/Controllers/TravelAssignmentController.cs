@@ -19,22 +19,20 @@ namespace CONTRAST_WEB.Controllers
             model.SetIdentity(HttpContext);
             await model.AutoFillEmployeeInfo();
 
-            if (participant != null && delete == null)
+            if (posted.employee_info_code != null)
             {
                 posted.Identity = model.Identity;
                 model = posted;
-                model.AddParticipant(participant);
-                ModelState.Remove(ModelState.FirstOrDefault(ms => ms.Key.ToString().StartsWith("participant")));
-            }
-            else
-            if (delete != null)
-            {
-                posted.Identity = model.Identity;
-                model = posted;
-                model.DeleteParticipant(Convert.ToInt32(delete));
                 ModelState.Clear();
+
+                if ((participant != null || participant == "") && delete == null)
+                   model.AddParticipant(participant);
+                   //ModelState.Remove(ModelState.FirstOrDefault(ms => ms.Key.ToString().StartsWith("participant")));
+                else
+                if (delete != null)
+                   model.DeleteParticipant(Convert.ToInt32(delete));
+                 
             }
-            
             List<TravelAssignmentDTO> model2 = new List<TravelAssignmentDTO>();
             model2.Add(model);
             
@@ -44,8 +42,7 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         public async System.Threading.Tasks.Task<ActionResult> Validate(TravelAssignmentDTO model)
-        {
-            
+        {            
             return View(model);
         }
 

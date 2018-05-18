@@ -68,7 +68,7 @@ namespace CONTRAST_WEB.DTO
 
         public void AddParticipant(string noreg)
         {
-            this.travel_participant_noreg.Add((noreg));
+            if(noreg!="")this.travel_participant_noreg.Add((noreg));
         }
 
         public void DeleteParticipant(int index)
