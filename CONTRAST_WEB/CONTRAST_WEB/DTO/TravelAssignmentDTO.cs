@@ -17,7 +17,9 @@ namespace CONTRAST_WEB.DTO
         public string employee_info_class { get; set; }
         public string employee_info_division { get; set; }
         public string employee_info_assigned_by { get; set; }
-
+        public string employee_info_bankname { get; set; }
+        public string employee_info_bankaccount { get; set; }
+        
         public string travel_request_name { get; set; }
         public string travel_request_noreg { get; set; }
         public string travel_request_purpose { get; set; }
@@ -28,29 +30,28 @@ namespace CONTRAST_WEB.DTO
         public string travel_request_id_activity { get; set; }
         public string travel_request_departure_city { get; set; }
         public string travel_request_destination_city { get; set; }
+        public DateTime travel_request_depart_date { get; set; }
+        public DateTime travel_request_depart_time { get; set; }
+        public DateTime travel_request_arrive_date { get; set; }
+        public DateTime travel_request_arrive_time { get; set; }
 
         public bool travel_request_airticket_flag { get; set; }
         public bool travel_request_multiple_flag { get; set; }
         public bool travel_request_passport_flag { get; set; }
 
-        public void AutoFillEmployeeInfo(tb_m_employee temp,string division)
+        public string travel_participant_noreg { get; set;}
+
+
+        public void AutoFillEmployeeInfo(tb_m_employee temp,string division,int? assignedby)
         {
             this.employee_info_code    =temp.code;
             this.employee_info_name    =temp.name;
             this.employee_info_class   =temp.@class;
             this.employee_info_division =division;
+            this.travel_request_type = false;
+            this.employee_info_assigned_by = assignedby.ToString();
         }
-
-        //public async void ManualFillEmployeeInfo(string noreg)
-        //{
-        //    tb_m_employee temp = new tb_m_employee();
-        //    temp = await GetData.EmployeeInfo(noreg);
-        //    this.employee_info_code = temp.code;
-        //    this.employee_info_name = temp.name;
-        //    this.employee_info_class = temp.@class;
-        //    this.employee_info_division = await this.GetEmployeeInfoDivision(temp.code);
-            
-        //}
+        
 
         public async Task<string> GetEmployeeInfoDivision(string noreg)
         {

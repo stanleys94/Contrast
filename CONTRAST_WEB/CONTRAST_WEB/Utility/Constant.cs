@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CONTRAST_WEB.Models
 {
@@ -45,8 +46,12 @@ namespace CONTRAST_WEB.Models
         public static string LogFolder = "~/Log";
         public static string TravelDocumentsFolder = "~/TravelDocuments";
 
-
         public static CultureInfo culture = new CultureInfo("id-ID");
 
+        public static List<SelectListItem>DestinationList = new List<SelectListItem>();
+
+        static Constant() {
+            DestinationList = GetData.DestinationInfoSync();
+        }   
     }
 }

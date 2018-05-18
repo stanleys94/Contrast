@@ -17,10 +17,20 @@ namespace CONTRAST_WEB.Controllers
         {
             TravelAssignmentDTO model = new TravelAssignmentDTO();
             model.SetIdentity(HttpContext);
-            model.AutoFillEmployeeInfo(await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name), await model.GetEmployeeInfoDivision(model.Identity.ClaimedIdentity.Name));
+            model.AutoFillEmployeeInfo(
+                //get employee info
+                await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name),
+                //get employee division
+                await model.GetEmployeeInfoDivision(model.Identity.ClaimedIdentity.Name),
+                //get employee assigned by
+                await Utility.AssignedBy(await GetData.EmployeeInfo(model.Identity.ClaimedIdentity.Name))
+                );
+
+            List<TravelAssignmentDTO> model2 = new List<TravelAssignmentDTO>();
+            model2.Add(model);
             //
 
-            return View(model);
+            return View(model2);
         }
     }
 }

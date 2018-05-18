@@ -1118,6 +1118,43 @@ namespace CONTRAST_WEB.Models
             return ListItem1;
         }
 
+        public static List<SelectListItem> DestinationInfoSync()
+        {
+            List<SelectListItem> ListItem1 = new List<SelectListItem>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                Task<HttpResponseMessage> response2 = client.GetAsync("api/Destination/Destination_List");
+                HttpResponseMessage response = response2.Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_m_destination> ResponseList = new List<tb_m_destination>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_m_destination>>(str);
+
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new SelectListItem();
+                        listItem.Text = item.destination_name;
+                        listItem.Value = item.id_destination.ToString();
+                        ListItem1.Add(listItem);
+                        k++;
+                    }
+                }
+            }
+            return ListItem1;
+        }
+
+
         public static async Task<tb_m_destination> DestinationCityInfo(string city)
         {
             tb_m_destination employee_object = new tb_m_destination();

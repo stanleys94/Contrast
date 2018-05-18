@@ -1,17 +1,415 @@
-﻿@model CONTRAST_WEB.DTO.TravelAssignmentDTO
+﻿@model List<CONTRAST_WEB.DTO.TravelAssignmentDTO>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "TRAVEL REQUEST";
+    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    List<SelectListItem> asd = new List<SelectListItem>();
+    List<SelectListItem> asd2 = new List<SelectListItem>();
+    List<SelectListItem> division = new List<SelectListItem>();
+
+    asd = CONTRAST_WEB.Models.Constant.DestinationList;
+    asd2 = ViewBag.RL2;
+    division = ViewBag.division_name2;
+
+    List<string> ModelList = new List<string>();
+    ModelList = ViewBag.RL3;
 }
+<div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+            }
+        </li>
+        <li class="breadcrumb-item active">Travel Assignment</li>
+    </ol>
+</div>
+<div class="container">
+    <div style="margin-top:100px" class="row">
+        <div class="col-md-11 col-md-offset-1">
+            <h4 style="text-align:left; padding:10px; margin-bottom:0px;">TRAVEL ASSIGNMENT REVISION FORM</h4>
+        </div>
+        <div class="col-md-11 col-md-offset-1">
+            <h5 style="text-align:left; margin-top:0px; padding:0 10px;">"Surat Perintah Perjalanan Dinas"</h5>
+        </div>
 
-<h2>Index</h2>
-@foreach (var items in Model.Identity.Privillege)
-{
-    @items
-}
+        <div class="col-md-5 col-md-offset-1">
+            <div style="height:50px; padding-top:20px;">
+                <strong style="color:deepskyblue">EMPLOYEE INFO</strong>
+            </div>
+        </div>
+        @using (Html.BeginForm("Validate", "TravelStatus", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            
+            <div class="col-md-5">
+                <div>
+                    <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
+                    <div style="width:450px;" class="input-group">
+                        @*@Html.TextBoxFor(m => m.First().tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput", @readonly = "readonly" })*@
+                        <input type="text" id="code" name="code" value="" hidden>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-info btn-lg form-control" name="" value="">Add</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
 
-@Model.employee_info_name
-@Model.employee_info_code
-@Model.employee_info_class
-@Model.employee_info_division
-@Model.employee_info_assigned_by
+            <div class="col-md-5 col-md-offset-1">
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                    @Html.TextBoxFor(m => m.First().employee_info_code, new { @class = "form-control", placeholder = "No Reg", @readonly = "readonly" })
+                </div>
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    @Html.TextBoxFor(m => m.First().employee_info_name, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-stats"></i></span>
+                    @Html.TextBoxFor(m => m.First().employee_info_class, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div style="margin-bottom:-10px;" class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+                    @Html.TextBoxFor(m => m.First().employee_info_division, new { @class = "form-control", @readonly = "readonly" })                    
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div style="margin-bottom:5px; padding:5px 5px;">
+                    <span class="fnt2"><strong>LIST PARTICIPANTS :</strong></span>
+                </div>
+                <div style="border-radius: 4px;width:450px;height: 145px;overflow-y: scroll;" class="wellNo">
+                    <div style="text-align:left;margin-top:10px;" class="input-group">
+                        <ol class="custom-bullet">
+                            @*@if (Model.First().participants != null)
+                            {
+                                if (Model.First().participants.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.First().participants.Count(); i++)
+                                    {
+                                        <li>
+                                            @Html.TextBoxFor(m => m.First().participants[i].no_reg, new { @readonly = "readonly", @style = "border:0px;color:grey;" })
+                                        </li>
+                                        <hr style="margin:10px 5px;" />
+                                        @Html.HiddenFor(m => m.First().participants[i].no_reg)
+                                        @Html.HiddenFor(m => m.First().participants[i].no_reg_parent)
+                                        @Html.HiddenFor(m => m.First().participants[i].group_code)
+                                        @Html.HiddenFor(m => m.First().participants[i].id_request_participant)
+                                        @Html.HiddenFor(m => m.First().participants[i].modified_date)
+                                        @Html.HiddenFor(m => m.First().participants[i].active_flag)
+                                        @Html.HiddenFor(m => m.First().participants[i].created_date)
+                                    }
+                                }
+                            }*@
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-md-offset-1">
+                <hr />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                    @Html.TextBoxFor(m => m.First().employee_info_assigned_by, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div style="padding-bottom:5px">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        @*@Html.DropDownListFor(m => m.First().travel_request_purpose, asd2.OrderBy(m => m.Text).ToList(), "-Travel Purpose-", new { @class = "form-control", placeholder = "Purpose", @readonly = "readonly" })*@
+                    </div>
+                </div>
+
+                <strong class="fnt2">Trip Type :</strong>
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                    @Html.TextBox("qweqd", Model.First().travel_request_multiple_flag == true ? "Multi Trip" : "Single Trip", new { @class = "form-control", @readonly = "readonly" })
+                </div>
+
+                <div style="padding:5px;padding-top:40px; margin-bottom:0px;" id="des1">
+                    <div style="margin-bottom:5px">
+                        <strong style="color:deepskyblue;">DESTINATION 1</strong>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Destination :</strong>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m=>m.First().travel_request_arrive_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m=>m.First().travel_request_arrive_time, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">Departure :</strong>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m=>m.First().travel_request_depart_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
+                            </span>
+                            <span class="input-group-addon">
+                                @Html.TextBoxFor(m=>m.First().travel_request_depart_time, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                @*@if (Model.Count() > 1)
+                {
+                    for (int k = 1; k < Model.Count(); k++)
+                    {
+                        <div style="padding:5px;padding-top:40px; margin-bottom:0px;" id="des1">
+                            <div style="margin-bottom:5px">
+                                <strong style="color:deepskyblue;">DESTINATION @(k + 1)</strong>
+                            </div>
+                            <div>
+                                <strong class="fnt2">Destination :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <span class="input-group-addon">
+                                        @Html.TextBox("date", Model[k].travel_request.start_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
+                                    </span>
+                                    <span class="input-group-addon">
+                                        @Html.TextBox("time", Model[k].travel_request.start_date, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong class="fnt2">Departure :</strong>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <span class="input-group-addon">
+                                        @Html.TextBox("rdate", Model[k].travel_request.end_date, "{0:yyyy-MM-dd}", new { @class = "form-control datecontrol", type = "date" })
+                                    </span>
+                                    <span class="input-group-addon">
+                                        @Html.TextBox("rtime", Model[k].travel_request.end_date, "{0:HH:mm}", new { @class = "form-control datecontrol", @type = "time" })
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }*@
+
+            </div>
+
+            <div class="col-md-5">
+                <hr />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                    @Html.TextBoxFor(m=>m.First().travel_request_type, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
+                        @Html.TextBoxFor(m => m.First().travel_request_reason, new { @class = "form-control", placeholder = "Reason Assigment...."})
+                    </div>
+                </div>
+
+
+                <div style="padding:5px;margin-bottom:50px;" id="des1">
+                    <div>
+                        <strong class="fnt2">Transportation :</strong>
+                        <div>
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
+                                @Html.TextBoxFor(m=>m.First().travel_request_airticket_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <strong class="fnt2">New or Renewal Passport :</strong>
+                        <div>
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-edit"></i></span>
+                                @Html.TextBoxFor(m=>m.First().travel_request_passport_flag, new { @class = "form-control", placeholder = "Reason Assigment....", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <strong class="fnt2">Destination :</strong>
+                        <div>
+                            @Html.DropDownListFor(m => m.First().travel_request_destination_city, CONTRAST_WEB.Models.Constant.DestinationList, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    @*@for (int k = 1; k < Model.Count(); k++)
+                    {
+                        <div style="padding-top:170px">
+                            <strong class="fnt2">Destination :</strong>
+                            <div>
+                                @Html.HiddenFor(m => m[k].travel_request.id_destination_city, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m[k].destination_string, new { @class = "form-control", @readonly = "readonly" })
+
+                            </div>
+                        </div>
+                    }*@
+
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-lg-offset-1" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2">Itinerary Documents :</span>
+                    <a style="font-size:12px" class='btn btn-primary'>
+                        Upload
+                        <input type="file" id="itinerarydoc" name="itinerarydoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info7").html("Itinerary file is ready!");'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info7"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-lg-offset-1" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2">Invitation Documents :</span>
+                    <a style="font-size:12px" class='btn btn-primary'>
+                        Upload
+                        <input type="file" id="invitationdoc" name="invitationdoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info8").html("Invitation file is ready!");'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info8"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-lg-offset-1" hidden>
+                <div style="position:relative;">
+                    <span class="fnt2">Proposal Documents :</span>
+                    <a style="font-size:12px" class='btn btn-primary'>
+                        Upload
+                        <input type="file" id="proposaldoc" name="proposaldoc" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info9").html("Proposal file is ready!");'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info9"></span>
+                    <p style="font-style:italic; color:cadetblue;">*Max size file 3MB</p>
+                </div>
+            </div>
+
+
+            <div class="col-lg-11 col-lg-offset-1">
+                <strong style="color:deepskyblue">@*BANK INFO*@</strong>
+            </div>
+            <div class="col-lg-5 col-lg-offset-1">
+                @*@Html.ValidationMessageFor(m => m.tbankname, "", new { @class = "text-danger" })*@
+                <div class=" text-danger">@*@ViewBag.ebankname*@</div>
+                <div>
+                    <span class="fnt2">Bank Name :</span>
+                    @Html.TextBoxFor(m => m.First().employee_info_bankname, new { @class = "form-control", @readonly = "readonly" })
+                    <br />
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <strong class="fnt2">@null</strong>
+                @*@Html.ValidationMessageFor(m => m.tbankaccount, "", new { @class = "text-danger" })*@
+                <div class=" text-danger">@*@ViewBag.ebankname*@</div>
+                <div>
+                    <span class="fnt2">Account Number :</span>
+                    @Html.TextBoxFor(m => m.First().employee_info_bankaccount, new { @class = "form-control", @readonly = "readonly" })
+                    <br />
+                </div>
+                <button type="button" style="width:145px" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Estimate Budget</button>
+                &nbsp;
+                @Html.ActionLink("Cancel", "Index", "Home")
+                <!--wates-->
+                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div style="height:50px" class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">X</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="mySmallModalLabel">Notification</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div style="text-align:center;">
+                                    <strong>Make sure your data is valid</strong>, click ok to continue
+                                </div>
+                                <div style="margin:10px 100px;">
+                                    <button type="submit" style="width:150px; margin:0 100px;" class="btn btn-info btn-lg" name="validate" value="Submit">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+    <hr />
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $("#searchInput").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue", "TravelRequest")',
+                dataType: "json",
+	        data: { search: $("#searchInput").val(), code: $("#code").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.code };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error Has detected");
+                }
+            });
+        }
+    });
+    $("#searchInput2").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue2", "TravelRequest")',
+                dataType: "json",
+                data: { search: $("#searchInput2").val(), code: $("#code").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.code };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error Has detected");
+                }
+            });
+        }
+    });
+    $(document).ready(function () {
+        $("#b1hide").click(function () {
+            $("#des2").fadeOut(500);
+        });
+        $("#b1show").click(function () {
+            $("#des2").fadeIn(500);
+            $("#des22").fadeIn(500);
+            $("#b1show").hide();
+        });
+        $("#b2hide").click(function () {
+            $("#des2").fadeOut(500);
+        });
+        $("#b2show").click(function () {
+            $("#des3").fadeIn(500);
+            $("#des33").fadeIn(500);
+            $("#b2show").hide();
+        });
+        $("#b3hide").click(function () {
+            $("#des3").fadeOut(500);
+        });
+    });
+
+    function yesnoCheck() {
+        if (document.getElementById('yesCheck').checked) {
+            //document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('des2').style.display = 'block';
+            document.getElementById('des22').style.display = 'block';
+            document.getElementById('b2show').style.display = 'block';
+            //document.getElementById('des33').style.display = 'block';
+        }
+        else if (document.getElementById('noCheck').checked) {
+            document.getElementById('ifYes').style.display = 'none';
+            document.getElementById('des2').style.display = 'none';
+            document.getElementById('des22').style.display = 'none';
+            document.getElementById('des3').style.display = 'none';
+            document.getElementById('des33').style.display = 'none';
+        }
+    }
+</script>
