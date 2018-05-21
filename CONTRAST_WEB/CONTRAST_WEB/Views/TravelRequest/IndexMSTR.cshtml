@@ -5,13 +5,14 @@
     List<SelectListItem> asd = new List<SelectListItem>();
     List<SelectListItem> asd2 = new List<SelectListItem>();
     List<SelectListItem> division = new List<SelectListItem>();
-
+    List<SelectListItem> SpecAssignBy = new List<SelectListItem>();
     asd = ViewBag.RL;
     asd2 = ViewBag.RL2;
     division = ViewBag.division_name2;
-
+    SpecAssignBy = ViewBag.SpecAssignBy;
     List<string> ModelList = new List<string>();
     ModelList = ViewBag.RL3;
+    string postdata = ViewBag.ListString;
 }
 <div class="container">
     <div style="margin-top:100px" class="row">
@@ -121,11 +122,24 @@
 
             <div class="col-md-6">
                 <hr />
-                <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
-                    @Html.HiddenFor(m => m.travel_request.assign_by, new { @class = "form-control", placeholder = "Assigned By" })
-                    @Html.TextBox("text", (string)ViewBag.Bossname, new { @class = "form-control", @readonly = "readonly" })
-                </div>
+                @if (SpecAssignBy.Count() > 0)
+                {
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                        @Html.DropDownListFor(m => m.travel_request.assign_by, SpecAssignBy, new { @class = "form-control", placeholder = "Purpose" })
+                        @Html.HiddenFor(m => m.travel_request.exep_empolyee)
+                    </div>
+                }
+
+                else
+                {
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-check"></i></span>
+                        @Html.HiddenFor(m => m.travel_request.assign_by, new { @class = "form-control", placeholder = "Assigned By" })
+                        @Html.TextBox("text", (string)ViewBag.Bossname, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                }
                 <div>
                     @Html.ValidationMessageFor(m => m.tpurpose, "", new { @class = "text-danger" })
                     <div class="form-group input-group">
