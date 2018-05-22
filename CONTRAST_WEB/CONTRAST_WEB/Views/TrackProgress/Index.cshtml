@@ -169,7 +169,7 @@
                 </table>
             </div>
             @foreach (int item in ViewBag.id_data)
-            {               
+            {
                 @Html.Hidden("id_data", item)
             }
         </div>
@@ -178,6 +178,10 @@
     @using (Html.BeginForm("Download", "TrackProgress", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
+        if (ViewBag.startdate != null){@Html.Hidden("startdate", ViewBag.startdate as DateTime?);}
+        if (ViewBag.enddate != null) {@Html.Hidden("enddate", ViewBag.enddate as DateTime?); }
+        if (ViewBag.CurrentFilter != null) {@Html.Hidden("SearchString", ViewBag.CurrentFilter as DateTime?); }
+        
         <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;" class="clearfix" hidden>
             <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
                 <table style="width:1250px;margin-bottom:0px;" class="table table-condensed table-striped" hidden>
@@ -214,34 +218,34 @@
                     {
                         for (int k = 0; k < Model.Count(); k++)
                         {
-                            @Html.HiddenFor(m => m[k].login_name)
-                            @Html.HiddenFor(m => m[k].login_id)
-                            @Html.HiddenFor(m => m[k].privilage)
-                            @Html.HiddenFor(m => m[k].TrackedList.id_data)
-                            @Html.HiddenFor(m => m[k].TrackedList.amount_total, new { @value = Model[k].TrackedList.amount_total })
-                            @Html.HiddenFor(m => m[k].TrackedList.cost_center, new { @value = Model[k].TrackedList.cost_center })
-                            @Html.HiddenFor(m => m[k].TrackedList.end_date, new { @value = Model[k].TrackedList.end_date })
-                            @Html.HiddenFor(m => m[k].TrackedList.id_actualcost, new { @value = Model[k].TrackedList.id_actualcost })
-                            @Html.HiddenFor(m => m[k].TrackedList.id_destination_city, new { @value = Model[k].TrackedList.id_destination_city })
-                            @Html.HiddenFor(m => m[k].TrackedList.id_request, new { @value = Model[k].TrackedList.id_request })
-                            @Html.HiddenFor(m => m[k].TrackedList.invoice_number, new { @value = Model[k].TrackedList.invoice_number })
-                            @Html.HiddenFor(m => m[k].TrackedList.start_date, new { @value = Model[k].TrackedList.start_date })
-                            @Html.HiddenFor(m => m[k].TrackedList.tax, new { @value = Model[k].TrackedList.tax })
-                            @Html.HiddenFor(m => m[k].TrackedList.vendor_code, new { @value = Model[k].TrackedList.vendor_code })
-                            @Html.HiddenFor(m => m[k].TrackedList.wbs_no, new { @value = Model[k].TrackedList.wbs_no })
+                            @*@Html.HiddenFor(m => m[k].login_name)
+                                @Html.HiddenFor(m => m[k].login_id)
+                                @Html.HiddenFor(m => m[k].privilage)
+                                @Html.HiddenFor(m => m[k].TrackedList.id_data)
+                                @Html.HiddenFor(m => m[k].TrackedList.amount_total, new { @value = Model[k].TrackedList.amount_total })
+                                @Html.HiddenFor(m => m[k].TrackedList.cost_center, new { @value = Model[k].TrackedList.cost_center })
+                                @Html.HiddenFor(m => m[k].TrackedList.end_date, new { @value = Model[k].TrackedList.end_date })
+                                @Html.HiddenFor(m => m[k].TrackedList.id_actualcost, new { @value = Model[k].TrackedList.id_actualcost })
+                                @Html.HiddenFor(m => m[k].TrackedList.id_destination_city, new { @value = Model[k].TrackedList.id_destination_city })
+                                @Html.HiddenFor(m => m[k].TrackedList.id_request, new { @value = Model[k].TrackedList.id_request })
+                                @Html.HiddenFor(m => m[k].TrackedList.invoice_number, new { @value = Model[k].TrackedList.invoice_number })
+                                @Html.HiddenFor(m => m[k].TrackedList.start_date, new { @value = Model[k].TrackedList.start_date })
+                                @Html.HiddenFor(m => m[k].TrackedList.tax, new { @value = Model[k].TrackedList.tax })
+                                @Html.HiddenFor(m => m[k].TrackedList.vendor_code, new { @value = Model[k].TrackedList.vendor_code })
+                                @Html.HiddenFor(m => m[k].TrackedList.wbs_no, new { @value = Model[k].TrackedList.wbs_no })*@
                             <tr>
                                 <td class="td">
                                     @*@Html.DisplayFor(Model => Model[k].TrackedList.group_code)*@
                                     <button class="btn btn-toolbar" type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })*@
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.name)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.name, new { Value = @Model[k].TrackedList.name })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.name, new { Value = @Model[k].TrackedList.name })*@
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.no_reg)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.no_reg, new { Value = @Model[k].TrackedList.no_reg })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.no_reg, new { Value = @Model[k].TrackedList.no_reg })*@
                                 </td>
                                 <td class="td">
                                     @if (Model[k].TrackedList.jenis_transaksi != null)
@@ -252,7 +256,7 @@
                                     {
                                         <label>None</label>
                                     }
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi, new { Value = @Model[k].TrackedList.jenis_transaksi })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.jenis_transaksi, new { Value = @Model[k].TrackedList.jenis_transaksi })*@
                                 </td>
                                 <td class="td">
                                     @if (Model[k].TrackedList.amount != null)
@@ -263,24 +267,24 @@
                                     {
                                         <label>None</label>
                                     }
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.amount, new { Value = @Model[k].TrackedList.amount })*@
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.destination_name, new { Value = @Model[k].TrackedList.destination_name })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.destination_name, new { Value = @Model[k].TrackedList.destination_name })*@
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS, new { Value = @Model[k].TrackedList.TYPES_OF_TRANSACTIONS })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS, new { Value = @Model[k].TrackedList.TYPES_OF_TRANSACTIONS })*@
                                 </td>
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.verified_flag, new { Value = @Model[k].TrackedList.verified_flag })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.verified_flag, new { Value = @Model[k].TrackedList.verified_flag })*@
                                 </td>
                                 @*add*@
                                 <td class="td">
                                     @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
-                                    @Html.HiddenFor(Model => Model[k].TrackedList.create_date, new { Value = @Model[k].TrackedList.create_date })
+                                    @*@Html.HiddenFor(Model => Model[k].TrackedList.create_date, new { Value = @Model[k].TrackedList.create_date })*@
                                 </td>
                             </tr>
 
@@ -306,12 +310,12 @@
         @if (ViewBag.startdate != null || ViewBag.enddate != null)
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
-                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
+                                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
         }
         else
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
-                          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
         }
     </div>
