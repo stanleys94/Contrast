@@ -37,7 +37,6 @@
                 @Html.HiddenFor(m => m.employee_info.unit_code_code)
                 @Html.HiddenFor(m => m.employee_info.unit_code_name)
                 @Html.HiddenFor(m => m.travel_request.travel_purpose)
-                @Html.HiddenFor(m => m.travel_request.assign_by)
                 @Html.HiddenFor(m => m.travel_request.start_date)
                 @Html.HiddenFor(m => m.travel_request.end_date)
                 @Html.HiddenFor(m => m.travel_request.reason_of_assigment)
@@ -48,10 +47,19 @@
                 @Html.HiddenFor(m => m.travel_request.destination_code)
                 <div>
                     <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
+                    @Html.Hidden("noreglist", postdata, new { id = "noreglist" })
                     @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
-                    @if (ViewBag.Exist != "" && ViewBag.Exist != null)
+                    @if (ViewBag.Exist != null && ViewBag.Exist != "")
                     {
                         <label style="font-size:11px" class="text-danger">@ViewBag.Exist Already in Participant List</label>
+                    }
+                    else if (ViewBag.noBank != null && ViewBag.noBank != "")
+                    {
+                        <label style="font-size:11px" class="text-danger">@ViewBag.noBank Has No Bank Account</label>
+                    }
+                    else if (ViewBag.Self != null && ViewBag.Self != "")
+                    {
+                        <label style="font-size:11px" class="text-danger">@ViewBag.Self is the Parent of this trip</label>
                     }
                     <div style="width:450px;" class="input-group">
                         @Html.TextBoxFor(m => m.tparticipant, new { @class = "form-control", placeholder = "Type Participant Name..", id = "searchInput" })
@@ -462,7 +470,7 @@
                 </div>
                 <button type="button" style="width:145px" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Estimate Budget</button>
                 &nbsp;
-                @Html.ActionLink("Cancel", "Index", "Home")
+               
                 <!--wates-->
                 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -500,7 +508,7 @@
             $.ajax({
                 url: '@Url.Action("GetSearchValue", "TravelRequest")',
                 dataType: "json",
-	        data: { search: $("#searchInput").val(), code: $("#code").val() },
+                data: { search: $("#searchInput").val(), code: $("#code").val(), liststring: $("#noreglist").val() },
                 success: function (data) {
                     response($.map(data, function (item) {
                         return { label: item.name, value: item.code };
