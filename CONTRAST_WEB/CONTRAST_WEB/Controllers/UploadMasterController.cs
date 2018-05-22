@@ -992,7 +992,7 @@ namespace CONTRAST_WEB.Controllers
                                         try
                                         {
                                             var cellString = workSheet.Cell(i, k);
-                                            if (cellString.GetValue<string>() == "" && k > 4 && k<11) throw new System.ArgumentException("There's no Value in this Cell");
+                                            if (k > 4 && k<10 && cellString.GetValue<string>() == "") throw new System.ArgumentException("There's no Value in this Cell");
                                             else if (k == 1) ExcelObject12.Division = cellString.GetValue<string>();
                                             else if (k == 2 && cellString.GetValue<string>() != "") ExcelObject12.Employee_Position = cellString.GetValue<string>();
                                             else if (k == 3 && cellString.GetValue<string>() != "") ExcelObject12.Employee_Name = cellString.GetValue<string>();
