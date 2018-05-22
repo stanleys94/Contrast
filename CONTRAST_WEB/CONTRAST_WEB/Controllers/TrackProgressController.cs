@@ -127,7 +127,7 @@ namespace CONTRAST_WEB.Controllers
                        )
                         temp.Add(track[k]);
                 }
-                /*if (temp.Count() > 0) */track = temp;
+                 track = temp;
             }
 
             //date filter
@@ -770,14 +770,137 @@ namespace CONTRAST_WEB.Controllers
         [Authorize]
         [Authorize(Roles = "contrast.user")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Download(List<int> id_data)
+        public async Task<ActionResult> Download(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
         {
+            var identity = (ClaimsIdentity)User.Identity;
+            string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+            ViewBag.Privillege = claims;
+            tb_m_employee employee = await GetData.EmployeeInfo(identity.Name);
+
             List<TrackingHelper> Model = new List<TrackingHelper>();
-            for (int k = 0; k < id_data.Count(); k++)
+            List<vw_tracking_transaction_data_new> new_list = new List<vw_tracking_transaction_data_new>();
+            int privillage = 0;
+            string privillage_desc = "";
+
+
+            //#1 verifier employee
+            //#2 admin istd
+            //#3 individual
+
+            //cek privillege
+            for (int k = 0; k < claims.Count(); k++)
             {
-                Model.Add(new TrackingHelper());
-                Model[k].TrackedList = await GetData.DownloadFileTrack(id_data[k]);
+                if (claims[k] == "contrast.travelcoordinator" || claims[k] == "contrast.secretary" || claims[k] == "contrast.adminga" || claims[k] == "contrast.ap" || claims[k] == "contrast.dphfad" || claims[k] == "contrast.dphga" || claims[k] == "contrast.dphpac" || claims[k] == "contrast.shfad" || claims[k] == "contrast.shpac" || claims[k] == "contrast.staffga" || claims[k] == "contrast.staffpac")
+                {
+                    privillage = 1;
+                    privillage_desc = "all";
+                    break;
+                }
+                else
+                if (claims[k] == "contrast.administd")
+                {
+                    privillage = 2;
+                    privillage_desc = " admin";
+                    break;
+                }
+                else
+                {
+                    privillage_desc = " user";
+                    privillage = 3;
+                }
             }
+
+            //pagination
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+
+            //data aggregation
+            if (privillage == 1)
+                new_list = await GetData.TrackingListAll();
+            else if (privillage == 2)
+            {
+                tb_m_employee_source_data Admin = await GetData.GetDivisionSource(Convert.ToInt32(employee.code));
+                tb_m_verifier_employee verifier = await GetData.EmployeeVerifier(Convert.ToInt32(employee.code));
+
+                string division = Admin.Divisi;
+                if (Admin.Divisi.Contains("and1")) Admin.Divisi = division.Replace("and1", "&");
+
+                new_list = await GetData.TrackingListDivisonAll(Admin.Divisi.Trim());
+            }
+            else
+                if (privillage == 3) new_list = await GetData.TrackingListIndividual(employee.code);
+
+            if (new_list.Count > 0)
+            {
+                foreach (var item in new_list)
+                {
+                    TrackingHelper temp = new TrackingHelper();
+                    temp.login_id = employee.code;
+                    temp.login_name = employee.name;
+                    temp.privilage = privillage_desc;
+                    temp.TrackedList = item;
+                    Model.Add(temp);
+                }
+            }
+
+            //if search / page empty
+            if (searchString != null)
+                page = 1;
+            else
+                searchString = currentFilter;
+
+            ViewBag.CurrentFilter = searchString;
+            if (startdate != null)
+                ViewBag.startdate = startdate;
+            else
+                ViewBag.startdate = null;
+
+            if (enddate != null)
+                ViewBag.enddate = enddate;
+            else
+                ViewBag.enddate = null;
+
+            //filter
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                List<TrackingHelper> temp = new List<TrackingHelper>();
+                for (int k = 0; k < Model.Count; k++)
+                {
+                    //by group code
+                    if (   Model[k].TrackedList.group_code.ToLower().Contains(searchString.ToLower())
+                        || Model[k].TrackedList.name.ToLower().Contains(searchString.ToLower())
+                        || Model[k].TrackedList.destination_name.ToLower().Contains(searchString.ToLower())
+                        || Model[k].TrackedList.verified_flag.ToLower().Contains(searchString.ToLower())
+                        || Model[k].TrackedList.TYPES_OF_TRANSACTIONS.ToLower().Contains(searchString.ToLower())
+                       )
+                        temp.Add(Model[k]);
+                }
+                Model = temp;
+            }
+
+            //date filter
+            if (startdate != null && enddate != null)
+            {
+                List<TrackingHelper> temp = new List<TrackingHelper>();
+                for (int k = 0; k < Model.Count; k++)
+                {
+                    //by group code
+                    if (
+                        Model[k].TrackedList.create_date >= startdate
+                        && Model[k].TrackedList.create_date <= enddate
+                       )
+                        temp.Add(Model[k]);
+                }
+                /*if (temp.Count() > 0)*/
+                Model = temp;
+            }
+
+            //List<TrackingHelper> Model = new List<TrackingHelper>();
+            //for (int k = 0; k < id_data.Count(); k++)
+            //{
+            //    Model.Add(new TrackingHelper());
+            //    Model[k].TrackedList = await GetData.DownloadFileTrack(id_data[k]);
+            //}
 
             XLWorkbook CreateExcell = new XLWorkbook();
             var InsertData = CreateExcell.Worksheets.Add("Tracking Data");
