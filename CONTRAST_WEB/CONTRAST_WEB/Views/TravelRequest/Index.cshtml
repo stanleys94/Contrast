@@ -52,7 +52,6 @@
                         <div style="margin:5px;" class="form-group form-inline">
                             Type name Employee :
                             <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@Model.employee_info.code />
-                            @Html.Hidden("noreglist", postdata, new { id = "noreglist" })
                             @*<input type="text" id="noreglist" name="noreglist" value=@postdata hidden>*@
                             <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
                         </div>
@@ -89,6 +88,7 @@
                 @Html.HiddenFor(m => m.travel_request.destination_code)
                 <div>
                     <strong style="color:deepskyblue">ADD PARTICIPANT :</strong>
+                    @Html.Hidden("noreglist", postdata, new { id = "noreglist" })
                     @Html.ValidationMessageFor(m => m.tparticipant, "", new { @class = "text-danger" })
                     @if (ViewBag.Exist != null && ViewBag.Exist != "")
                     {
