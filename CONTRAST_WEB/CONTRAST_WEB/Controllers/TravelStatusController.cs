@@ -1438,7 +1438,7 @@ namespace CONTRAST_WEB.Controllers
                 ////if (ResponseList.Count > 0) return View("Index", ResponseList.OrderBy(r => r.status_request).ToList());
                 //else
                 //{
-                return View("/TravelRequest/SubmittedMSTR");
+                return View("SubmittedMSTR");
                 //return View("Index", ResponseList);
                 //}
             }
@@ -1858,7 +1858,7 @@ namespace CONTRAST_WEB.Controllers
                 return File(stream, "application/pdf", receipt.Replace(" ", "_") + "_" + model2.travel_request.group_code.Trim(' ') + "_" + DateTime.Now.ToString("yyMMdd-hh-mm-tt") + ".pdf");
 
             }
-            return View("/TravelRequest/SubmittedMSTR");
+            return View("SubmittedMSTR");
         }
 
         // GET: TravelStatus
