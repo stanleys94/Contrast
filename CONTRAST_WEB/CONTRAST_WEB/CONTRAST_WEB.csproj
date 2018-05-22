@@ -308,9 +308,6 @@
     <Compile Include="Models\tb_r_record_rejected_verification.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tb_r_record_settlement_receipt.cs">	
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>	
-    </Compile>
     <Compile Include="Models\tb_r_statusUploadMaster.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
