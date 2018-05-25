@@ -83,6 +83,23 @@ namespace CONTRAST_WEB.Models
                    
                     if (model.flag == "1" && UpdatedData[k].final_status == null) UpdatedData[k].final_status = "1";
                 }
+                List<tb_r_travel_request> Request = await GetData.TravelRequestGCList(model.Settlement_Verified.group_code);
+                List<tb_r_travel_request> updatedRequest = new List<tb_r_travel_request>();
+                foreach(var item in Request)
+                {
+                    tb_r_travel_request temp = new tb_r_travel_request();
+                    if (item.status_request.Contains("7"))
+                    {
+                        temp = item;
+                        temp.active_flag = true;
+                        updatedRequest.Add(temp);
+                    }
+                }
+
+                foreach (var item in updatedRequest)
+                {
+                    await UpdateData.TravelRequest(item);
+                }
             }
             else
             if (position.Trim() == "DpH-GA")
