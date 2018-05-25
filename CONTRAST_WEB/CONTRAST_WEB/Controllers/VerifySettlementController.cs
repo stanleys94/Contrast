@@ -211,7 +211,7 @@ namespace CONTRAST_WEB.Controllers
                         rejected.user_created = Convert.ToInt32(model[k].EmployeeInfo.code);
                         rejected.created_date = DateTime.Now;
 
-                        //await Utility.RecordRejected(rejected);
+                        await Utility.RecordRejected(rejected);
 
                         model[k].flag = "2";
                         await UpdateData.SettlementRejected(model[k], access_status.position, rejected);

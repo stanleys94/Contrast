@@ -374,6 +374,11 @@ namespace CONTRAST_WEB.Controllers
                 return View("Details", model);
         }
 
+        [HttpPost]
+        [Authorize]
+        [Authorize(Roles = "contrast.user")]
+        [ValidateAntiForgeryToken]
+        [NoCache]
         public async Task<ActionResult> Insert2(SettlementHelper model, string sum2, string insert, string time1, string time2)
         {
             if (ModelState.IsValid)
@@ -443,7 +448,7 @@ namespace CONTRAST_WEB.Controllers
                     List<vw_travel_for_settlement> ResponseList = new List<vw_travel_for_settlement>();
 
                     ResponseList = await GetData.TravelSettlementList(Convert.ToInt32(model.TravelRequest.login_id));
-                    ///*
+                    //*
                     for (int i = 0; i < ResponseList.Count(); i++)
                     {
                         ResponseList[i].login_id = model.TravelRequest.login_id;
