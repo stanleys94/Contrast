@@ -104,7 +104,7 @@ namespace CONTRAST_WEB.Controllers
                     //by group code
                     if (   ResultObject2[k].Settlement_Verified.group_code.ToLower().Contains(searchString.ToLower())
                         || ResultObject2[k].Settlement_Verified.name.ToLower().Contains(searchString.ToLower())
-                        || ResultObject2[k].Settlement_Verified.destination_name.ToLower().Contains(searchString.ToLower())                        
+                        || ResultObject2[k].Settlement_Verified.destination_name.ToLower().Contains(searchString.ToLower())
                        )
                         temp.Add(ResultObject2[k]);
                 } 

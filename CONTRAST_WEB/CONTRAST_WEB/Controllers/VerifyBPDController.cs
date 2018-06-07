@@ -65,7 +65,6 @@ namespace CONTRAST_WEB.Controllers
                     if (ResultObject2[k].FixedCost_Verified.group_code.ToLower().Contains(searchString.ToLower())
                         || ResultObject2[k].FixedCost_Verified.name.ToLower().Contains(searchString.ToLower())
                         || ResultObject2[k].FixedCost_Verified.destination_name.ToLower().Contains(searchString.ToLower())
-                        
                        )
                         temp.Add(ResultObject2[k]);
                 }
