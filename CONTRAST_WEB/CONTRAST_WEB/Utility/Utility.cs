@@ -235,6 +235,7 @@ namespace CONTRAST_WEB.Models
             }
         }
 
+
         public static async Task TravelProcedure(tb_m_travel_procedures model)
         {
             using (var client = new HttpClient())
@@ -451,7 +452,7 @@ namespace CONTRAST_WEB.Models
             }
 
             if (model.apprv_date_lvl2 != null)
-            { 
+            {
                 model.apprv_date_lvl2 = model.apprv_date_lvl2.Value.ToUniversalTime();
                 model.apprv_date_lvl2 = model.apprv_date_lvl2 + offset;
             }
@@ -746,6 +747,19 @@ namespace CONTRAST_WEB.Models
             date = date.ToUniversalTime();
             date = date + offset;
             return date;
+        }
+
+        public static async Task InvokeCube()
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri("http://10.86.110.82:97");
+                
+                var content = new FormUrlEncodedContent(new Dictionary<string,string> {{"value", ""}});
+                var response = await client.PostAsync("index", content);
+            }
+
         }
     }
 }

@@ -218,6 +218,7 @@
     <Compile Include="Controllers\GenerateFileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoiceDownloadController.cs" />
+    <Compile Include="Controllers\InvokeCubeController.cs" />
     <Compile Include="Controllers\LinkController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PaymentListController.cs" />
@@ -828,6 +829,7 @@
     <Folder Include="Log\" />
     <Folder Include="PhotoFolder\" />
     <Folder Include="SettlementFolder\" />
+    <Folder Include="Views\InvokeCube\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
