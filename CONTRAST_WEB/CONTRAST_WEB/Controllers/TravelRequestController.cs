@@ -807,13 +807,16 @@ namespace CONTRAST_WEB.Controllers
 
             if (validate != null && model.travel_request != null)
             {
+                //if (Request.Files["generaldoc"] != null)
+                //{
+                //    HttpPostedFileBase file = Request.Files["generaldoc"];
+                //    model.generaldoc_file = file;
+                //    model.travel_request.path_general = "path";
+                //}
+
                 if (ModelState.IsValid)
                 {
-                    if (Request.Files["generaldoc"] != null)
-                    {
-                        HttpPostedFileBase file = Request.Files["generaldoc"];
-                        model.generaldoc_file = file;
-                    }
+                    
 
                     var config = new MapperConfiguration(cfg =>
                     {

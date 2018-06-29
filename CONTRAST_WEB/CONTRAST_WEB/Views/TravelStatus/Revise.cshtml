@@ -253,7 +253,7 @@
                             <div>
                                 @Html.HiddenFor(m => m[k].travel_request.id_destination_city, new { @class = "form-control", @readonly = "readonly" })
                                 @Html.TextBoxFor(m => m[k].destination_string, new { @class = "form-control", @readonly = "readonly" })
-
+                                @Html.HiddenFor(m=>m[k].travel_request.path_general)
                             </div>
                         </div>
                     }

@@ -426,12 +426,12 @@
             </div>
 
             <div class="col-lg-5 col-lg-offset-1">
+                <div>@Html.ValidationMessageFor(m => m.generaldoc_file, "", new { @class = "text-danger" })</div>
                 <span class="fnt2">General Documents :</span>
                 <div style="position:relative;">
                     <div>
                         <a style="font-size:13px" class='btn btn-primary'>
-                            <input type="file" id="generaldoc" name="generaldoc" style='position:absolute;z-index:8;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; ' size="40" onchange='$("#upload-file-info6").html($(this).val().replace(/.*(\/|\\)/,""));'>
-                            <i class="glyphicon glyphicon-search"></i>&nbsp;Browse
+                            @Html.TextBoxFor(m => m.generaldoc_file, new { type = "file" })                            
                         </a>
                         <label style="color:gray;font-size:13px;padding-top:0px;" class="h5s" id="upload-file-info6"></label>
                     </div>

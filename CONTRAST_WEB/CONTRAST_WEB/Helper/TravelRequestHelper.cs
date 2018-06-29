@@ -183,6 +183,7 @@ namespace CONTRAST_WEB.Models
         [ParticipantValidator]
         public string tparticipant { get; set; }
 
+        [Required(ErrorMessage = "Travel document must be attached !")]
         public HttpPostedFileBase generaldoc_file { get; set; }
         public HttpPostedFileBase itinerary_file { get; set; }
         public HttpPostedFileBase invitation_file { get; set; }

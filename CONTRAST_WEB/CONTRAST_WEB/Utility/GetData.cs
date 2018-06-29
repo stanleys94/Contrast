@@ -181,7 +181,7 @@ namespace CONTRAST_WEB.Models
                     division_name = JsonConvert.DeserializeObject<tb_m_employee_source_data>(EmpResponse);
                 }
             }
-            
+             
             return division_name.Divisi;
         }
 

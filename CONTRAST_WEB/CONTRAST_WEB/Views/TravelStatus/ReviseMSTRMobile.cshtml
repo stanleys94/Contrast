@@ -157,6 +157,7 @@
             {
                 for (int k = 1; k < Model.Count(); k++)
                 {
+                    @Html.HiddenFor(m=>m[k].travel_request.path_general)
                     <div style="padding:5px;padding-top:40px; margin-bottom:0px;" id="des1">
                             <div style="margin-bottom:5px">
                                 <strong style="color:deepskyblue;">DESTINATION @(k + 1)</strong>
