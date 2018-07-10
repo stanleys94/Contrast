@@ -116,19 +116,40 @@
                             <tr><th>Lat Coor</th><th>Long Coor</th><th>Execute Date</th><th>Proof</th><th>Check Location</th></tr>
                             @for (int i = 0; i < Model.Executed.Count; i++)
                             {
-                                <tr>
+                            <tr>
+                                @if (Model.Executed[i].latitude == 0 || Model.Executed[i].longitude == 0)
+                                {
+                                    <td style="width:200px;">No Coordinate</td>
+                                    <td style="width:200px;">No Coordinate</td>
+
+                                }
+                                else
+                                {
                                     <td style="width:200px;">@Model.Executed[i].latitude</td>
                                     <td style="width:200px;">@Model.Executed[i].longitude</td>
-                                    <td style="width:200px;">@Model.Executed[i].execution_date</td>
-                                    @if (Model.Executed[i].pic_path != null)
-                                    {
-                                        <td style="width:150px;"><a href=@Model.Executed[i].pic_path target="_blank">Available</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td style="width:150px;">Not Available</td>
-                                    }
-                                        <td><a href="https://www.gps-coordinates.org/" target="_blank">Check (Put Coordinates)</a></td>
+
+                                }
+                                <td style="width:200px;">@Model.Executed[i].execution_date</td>
+                                @if (Model.Executed[i].pic_path != null)
+                                {
+                                    <td style="width:150px;"><a href=@Model.Executed[i].pic_path target="_blank">Available</a></td>
+                                }
+                                else
+                                {
+                                    <td style="width:150px;">Not Available</td>
+                                }
+                                @if (Model.Executed[i].latitude != 0 || Model.Executed[i].longitude != 0)
+                                {
+                                    string text = "Check (Put Coordinates)";
+                                    string link = "<a target=\"_blank\" href=\"https://www.google.com/maps?q=loc:" + Model.Executed[i].latitude + "," + Model.Executed[i].longitude + "&zoom=15\">" + text + "</a>";
+
+                                    <td>@Html.Raw(link)</td>
+
+                                }
+                                else
+                                {
+                                <td><a href="https://www.google.com/maps" target="_blank">Check (Put Coordinates)</a></td>
+                                }
                                 </tr>
                             }
                         </table><br />

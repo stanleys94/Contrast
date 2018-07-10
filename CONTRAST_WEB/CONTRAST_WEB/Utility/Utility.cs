@@ -540,7 +540,7 @@ namespace CONTRAST_WEB.Models
                 model.apprv_date_lvl16 = model.apprv_date_lvl16 + offset;
             }
 
-            if (model.apprv_date_lvl7 != null)
+            if (model.apprv_date_lvl17 != null)
             {
                 model.apprv_date_lvl17 = model.apprv_date_lvl17.Value.ToUniversalTime();
                 model.apprv_date_lvl17 = model.apprv_date_lvl17 + offset;

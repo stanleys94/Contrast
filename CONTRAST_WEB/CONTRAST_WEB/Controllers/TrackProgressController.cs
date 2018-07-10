@@ -34,7 +34,6 @@ namespace CONTRAST_WEB.Controllers
             int privillage = 0;
             string privillage_desc = "";
 
-
             //#1 verifier employee
             //#2 admin istd
             //#3 individual
@@ -178,6 +177,43 @@ namespace CONTRAST_WEB.Controllers
             Detailed.logged_id = await GetData.EmployeeInfo(mood.login_id);
 
             List<tb_r_travel_request> TravelCode = await GetData.TravelRequestGCList(Model.TrackedList.group_code);
+            List<tb_r_travel_request_participant> Participant_List = new List<tb_r_travel_request_participant>();
+
+            if (TravelCode.Count() > 0)
+            {
+                if (TravelCode[0].participants_flag == true)
+                {
+                    PARTICIPANT current = new PARTICIPANT();
+                    current.name = await GetData.EmployeeNameInfo(TravelCode[0].no_reg);
+                    current.no_reg = (int)TravelCode[0].no_reg;
+                    current.division = await GetData.GetDivisionSourceName((int)TravelCode[0].no_reg);
+                    if (TravelCode[0].invited_by == TravelCode[0].no_reg)
+                    {
+                        current.status = "Parent";
+                    }
+                    else
+                    {
+                        current.status = "Children";
+                    }
+
+                    Detailed.Participant.Add(current);
+
+                    if (current.status == "Parent")
+                    {
+                        List<tb_r_travel_request_participant> participant_list = await GetData.TravelRequestParticipant(Detailed.Participant[0].no_reg.ToString(), Detailed.Participant[0].BTA);
+                        foreach (var item in participant_list)
+                        {
+                            PARTICIPANT part = new PARTICIPANT();
+                            part.name = await GetData.EmployeeNameInfo(item.no_reg);
+                            part.division = await GetData.GetDivisionSourceName((int)item.no_reg);
+                            part.status = "Children";
+                            part.no_reg = (int) item.no_reg;
+                            List<tb_r_travel_request> BTA = await GetData.TravelRequestList();
+                            List<tb_r_travel_request> children = BTA.Where(b => b.no_reg == (int?)part.no_reg && (b.participants_flag==true)  && b.invited_by == current.no_reg && b.start_date == TravelCode[0].start_date && b.id_destination_city == TravelCode[0].id_destination_city).ToList();
+                        }
+                    }
+                }
+            }
             Detailed.Name = Model.TrackedList.name;
             Detailed.Division = Model.TrackedList.divisi;
             Detailed.GroupCode = Model.TrackedList.group_code;
@@ -186,7 +222,8 @@ namespace CONTRAST_WEB.Controllers
             Detailed.Destination = new List<string>();
             Detailed.StartDate = new List<DateTime>();
             Detailed.EndDate = new List<DateTime>();
-
+            
+            
             Detailed.HigherUpCode = new List<string>();
             Detailed.HigherUpApprovalDate = new List<string>();
             Detailed.HigherUp = new List<string>();
@@ -203,6 +240,10 @@ namespace CONTRAST_WEB.Controllers
                 Detailed.Destination.Add(city);
                 Detailed.StartDate.Add(Convert.ToDateTime(TravelCode[i].start_date));
                 Detailed.EndDate.Add(Convert.ToDateTime(TravelCode[i].end_date));
+                if (TravelCode[i].path_general != null)
+                {
+                    if (TravelCode[i].path_general.Contains("http")) Detailed.Itinierary = TravelCode[i].path_general;
+                }
             }
 
             if (TravelCode[0].apprv_by_lvl1.HasValue)

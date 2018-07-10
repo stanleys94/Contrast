@@ -151,7 +151,7 @@
                     <br />
                     <button style="width:145px" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
                     <button style="width:145px;position:relative;left:10px" type="submit" name="download" value="download" class="btn btn-info btn-lg">Download</button>
-                    @if (Model.travel_request.status_request == null)
+                    @if (Model.travel_request.status_request == null || Model.travel_request.status_request.Contains("0"))
                     {
                         <button type="button" style="width:145px; position:relative;left:10px" class="btn btn-danger btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">Drop Request</button>
                         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">

@@ -15,6 +15,7 @@ namespace CONTRAST_WEB.Models
         public string Name { get; set; }
         public string EmployeeCode { get; set; }
         public string Division { get; set; }
+        public string Itinierary { get; set; }
 
         public List<COST> ActualCost { get; set; }
         public List<COST> SettlementCost { get; set; }
@@ -26,10 +27,15 @@ namespace CONTRAST_WEB.Models
         public List<string> HigherUpApprovalDate { get; set; }
 
         public List<tb_r_travel_execution> Executed { get; set; }
+        public List<string> Executed_Coor { get; set; }
+
         public List<tb_r_travel_settlement> Settle { get; set; }
         public tb_m_employee logged_id { get; set; }
         public string privilage { get; set; }
+
+        public List<PARTICIPANT> Participant { get; set; }
     }
+
     public class COST
     {
         public string Transaction { get; set; }
@@ -41,5 +47,14 @@ namespace CONTRAST_WEB.Models
         public string Pending { get; set; }
         public string Approved_Status { get; set; }
         public string Path { get; set; }
+    }
+
+    public class PARTICIPANT
+    {
+        public int no_reg { get; set; }
+        public string name { get; set; }
+        public string division { get; set; }
+        public string status { get; set; }
+        public string BTA { get; set; }
     }
 }

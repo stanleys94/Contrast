@@ -1005,9 +1005,10 @@ namespace CONTRAST_WEB.Controllers
                     // Do stuff
                 }
                 else
-                {                    
+                {
+                    string apply = model.employee_info.code;
                     //if model is invalid
-                    return Redirect("Index");
+                    return RedirectToAction("Index","TravelRequest", new { applied = apply});
                 }
 
             }
