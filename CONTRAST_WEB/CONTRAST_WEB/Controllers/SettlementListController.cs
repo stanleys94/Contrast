@@ -482,7 +482,7 @@ namespace CONTRAST_WEB.Controllers
                     {
                         ActualCostObject.amount = (int)model.HotelSettlement;
                         ActualCostObject.jenis_transaksi = "Hotel";
-                       // await InsertData.ActualCost(ActualCostObject);
+                        await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -492,7 +492,7 @@ namespace CONTRAST_WEB.Controllers
 
                         ActualCostObject.amount = (int)model.TicketSettlement;
                         ActualCostObject.jenis_transaksi = "Ticket";
-                       // await InsertData.ActualCost(ActualCostObject);
+                        await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -502,7 +502,7 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.LaundrySettlement;
                         ActualCostObject.jenis_transaksi = "Laundry";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileLaundry, "Laundry_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                       // await InsertData.ActualCost(ActualCostObject);
+                        await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -512,7 +512,7 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.TransportationSettlement;
                         ActualCostObject.jenis_transaksi = "Transportation";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileTransportation, "Transport_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                       // await InsertData.ActualCost(ActualCostObject);
+                        await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -522,7 +522,7 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.MiscSettlement;
                         ActualCostObject.jenis_transaksi = "Miscellaneous";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileOther, "Other_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                       // await InsertData.ActualCost(ActualCostObject);
+                        await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -533,10 +533,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    //else
-                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    else
+                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
