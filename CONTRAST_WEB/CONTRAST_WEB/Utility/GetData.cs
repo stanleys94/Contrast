@@ -1451,6 +1451,83 @@ namespace CONTRAST_WEB.Models
         }
 
 
+        public static async Task<List<tb_r_travel_request>> TravelRequestCreatedDate(DateTime? date)
+        {
+            List<tb_r_travel_request> ListItem = new List<tb_r_travel_request>();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TravelRequest/CreatedDate?date=" +date);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_travel_request> ResponseList = new List<tb_r_travel_request>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_travel_request>>(str);
+
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new tb_r_travel_request();
+                        listItem = item;
+
+                        ListItem.Add(listItem);
+                        k++;
+                    }
+                }
+            }
+
+            return ListItem;
+        }
+
+        public static async Task<List<tb_r_travel_request>> TravelRequestInvited(int? noreg,DateTime? date)
+        {
+            List<tb_r_travel_request> ListItem = new List<tb_r_travel_request>();
+            using (var client = new HttpClient())
+            {
+
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage response = await client.GetAsync("api/TravelRequest/Participant?noreg=" + noreg +"&date="+date);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (response.IsSuccessStatusCode)
+                {
+                    List<tb_r_travel_request> ResponseList = new List<tb_r_travel_request>();
+                    var str = response.Content.ReadAsStringAsync().Result;
+                    ResponseList = JsonConvert.DeserializeObject<List<tb_r_travel_request>>(str);
+
+                    int k = 1;
+                    foreach (var item in ResponseList)
+                    {
+                        var listItem = new tb_r_travel_request();
+                        listItem = item;
+
+                        ListItem.Add(listItem);
+                        k++;
+                    }
+                }
+            }
+
+            return ListItem;
+        }
 
         public static async Task<List<tb_r_travel_request>> TravelRequestList()
         {

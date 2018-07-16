@@ -22,8 +22,55 @@ namespace CONTRAST_WEB.Controllers
     {
         [Authorize]
         [Authorize(Roles = "contrast.user")]
-        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startdate, DateTime? enddate, string MealBox, string TicketBox, string HotelBox, string SettlementBox, string DomesticBox, string OverseasBox, string RegularBox, string TangoBox, string KyohanBox)
         {
+            //Filter Flag
+            if (MealBox != null)
+            {
+                ViewBag.MealCheck = "Check";
+                ViewBag.CostFilter = "Check";
+            }
+            if (DomesticBox != null)
+            {
+                ViewBag.DomesticCheck = "Check";
+                ViewBag.DestinationFilter = "Check";
+            }
+            if (HotelBox != null)
+            {
+                ViewBag.HotelCheck = "Check";
+                ViewBag.CostFilter = "Check";
+            }
+            if (KyohanBox != null)
+            {
+                ViewBag.KyohanCheck = "Check";
+                ViewBag.ActivityFilter = "Check";
+            }
+            if (OverseasBox != null)
+            {
+                ViewBag.OverseasCheck = "Check";
+                ViewBag.DestinationFilter = "Check";
+            }
+            if (RegularBox != null)
+            {
+                ViewBag.RegularCheck = "Check";
+                ViewBag.ActivityFilter = "Check";
+            }
+            if (SettlementBox != null)
+            {
+                ViewBag.SettlementCheck = "Check";
+                ViewBag.CostFilter = "Check";
+            }
+            if (TangoBox != null)
+            {
+                ViewBag.TangoCheck = "Check";
+                ViewBag.ActivityFilter = "Check";
+            }
+            if (TicketBox != null)
+            {
+                ViewBag.TicketCheck = "Check";
+                ViewBag.CostFilter = "Check";
+            }
+
             var identity = (ClaimsIdentity)User.Identity;
             string[] claims = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             ViewBag.Privillege = claims;
@@ -146,6 +193,98 @@ namespace CONTRAST_WEB.Controllers
                 track = temp;
             }
 
+            // meal filter
+            List<TrackingHelper> FilterList = new List<TrackingHelper>();
+
+            if (MealBox != null)
+            {
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.jenis_transaksi == null) ;
+                    else
+                    if (track[i].TrackedList.jenis_transaksi.ToLower().Contains("meal")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+
+            }
+
+            // ticket filter
+            if(TicketBox!= null)
+            {
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.jenis_transaksi == null) ;
+                    else
+                    if (track[i].TrackedList.jenis_transaksi.ToLower().Contains("ticket")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+            }
+
+            // Hotel Filter
+            if (HotelBox != null)
+            {
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.jenis_transaksi == null) ;
+                    else
+                    if (track[i].TrackedList.jenis_transaksi.ToLower().Contains("hotel")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+            }
+
+            // Settlement Filter
+            if (SettlementBox != null)
+            {
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.jenis_transaksi == null) ;
+                    else
+                    if (track[i].TrackedList.jenis_transaksi.ToLower().Contains("settlement")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+            }
+
+            // Tango Filter
+            if (TangoBox != null)
+            {
+
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.activity_name.ToLower().Contains("tango")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+
+            }
+
+            // Regular Filter
+            if (RegularBox != null)
+            {
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.activity_name.ToLower().Contains("regular")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+            }
+
+            // Kyouhan Filter
+            if (RegularBox != null)
+            {
+                for (int i = 0; i < track.Count(); i++)
+                {
+                    if (track[i].TrackedList.activity_name.ToLower().Contains("kyouhan")) FilterList.Add(track[i]);
+                }
+                track = FilterList;
+                FilterList = new List<TrackingHelper>();
+            }
+
+            if(FilterList.Count>0) track = FilterList;
+
             List<int> id_data = new List<int>();
             for (int k = 0; k < track.Count; k++)
                 id_data.Add(track[k].TrackedList.id_data);
@@ -184,23 +323,29 @@ namespace CONTRAST_WEB.Controllers
                 if (TravelCode[0].participants_flag == true)
                 {
                     PARTICIPANT current = new PARTICIPANT();
+                    current.BTA = TravelCode[0].group_code.Trim();
                     current.name = await GetData.EmployeeNameInfo(TravelCode[0].no_reg);
                     current.no_reg = (int)TravelCode[0].no_reg;
                     current.division = await GetData.GetDivisionSourceName((int)TravelCode[0].no_reg);
                     if (TravelCode[0].invited_by == TravelCode[0].no_reg)
                     {
                         current.status = "Parent";
+                        
                     }
                     else
                     {
                         current.status = "Children";
                     }
 
-                    Detailed.Participant.Add(current);
+                    current.name = current.name.Trim();
+                    current.division = current.division.Trim();
+
+                    List<PARTICIPANT> party = new List<PARTICIPANT>();
+                    party.Add(current);
 
                     if (current.status == "Parent")
                     {
-                        List<tb_r_travel_request_participant> participant_list = await GetData.TravelRequestParticipant(Detailed.Participant[0].no_reg.ToString(), Detailed.Participant[0].BTA);
+                        List<tb_r_travel_request_participant> participant_list = await GetData.TravelRequestParticipant(party[0].no_reg.ToString(), party[0].BTA);
                         foreach (var item in participant_list)
                         {
                             PARTICIPANT part = new PARTICIPANT();
@@ -208,12 +353,84 @@ namespace CONTRAST_WEB.Controllers
                             part.division = await GetData.GetDivisionSourceName((int)item.no_reg);
                             part.status = "Children";
                             part.no_reg = (int) item.no_reg;
-                            List<tb_r_travel_request> BTA = await GetData.TravelRequestList();
-                            List<tb_r_travel_request> children = BTA.Where(b => b.no_reg == (int?)part.no_reg && (b.participants_flag==true)  && b.invited_by == current.no_reg && b.start_date == TravelCode[0].start_date && b.id_destination_city == TravelCode[0].id_destination_city).ToList();
+                            List<tb_r_travel_request> BTA = await GetData.TravelRequestCreatedDate(TravelCode[0].create_date);
+                            tb_r_travel_request children = new tb_r_travel_request();
+                            foreach (var item2 in BTA)
+                            {
+                                if (item2.start_date == TravelCode[0].start_date && item2.destination_code == TravelCode[0].destination_code && item2.invited_by == TravelCode[0].no_reg && item2.no_reg == item.no_reg)
+                                {
+                                    children = item2;
+                                    break;
+                                }
+                            }
+                            if (children.group_code != null)
+                            {
+                                part.BTA = children.group_code;
+                                
+                            }
+                            else
+                            {
+                                part.BTA = "Rejected/Has Other Travel Assignment";
+                            }
+                            part.name = part.name.Trim();
+                            part.BTA = part.BTA.Trim();
+                            part.division = part.division.Trim();
+                           
+
+                            party.Add(part);
                         }
                     }
+                    else if (current.status == "Children")
+                    {
+                        List<tb_r_travel_request> parent_candidate = await GetData.TravelRequestCreatedDate(TravelCode[0].create_date);
+                        tb_r_travel_request parent = parent_candidate.Where(b => b.no_reg == TravelCode[0].invited_by && b.destination_code == TravelCode[0].destination_code && b.start_date == TravelCode[0].start_date).First();
+
+                        PARTICIPANT parent_participant = new PARTICIPANT();
+
+                        parent_participant.name = await GetData.EmployeeNameInfo(parent.no_reg);
+                        parent_participant.BTA = parent.group_code.Trim();
+                        parent_participant.division = await GetData.GetDivisionSourceName((int)parent.no_reg);
+                        parent_participant.no_reg = (int)parent.no_reg;
+                        parent_participant.name = parent_participant.name.Trim();
+                        parent_participant.division = parent_participant.division.Trim();
+
+                        party.Add(parent_participant);
+
+                        List<tb_r_travel_request_participant> participant_list = await GetData.TravelRequestParticipant(parent.no_reg.ToString(), parent.group_code);
+                        foreach (var item in participant_list)
+                        {
+                            if (item.no_reg != parent.no_reg && item.no_reg != TravelCode[0].no_reg)
+                            {
+                                List<tb_r_travel_request> participant_x = await GetData.TravelRequestInvited(item.no_reg, TravelCode[0].create_date);
+
+                                if (participant_x.Count > 0)
+                                {
+                                    foreach (var item2 in participant_x)
+                                    {
+                                        if (item2.destination_code == TravelCode[0].destination_code && item2.invited_by == TravelCode[0].invited_by && item2.start_date == TravelCode[0].start_date)
+                                        {
+                                            PARTICIPANT part = new PARTICIPANT();
+                                            part.name = await GetData.EmployeeNameInfo((int)item2.no_reg);
+                                            part.BTA = item2.group_code.Trim();
+                                            part.division = await GetData.GetDivisionSourceName((int)item2.no_reg);
+                                            part.status = "Children";
+                                            part.no_reg = (int)item2.no_reg;
+
+                                            part.BTA = part.BTA.Trim();
+                                            part.division = part.division.Trim();
+
+                                            party.Add(part);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Detailed.Participant = party;
                 }
             }
+            
             Detailed.Name = Model.TrackedList.name;
             Detailed.Division = Model.TrackedList.divisi;
             Detailed.GroupCode = Model.TrackedList.group_code;

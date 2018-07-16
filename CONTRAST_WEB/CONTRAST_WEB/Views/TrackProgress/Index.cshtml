@@ -4,6 +4,12 @@
     ViewBag.Title = "Transaction Tracking";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
+<style>
+    .pagination {
+        display: inline;
+    }
+</style>
+
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
     <ol class="breadcrumb">
         <li>
@@ -45,9 +51,200 @@
                         {
                             @Html.TextBox("enddate", ViewBag.enddate as DateTime?, new { @id = "enddate", @type = "date", @class = "form-control", style = "width:170px" })
                         }
+
                     </span>
 
+
+
                     <span><button type="submit" value="Search" class="btn btn-success">Search</button></span>
+                    <br />
+                    <table style="border:none;display:inline;width:175px">
+                        <tr>
+                            @if (ViewBag.CostFilter != null)
+                            {
+                                <td style="width:175px">
+                                    <input type="checkbox" id="CostFilter" name="CostFilter" value="Meal" style="width:10px ;padding-top:10px" checked />
+                                    :Cost Filter
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:175px">
+                                    <input type="checkbox" id="CostFilter" name="CostFilter" value="Meal" style="width:10px ;padding-top:10px"/>
+                                    :Cost Filter
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            @if (ViewBag.DestinationFilter != null)
+                            {
+                                <td style="width:175px">
+                                    <input type="checkbox" id="DestinationFilter" name="DestinationFilter" value="Meal" style="width:10px ;padding-top:10px" checked />
+                                    :Destination Filter
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:175px">
+                                    <input type="checkbox" id="DestinationFilter" name="DestinationFilter" value="Meal" style="width:10px ;padding-top:10px" />
+                                    :Destination Filter
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            @if (ViewBag.ActivityFilter != null)
+                            {
+                                <td style="width:175px">
+                                    <input type="checkbox" id="ActivityFilter" name="ActivityFilter" value="Meal" style="width:10px ;padding-top:10px" Checked/>
+                                    :Activity Filter
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:175px">
+                                    <input type="checkbox" id="ActivityFilter" name="ActivityFilter" value="Meal" style="width:10px ;padding-top:10px" />
+                                    :Activity Filter
+                                </td>
+                            }
+                        </tr>
+                    </table>
+                    <table style="border:none; display:inline; width:750px">
+                        <tr id="costList" style="visibility:hidden">
+                            @if (ViewBag.MealCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="MealBox" value="Meal" style="width:10px ;padding-top:10px" checked />
+                                    :Meal
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="MealBox" value="Meal" style="width:10px ;padding-top:10px" />
+                                    :Meal
+                                </td>
+                            }
+
+                            @if (ViewBag.TicketCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="TicketBox" value="Ticket" style="width:10px ;padding-top:10px" checked />
+                                    :Ticket
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="TicketBox" value="Ticket" style="width:10px ;padding-top:10px" />
+                                    :Ticket
+                                </td>
+                            }
+
+                            @if (ViewBag.HotelCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="HotelBox" value="Hotel" style="width:10px ;padding-top:10px" checked />
+                                    :Hotel
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="HotelBox" value="Hotel" style="width:10px ;padding-top:10px" />
+                                    :Hotel
+                                </td>
+                            }
+
+                            @if (ViewBag.SettlementCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="SettlementBox" value="Settlement" style="width:10px ;padding-top:10px" checked />
+                                    :Settlement
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="SettlementBox" value="Settlement" style="width:10px ;padding-top:10px" />
+                                    :Settlement
+                                </td>
+                            }
+                        </tr>
+                        <tr id="destinationList" style="visibility:hidden">
+                            @if (ViewBag.DomesticCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="DomesticBox" value="Domestic" style="width:10px ;padding-top:10px" checked />
+                                    :Domestic
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="DomesticBox" value="Domestic" style="width:10px ;padding-top:10px" />
+                                    :Domestic
+                                </td>
+                            }
+                            @if (ViewBag.OverseasCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="OverseasBox" value="Overseas" style="width:10px ;padding-top:10px" checked />
+                                    :Overseas
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="OverseasBox" value="Overseas" style="width:10px ;padding-top:10px" />
+                                    :Overseas
+                                </td>
+                            }
+                        </tr>
+                        <tr id="activityList" style="visibility:hidden">
+                            @if (ViewBag.RegularCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="RegularBox" value="Regular" style="width:10px ;padding-top:10px" checked />
+                                    :Regular
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="RegularBox" value="Regular" style="width:10px ;padding-top:10px" />
+                                    :Regular
+                                </td>
+                            }
+                            @if (ViewBag.TangoCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="TangoBox" value="Tango" style="width:10px ;padding-top:10px" checked />
+                                    :Tango
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="TangoBox" value="Tango" style="width:10px ;padding-top:10px" />
+                                    :Tango
+                                </td>
+                            }
+                            @if (ViewBag.KyohanCheck != null)
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="KyohanBox" value="Kyohan" style="width:10px ;padding-top:10px" checked />
+                                    :Kyohan
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width:100px">
+                                    <input type="checkbox" name="KyohanBox" value="Kyohan" style="width:10px ;padding-top:10px" />
+                                    :Kyohan
+                                </td>
+                            }
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -117,7 +314,7 @@
                             <tr>
                                 <td class="td">
                                     @*@Html.DisplayFor(Model => Model[k].TrackedList.group_code)*@
-                                    <button class="btn btn-toolbar" type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>
+                                    <button class="btn btn-toolbar" type="submit" name="detail" value=@k formtarget="_blank">@Model[k].TrackedList.group_code</button>
                                     @Html.HiddenFor(Model => Model[k].TrackedList.group_code, new { Value = @Model[k].TrackedList.group_code })
                                 </td>
                                 <td class="td">
@@ -193,135 +390,202 @@
     @using (Html.BeginForm("Download", "TrackProgress", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        if (ViewBag.startdate != null){@Html.Hidden("startdate", ViewBag.startdate as DateTime?);}
-        if (ViewBag.enddate != null) {@Html.Hidden("enddate", ViewBag.enddate as DateTime?); }
-        if (ViewBag.CurrentFilter != null) {@Html.Hidden("SearchString", ViewBag.CurrentFilter as DateTime?); }
-        
-        <div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;" class="clearfix" hidden>
-            <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
-                <table style="width:1250px;margin-bottom:0px;" class="table table-condensed table-striped" hidden>
-                    <tr style="background-color:deepskyblue; text-align:center;">
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:30px;">
-                            NUMBER
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            NAME
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
-                            NOREG
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
-                            TRANSACTION
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
-                            AMOUNT
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            DESTINATION
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            STATUS
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
-                            OUTSTANDING
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            ACTIVITY
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
-                            GENERATED DATE
-                        </th>
-                        <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
-                            APPROVED DATE
-                        </th>
-
-                    </tr>
-                    @if (Model.Count() > 0)
-                    {
-                        for (int k = 0; k < Model.Count(); k++)
-                        {                          
-                            <tr>
-                                <td class="td">                                   
-                                    <button class="btn btn-toolbar" type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>                                   
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.name)
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.no_reg)
-                                </td>
-                                <td class="td">
-                                    @if (Model[k].TrackedList.jenis_transaksi != null)
-                                    {
-                                        @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
-                                    }
-                                    else
-                                    {
-                                        <label>None</label>
-                                    }                                   
-                                </td>
-                                <td class="td">
-                                    @if (Model[k].TrackedList.amount != null)
-                                    {
-                                        <p>Rp. @String.Format("{0:n0}", Model[k].TrackedList.amount, new { style = "width:500px" })</p>}
-                                    else
-                                    {
-                                        <label>None</label>
-                                    }
-                                   
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
-                                </td>
-                                 <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.id_activity)
-                                </td>
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
-                                </td>                               
-                                <td class="td">
-                                    @Html.DisplayFor(Model => Model[k].TrackedList.approval_date)
-                                </td>
-                            </tr>
-
-
-                        }
-                    }
-                </table>
-            </div>
-            @foreach (int item in ViewBag.id_data)
-            {
-                @Html.Hidden("id_data", item)
-            }
-        </div>
-        <div style="float:right;margin-top:10px;padding-left:100px;" class="col-lg-3 col-lg-offset-2">
-            @*<button type="submit" class="btn btn-info" value="Download" name="download">Download</button>*@
-            <button id="button" class="btn btn-info btn-lg" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button>
-            <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
-        </div>
+        if (ViewBag.startdate != null)
+        {@Html.Hidden("startdate", ViewBag.startdate as DateTime?);
     }
+    if (ViewBag.enddate != null)
+    {@Html.Hidden("enddate", ViewBag.enddate as DateTime?);
+}
+if (ViewBag.CurrentFilter != null)
+{@Html.Hidden("SearchString", ViewBag.CurrentFilter as DateTime?);
+}
 
-    <div style="float:left;margin-top:10px;" class="col-lg-7">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-        @if (ViewBag.startdate != null || ViewBag.enddate != null)
-        {
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-                                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate }))
-        }
-        else
-        {
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-                                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+<div style="width:100%;text-align:left;height:370px;overflow-y:scroll;border:0px;" class="clearfix" hidden>
+    <div style="width:100%;text-align:left;border:0px;padding:0 5px;">
+        <table style="width:1250px;margin-bottom:0px;" class="table table-condensed table-striped" hidden>
+            <tr style="background-color:deepskyblue; text-align:center;">
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:30px;">
+                    NUMBER
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                    NAME
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:60px;">
+                    NOREG
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:40px;">
+                    TRANSACTION
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:110px;">
+                    AMOUNT
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                    DESTINATION
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                    STATUS
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:80px;">
+                    OUTSTANDING
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                    ACTIVITY
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:150px;">
+                    GENERATED DATE
+                </th>
+                <th style="color:white; background-color:deepskyblue; text-align:center; border-right:1px solid white;width:120px;">
+                    APPROVED DATE
+                </th>
 
-        }
+            </tr>
+            @if (Model.Count() > 0)
+            {
+                for (int k = 0; k < Model.Count(); k++)
+                {
+                    <tr>
+                        <td class="td">
+                            <button class="btn btn-toolbar" type="submit" name="detail" value=@k>@Model[k].TrackedList.group_code</button>
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.name)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.no_reg)
+                        </td>
+                        <td class="td">
+                            @if (Model[k].TrackedList.jenis_transaksi != null)
+                            {
+                                @Html.DisplayFor(Model => Model[k].TrackedList.jenis_transaksi)
+                            }
+                            else
+                            {
+                                <label>None</label>
+                            }
+                        </td>
+                        <td class="td">
+                            @if (Model[k].TrackedList.amount != null)
+                            {
+                                <p>Rp. @String.Format("{0:n0}", Model[k].TrackedList.amount, new { style = "width:500px" })</p>}
+                            else
+                            {
+                                <label>None</label>
+                            }
+
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.destination_name)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.TYPES_OF_TRANSACTIONS)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.verified_flag)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.id_activity)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.create_date)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(Model => Model[k].TrackedList.approval_date)
+                        </td>
+                    </tr>
+
+
+                }
+            }
+        </table>
+    </div>
+    @foreach (int item in ViewBag.id_data)
+    {
+        @Html.Hidden("id_data", item)
+    }
+</div>
+<div style="float:left; margin-top:10px;width:200px">
+    @*<button type="submit" class="btn btn-info" value="Download" name="download">Download</button>*@
+    <button id="button" class="btn btn-info btn-lg" type="submit" name="Submit" value="Submit"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button>
+    <button type="button" class="btn btn-default" onclick="goBack()">Back</button>
+</div>
+}
+
+    <div style="float:right ;margin-top:10px; width:800px">
+        <span style="float:left;width:150px">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </span>
+        <span>
+            @if (ViewBag.startdate != null || ViewBag.enddate != null)
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startdate = ViewBag.startdate, enddate = ViewBag.enddate, @float="right", @style = "height:10px;padding:top:0px;margin-top;0px" }))
+            }
+            else
+            {
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+                                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter , @float = "right" , @style= "height:10px;padding:top:0px;margin-top;0px" }))
+
+            }
+        </span>
     </div>
 </div>
+
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script src="~/Scripts/verify.js"></script>
+
+<script>
+
+    if ($('#CostFilter').is(":checked")) {
+        $('#costList').css('visibility', 'visible');
+    } else if ($('#CostFilter').is(":not(:checked)")) {
+        $('#costList').css('visibility', 'hidden');
+    }
+
+    if ($('#ActivityFilter').is(":checked")) {
+        $('#activityList').css('visibility', 'visible');
+    } else if ($('#ActivityFilter').is(":not(:checked)")) {
+        $('#activityList').css('visibility', 'hidden');
+    }
+
+    if ($('#DestinationFilter').is(":checked")) {
+        $('#destinationList').css('visibility', 'visible');
+    } else if ($('#DestinationFilter').is(":not(:checked)")) {
+        $('#destinationList').css('visibility', 'hidden');
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#CostFilter').change(function () {
+            var $this = $(this);
+            if ($this.is(':checked')) {
+                $('#costList').css('visibility', 'visible');
+
+            }
+            else {
+                $('#costList').css('visibility', 'hidden');
+            }
+        });
+        $('#DestinationFilter').change(function () {
+            var $this = $(this);
+            if ($this.is(':checked')) {
+                $('#destinationList').css('visibility', 'visible');
+
+            }
+            else {
+                $('#destinationList').css('visibility', 'hidden');
+            }
+        });
+        $('#ActivityFilter').change(function () {
+            var $this = $(this);
+            if ($this.is(':checked')) {
+                $('#activityList').css('visibility', 'visible');
+
+            }
+            else {
+                $('#activityList').css('visibility', 'hidden');
+            }
+        });
+    });
+</script>
