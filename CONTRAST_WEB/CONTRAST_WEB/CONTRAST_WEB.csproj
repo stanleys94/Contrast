@@ -253,6 +253,7 @@
     </Compile>
     <Compile Include="Helper\PaymentListHelper.cs" />
     <Compile Include="Helper\PaymentProposalHelper.cs" />
+    <Compile Include="Helper\PrintHelper.cs" />
     <Compile Include="Helper\TrackingDetailHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Helper\ActualCostHelper.cs" />
@@ -820,6 +821,7 @@
     <Content Include="Views\TravelStatus\ValidateMSTR.cshtml" />
     <Content Include="Views\TravelStatus\ValidateMSTRMobile.cshtml" />
     <Content Include="Views\TravelStatus\SubmittedMSTR.cshtml" />
+    <Content Include="Views\SettlementList\Done.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

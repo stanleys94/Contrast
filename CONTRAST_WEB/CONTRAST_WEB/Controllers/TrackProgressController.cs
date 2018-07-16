@@ -177,7 +177,8 @@ namespace CONTRAST_WEB.Controllers
             Detailed.logged_id = new tb_m_employee();
             Detailed.logged_id = await GetData.EmployeeInfo(mood.login_id);
 
-            List<tb_r_travel_request> TravelCode = await GetData.TravelRequestGCList(Model.TrackedList.group_code);
+            List<tb_r_travel_request> TravelCode1 = await GetData.TravelRequestGCList(Model.TrackedList.group_code);
+            List<tb_r_travel_request> TravelCode = TravelCode1.OrderBy(b => b.start_date).ToList();
             Detailed.Name = Model.TrackedList.name;
             Detailed.Division = Model.TrackedList.divisi;
             Detailed.GroupCode = Model.TrackedList.group_code;

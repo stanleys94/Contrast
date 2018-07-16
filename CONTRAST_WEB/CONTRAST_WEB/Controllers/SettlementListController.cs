@@ -17,6 +17,8 @@ using PdfSharp.Pdf;
 using PdfSharp;
 using PdfSharp.Drawing.Layout;
 using CONTRAST_WEB.CustomValidator;
+using CONTRAST_WEB.Models;
+using CONTRAST_WEB.Helper;
 using System.Security.Claims;
 
 
@@ -383,6 +385,15 @@ namespace CONTRAST_WEB.Controllers
         {
             if (ModelState.IsValid)
             {
+                tb_r_travel_request settle_check = await GetData.TravelRequest(model.TravelRequest.id_request);
+                if (settle_check.status_request == "7 ")
+                {
+                    string done = settle_check.group_code.Trim();
+                    ViewBag.done = done;
+                    ViewBag.URL = Constant.Baseurl;
+                    return View("Done");
+                }
+
                 ViewBag.time1 = time1;
                 ViewBag.time2 = time2;
 
@@ -471,7 +482,7 @@ namespace CONTRAST_WEB.Controllers
                     {
                         ActualCostObject.amount = (int)model.HotelSettlement;
                         ActualCostObject.jenis_transaksi = "Hotel";
-                        await InsertData.ActualCost(ActualCostObject);
+                       // await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -481,7 +492,7 @@ namespace CONTRAST_WEB.Controllers
 
                         ActualCostObject.amount = (int)model.TicketSettlement;
                         ActualCostObject.jenis_transaksi = "Ticket";
-                        await InsertData.ActualCost(ActualCostObject);
+                       // await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -491,7 +502,7 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.LaundrySettlement;
                         ActualCostObject.jenis_transaksi = "Laundry";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileLaundry, "Laundry_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                        await InsertData.ActualCost(ActualCostObject);
+                       // await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -501,7 +512,7 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.TransportationSettlement;
                         ActualCostObject.jenis_transaksi = "Transportation";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileTransportation, "Transport_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                        await InsertData.ActualCost(ActualCostObject);
+                       // await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -511,7 +522,7 @@ namespace CONTRAST_WEB.Controllers
                         ActualCostObject.amount = (int)model.MiscSettlement;
                         ActualCostObject.jenis_transaksi = "Miscellaneous";
                         ActualCostObject.path_file = Utility.UploadSettlementReceipt(model.ReceiptFileOther, "Other_" + ActualCostObject.no_reg + "_" + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second);
-                        await InsertData.ActualCost(ActualCostObject);
+                       // await InsertData.ActualCost(ActualCostObject);
                         ActualCostObject.start_date_extend = temp_start;
                         ActualCostObject.end_date_extend = temp_end;
                     }
@@ -522,10 +533,10 @@ namespace CONTRAST_WEB.Controllers
                     SettlementPaidHelper SummarySettlementObject = new SettlementPaidHelper();
                     SummarySettlementObject.Summary = await GetData.SummarySettlementInfo(ActualCostObject.group_code);
 
-                    if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
-                    else
-                        await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
+                    //if (model.MealSettlement == 0 && model.PreparationSettlement == 0 && model.HotelSettlement == 0 && model.TicketSettlement == 0 && model.LaundrySettlement == 0 && model.TransportationSettlement == 0 && model.MiscSettlement == 0)
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "1");
+                    //else
+                    //    await UpdateData.TravelRequest(ActualCostObject.group_code, "0");
 
                     //migrate ke helper baru
 
@@ -578,6 +589,8 @@ namespace CONTRAST_WEB.Controllers
         }
 
         // GET: SettlementList
+
+       
 
         public async Task<ActionResult> IndexMSTR(string noreg)
         {
@@ -829,6 +842,7 @@ namespace CONTRAST_WEB.Controllers
         {
             if (ModelState.IsValid)
             {
+               
                 ViewBag.time1 = time1;
                 ViewBag.time2 = time2;
 
@@ -1095,14 +1109,7 @@ namespace CONTRAST_WEB.Controllers
             int total_Reimburse = 0;
             int total_Actual = 0;
 
-            List<string> start_date = new List<string>();
-            List<string> start_time = new List<string>();
-
-            List<string> end_date = new List<string>();
-            List<string> end_time = new List<string>();
-
-            List<string> destination = new List<string>();
-            List<string> from = new List<string>();
+            List<PrintHelper> printing = new List<PrintHelper>();
 
             int x_pad_max = 0;
             int x_pad = 0;
@@ -1113,88 +1120,104 @@ namespace CONTRAST_WEB.Controllers
             int count = 0;
             if (model.Summary.startDate_1.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.Summary.startDate_1).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.Summary.endDate_1).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
+                first.start_date = Convert.ToDateTime(model.Summary.startDate_1).ToString("dd MMM yyyy");
+                first.end_date = Convert.ToDateTime(model.Summary.endDate_1).ToString("dd MMM yyyy");
 
-                start_time.Add(Convert.ToDateTime(model.Summary.startDate_1).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.Summary.endDate_1).ToString("hh:mm tt"));
+                first.start_time = Convert.ToDateTime(model.Summary.startDate_1).ToString("hh:mm tt");
+                first.end_time = Convert.ToDateTime(model.Summary.endDate_1).ToString("hh:mm tt");
 
-                destination.Add(model.Summary.destination_1);
-                from.Add("Jakarta");
+                first.destination = (model.Summary.destination_1);
+                first.from = ("Jakarta");
+                printing.Add(first);
                 count++;
             }
             if (model.Summary.startDate_2.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.Summary.startDate_2).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.Summary.endDate_2).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
 
-                start_time.Add(Convert.ToDateTime(model.Summary.startDate_2).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.Summary.endDate_2).ToString("hh:mm tt"));
+                first.start_date=(Convert.ToDateTime(model.Summary.startDate_2).ToString("dd MMM yyyy"));
+                first.end_date =(Convert.ToDateTime(model.Summary.endDate_2).ToString("dd MMM yyyy"));
 
-                destination.Add(model.Summary.destination_2);
-                from.Add(model.Summary.destination_1);
+                first.start_time =(Convert.ToDateTime(model.Summary.startDate_2).ToString("hh:mm tt"));
+                first.end_time =(Convert.ToDateTime(model.Summary.endDate_2).ToString("hh:mm tt"));
+
+                first.destination =(model.Summary.destination_2);
+                first.from =(model.Summary.destination_1);
+                printing.Add(first);
                 count++;
             }
             if (model.Summary.startDate_3.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.Summary.startDate_3).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.Summary.endDate_3).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
+                first.start_date = (Convert.ToDateTime(model.Summary.startDate_3).ToString("dd MMM yyyy"));
+                first.end_date =(Convert.ToDateTime(model.Summary.endDate_3).ToString("dd MMM yyyy"));
 
-                start_time.Add(Convert.ToDateTime(model.Summary.startDate_3).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.Summary.endDate_3).ToString("hh:mm tt"));
+                first.start_time =(Convert.ToDateTime(model.Summary.startDate_3).ToString("hh:mm tt"));
+                first.end_time =(Convert.ToDateTime(model.Summary.endDate_3).ToString("hh:mm tt"));
 
-                destination.Add(model.Summary.destination_3);
-                from.Add(model.Summary.destination_2);
+                first.destination =(model.Summary.destination_3);
+                first.from =(model.Summary.destination_2);
+                printing.Add(first);
                 count++;
             }
             if (model.Summary.startDate_4.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.Summary.startDate_4).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.Summary.endDate_4).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
+                first.start_date =(Convert.ToDateTime(model.Summary.startDate_4).ToString("dd MMM yyyy"));
+                first.end_date =(Convert.ToDateTime(model.Summary.endDate_4).ToString("dd MMM yyyy"));
 
-                start_time.Add(Convert.ToDateTime(model.Summary.startDate_4).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.Summary.endDate_4).ToString("hh:mm tt"));
+                first.start_time =(Convert.ToDateTime(model.Summary.startDate_4).ToString("hh:mm tt"));
+                first.end_time =(Convert.ToDateTime(model.Summary.endDate_4).ToString("hh:mm tt"));
 
-                destination.Add(model.Summary.destination_4);
-                from.Add(model.Summary.destination_3);
+                first.destination =(model.Summary.destination_4);
+                first.from =(model.Summary.destination_3);
+
+                printing.Add(first);
                 count++;
             }
             if (model.Summary.startDate_5.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.Summary.startDate_5).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.Summary.endDate_5).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
+                first.start_date = (Convert.ToDateTime(model.Summary.startDate_5).ToString("dd MMM yyyy"));
+                first.end_date =(Convert.ToDateTime(model.Summary.endDate_5).ToString("dd MMM yyyy"));
 
-                start_time.Add(Convert.ToDateTime(model.Summary.startDate_5).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.Summary.endDate_5).ToString("hh:mm tt"));
+                first.start_time =(Convert.ToDateTime(model.Summary.startDate_5).ToString("hh:mm tt"));
+                first.end_time =(Convert.ToDateTime(model.Summary.endDate_5).ToString("hh:mm tt"));
 
-                destination.Add(model.Summary.destination_5);
-                from.Add(model.Summary.destination_4);
+                first.destination =(model.Summary.destination_5);
+                first.from =(model.Summary.destination_4);
+                printing.Add(first);
                 count++;
             }
             if (model.Summary.startDate_6.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.Summary.startDate_6).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.Summary.endDate_6).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
+                first.start_date = (Convert.ToDateTime(model.Summary.startDate_6).ToString("dd MMM yyyy"));
+                first.end_date =(Convert.ToDateTime(model.Summary.endDate_6).ToString("dd MMM yyyy"));
 
-                start_time.Add(Convert.ToDateTime(model.Summary.startDate_6).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.Summary.endDate_6).ToString("hh:mm tt"));
+                first.start_time =(Convert.ToDateTime(model.Summary.startDate_6).ToString("hh:mm tt"));
+                first.end_time =(Convert.ToDateTime(model.Summary.endDate_6).ToString("hh:mm tt"));
 
-                destination.Add(model.Summary.destination_6);
-                from.Add(model.Summary.destination_5);
+                first.destination =(model.Summary.destination_6);
+                first.from =(model.Summary.destination_5);
+                printing.Add(first);
                 count++;
             }
             if (model.StartSettlement.HasValue)
             {
-                start_date.Add(Convert.ToDateTime(model.StartSettlement).ToString("dd MMM yyyy"));
-                end_date.Add(Convert.ToDateTime(model.EndSettlement).ToString("dd MMM yyyy"));
+                PrintHelper first = new PrintHelper();
+                first.start_date = (Convert.ToDateTime(model.StartSettlement).ToString("dd MMM yyyy"));
+                first.end_date =(Convert.ToDateTime(model.EndSettlement).ToString("dd MMM yyyy"));
 
-                start_time.Add(Convert.ToDateTime(model.StartSettlement).ToString("hh:mm tt"));
-                end_time.Add(Convert.ToDateTime(model.EndSettlement).ToString("hh:mm tt"));
+                first.start_time =(Convert.ToDateTime(model.StartSettlement).ToString("hh:mm tt"));
+                first.end_time =(Convert.ToDateTime(model.EndSettlement).ToString("hh:mm tt"));
 
-                destination.Add("Extend");
-                from.Add(destination[count - 1]);
+                first.destination =("Extend");
+                first.from =(printing[count-1].destination);
             }
 
+            List<PrintHelper> print_element = printing.OrderBy(b => b.start_date).ToList();
             //gfx.DrawRectangle(XBrushes.GhostWhite, 50, 735, 495, 63);
 
             XImage TAM = XImage.FromFile(TAMPath);
@@ -1246,18 +1269,18 @@ namespace CONTRAST_WEB.Controllers
             gfx.DrawString("Return", body, XBrushes.Black, 385 + x_pad, 240, XStringFormats.TopLeft);
 
             int i = 0, last_date = 0;
-            foreach (var item in start_date)
+            foreach (var item in print_element)
             {
                 last_date = i;
                 gap_now = (i + 1) * 15;
-                gfx.DrawString(from[i], body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(destination[i], body, XBrushes.Black, 180, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].from, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].destination, body, XBrushes.Black, 180, 240 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(start_date[i], body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(start_time[i], body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].start_date, body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].start_time, body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(end_date[i], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
-                gfx.DrawString(end_time[i], body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].end_date, body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].end_time, body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 i++;
 
             }
@@ -1266,7 +1289,7 @@ namespace CONTRAST_WEB.Controllers
                 gap_now = (i + 1) * 15;
                 gfx.DrawString(HDDepartFlag, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(start_date[0], body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[i].start_date, body, XBrushes.Black, 280 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
 
                 if (HDDepart != null)
                     gfx.DrawString(HDDepart, body, XBrushes.Black, 335 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
@@ -1278,7 +1301,7 @@ namespace CONTRAST_WEB.Controllers
                 gap_now = (i + 1) * 15;
                 gfx.DrawString(HDReturnFlag, body, XBrushes.Black, 85, 240 + gap_now, XStringFormats.TopLeft);
 
-                gfx.DrawString(end_date[last_date], body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
+                gfx.DrawString(print_element[last_date].end_date, body, XBrushes.Black, 385 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 if (HDReturn != null)
                     gfx.DrawString(HDReturn, body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
                 else gfx.DrawString("00:00 AM", body, XBrushes.Black, 440 + x_pad, 240 + gap_now, XStringFormats.TopLeft);
