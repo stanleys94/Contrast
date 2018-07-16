@@ -1,134 +1,134 @@
 ﻿@model IList<CONTRAST_WEB.Models.vw_travel_for_settlement>
 @{
-    ViewBag.Title = "SETTLEMENT LIST";
-    Layout = "~/Views/Shared/_LayoutLg.cshtml";
+	ViewBag.Title = "SETTLEMENT LIST";
+	Layout = "~/Views/Shared/_LayoutLg.cshtml";
 }
 <div style="height:100px; padding:60px 0 0 0;" class="well navbar-fixed-top">
-    <ol class="breadcrumb">
-        <li>
-            @using (Html.BeginForm("Index", "Home"))
-            {
-                <button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
-            }
-        </li>
-        <li class="breadcrumb-item active">Settlement List</li>
-    </ol>
+	<ol class="breadcrumb">
+		<li>
+			@using (Html.BeginForm("Index", "Home"))
+			{
+				<button type="submit" style="border:0px; margin:0; background-color:transparent; padding:0px; color:dimgrey">Home</button>
+			}
+		</li>
+		<li class="breadcrumb-item active">Settlement List</li>
+	</ol>
 </div>
 <div class="container">
-    <div style="margin-top:110px; padding:0 90px;" id="products" class="row list-group _3EibU">
-        @using (Html.BeginForm("Index", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
-            foreach (var item in ViewBag.Privillege)
-            {
-                if (item == "contrast.travelcoordinator")
-                {
-                <div style="width:960px;" class="col-md-11 ">
-                    <hr>
-                </div>
-                <div style="width:950px;text-align:center" class="col-md-11" >
-                    <div style="margin:5px;" class="form-group form-inline">
-                        <strong style="color:deepskyblue;">TRAVEL COORDINATOR :</strong> @ViewBag.loged_name (@ViewBag.loged_id)
-                    </div>
-                </div> 
-                <div style="width:475px;" class="col-md-5">
-                    <div style="margin:5px;" class="form-group form-inline">
-                        Type name Employee :
-                        <input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@ViewBag.applied />
-                        <input type="text" id="code" name="code" value=@ViewBag.applied hidden>
-                        <button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
-                    </div>
-                </div>
+	<div style="margin-top:110px; padding:0 90px;" id="products" class="row list-group _3EibU">
+		@using (Html.BeginForm("Index", "SettlementList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+			@Html.AntiForgeryToken()
+			foreach (var item in ViewBag.Privillege)
+			{
+				if (item == "contrast.travelcoordinator")
+				{
+				<div style="width:960px;" class="col-md-11 ">
+					<hr>
+				</div>
+				<div style="width:950px;text-align:center" class="col-md-11" >
+					<div style="margin:5px;" class="form-group form-inline">
+						<strong style="color:deepskyblue;">TRAVEL COORDINATOR :</strong> @ViewBag.loged_name (@ViewBag.loged_id)
+					</div>
+				</div> 
+				<div style="width:475px;" class="col-md-5">
+					<div style="margin:5px;" class="form-group form-inline">
+						Type name Employee :
+						<input type="text" id="searchInput2" name="applied" class="form-control" style="width:200px" value=@ViewBag.applied />
+						<input type="text" id="code" name="code" value=@ViewBag.applied hidden>
+						<button type="submit" class="btn btn-success btn-lg input-group-btn" name="Add" value="Submit" style="width:70px">Assign</button>
+					</div>
+				</div>
 
-                 <div style="width:475px;padding-top:5px" class="col-md-5">
-                    <div style="margin:5px;" class="form-group form-inline">
-                        Assigned Employee :
-                        @if (ViewBag.applied_name != null)
-                        {
-                            <label>@ViewBag.applied_name (@ViewBag.applied)</label>
-                        }
-                    </div>
-                </div>
+				 <div style="width:475px;padding-top:5px" class="col-md-5">
+					<div style="margin:5px;" class="form-group form-inline">
+						Assigned Employee :
+						@if (ViewBag.applied_name != null)
+						{
+							<label>@ViewBag.applied_name (@ViewBag.applied)</label>
+						}
+					</div>
+				</div>
 
-                <div style="width:960px;" class="col-md-11 ">
-                    <hr>
-                </div>
-                }
-            }
-        }
-        @for (var i = 0; i < Model.Count; i++)
-        {
-            var item = Model[i];
+				<div style="width:960px;" class="col-md-11 ">
+					<hr>
+				</div>
+				}
+			}
+		}
+		@for (var i = 0; i < Model.Count; i++)
+		{
+			var item = Model[i];
 
-            using (Html.BeginForm("Details", "SettlementList", Model[i]))
-            {
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(m => item.id_request)
-                @Html.HiddenFor(m => item.id_destination_city)
-                @Html.HiddenFor(m => item.total_meal)
-                @Html.HiddenFor(m => item.total_miscellaneous)
-                @Html.HiddenFor(m => item.total_ticket)
-                @Html.HiddenFor(m => item.total_transportation)
-                @Html.HiddenFor(m => item.total_winter)
-                @Html.HiddenFor(m => item.total_hotel)
-                @Html.HiddenFor(m => item.total_laundry)
-                @Html.HiddenFor(m => item.no_reg)
-                @Html.HiddenFor(m => item.emp_name)
-                @Html.HiddenFor(m => item.group_code)
-                @Html.HiddenFor(m => item.login_id)
-                @Html.HiddenFor(m => item.comment)
-                @Html.HiddenFor(m => item.final_status)
-                @Html.HiddenFor(m => item.process_reject)
-                <div class="item col-xs-6 col-lg-6">
-                    <div class="thumbnail">
-                        <div class="clearfix">
-                            <div class="column content">
-                                <span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
-                            </div>
-                            <div style="padding:20px 1px; width:270px;" class="column menu">
-                                <span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span>
-                                <span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
-                                @if (item.final_status == "2")
-                                {
-                                    <strong style="color:red">Rejected</strong>
-                                }
-                                else if (item.final_status == "0")
-                                {
-                                    <strong style="color:darkcyan">Pending</strong>
-                                }
-                            </div>
-                            <span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-    </div>
+			using (Html.BeginForm("Details", "SettlementList", Model[i]))
+			{
+				@Html.AntiForgeryToken()
+				@Html.HiddenFor(m => item.id_request)
+				@Html.HiddenFor(m => item.id_destination_city)
+				@Html.HiddenFor(m => item.total_meal)
+				@Html.HiddenFor(m => item.total_miscellaneous)
+				@Html.HiddenFor(m => item.total_ticket)
+				@Html.HiddenFor(m => item.total_transportation)
+				@Html.HiddenFor(m => item.total_winter)
+				@Html.HiddenFor(m => item.total_hotel)
+				@Html.HiddenFor(m => item.total_laundry)
+				@Html.HiddenFor(m => item.no_reg)
+				@Html.HiddenFor(m => item.emp_name)
+				@Html.HiddenFor(m => item.group_code)
+				@Html.HiddenFor(m => item.login_id)
+				@Html.HiddenFor(m => item.comment)
+				@Html.HiddenFor(m => item.final_status)
+				@Html.HiddenFor(m => item.process_reject)
+				<div class="item col-xs-6 col-lg-6">
+					<div class="thumbnail">
+						<div class="clearfix">
+							<div class="column content">
+								<span style="padding:0 10px"><input type="image" img style="margin:5px 0px; width:auto; height:50px" src="~/img/Settlement-icon-b.png" /></span>
+							</div>
+							<div style="padding:20px 1px; width:270px;" class="column menu">
+								<span class="templatetext">@Html.DisplayFor(modelItem => item.group_code)</span>
+								<span class="designationstyle">&nbsp;(to @Html.DisplayFor(modelItem => item.destination_name) )</span>
+								@if (item.final_status == "2")
+								{
+									<strong style="color:red">Rejected</strong>
+								}
+								else if (item.final_status == "0")
+								{
+									<strong style="color:darkcyan">Pending</strong>
+								}
+							</div>
+							<span style="float:right; padding:20px 20px;" class="glyphicon glyphicon-chevron-right"></span>
+						</div>
+					</div>
+				</div>
+			}
+		}
+	</div>
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 <script>
-     $("#searchInput2").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '@Url.Action("GetSearchValue2", "SettlementList")',
-                dataType: "json",
-	        data: { search: $("#searchInput2").val(), code: $("#code").val() },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return { label: item.name, value: item.code };
-                    }));
-                },
-                error: function (xhr, status, error) {
-                    alert("Error Has detected");
-                }
-            });
-        }
-    });
+	 $("#searchInput2").autocomplete({
+		source: function (request, response) {
+			$.ajax({
+				url: '@Url.Action("GetSearchValue2", "SettlementList")',
+				dataType: "json",
+			data: { search: $("#searchInput2").val(), code: $("#code").val() },
+				success: function (data) {
+					response($.map(data, function (item) {
+						return { label: item.name, value: item.code };
+					}));
+				},
+				error: function (xhr, status, error) {
+					alert("Error Has detected");
+				}
+			});
+		}
+	});
 
-    function goBack() {
-        window.history.back();
-    }
+	function goBack() {
+		window.history.back();
+	}
 </script>

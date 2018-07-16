@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Done";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .centerAllign {
+        margin: auto;
+        width: 50%;
+        padding: 10px;
+    }
+</style>
+
+<div style="padding-top:100px">
+    <table style="font-size:30px; border:none" class="centerAllign">
+        <tr>
+            <td style="text-align:center">
+                <strong style="color:#ff0000;text-align:justify">@ViewBag.Done</strong>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                already been settled
+            </td>
+        </tr>
+    </table>
+    
+</div>
+<meta http-equiv="refresh" content="3;url=@ViewBag.URL" name="applied" />
+
