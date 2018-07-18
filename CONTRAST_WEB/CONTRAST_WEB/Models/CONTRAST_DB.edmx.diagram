@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1cc5505a24fd4f6988b498bc009074ca" Name="Diagram1" ZoomLevel="14">
+        <EntityTypeShape EntityType="CONTRASTModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_arrange_cashallowance" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_category_lead_time" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_destination" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_divison_mapping" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_employee" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_flag_meaning" Width="1.5" PointX="8.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_gl_account" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_lt_employee" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_lt_spec_employee" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_multiple_dest_flag" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_overseas_allowance" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_overseas_flag" Width="1.5" PointX="10.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_participant_flag" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_purpose" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_rate_flight" Width="1.5" PointX="12.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_rate_hotel" Width="1.5" PointX="6.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_rate_passport" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_rate_visa" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_region" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_request_type" Width="1.5" PointX="8.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_tax" Width="1.5" PointX="2.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_transaction_mapping" Width="1.5" PointX="14.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_travel_activity" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_travel_procedures" Width="1.5" PointX="14.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_vendor" Width="1.5" PointX="10.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_winter_period" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_actualcost_BACKUP" Width="1.5" PointX="6.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_actualcost_BACKUP_DATA" Width="1.5" PointX="16.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_dit" Width="1.5" PointX="0.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_execution" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_payment_verification" Width="1.5" PointX="18.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_request_BACKUP" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_request_BACKUP_DATA" Width="1.5" PointX="8.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_request_participant" Width="1.5" PointX="10.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_settlement" Width="1.5" PointX="20.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_settlement_receipt" Width="1.5" PointX="22.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_bms_budget" Width="1.5" PointX="22.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_div_approval_mapping" Width="1.5" PointX="22.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_mapping_approval" Width="1.5" PointX="22.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_verifier_employee" Width="1.5" PointX="24.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_fixedcost_allowance" Width="1.5" PointX="24.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_test_div_map" Width="1.5" PointX="12.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_employee_display_name" Width="1.5" PointX="18.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_lt_performance" Width="1.5" PointX="24.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_request_summary" Width="1.5" PointX="20.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_send_email_notif_participant" Width="1.5" PointX="0.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_send_email_notif_settlement" Width="1.5" PointX="2.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_send_email_trv_confirmation" Width="1.5" PointX="26.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_sum_actualcost_dtl" Width="1.5" PointX="26.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_sum_actualcost_dtl_gen_file" Width="1.5" PointX="26.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_sum_actualcost_hdr_gen_file" Width="1.5" PointX="26.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_summary_settlement" Width="1.5" PointX="28.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_travel_allowance" Width="1.5" PointX="28.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_travel_cost" Width="1.5" PointX="28.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_travel_for_settlement" Width="1.5" PointX="28.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_travel_profile" Width="1.5" PointX="22.75" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_mstr_user" Width="1.5" PointX="11.375" PointY="28.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_vendor_employee" Width="1.5" PointX="25.375" PointY="16.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_travel_execution_list" Width="1.5" PointX="17.375" PointY="29.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_budget" Width="1.5" PointX="29.375" PointY="26.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_budget_division_mapping" Width="1.5" PointX="3.375" PointY="5.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_employee_source_data" Width="1.5" PointX="31.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_BPD_verified" Width="1.5" PointX="15.375" PointY="24.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_settlement_verified" Width="1.5" PointX="31.375" PointY="5.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_budget_div_mapping" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_record_rejected_verification" Width="1.5" PointX="23.375" PointY="21.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_rejected_travel_for_settlement" Width="1.5" PointX="31.375" PointY="12.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_tracking_transaction_data" Width="1.5" PointX="31.375" PointY="18.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_total_budget" Width="1.5" PointX="31.375" PointY="24.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_record_generate_file" Width="1.5" PointX="31.375" PointY="29.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_photo_employee" Width="1.5" PointX="25.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_budget_source_data" Width="1.5" PointX="0.75" PointY="32.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_employee_structure_organization" Width="1.5" PointX="2.75" PointY="32.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_invoice_actualcost" Width="1.5" PointX="33.375" PointY="7.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_actualcost_preparation" Width="1.5" PointX="5.375" PointY="26.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_actualCost_verified" Width="1.5" PointX="5.375" PointY="31.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_rejected_actualcost_verification" Width="1.5" PointX="33.375" PointY="19.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_invoice_actualcost_new" Width="1.5" PointX="33.375" PointY="27.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_request" Width="1.5" PointX="29.375" PointY="33.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_actualcost" Width="1.5" PointX="7.375" PointY="33.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_actualcost_generate_file" Width="1.5" PointX="13.375" PointY="30.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_statusUploadMaster" Width="1.5" PointX="3.375" PointY="17.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_payment_proposal" Width="1.5" PointX="3.375" PointY="20.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_special_employee" Width="1.5" PointX="35.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_invoice_actualcost" Width="1.5" PointX="9.375" PointY="35.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_record_payment_list" Width="1.5" PointX="33.375" PointY="13.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_record_payment_proposal" Width="1.5" PointX="35.375" PointY="10.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_travel_request_comment" Width="1.5" PointX="17.375" PointY="18.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_payment_list" Width="1.5" PointX="25.375" PointY="34.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_m_special_employee_new" Width="1.5" PointX="35.375" PointY="14.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.vw_tracking_transaction_data_new" Width="1.5" PointX="35.375" PointY="25.75" />
+        <EntityTypeShape EntityType="CONTRASTModel.tb_r_record_settlement_receipt" Width="1.5" PointX="35.375" PointY="32.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
