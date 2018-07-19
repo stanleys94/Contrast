@@ -51,6 +51,8 @@ namespace CONTRAST_WEB.Controllers
                             {
                                 if (HalfDayCheck.additional3 != "")
                                 {
+                                    if (HalfDayCheck.additional3.Contains('.'))
+                                        HalfDayCheck.additional3=HalfDayCheck.additional3.Replace('.',':');
                                     DateTime check = Convert.ToDateTime(HalfDayCheck.additional3);
                                     ResultObject2[k].HDDepart = check.ToString("hh:mm:ss tt");
                                 }

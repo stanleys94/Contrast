@@ -260,10 +260,36 @@
     <Compile Include="Helper\ActualCostShtHelper.cs" />
     <Compile Include="Helper\ActualCostVerifiedHelper.cs" />
     <Compile Include="Helper\AllowanceHelper.cs" />
+    <Compile Include="Models\CONTRAST_DB.Context.cs">
+      <DependentUpon>CONTRAST_DB.Context.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\CONTRAST_DB.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\CONTRAST_DB.Designer.cs">
+      <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="Models\CONTRAST_DB.Views.cs" />
     <Compile Include="Helper\GenerateFileHelper.cs" />
     <Compile Include="Helper\InvoiceHelper.cs" />
     <Compile Include="Helper\SettlementPaidHelper.cs" />
+    <Compile Include="Helper\TrackingHelper.cs" />
+    <Compile Include="Helper\TravelStatusCommentHelper.cs" />
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_bms_budget.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_m_arrange_cashallowance.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_budget.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -274,135 +300,6 @@
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_budget_source_data.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_employee_source_data.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_employee_structure_organization.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_photo_employee.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_special_employee.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_special_employee_new.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_vendor_employee.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_invoice_actualcost.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_record_generate_file.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_record_payment_list.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_record_payment_proposal.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_record_rejected_verification.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_record_settlement_receipt.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_statusUploadMaster.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_travel_actualcost.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_travel_request.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_r_travel_request_comment.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Helper\TrackingHelper.cs" />
-    <Compile Include="Helper\TravelStatusCommentHelper.cs" />
-    <Compile Include="Models\vw_actualcost_generate_file.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_actualcost_preparation.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_actualCost_verified.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_BPD_verified.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_invoice_actualcost.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_invoice_actualcost_new.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_payment_list.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_payment_proposal.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_rejected_actualcost_verification.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_rejected_travel_for_settlement.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_settlement_verified.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_tracking_transaction_data.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_tracking_transaction_data_new.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vw_travel_execution_list.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Utility\Calculate.cs" />
-    <Compile Include="Utility\Class1.cs" />
-    <Compile Include="Utility\Constant.cs" />
-    <Compile Include="Models\CONTRAST_DB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CONTRAST_DB.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CONTRAST_DB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CONTRAST_DB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Helper\FixedCostVerifierHelper.cs" />
-    <Compile Include="Utility\DeleteData.cs" />
-    <Compile Include="Utility\FileType.cs" />
-    <Compile Include="Utility\GetData.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Utility\InsertData.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Helper\RequestSummaryHelper.cs" />
-    <Compile Include="Helper\SettlementHelper.cs" />
-    <Compile Include="Helper\SettlementVerifiedHelper.cs" />
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_bms_budget.cs">
-      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tb_m_arrange_cashallowance.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_category_lead_time.cs">
@@ -418,6 +315,12 @@
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_employee.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_m_employee_source_data.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_m_employee_structure_organization.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_flag_meaning.cs">
@@ -450,6 +353,9 @@
     <Compile Include="Models\tb_m_participant_flag.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_m_photo_employee.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_purpose.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -471,6 +377,12 @@
     <Compile Include="Models\tb_m_request_type.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_m_special_employee.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_m_special_employee_new.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_tax.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
@@ -486,10 +398,37 @@
     <Compile Include="Models\tb_m_vendor.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_m_vendor_employee.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_m_verifier_employee.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_m_winter_period.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_invoice_actualcost.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_record_generate_file.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_record_payment_list.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_record_payment_proposal.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_record_rejected_verification.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_record_settlement_receipt.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_statusUploadMaster.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_travel_actualcost.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_r_travel_actualcost_BACKUP.cs">
@@ -510,10 +449,16 @@
     <Compile Include="Models\tb_r_travel_payment_verification.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tb_r_travel_request.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tb_r_travel_request_BACKUP.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_r_travel_request_BACKUP_DATA.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tb_r_travel_request_comment.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tb_r_travel_request_participant.cs">
@@ -528,15 +473,40 @@
     <Compile Include="Models\tb_test_div_map.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Utility\TokenJwt.cs" />
-    <Compile Include="Helper\TravelDitHelper.cs" />
-    <Compile Include="Helper\TravelExecutionHelper.cs" />
-    <Compile Include="Helper\TravelRequestHelper.cs" />
-    <Compile Include="Helper\TravelStatusHelper.cs" />
+    <Compile Include="Models\vw_actualcost_generate_file.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_actualcost_preparation.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_actualCost_verified.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_BPD_verified.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\vw_employee_display_name.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vw_invoice_actualcost.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_invoice_actualcost_new.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\vw_lt_performance.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_payment_list.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_payment_proposal.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_rejected_actualcost_verification.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_rejected_travel_for_settlement.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_request_summary.cs">
@@ -549,6 +519,9 @@
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_send_email_trv_confirmation.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_settlement_verified.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_summary_settlement.cs">
@@ -566,10 +539,19 @@
     <Compile Include="Models\vw_total_budget.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vw_tracking_transaction_data.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_tracking_transaction_data_new.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\vw_travel_allowance.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_travel_cost.cs">
+      <DependentUpon>CONTRAST_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_travel_execution_list.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_travel_for_settlement.cs">
@@ -578,6 +560,24 @@
     <Compile Include="Models\vw_travel_profile.cs">
       <DependentUpon>CONTRAST_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Calculate.cs" />
+    <Compile Include="Utility\Class1.cs" />
+    <Compile Include="Utility\Constant.cs" />
+    <Compile Include="Helper\FixedCostVerifierHelper.cs" />
+    <Compile Include="Utility\DeleteData.cs" />
+    <Compile Include="Utility\FileType.cs" />
+    <Compile Include="Utility\GetData.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Utility\InsertData.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Helper\RequestSummaryHelper.cs" />
+    <Compile Include="Helper\SettlementHelper.cs" />
+    <Compile Include="Helper\SettlementVerifiedHelper.cs" />
+    <Compile Include="Utility\TokenJwt.cs" />
+    <Compile Include="Helper\TravelDitHelper.cs" />
+    <Compile Include="Helper\TravelExecutionHelper.cs" />
+    <Compile Include="Helper\TravelRequestHelper.cs" />
+    <Compile Include="Helper\TravelStatusHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\JwtProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -642,26 +642,22 @@
     <Content Include="img\traveltracking.png" />
     <Content Include="img\verification.png" />
     <Content Include="Models\CONTRAST_DB.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CONTRAST_DB.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\CONTRAST_DB.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
+    <Content Include="Models\CONTRAST_DB.edmx.diagram">
       <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\CONTRAST_DB.tt">
+      <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CONTRAST_DB.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <EntityDeploy Include="Models\CONTRAST_DB.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CONTRAST_DB.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\CONTRAST_DB.edmx.diagram">
-      <DependentUpon>CONTRAST_DB.edmx</DependentUpon>
     </Content>
     <Content Include="Files\DIT_DOMESTIC_TEMPLATE.xlsx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -681,7 +677,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\verify.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -846,6 +844,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Models\CONTRAST_DB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CONTRAST_DB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

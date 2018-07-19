@@ -1,6 +1,7 @@
 ﻿using CONTRAST_WEB.CustomValidator;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -43,6 +44,8 @@ namespace CONTRAST_WEB.Models
         public bool extend_flag { get; set; }
         public bool halfday_flag1 { get; set; }
         public bool halfday_flag2 { get; set; }
+
+         
         public string date_depart { get; set; }
         public string date_return { get; set; }
 

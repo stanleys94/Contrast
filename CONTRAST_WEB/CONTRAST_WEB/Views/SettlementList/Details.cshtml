@@ -410,7 +410,8 @@
                     </div>
                     <div style="margin-bottom:0px;float:left;margin-left:5px;" id="timedepart">
                         <label>
-                            @Html.TextBox("time1", (object)ViewBag.time1, new { @readonly = "readonly", @id = "time1", @type = "time", @Value = ViewBag.time1, @class = "form-control" })
+                            <input class="form-control" id="time1" type="time" name="time1" value="@ViewBag.time1" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"  readonly  oninput="setCustomValidity(''); checkValidity(); setCustomValidity(validity.valid ? '' :'Please use 24 hours HH:MM format [i.e. 10:30]');"/>
+                            @*@Html.TextBox("time1", (object)ViewBag.time1, new { @readonly = "readonly", @id = "time1", @type = "time", @Value = ViewBag.time1, @class = "form-control" })*@
                             @*@Html.TextBoxFor(m => m.date_depart, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
                         </label>
                         <span style="font-size:12px;color:gray;height:300px;">*Departure Time</span>
@@ -432,7 +433,8 @@
                     </div>
                     <div style="margin-bottom:0px;float:left;margin-left:5px;" class="col-md-offset-0" id="timereturn">
                         <label>
-                            @Html.TextBox("time2", (object)ViewBag.time2, new { @readonly = "readonly", @id = "time2", @type = "time", @Value = ViewBag.time2, @class = "form-control" })
+                            <input class="form-control" id="time2" type="time" name="time2" value="@ViewBag.time2" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"  readonly oninput="setCustomValidity(''); checkValidity(); setCustomValidity(validity.valid ? '' :'Please use 24 hours HH:MM format [i.e. 10:30]');"/>
+                            @*@Html.TextBox("time2", (object)ViewBag.time2, new { @readonly = "readonly", @id = "time2", @type = "time", @Value = ViewBag.time2, @class = "form-control" })*@
                             @*@Html.TextBoxFor(m  => m.date_return, new { @type = "time", @class = "form-control", @style = "width:150px;" })*@
                         </label>
                         <span style="font-size:12px;color:gray;height:300px;">*Return Time</span>
