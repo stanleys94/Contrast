@@ -386,7 +386,8 @@ namespace CONTRAST_WEB.Controllers
             if (ModelState.IsValid)
             {
                 tb_r_travel_request settle_check = await GetData.TravelRequest(model.TravelRequest.id_request);
-                if (settle_check.status_request == "7 ")
+                
+                if (settle_check.status_request == "7 " && model.TravelRequest.final_status=="0")
                 {
                     string done = settle_check.group_code.Trim();
                     ViewBag.done = done;
