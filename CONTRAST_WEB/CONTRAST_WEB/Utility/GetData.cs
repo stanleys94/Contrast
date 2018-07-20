@@ -1451,7 +1451,7 @@ namespace CONTRAST_WEB.Models
         }
 
 
-        public static async Task<List<tb_r_travel_request>> TravelRequestCreatedDate(DateTime? date)
+        public static async Task<List<tb_r_travel_request>> TravelRequestStartEndDate(string start, string end)
         {
             List<tb_r_travel_request> ListItem = new List<tb_r_travel_request>();
             using (var client = new HttpClient())
@@ -1466,7 +1466,7 @@ namespace CONTRAST_WEB.Models
 
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage response = await client.GetAsync("api/TravelRequest/CreatedDate?date=" +date);
+                HttpResponseMessage response = await client.GetAsync("api/TravelRequest/StartEndDate?start=" + start + "&end="+ end);
 
                 //Checking the response is successful or not which is sent using HttpClient  
                 if (response.IsSuccessStatusCode)

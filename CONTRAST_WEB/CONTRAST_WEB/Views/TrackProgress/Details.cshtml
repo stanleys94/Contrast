@@ -2,165 +2,253 @@
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_LayoutLg.cshtml";
+    int counter = 1;
 }
-
+<style>
+    #para_2 {
+        border-right: 5px solid #9090ff
+    }
+    #para_3 {
+        border-left: 5px solid #9090ff
+    }
+    #para_4 {
+        border-right: 5px solid #9090ff
+    }
+    #para_4 {
+        border-left: 5px solid #9090ff
+    }
+</style>
 <div class="container">
-    <div style="margin-top:80px" class="row">            
-                <div>
-                    <label class="h5c" style="width:1150px;"><b>DETAILS</b> ( @Model.GroupCode.Trim(' ') )</label><br />
-                    <label class="h5s">EMPLOYEE INFO</label><br />
-                    <table>
-                        <tr><td style="font-weight:bold">NAME</td><td>&nbsp;:&nbsp;</td><td>@Model.Name</td></tr>
-                        <tr><td style="font-weight:bold">NOREG</td><td>&nbsp;:&nbsp;</td><td>@Model.EmployeeCode</td></tr>
-                        <tr><td style="font-weight:bold">DIVISION</td><td>&nbsp;:&nbsp;</td><td>@Model.Division</td></tr>
-                    </table>
-                    <br />
-                    
-                    <label class="h5s">TRAVEL INFO</label>
-                    <table style="border:none;">
-                        <tr><th style="width:250px">From</th><th style="width:250px">To</th><th style="width:250px">Start Date</th><th style="width:250px">End Date</th></tr>
-                        @if (Model.Destination.Count > 0)
-                        {
-                            for (int k = 0; k < Model.Destination.Count; k++)
-                            {
-                                if (k == 0)
-                                {
-                                    <tr><td>Jakarta</td><td>@Model.Destination[k]</td><td>@Model.StartDate[k]</td><td>@Model.EndDate[k]</td></tr>
-                                }
-                                else
-                                {
-                                    <tr><td>@Model.Destination[k - 1]</td><td>@Model.Destination[k]</td><td>@Model.StartDate[k]</td><td>@Model.EndDate[k]</td></tr>
-
-                                }
-                            }
-                        }
-                    </table>
-                    <br />
-
-                    <table style="border:none;">
-                        <tr><th style="width:250px">Approver</th><th style="width:250px">Approver Code</th><th style="width:250px">Status</th><th style="width:250px">Approval Date</th></tr>
-                        @if (Model.Destination.Count > 0)
-                        {
-                            for (int k = 0; k < Model.HigherUp.Count; k++)
-                            {
-                                <tr><td>@Model.HigherUp[k]</td><td>@Model.HigherUpCode[k]</td><td>@Model.HigherUpApprovalStatus[k]</td><td>@Model.HigherUpApprovalDate[k]</td></tr>
-                            }
-                        }
-                    </table><br />
-                    @if (Model.ActualCost.Count > 0)
-                    {
-                        <label class="h5s">ACTUAL COST DETAILS</label>
-                        <table>
-                            <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
-                            @for (int k = 0; k < Model.ActualCost.Count; k++)
-                            {
-                                <tr><td>@Model.ActualCost[k].Transaction</td><td>Rp. @Model.ActualCost[k].Amount.ToString("N")</td><td>@Model.ActualCost[k].Approved</td><td>@Model.ActualCost[k].Approved_Status</td><td>@Model.ActualCost[k].ApprovedDate</td><td>@Model.ActualCost[k].Pending</td></tr>
-
-                            }
-                        </table><br />
-                    }
-
-                    @if (Model.BPD.Count > 0)
-                    {
-                        <label class="h5s">BPD DETAILS</label>
-                        <table>
-                            <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
-                            @for (int k = 0; k < Model.BPD.Count; k++)
-                            {
-                                <tr><td>@Model.BPD[k].Transaction</td><td>Rp. @Model.BPD[k].Amount.ToString("N")</td><td>@Model.BPD[k].Approved</td><td>@Model.BPD[k].Approved_Status</td><td>@Model.BPD[k].ApprovedDate</td><td>@Model.BPD[k].Pending</td></tr>
-
-                            }
-                        </table><br />
-                    }
-
-                    @if (Model.SettlementCost.Count > 0)
-                    {
-                        <label class="h5s">SETTLEMENT DETAILS</label>
-                        <table>
-                            <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th><th>Attachment</th></tr>
-                            @for (int k = 0; k < Model.SettlementCost.Count; k++)
-                            {
-                                <tr>
-                                    <td>@Model.SettlementCost[k].Transaction</td>
-                                    <td>Rp. @Model.SettlementCost[k].Amount.ToString("N")</td>
-                                    <td>@Model.SettlementCost[k].Approved</td>
-                                    <td>@Model.SettlementCost[k].Approved_Status</td>
-                                    <td>@Model.SettlementCost[k].ApprovedDate</td>
-                                    <td>@Model.SettlementCost[k].Pending</td>
-                                    @if (Model.SettlementCost[k].Path != null)
-                                    {
-                                        <td><a href=@Model.SettlementCost[k].Path id="link" target="_blank">Open</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td>None</td>
-                                    }
-                                </tr>
-
-                            }
-                        </table><br />
-                        using (Html.BeginForm("Print", "TrackProgress"))
-                        {
-                        @Html.AntiForgeryToken()
-                        @Html.Hidden("BTA",Model.GroupCode.Trim())
-                        <label style="color:darkgray;">Settlement Receipt : </label>
-                        <button type="submit" class="btn btn-toolbar btn-sm" style="width:145px"><i class="glyphicon glyphicon-download"></i> Re-Download</button>
-                        }
-                    }
-
-                    @if (Model.Executed.Count > 0)
-                    {
-                        <br />
-                        <label class="h5s">TRAVEL EXECUTION DETAILS</label>
-                        <table>
-                            <tr><th>Lat Coor</th><th>Long Coor</th><th>Execute Date</th><th>Proof</th><th>Check Location</th></tr>
-                            @for (int i = 0; i < Model.Executed.Count; i++)
-                            {
-                            <tr>
-                                @if (Model.Executed[i].latitude == 0 || Model.Executed[i].longitude == 0)
-                                {
-                                    <td style="width:200px;">No Coordinate</td>
-                                    <td style="width:200px;">No Coordinate</td>
-
-                                }
-                                else
-                                {
-                                    <td style="width:200px;">@Model.Executed[i].latitude</td>
-                                    <td style="width:200px;">@Model.Executed[i].longitude</td>
-
-                                }
-                                <td style="width:200px;">@Model.Executed[i].execution_date</td>
-                                @if (Model.Executed[i].pic_path != null)
-                                {
-                                    <td style="width:150px;"><a href=@Model.Executed[i].pic_path target="_blank">Available</a></td>
-                                }
-                                else
-                                {
-                                    <td style="width:150px;">Not Available</td>
-                                }
-                                @if (Model.Executed[i].latitude != 0 || Model.Executed[i].longitude != 0)
-                                {
-                                    string text = "Check (Put Coordinates)";
-                                    string link = "<a target=\"_blank\" href=\"https://www.google.com/maps?q=loc:" + Model.Executed[i].latitude + "," + Model.Executed[i].longitude + "&zoom=15\">" + text + "</a>";
-
-                                    <td>@Html.Raw(link)</td>
-
-                                }
-                                else
-                                {
-                                <td><a href="https://www.google.com/maps" target="_blank">Check (Put Coordinates)</a></td>
-                                }
-                                </tr>
-                            }
-                        </table><br />
-                    }
-                </div>
-                <button style="width:145px;float:right;margin-bottom:30px;" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
+    <div class="row" style="margin-top:80px">
+        <label class="h5c" style="width:1150px;"><b>DETAILS</b> (@Model.GroupCode.Trim(' ') )</label><br />
+        <div style="margin-top:10px;padding-left:20px ;border-top:1px solid;border-bottom:2px double; border-right:5px solid #9090FF;">
+            <label class="h5s">EMPLOYEE INFO</label><br />
+            <table>
+                <tr><td style="font-weight:bold">NAME</td><td>&nbsp;:&nbsp;</td><td>@Model.Name</td></tr>
+                <tr><td style="font-weight:bold">NOREG</td><td>&nbsp;:&nbsp;</td><td>@Model.EmployeeCode</td></tr>
+                <tr><td style="font-weight:bold">DIVISION</td><td>&nbsp;:&nbsp;</td><td>@Model.Division</td></tr>
+            </table>
+            <br />
+        </div>
     </div>
-</div>
+
+    <div class="row" style="margin-top:10px;padding-left:20px ;border-top:1px solid;border-bottom:2px double; border-left:5px solid #9090FF;">
+
+        <label class="h5s">TRAVEL INFO</label>
+        <table style="border:none;">
+            <tr><th style="width:250px">From</th><th style="width:250px">To</th><th style="width:250px">Start Date</th><th style="width:250px">End Date</th></tr>
+            @if (Model.Destination.Count > 0)
+            {
+                for (int k = 0; k < Model.Destination.Count; k++)
+                {
+                    if (k == 0)
+                    {
+                        <tr><td>Jakarta</td><td>@Model.Destination[k]</td><td>@Model.StartDate[k]</td><td>@Model.EndDate[k]</td></tr>
+                    }
+                    else
+                    {
+                        <tr><td>@Model.Destination[k - 1]</td><td>@Model.Destination[k]</td><td>@Model.StartDate[k]</td><td>@Model.EndDate[k]</td></tr>
+
+                    }
+                }
+            }
+        </table>
+
+        @if (Model.Participant != null)
+        {
+            <label class="h5s">PARTICIPANT INFO</label>
+            if (Model.Participant.Count() > 0)
+            {
+                if (Model.Participant[0].status == "Parent")
+                {
+                    <label> : As Leader </label>
+                }
+                else
+                {
+                    <label> As Participant (invited by : @Model.Participant[1].name - @Model.Participant[1].no_reg)</label>
+                }
+                <table style="border:none">
+                    <tr>
+                        <th style="width:250px">Participant Name</th>
+                        <th style="width:100px">No. Reg</th>
+                        <th style="width:300px">Division</th>
+                        <th style="width:400px">Group Code</th>
+                        <th style="width:100px">Status</th>
+                    </tr>
+                    @foreach (var item in Model.Participant)
+                    {
+                        <tr>
+                            <td>@item.name</td>
+                            <td>@item.no_reg</td>
+                            <td>@item.division</td>
+                            <td>@item.BTA</td>
+                            <td>@item.status</td>
+                        </tr>
+                    }
+                </table>
+
+
+
+            }
+        }
+        <br />
+        <table style="border:none;">
+            <tr>
+                <th style="width:250px">Approver</th>
+                <th style="width:250px">Approver Code</th>
+                <th style="width:250px">Status</th>
+                <th style="width:250px">Approval Date</th>
+            </tr>
+            @if (Model.Destination.Count > 0)
+            {
+                for (int k = 0; k < Model.HigherUp.Count; k++)
+                {
+                    <tr>
+                        <td>@Model.HigherUp[k]</td>
+                        <td>@Model.HigherUpCode[k]</td>
+                        <td>@Model.HigherUpApprovalStatus[k]</td>
+                        <td>@Model.HigherUpApprovalDate[k]</td>
+                    </tr>
+                }
+            }
+        </table><br />
+    </div>
+
+    @if (Model.ActualCost.Count > 0)
+    {
+        counter = counter + 1;
+    <div  id="para_@counter" class="row" style="margin-top:10px;padding-left:20px ;border-top:1px solid;border-bottom:2px double;">
+
+        <label class="h5s">ACTUAL COST DETAILS</label>
+        <table>
+            <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
+            @for (int k = 0; k < Model.ActualCost.Count; k++)
+            {
+                <tr><td>@Model.ActualCost[k].Transaction</td><td>Rp. @Model.ActualCost[k].Amount.ToString("N")</td><td>@Model.ActualCost[k].Approved</td><td>@Model.ActualCost[k].Approved_Status</td><td>@Model.ActualCost[k].ApprovedDate</td><td>@Model.ActualCost[k].Pending</td></tr>
+
+            }
+        </table>
+        <br />
+    </div>
+        }
+
+
+        @if (Model.BPD.Count > 0)
+        {
+            counter = counter + 1;
+            <div id="para_@counter" class="row" style="margin-top:10px;padding-left:20px ;border-top:1px solid;border-bottom:2px double;">
+
+                <label class="h5s">BPD DETAILS</label>
+                <table>
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:250px">Processed On</th><th style="width:250px">Pending</th></tr>
+                    @for (int k = 0; k < Model.BPD.Count; k++)
+                    {
+                        <tr><td>@Model.BPD[k].Transaction</td><td>Rp. @Model.BPD[k].Amount.ToString("N")</td><td>@Model.BPD[k].Approved</td><td>@Model.BPD[k].Approved_Status</td><td>@Model.BPD[k].ApprovedDate</td><td>@Model.BPD[k].Pending</td></tr>
+
+                    }
+                </table><br />
+            </div>
+        }
+
+
+        @if (Model.SettlementCost.Count > 0)
+        {
+            counter = counter + 1;
+            <div id="para_@counter" class="row" style="margin-top:10px;padding-left:20px; padding-right:20px;border-top:1px solid;border-bottom:2px double;">
+
+                <label class="h5s">SETTLEMENT DETAILS</label>
+                <table width="">
+                    <tr><th style="width:250px">Transaction Type</th><th style="width:250px">Amount</th><th style="width:250px">Approval</th><th style="width:250px">Status</th><th style="width:150px">Processed On</th><th style="width:200px">Pending</th><th>Attachment</th></tr>
+                    @for (int k = 0; k < Model.SettlementCost.Count; k++)
+                    {
+                        <tr>
+                            <td>@Model.SettlementCost[k].Transaction</td>
+                            <td>Rp. @Model.SettlementCost[k].Amount.ToString("N")</td>
+                            <td>@Model.SettlementCost[k].Approved</td>
+                            <td>@Model.SettlementCost[k].Approved_Status</td>
+                            <td>@Model.SettlementCost[k].ApprovedDate</td>
+                            <td>@Model.SettlementCost[k].Pending</td>
+                            @if (Model.SettlementCost[k].Path != null)
+                            {
+                                <td><a href=@Model.SettlementCost[k].Path id="link" target="_blank">Open</a></td>
+                            }
+                            else
+                            {
+                                <td>None</td>
+                            }
+                        </tr>
+
+                    }
+                </table><br />
+                @using (Html.BeginForm("Print", "TrackProgress"))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("BTA", Model.GroupCode.Trim())
+                    <label style="color:darkgray;">Settlement Receipt : </label>
+                    <button type="submit" class="btn btn-toolbar btn-sm" style="width:145px"><i class="glyphicon glyphicon-download"></i> Re-Download</button>
+                }
+            </div>
+        }
+
+
+        @if (Model.Executed.Count > 0)
+        {
+            counter = counter + 1;
+            <div id="para_@counter" class="row" style="margin-top:10px;padding-left:20px;border-top:1px solid;border-bottom:2px double;">
+
+                <br />
+                <label class="h5s">TRAVEL EXECUTION DETAILS</label>
+                <table>
+                    <tr><th>Lat Coor</th><th>Long Coor</th><th>Execute Date</th><th>Proof</th><th>Check Location</th></tr>
+                    @for (int i = 0; i < Model.Executed.Count; i++)
+                    {
+                        <tr>
+                            @if (Model.Executed[i].latitude == 0 || Model.Executed[i].longitude == 0)
+                            {
+                                <td style="width:200px;">No Coordinate</td>
+                                <td style="width:200px;">No Coordinate</td>
+
+                            }
+                            else
+                            {
+                                <td style="width:200px;">@Model.Executed[i].latitude</td>
+                                <td style="width:200px;">@Model.Executed[i].longitude</td>
+
+                            }
+                            <td style="width:200px;">@Model.Executed[i].execution_date</td>
+                            @if (Model.Executed[i].pic_path != null)
+                            {
+                                <td style="width:150px;"><a href=@Model.Executed[i].pic_path target="_blank">Available</a></td>
+                            }
+                            else
+                            {
+                                <td style="width:150px;">Not Available</td>
+                            }
+                            @if (Model.Executed[i].latitude != 0 || Model.Executed[i].longitude != 0)
+                            {
+                                string text = "Check (Put Coordinates)";
+                                string link = "<a target=\"_blank\" href=\"https://www.google.com/maps?q=loc:" + Model.Executed[i].latitude + "," + Model.Executed[i].longitude + "&zoom=15\">" + text + "</a>";
+
+                                <td>@Html.Raw(link)</td>
+
+                            }
+                            else
+                            {
+                                <td><a href="https://www.google.com/maps" target="_blank">Check (Put Coordinates)</a></td>
+                            }
+                        </tr>
+                    }
+                </table><br />
+            </div>
+        }
+
+        <br />
+        <button style="width:145px;float:right;margin-bottom:30px;" type="button" class="btn btn-default btn-lg" onclick="goBack()">Back</button>
+    </div>
 
 <script>
             function goBack() {
                 window.history.back();
-            }
+    }
 </script>
+

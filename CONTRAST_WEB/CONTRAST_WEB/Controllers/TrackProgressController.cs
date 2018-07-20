@@ -346,46 +346,66 @@ namespace CONTRAST_WEB.Controllers
                     if (current.status == "Parent")
                     {
                         List<tb_r_travel_request_participant> participant_list = await GetData.TravelRequestParticipant(party[0].no_reg.ToString(), party[0].BTA);
-                        foreach (var item in participant_list)
+                        if (participant_list.Count() > 1)
                         {
-                            PARTICIPANT part = new PARTICIPANT();
-                            part.name = await GetData.EmployeeNameInfo(item.no_reg);
-                            part.division = await GetData.GetDivisionSourceName((int)item.no_reg);
-                            part.status = "Children";
-                            part.no_reg = (int) item.no_reg;
-                            List<tb_r_travel_request> BTA = await GetData.TravelRequestCreatedDate(TravelCode[0].create_date);
-                            tb_r_travel_request children = new tb_r_travel_request();
-                            foreach (var item2 in BTA)
+                            foreach (var item in participant_list)
                             {
-                                if (item2.start_date == TravelCode[0].start_date && item2.destination_code == TravelCode[0].destination_code && item2.invited_by == TravelCode[0].no_reg && item2.no_reg == item.no_reg)
+                                PARTICIPANT part = new PARTICIPANT();
+                                part.name = await GetData.EmployeeNameInfo(item.no_reg);
+                                part.division = await GetData.GetDivisionSourceName((int)item.no_reg);
+                                part.status = "Children";
+                                part.no_reg = (int)item.no_reg;
+                                string start = Convert.ToDateTime(TravelCode[0].start_date).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                string end = Convert.ToDateTime(TravelCode[0].end_date).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                List<tb_r_travel_request> BTA = await GetData.TravelRequestStartEndDate(start,end);
+                                tb_r_travel_request children = new tb_r_travel_request();
+                                foreach (var item2 in BTA)
                                 {
-                                    children = item2;
-                                    break;
+                                    if (item2.start_date == TravelCode[0].start_date && item2.destination_code == TravelCode[0].destination_code && item2.invited_by == TravelCode[0].no_reg && item2.no_reg == item.no_reg)
+                                    {
+                                        children = item2;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (children.group_code != null)
-                            {
-                                part.BTA = children.group_code;
-                                
-                            }
-                            else
-                            {
-                                part.BTA = "Rejected/Has Other Travel Assignment";
-                            }
-                            part.name = part.name.Trim();
-                            part.BTA = part.BTA.Trim();
-                            part.division = part.division.Trim();
-                           
+                                if (children.group_code != null)
+                                {
+                                    part.BTA = children.group_code;
 
-                            party.Add(part);
+                                }
+                                else
+                                {
+                                    part.BTA = "Rejected/Has Other Travel Assignment";
+                                }
+                                part.name = part.name.Trim();
+                                part.BTA = part.BTA.Trim();
+                                part.division = part.division.Trim();
+
+
+                                party.Add(part);
+                            }
                         }
                     }
                     else if (current.status == "Children")
                     {
-                        List<tb_r_travel_request> parent_candidate = await GetData.TravelRequestCreatedDate(TravelCode[0].create_date);
-                        tb_r_travel_request parent = parent_candidate.Where(b => b.no_reg == TravelCode[0].invited_by && b.destination_code == TravelCode[0].destination_code && b.start_date == TravelCode[0].start_date).First();
+                        string start = Convert.ToDateTime(TravelCode[0].start_date).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                        string end = Convert.ToDateTime(TravelCode[0].end_date).ToString("yyyy-MM-dd HH:mm:ss.fff");
 
+                        List<tb_r_travel_request> parent_candidate = await GetData.TravelRequestStartEndDate(start,end);
                         PARTICIPANT parent_participant = new PARTICIPANT();
+                        tb_r_travel_request parent = new tb_r_travel_request();
+
+                        try
+                        {
+                            parent = parent_candidate.Where(b => b.no_reg == TravelCode[0].invited_by && b.destination_code == TravelCode[0].destination_code && b.start_date == TravelCode[0].start_date).First();
+
+                        }
+                        catch (Exception X)
+                        {
+
+
+                        }
+                     
+                       
 
                         parent_participant.name = await GetData.EmployeeNameInfo(parent.no_reg);
                         parent_participant.BTA = parent.group_code.Trim();
@@ -393,7 +413,7 @@ namespace CONTRAST_WEB.Controllers
                         parent_participant.no_reg = (int)parent.no_reg;
                         parent_participant.name = parent_participant.name.Trim();
                         parent_participant.division = parent_participant.division.Trim();
-
+                        parent_participant.status = "Parent";
                         party.Add(parent_participant);
 
                         List<tb_r_travel_request_participant> participant_list = await GetData.TravelRequestParticipant(parent.no_reg.ToString(), parent.group_code);
