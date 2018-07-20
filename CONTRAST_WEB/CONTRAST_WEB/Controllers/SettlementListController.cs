@@ -386,15 +386,37 @@ namespace CONTRAST_WEB.Controllers
             if (ModelState.IsValid)
             {
                 tb_r_travel_request settle_check = await GetData.TravelRequest(model.TravelRequest.id_request);
-                
-                if (settle_check.status_request == "7 " && model.TravelRequest.final_status=="0")
+                List<tb_r_travel_actualcost> check_actualcost = await GetData.ActualCostBTA(model.TravelRequest.group_code);
+                List<tb_r_travel_actualcost> check = new List<tb_r_travel_actualcost>();
+                try
+                {
+                    check = check_actualcost.Where(b => b.information_actualcost.Trim().Contains("Settlement") && b.final_status!="3").OrderByDescending(b=>b.final_status).ToList();
+                }
+                catch (Exception x)
+                {
+                    
+                }
+                bool check_flag = false;
+                foreach (var item in check)
+                {
+                    int final_status = 0;
+                    if (item.final_status == null) final_status = 1;
+                    else final_status = Convert.ToInt32(item.final_status);
+
+                    if (item.information_actualcost.ToLower().Contains("settlement") && (final_status != 1))
+                    {
+                        check_flag = true;
+                        break;
+                    }
+                }
+                if ((settle_check.status_request == "7 " && settle_check.active_flag == true)||(settle_check.status_request == "7 " && !check_flag))
                 {
                     string done = settle_check.group_code.Trim();
                     ViewBag.done = done;
-                    ViewBag.URL = Constant.Baseurl;
+                    ViewBag.URL = Constant.homeURL;
                     return View("Done");
                 }
-
+                
                 ViewBag.time1 = time1;
                 ViewBag.time2 = time2;
 

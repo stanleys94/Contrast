@@ -50,5 +50,13 @@ namespace CONTRAST_WEB.Models
 
         public static CultureInfo culture = new CultureInfo("id-ID");
 
+        //dev
+        //public static string homeURL = "http://10.85.40.68:91/";
+
+        //production
+        //public static string homeURL = "https://passport.toyota.astra.co.id:5006/photofolder/";
+
+        //local
+        public static string homeURL = "http://localhost:56552/";
     }
 }
