@@ -1185,6 +1185,66 @@ namespace CONTRAST_WEB.Models
             }
             return employee_object;
         }
+
+        public static async Task<List<tb_m_destination>> DestinationActiveCity(string city)
+        {
+            List<tb_m_destination> employee_object = new List<tb_m_destination>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/Destination/Flag?city=" + city);
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+                    List<tb_m_destination> Result = new List<tb_m_destination>();
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Result = JsonConvert.DeserializeObject<List<tb_m_destination>>(EmpResponse);
+                    employee_object = Result;
+                }
+            }
+            return employee_object;
+        }
+
+        public static async Task<List<tb_m_destination>> DestinationActive()
+        {
+            List<tb_m_destination> employee_object = new List<tb_m_destination>();
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                HttpResponseMessage Res = await client.GetAsync("api/Destination/Destination_List");
+
+                //Checking the response is successful or not which is sent using HttpClient  
+                if (Res.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api   
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+                    List<tb_m_destination> Result = new List<tb_m_destination>();
+                    //Deserializing the response recieved from web api and storing into the Employee list  
+                    Result = JsonConvert.DeserializeObject<List<tb_m_destination>>(EmpResponse);
+                    employee_object = Result;
+                }
+            }
+            return employee_object;
+        }
+
+
         public static async Task<List<SelectListItem>> TaxInfo()
         {
             List<SelectListItem> ListItem1 = new List<SelectListItem>();

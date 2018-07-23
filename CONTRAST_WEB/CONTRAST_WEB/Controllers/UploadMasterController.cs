@@ -165,13 +165,15 @@ namespace CONTRAST_WEB.Controllers
                                     {
                                         try
                                         {
+                                            int region = 0;
                                             var cellString = workSheet.Cell(i, k);
-                                            if (cellString.GetValue<string>() == "" && k < 4) throw new System.ArgumentException("There's no Value in this Cell");
-
+                                            if (cellString.GetValue<string>() == "" && k < 5) throw new System.ArgumentException("There's no Value in this Cell");
+                                           
                                             else if (k == 1) ExcelObject2.destination = cellString.GetValue<string>();
-                                            else if (k == 2) ExcelObject2.economy = Convert.ToDouble(cellString.GetValue<string>());
-                                            else if (k == 3) ExcelObject2.business = Convert.ToDouble(cellString.GetValue<string>());
-                                            if (k >= 4)
+                                            else if (k == 2) region = Convert.ToInt32(cellString.GetValue<string>());
+                                            else if (k == 3) ExcelObject2.economy = Convert.ToDouble(cellString.GetValue<string>());
+                                            else if (k == 4) ExcelObject2.business = Convert.ToDouble(cellString.GetValue<string>());
+                                            if (k > 4)
                                             {
                                                 if (cellString.GetValue<string>() != "") throw new System.ArgumentException("Invalid Format Excell");
                                                 else break;
@@ -195,25 +197,48 @@ namespace CONTRAST_WEB.Controllers
 
                                 if (!flag_error)
                                 {
+                                    List<tb_m_destination> region_list = await GetData.DestinationActive();
                                     while (true)
                                     {
                                         var check_table = workSheet.Cell(i, k);
                                         if (check_table.GetValue<String>() == "") break;
                                         tb_m_rate_flight ExcelObject2 = new tb_m_rate_flight();
-
+                                        tb_m_destination add_destination = new tb_m_destination();
+                                        
                                         while (true)
                                         {
+                                            
                                             var cellString = workSheet.Cell(i, k);
                                             if (k == 1) ExcelObject2.destination = cellString.GetValue<string>();
-                                            else if (k == 2) ExcelObject2.economy = Convert.ToDouble(cellString.GetValue<string>());
-                                            else if (k == 3) ExcelObject2.business = Convert.ToDouble(cellString.GetValue<string>());
-                                            else if (k == 4) break;
+                                            else if (k == 2)
+                                            {
+                                                try
+                                                {
+                                                    add_destination = region_list.Where(b => b.destination_name.Contains(ExcelObject2.destination)).First();
+                                                }
+                                                catch (Exception extra)
+                                                {
+                                                    add_destination.destination_name = ExcelObject2.destination;
+                                                    add_destination.id_region = Convert.ToInt16(cellString.GetValue<string>());
+                                                    if (add_destination.id_region == 0) add_destination.id_region = 4;
+                                                }       
+                                            } 
+                                            else if (k == 3) ExcelObject2.economy = Convert.ToDouble(cellString.GetValue<string>());
+                                            else if (k == 4) ExcelObject2.business = Convert.ToDouble(cellString.GetValue<string>());
+                                            else if (k == 5) break;
                                             k++;
                                         }
                                         ExcelObject2.user_created = model.no_reg;
                                         ExcelObject2.active_flag = true;
                                         ExcelObject2.start_date = DateTime.Now;
+                                        if (add_destination.active_flag != true)
+                                        {
+                                            add_destination.active_flag = true;
+                                            add_destination.start_date = DateTime.Now.AddHours(7);
+                                            await Utility.Destination(add_destination);
+                                        }
                                         await Utility.RateFlight(ExcelObject2);
+                                        
                                         i++;
                                         k = 1;
                                     }
@@ -1118,16 +1143,43 @@ namespace CONTRAST_WEB.Controllers
                     var InsertData = CreateExcell.Worksheets.Add("Current Rate Flight Data");
                     List<tb_m_rate_flight> dbObject1 = await GetData.RateFlightList();
 
-
                     InsertData.Cell(1, 1).Value = "Destination";
-                    InsertData.Cell(1, 2).Value = "Economy";
-                    InsertData.Cell(1, 3).Value = "Business";
+                    InsertData.Cell(1, 2).Value = "Region";
+                    InsertData.Cell(1, 3).Value = "Economy";
+                    InsertData.Cell(1, 4).Value = "Business";
+                    InsertData.Cell(1, 8).Value = "Region Flag";
+                    InsertData.Cell(1, 9).Value = "Region Meaning";
 
+                    InsertData.Cell(2, 8).Value = "0";
+                    InsertData.Cell(3, 8).Value = "1";
+                    InsertData.Cell(4, 8).Value = "2";
+                    InsertData.Cell(5, 8).Value = "3";
+                    InsertData.Cell(6, 8).Value = "4";
+
+                    InsertData.Cell(2, 9).Value = "Destinasi Tidak Terdaftar";
+                    InsertData.Cell(3, 9).Value = "Jepang";
+                    InsertData.Cell(4, 9).Value = "Asia";
+                    InsertData.Cell(5, 9).Value = "Eropa";
+                    InsertData.Cell(6, 9).Value = "Domestik";
+
+                    List<tb_m_destination> region_list = await GetData.DestinationActive();
                     for (int i = 0; i < dbObject1.Count(); i++)
                     {
+                        tb_m_destination region = new tb_m_destination();
+                        int value = 0;
+                        try
+                        {
+                            region = region_list.Where(b => b.destination_name.Contains(dbObject1[i].destination)).First();
+                            value = Convert.ToInt32(region.id_region);
+                        }
+                        catch (Exception x)
+                        {
+                            value = 0;
+                        }
                         InsertData.Cell(i + 2, 1).Value = dbObject1[i].destination;
-                        InsertData.Cell(i + 2, 2).Value = dbObject1[i].economy;
-                        InsertData.Cell(i + 2, 3).Value = dbObject1[i].business;
+                        InsertData.Cell(i + 2, 2).Value = value;
+                        InsertData.Cell(i + 2, 3).Value = dbObject1[i].economy;
+                        InsertData.Cell(i + 2, 4).Value = dbObject1[i].business;
                     }
                     MemoryStream excelStream = new MemoryStream();
                     CreateExcell.SaveAs(excelStream);

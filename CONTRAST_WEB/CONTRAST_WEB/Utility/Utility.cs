@@ -122,6 +122,24 @@ namespace CONTRAST_WEB.Models
             }
         }
 
+        public static async Task Destination(tb_m_destination model)
+        {
+            using (var client = new HttpClient())
+            {
+                //Passing service base url  
+                client.BaseAddress = new Uri(Constant.Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+                //Define request data format  
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+                //HttpResponseMessage response = await client.PostAsJsonAsync("api/RateFlight", model);
+                HttpResponseMessage response = await client.PostAsync("api/Destination", new StringContent(
+                                 new JavaScriptSerializer().Serialize(model), Encoding.UTF8, "application/json"));
+            }
+        }
+
         public static async Task Allowance(tb_m_overseas_allowance model)
         {
             using (var client = new HttpClient())
